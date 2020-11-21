@@ -1,0 +1,129 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "name" . }}
+  labels:
+    chart: {{ .Chart.Name}}-{{ .Chart.Version | replace "+" "_" }}
+    app: {{ template "name" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  serviceName: {{ template "name" . }}
+  selector:
+    matchLabels:
+      app: {{ template "name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+    spec:
+      #nodeSelector:
+      #node-role.kubernetes.io: worker
+            # hostNetwork: true
+      hostAliases:
+      - ip: 127.0.0.1
+        hostnames:
+        - pihole.morphine
+      containers:
+      - name: {{ .Chart.Name }}
+        image: pihole/pihole:latest
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        stdin: true
+        tty: true
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+        env:
+        - name: 'ServerIP'
+           valueFrom:
+             secretKeyRef:
+               name: pihole-admin-secret
+               key: serverip
+        - name: 'DNS1'
+          value: '1.1.1.1'
+        - name: 'DNS2'
+          value: '1.0.0.1'
+        - name: 'DNS3'
+          value: '208.67.222.222'
+        - name: 'DNS4'
+          value: '208.67.220.220'
+        - name: 'WEBPASSWORD'
+          valueFrom:
+            secretKeyRef:
+              name: pihole-admin-secret
+              key: webpassword
+        - name: TZ
+          value: Europe/Warsaw
+        - name: CONDITIONAL_FORWARDING
+          value: 'false'
+        - name: ADMIN_EMAIL
+           valueFrom:
+             secretKeyRef:
+               name: pihole-admin-secret
+               key: email
+        - name: DNSSEC
+          value: 'true'
+        - name: 'WEBUIBOXEDLAYOUT'
+          value: 'traditional'
+        ports:
+        - name: web
+          containerPort: 81
+        #- name: dhcp
+          #containerPort: 67
+          #protocol: UDP
+        - name: dns-tcp
+          #hostPort: 53
+          protocol: TCP
+          containerPort: 53
+        - name: dns-udp
+          containerPort: 53
+          hostPort: 53
+          protocol: UDP
+        readinessProbe:
+          exec:
+            command: ['dig', '@127.0.0.1', 'google.com']
+          timeoutSeconds: 20
+          initialDelaySeconds: 5
+          periodSeconds: 120
+        livenessProbe:
+          exec:
+            command: ['dig', '@127.0.0.1', 'google.com']
+          timeoutSeconds: 20
+          initialDelaySeconds: 30
+          periodSeconds: 180
+          # - name: {{ template "name" . }}-dns2
+          #   containerPort: 53
+        volumeMounts:
+            - mountPath: "/etc/pihole"
+              name: {{ template "name" . }}-pvc
+              subPath: "pihole"
+            - mountPath: "/etc/dnsmasq.d"
+              name: {{ template "name" . }}-pvc
+              subPath: "dnsmasq"
+            - mountPath: "/etc/dnsmasq.d/05-custom.conf"
+              name: {{ template "name" . }}-custom-config
+              subPath: 05-custom.conf
+            - mountPath: "/etc/pihole/whitelist.txt"
+              name: {{ template "name" . }}-custom-config-list
+              subPath: whitelist.txt
+            - mountPath: "/etc/pihole/adlists.list"
+              name: {{ template "name" . }}-custom-config-list
+              subPath: adlists.list
+            - mountPath: "/etc/pihole/regex.list"
+              name: {{ template "name" . }}-custom-config-list
+              subPath: regex.list
+            #- mountPath: "/etc/pihole/custom.list"
+              #name: {{ template "name" . }}-custom-config-list
+              #subPath: custom.list
+      volumes:
+        - name: {{ template "name" . }}-custom-config
+          configMap:
+            name: {{ template "name" . }}-custom-config
+        - name: {{ template "name" . }}-custom-config-list
+          configMap:
+            name: {{ template "name" . }}-custom-config-list
+        - name: {{ template "name" . }}-pvc
+          persistentVolumeClaim:
+            claimName: {{ template "name" . }}-pvc

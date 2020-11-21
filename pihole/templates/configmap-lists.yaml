@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "name" . }}-custom-config-list
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  custom.list: |
+    10.0.0.8 rpi-k3s-master.morphine
+    10.0.0.7 rpi-k3s-worker1.morphine
+    10.0.0.10 rpi-k3s-worker2.morphine
+    10.0.0.12 rpi-k3s-worker3.morphine
+    10.0.0.14 rpi-k3s-worker4.morphine
+    10.0.0.13 blueberry.morphine
+    10.0.0.21 cocaine.morphine
+    10.0.0.6 ps4.morphine
+    10.0.0.27 weasel.morphine
+    10.0.0.22 strawberry.morphine
+    10.0.0.2 racoon.morhpine
+  whitelist.txt: |
+    s.youtube.com
+    youtu.be
+    youtube.com
+    hangouts.google.com
+  adlists.list: |
+    https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+    https://raw.githubusercontent.com/szpaczyna/cherry_conf/master/etc/hosts
+    https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+    https://mirror1.malwaredomains.com/files/justdomains
+    http://sysctl.org/cameleon/hosts
+    https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+    https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+    http://phishing.mailscanner.info/phishing.bad.sites.conf
+    https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt
+    https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt
+    https://zerodot1.gitlab.io/CoinBlockerLists/list.txt
+    https://zerodot1.gitlab.io/CoinBlockerLists/list_browser.txt
+    https://zerodot1.gitlab.io/CoinBlockerLists/list_optional.txt
+    https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+    https://raw.githubusercontent.com/w13d/adblockListABP-PiHole/master/Spotify.txt
+    https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/hostfile.txt
+    https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/easy_privacy_host.txt
+    https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/easylist_host.txt
+    https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/adguard_mobile_host.txt
+    https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/Ad_filter_list_by_Disconnect.txt
+  regex.list: |

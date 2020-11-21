@@ -1,0 +1,29 @@
+apiVersion: v1
+data:
+  index.html: |+
+    <Html>
+    <Head>
+    <title>
+    shpaq [dot] org
+    </title>
+    </Head>
+    <body style="background-color:darkgrey;">
+    <center>
+    <h1>All your base are belong to us!</h1>
+    <pre>
+
+
+
+    _______________________________
+    </pre>
+    <p>
+    shpaq [at] shpaq [dot] org
+    </p>
+    </center>
+    </Html>
+    </body>
+
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: shpaq-org

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shpaq-org
+  namespace: www
+  labels:
+    name: shpaq-org
+    app: shpaq-org
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: shpaq-org
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: shpaq-org
+        app: shpaq-org
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+          - mountPath: /usr/share/nginx/html/index.html
+            name: nginx-conf
+            subPath: index.html
+        resources:
+          requests:
+            cpu: 24m
+            memory: 24Mi
+          limits:
+            cpu: 64m
+            memory: 128Mi
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: shpaq-org
+      nodeSelector:
+        kubernetes.io/os: linux
+        kubernetes.io/role: worker

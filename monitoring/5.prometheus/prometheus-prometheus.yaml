@@ -1,0 +1,68 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  labels:
+    prometheus: k8s
+  name: k8s
+  namespace: monitoring
+spec:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: prometheus
+              operator: In
+              values:
+              - k8s
+          namespaces:
+          - monitoring
+          topologyKey: kubernetes.io/hostname
+        weight: 100
+  alerting:
+    alertmanagers:
+    - name: alertmanager-main
+      namespace: monitoring
+      port: web
+  externalUrl: http://prometheus.k3s.shpaq.org
+  #image: prom/prometheus:v2.19.1
+  image: prom/prometheus:latest
+  nodeSelector:
+    kubernetes.io/os: linux
+    kubernetes.io/role: worker
+    #kubernetes.io/hostname: rpi-k3s-worker3
+  podMonitorNamespaceSelector: {}
+  podMonitorSelector: {}
+  replicas: 1
+  resources:
+    requests:
+      memory: 275Mi
+      cpu: 100m
+  retention: 7d
+  ruleSelector:
+    matchLabels:
+      prometheus: k8s
+      role: alert-rules
+  scrapeInterval: 60s
+  scrapeTimeout: 30s
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+  serviceAccountName: prometheus-k8s
+  serviceMonitorNamespaceSelector: {}
+  serviceMonitorSelector: {}
+  storage:
+    volumeClaimTemplate:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 3Gi
+        storageClassName: local-path
+        volumeName: ""
+  version: v2.22.1

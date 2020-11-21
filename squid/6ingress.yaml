@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: proxy
+  name: squid
+  labels:
+    app: squid
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  rules:
+    - host: proxy.k3s.shpaq.org
+      http:
+        paths:
+        - backend:
+            servicePort: 3128
+            serviceName: squid
+        #path: /
+  tls:
+  - hosts:
+    - proxy.k3s.shpaq.org
+    secretName: proxy-k3s-shpaq-org-tls

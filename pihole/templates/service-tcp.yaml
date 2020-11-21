@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "name" . }}
+  namespace: {{ template "name" .}}
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    app: {{ template "name" . }}
+  ports:
+  - name: {{ template "name" . }}-web
+    port: 81
+    targetPort: 80
+    protocol:   TCP
+  - name:       {{ template "name" . }}-dns-tcp
+    port: 53
+    targetPort: 53
+    protocol:   TCP
+#  externalIPs:
+#    - 89.74.132.167
+  selector:
+    app: {{ template "name" . }}

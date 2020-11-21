@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: pihole-exporter
+  name: pihole-exporter
+  namespace: monitoring
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 60s
+    targetPort: 9617
+  jobLabel: pihole-exporter
+  selector:
+    matchLabels:
+      app: pihole-exporter

@@ -1,0 +1,13 @@
+image:
+  pullPolicy: IfNotPresent
+
+persistence:
+  enabled: true
+  keep: false
+  accessMode: ReadWriteMany
+  size: 3Gi
+
+configData: |-
+  
+ingress:
+  host: pihole.k3s.shpaq.org
