@@ -25,8 +25,8 @@ spec:
     spec:
       containers:
       - name: nextcloud
-        #image: "nextcloud:16.0.4-apache"
-        image: "nextcloud:production-apache"
+        image: "nextcloud:latest"
+        #image: "nextcloud:production-apache"
         imagePullPolicy: IfNotPresent
         env:
         - name: MYSQL_HOST
