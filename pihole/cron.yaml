@@ -1,0 +1,19 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: pihole-dig
+  namespace: pihole
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: pihole-dig
+            image: busybox
+            args:
+            - /bin/sh
+            - -c
+            - kubectl exec -it pihole-0 "dig google.com @127.0.0.1 > /dev/null ";
+          restartPolicy: OnFailure
