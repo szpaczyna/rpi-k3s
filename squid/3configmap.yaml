@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: proxy
+  namespace: apps
   name: squid-config
   labels:
     app: squid
@@ -29,6 +29,8 @@ data:
     .go.republicains.fr
   squid.conf: |
     acl localnet src 10.0.0.0/26
+    acl localnet src 10.42.0.0/16
+    acl localnet src 10.43.0.0/16
     acl SSL_ports port 443
     acl Safe_ports port 80          # http
     acl Safe_ports port 21          # ftp
@@ -54,12 +56,12 @@ data:
     auth_param basic children 5
     auth_param basic realm proxy.k3s.shpaq.org
     acl auth_users proxy_auth REQUIRED
-    http_access allow auth_users
     http_reply_access allow all
     http_access deny dst_ads
     http_access deny dst_blacklist
     http_access allow localnet
     http_access allow localhost
+    http_access allow auth_users
     http_access deny all
 
     coredump_dir /var/spool/squid

@@ -4,9 +4,10 @@ metadata:
   name: squid
   labels:
     name: squid
-  namespace: proxy
+  namespace: apps
 spec:
-  type: LoadBalancer
+  externalIPs:
+    - 10.0.0.13
   ports:
     - port: 3128
       targetPort: 3128
