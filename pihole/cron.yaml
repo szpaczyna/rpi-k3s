@@ -15,5 +15,5 @@ spec:
             args:
             - /bin/sh
             - -c
-            - kubectl exec -it pihole-0 "dig google.com @127.0.0.1 > /dev/null ";
+            - kubectl exec -i -t pihole-0 -- "dig google.com @127.0.0.1 > /dev/null ";
           restartPolicy: OnFailure

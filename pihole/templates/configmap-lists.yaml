@@ -9,17 +9,6 @@ metadata:
     release: {{ .Release.Name }}
 data:
   custom.list: |
-    10.0.0.8 rpi-k3s-master.morphine
-    10.0.0.7 rpi-k3s-worker1.morphine
-    10.0.0.10 rpi-k3s-worker2.morphine
-    10.0.0.12 rpi-k3s-worker3.morphine
-    10.0.0.14 rpi-k3s-worker4.morphine
-    10.0.0.13 blueberry.morphine
-    10.0.0.21 cocaine.morphine
-    10.0.0.6 ps4.morphine
-    10.0.0.27 weasel.morphine
-    10.0.0.22 strawberry.morphine
-    10.0.0.2 racoon.morhpine
   whitelist.txt: |
     s.youtube.com
     youtu.be

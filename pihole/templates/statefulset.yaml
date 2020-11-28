@@ -9,6 +9,10 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    #maxSurge: 1
+    #maxUnavailable: 1
   serviceName: {{ template "name" . }}
   selector:
     matchLabels:
@@ -18,13 +22,20 @@ spec:
       labels:
         app: {{ template "name" . }}
     spec:
+     # hostNetwork: true
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+        - 127.0.0.1
+        - 1.1.1.1
+        - 8.8.8.8
       #nodeSelector:
       #node-role.kubernetes.io: worker
             # hostNetwork: true
       hostAliases:
       - ip: 127.0.0.1
         hostnames:
-        - pihole.morphine
+        - pihole
       containers:
       - name: {{ .Chart.Name }}
         image: pihole/pihole:latest
@@ -81,6 +92,8 @@ spec:
           containerPort: 53
           hostPort: 53
           protocol: UDP
+        securityContext:
+          priviledged: true
         readinessProbe:
           exec:
             command: ['dig', '@127.0.0.1', 'google.com']

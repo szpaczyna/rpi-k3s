@@ -21,6 +21,6 @@ spec:
     targetPort: 53
     protocol:   TCP
 #  externalIPs:
-#    - 89.74.132.167
+#    - 10.0.0.9
   selector:
     app: {{ template "name" . }}
