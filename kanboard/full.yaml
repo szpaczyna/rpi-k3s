@@ -1,0 +1,176 @@
+---
+# Source: kanboard/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kanboard
+  labels:
+    helm.sh/chart: kanboard-0.1.1
+    app.kubernetes.io/name: kanboard
+    app.kubernetes.io/instance: kanboard
+    app.kubernetes.io/version: "v1.2.14"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: kanboard/templates/pvc.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: kanboard-data
+  labels:
+    app.kubernetes.io/name: kanboard
+    helm.sh/chart: kanboard-0.1.1
+    app.kubernetes.io/instance: kanboard
+    app.kubernetes.io/managed-by: Helm
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "2G"
+  storageClassName: "local-path"
+---
+# Source: kanboard/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kanboard
+  labels:
+    helm.sh/chart: kanboard-0.1.1
+    app.kubernetes.io/name: kanboard
+    app.kubernetes.io/instance: kanboard
+    app.kubernetes.io/version: "v1.2.14"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: kanboard
+    app.kubernetes.io/instance: kanboard
+---
+# Source: kanboard/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kanboard
+  labels:
+    helm.sh/chart: kanboard-0.1.1
+    app.kubernetes.io/name: kanboard
+    app.kubernetes.io/instance: kanboard
+    app.kubernetes.io/version: "v1.2.14"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kanboard
+      app.kubernetes.io/instance: kanboard
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kanboard
+        app.kubernetes.io/instance: kanboard
+    spec:
+      serviceAccountName: kanboard
+      securityContext:
+        fsGroup: 2000
+      containers:
+        - name: kanboard
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          image: "kanboard/kanboard:latest"
+          imagePullPolicy: IfNotPresent
+          env:
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+          - mountPath: /var/www/app/data
+            name: data
+            subPath: data
+          - mountPath: /var/www/app/plugins
+            name: data
+            subPath: plugins
+          - mountPath: /etc/nginx/ssl
+            name: data
+            subPath: ssl
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: kanboard-data
+      nodeSelector:
+        kubernetes.io/os: linux
+        kubernetes.io/role: worker
+---
+# Source: kanboard/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kanboard
+  labels:
+    helm.sh/chart: kanboard-0.1.1
+    app.kubernetes.io/name: kanboard
+    app.kubernetes.io/instance: "kanboard"
+    app.kubernetes.io/version: "v1.2.14"
+    app.kubernetes.io/managed-by: "Helm"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.redirect.permanent: "true"
+    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+spec:
+  rules:
+    - host: "kanboard.k3s.shpaq.org"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kanboard
+              servicePort: 80
+  tls:
+    - hosts:
+        - "kanboard.k3s.shpaq.org"
+      secretName: kanboard-k3s-shpaq-org-tls
+---
+# Source: kanboard/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "kanboard-test-connection"
+  labels:
+    helm.sh/chart: kanboard-0.1.1
+    app.kubernetes.io/name: kanboard
+    app.kubernetes.io/instance: kanboard
+    app.kubernetes.io/version: "v1.2.14"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['kanboard:80']
+  restartPolicy: Never
