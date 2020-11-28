@@ -1,142 +1,128 @@
-# Default values for docker-registry.
+# Default values for docker-registry-ui.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-replicaCount: 1
 
-updateStrategy:
-   type: RollingUpdate
-   rollingUpdate:
-     maxSurge: 1
-     maxUnavailable: 0
 
-podAnnotations: {}
-podLabels: {}
+ui:
+  title: "Docker registry UI"
+  delete_images: true
+  proxy: true
 
-image:
-  repository: registry
-  tag: 2.7.1
-  pullPolicy: IfNotPresent
-# imagePullSecrets:
-    # - name: docker
-service:
-  name: registry
-  type: ClusterIP
-  # clusterIP:
-  port: 5000
-  # nodePort:
-  # loadBalancerIP:
-  # loadBalancerSourceRanges:
-  annotations: {}
-  # foo.io/bar: "true"
-ingress:
-  enabled: true
-  path: /
-  # Used to create an Ingress record.
-  hosts:
-    - registry.k3s.shpaq.org
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    cert-manager.io/cluster-issuer: letsencrypt-stage
-    traefik.frontend.redirect.permanent: 'true'
-    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
-    traefik.ingress.kubernetes.io/redirect-entry-point: https
-  labels: {}
-  tls:
-  - secretName: registry-k3s-shpaq-org-tls
+  replicaCount: 1
+  image:
+    registry: docker.io
+    repository: joxit/docker-registry-ui
+    tag: arm32v7-static
+    pullPolicy: IfNotPresent
+  probe:
+    liveness: true
+    readiness: true
+
+  resources:
+  # If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+   requests:
+     cpu: 100m
+     memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  fullnameOverride: ""
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      traefik.frontend.redirect.permanent: 'true'
+      traefik.ingress.kubernetes.io/frontend-entry-points: http, https
+      traefik.ingress.kubernetes.io/redirect-entry-point: https
     hosts:
-      - registry.k3s.shpaq.org
-resources:
-  limits:
-    cpu: 100m
-    memory: 256Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
-persistence:
-  accessMode: 'ReadWriteOnce'
-  enabled: false
-  size: 30Gi
-  storageClass: 'nfs-storage'
+      - host: registry.k3s.shpaq.org
+    tls:
+    - secretName: registry-k3s-shpaq-org-tls
+      hosts:
+        - registry.k3s.shpaq.org
 
-# set the type of filesystem to use: filesystem, s3
-storage: filesystem
 
-# Set this to name of secret for tls certs
-# tlsSecretName: registry.docker.example.com
-secrets:
-  haSharedSecret: ""
-  htpasswd: ""
-# Secrets for Azure
-#   azure:
-#     accountName: ""
-#     accountKey: ""
-#     container: ""
-# Secrets for S3 access and secret keys
-#   s3:
-#     accessKey: ""
-#     secretKey: ""
-# Secrets for Swift username and password
-#   swift:
-#     username: ""
-#     password: ""
+registry:
+  external: false
+  # URL of the registry (requiered. Note: this wont work as localhost is inside the container. Only used if the registry is external)
+  url: http://localhost:5000
 
-# Options for s3 storage type:
-# s3:
-#  region: us-east-1
-#  regionEndpoint: s3.us-east-1.amazonaws.com
-#  bucket: my-bucket
-#  encrypt: false
-#  secure: true
+  replicaCount: 1
+  # Image definition for the registry (Only used if the registry is not external)
+  image:
+    registry: docker.io
+    repository: registry
+    tag: 2.7.1
+    pullPolicy: IfNotPresent
+  probe:
+    liveness: true
+    readiness: true
+  resources:
+  # If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+   requests:
+     cpu: 100m
+     memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  fullnameOverride: ""
 
-# Options for swift storage type:
-# swift:
-#  authurl: http://swift.example.com/
-#  container: my-container
 
-configData:
-  version: 0.1
-  log:
-    fields:
-      service: registry
-  storage:
-    cache:
-      blobdescriptor: inmemory
-  http:
-    addr: :5000
-    headers:
-      X-Content-Type-Options: [nosniff]
-  health:
-    storagedriver:
-      enabled: true
-      interval: 10s
-      threshold: 3
+  persistence:
+    ## If true, use a Persistent Volume Claim, If false, use emptyDir
+    ##
+    enabled: true
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: "nfs-storage"
+    ## Persistent Volume Claim annotations
+    ##
+    annotations:
+    ## Persistent Volume Access Mode
+    ##
+    accessModes:
+    # This have to be ReadWriteMany if replicaCount>1
+    - ReadWriteOnce
+    ## Persistent Volume size
+    ##
+    size: 30Gi
+    ##
 
-securityContext:
-  enabled: true
-  runAsUser: 1000
-  fsGroup: 1000
+  service:
+    type: ClusterIP
+    port: 5000
 
-priorityClassName: ""
+  ingress:
+    enabled: false
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: docker-registry.local
 
-podDisruptionBudget: {}
-  # maxUnavailable: 1
-  # minAvailable: 2
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
 
-nodeSelector: {}
-affinity: {}
-tolerations: []
-extraVolumeMounts: []
-## Additional volumeMounts to the registry container.
-#  - mountPath: /secret-data
-#    name: cloudfront-pem-secret
-#    readOnly: true
-
-extraVolumes: []
-## Additional volumes to the pod.
-#  - name: cloudfront-pem-secret
-#    secret:
-#      secretName: cloudfront-credentials
-#      items:
-#        - key: cloudfront.pem
-#          path: cloudfront.pem
-#          mode: 511
+imagePullSecrets: []
+nameOverride: ""
