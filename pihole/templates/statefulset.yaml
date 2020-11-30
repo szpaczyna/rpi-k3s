@@ -9,10 +9,6 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
-  strategy:
-    type: RollingUpdate
-    #maxSurge: 1
-    #maxUnavailable: 1
   serviceName: {{ template "name" . }}
   selector:
     matchLabels:
@@ -29,16 +25,15 @@ spec:
         - 127.0.0.1
         - 1.1.1.1
         - 8.8.8.8
-      #nodeSelector:
-      #node-role.kubernetes.io: worker
-            # hostNetwork: true
+      nodeSelector:
+        kubernetes.io/role: worker
       hostAliases:
       - ip: 127.0.0.1
         hostnames:
         - pihole
       containers:
       - name: {{ .Chart.Name }}
-        image: pihole/pihole:latest
+        image: pihole/pihole:v5.2
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         stdin: true
         tty: true
@@ -48,18 +43,15 @@ spec:
             cpu: 100m
         env:
         - name: 'ServerIP'
-           valueFrom:
-             secretKeyRef:
-               name: pihole-admin-secret
-               key: serverip
+          value: 10.0.0.13
         - name: 'DNS1'
           value: '1.1.1.1'
         - name: 'DNS2'
           value: '1.0.0.1'
         - name: 'DNS3'
-          value: '208.67.222.222'
+          value: '9.9.9.9'
         - name: 'DNS4'
-          value: '208.67.220.220'
+          value: '149.112.112.112'
         - name: 'WEBPASSWORD'
           valueFrom:
             secretKeyRef:
@@ -68,12 +60,16 @@ spec:
         - name: TZ
           value: Europe/Warsaw
         - name: CONDITIONAL_FORWARDING
-          value: 'false'
+          value: 'true'
+        - name: CONDITIONAL_FORWARDING_IP
+          value: '10.0.0.1'
+        - name: CONDITIONAL_FORWARDING_DOMAIN
+          value: 'morphine'
         - name: ADMIN_EMAIL
-           valueFrom:
-             secretKeyRef:
-               name: pihole-admin-secret
-               key: email
+          valueFrom:
+            secretKeyRef:
+              name: pihole-admin-secret
+              key: email
         - name: DNSSEC
           value: 'true'
         - name: 'WEBUIBOXEDLAYOUT'
@@ -92,8 +88,6 @@ spec:
           containerPort: 53
           hostPort: 53
           protocol: UDP
-        securityContext:
-          priviledged: true
         readinessProbe:
           exec:
             command: ['dig', '@127.0.0.1', 'google.com']

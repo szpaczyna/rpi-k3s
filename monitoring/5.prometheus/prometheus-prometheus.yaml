@@ -29,7 +29,7 @@ spec:
   image: prom/prometheus:latest
   nodeSelector:
     kubernetes.io/os: linux
-    kubernetes.io/hostname: rpi-k3s-worker3
+    kubernetes.io/role: worker
   podMonitorNamespaceSelector: {}
   podMonitorSelector: {}
   replicas: 1

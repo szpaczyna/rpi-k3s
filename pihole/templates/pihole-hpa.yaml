@@ -2,7 +2,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "name" . }}-mem-scale
-  namespace: {{ template "name" . }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -22,7 +21,6 @@ apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "name" . }}-cpu-scale
-  namespace: {{ template "name" . }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

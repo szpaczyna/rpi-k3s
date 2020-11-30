@@ -1,9 +1,10 @@
 image:
   pullPolicy: IfNotPresent
+  image: pihole/pihole:latest
 
 persistence:
   enabled: true
-  keep: false
+  keep: true
   accessMode: ReadWriteMany
   size: 3Gi
 
