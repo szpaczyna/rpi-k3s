@@ -53,7 +53,8 @@ spec:
         securityContext:
           runAsUser: 65534
       nodeSelector:
-        beta.kubernetes.io/os: linux
+        kubernetes.io/os: linux
+        kubernetes.io/role: worker
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534

@@ -1,0 +1,3 @@
+#!/bin/bash
+kubectl apply -f . --validate=false 
+kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true 

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: shpaq-org
-  namespace: www
+  namespace: apps
   labels:
     name: shpaq-org
     app: shpaq-org

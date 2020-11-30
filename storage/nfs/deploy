@@ -1,0 +1,4 @@
+#!/bin/bash
+kubectl apply -f .
+kubectl patch storageclass nfs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+kubectl patch deployment nfs-client-provisioner -n nfs-storage --patch '{"spec": {"template": {"spec": {"nodeSelector": {"kubernetes.io/arch": "arm"}}}}}'

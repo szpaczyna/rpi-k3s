@@ -26,25 +26,23 @@ spec:
       namespace: monitoring
       port: web
   externalUrl: http://prometheus.k3s.shpaq.org
-  #image: prom/prometheus:v2.19.1
   image: prom/prometheus:latest
   nodeSelector:
     kubernetes.io/os: linux
-    kubernetes.io/role: worker
-    #kubernetes.io/hostname: rpi-k3s-worker3
+    kubernetes.io/hostname: rpi-k3s-worker3
   podMonitorNamespaceSelector: {}
   podMonitorSelector: {}
   replicas: 1
   resources:
     requests:
-      memory: 275Mi
+      memory: 400Mi
       cpu: 100m
-  retention: 7d
+  retention: 15d
   ruleSelector:
     matchLabels:
       prometheus: k8s
       role: alert-rules
-  scrapeInterval: 60s
+  scrapeInterval: 30s
   scrapeTimeout: 30s
   securityContext:
     fsGroup: 2000
@@ -62,7 +60,7 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 3Gi
-        storageClassName: local-path
+            storage: 5Gi
+        storageClassName: nfs-storage
         volumeName: ""
-  version: v2.22.1
+  version: v2.21.1

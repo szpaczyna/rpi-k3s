@@ -14,8 +14,6 @@ rules:
   - alertmanagers/finalizers
   - prometheuses
   - prometheuses/finalizers
-  - thanosrulers
-  - thanosrulers/finalizers
   - servicemonitors
   - podmonitors
   - prometheusrules
