@@ -37,13 +37,13 @@ spec:
     requests:
       memory: 400Mi
       cpu: 100m
-  retention: 15d
+  retention: 5d
   ruleSelector:
     matchLabels:
       prometheus: k8s
       role: alert-rules
-  scrapeInterval: 30s
-  scrapeTimeout: 30s
+  scrapeInterval: 120s
+  scrapeTimeout: 60s
   securityContext:
     fsGroup: 2000
     runAsNonRoot: true
@@ -61,6 +61,6 @@ spec:
         resources:
           requests:
             storage: 5Gi
-        storageClassName: nfs-storage
+        storageClassName: local-path
         volumeName: ""
   version: v2.21.1

@@ -3,10 +3,15 @@ apiVersion: apps/v1
 metadata:
   name: nfs-client-provisioner
   namespace: nfs-storage
+  labels:
+    app: nfs-client-provisioner
 spec:
   replicas: 2
   strategy:
     type: RollingUpdate
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
   template:
     metadata:
       labels:
@@ -25,7 +30,7 @@ spec:
             - name: NFS_SERVER
               value: rpi-k3s-worker4
             - name: NFS_PATH
-              value: /data/kubernetes-storage
+              value: /data/k8s-storage
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -43,4 +48,4 @@ spec:
         - name: nfs-client-root
           nfs:
             server: rpi-k3s-worker4
-            path: /data/kubernetes-storage
+            path: /data/k8s-storage
