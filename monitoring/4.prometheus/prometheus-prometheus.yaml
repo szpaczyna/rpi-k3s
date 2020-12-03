@@ -20,11 +20,6 @@ spec:
           - monitoring
           topologyKey: kubernetes.io/hostname
         weight: 100
-  alerting:
-    alertmanagers:
-    - name: alertmanager-main
-      namespace: monitoring
-      port: web
   externalUrl: http://prometheus.k3s.shpaq.org
   image: prom/prometheus:latest
   nodeSelector:
@@ -32,16 +27,12 @@ spec:
     kubernetes.io/role: worker
   podMonitorNamespaceSelector: {}
   podMonitorSelector: {}
-  replicas: 1
+  replicas: 2
   resources:
     requests:
-      memory: 400Mi
+      memory: 300Mi
       cpu: 100m
   retention: 5d
-  ruleSelector:
-    matchLabels:
-      prometheus: k8s
-      role: alert-rules
   scrapeInterval: 120s
   scrapeTimeout: 60s
   securityContext:

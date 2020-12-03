@@ -2,7 +2,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: pihole-dig
-  namespace: pihole
+  namespace: apps
 spec:
   schedule: "*/5 * * * *"
   jobTemplate:
@@ -13,7 +13,7 @@ spec:
           - name: pihole-dig
             image: busybox
             args:
-            - /bin/sh
-            - -c
-            - kubectl exec -i -t pihole-0 -- "dig google.com @127.0.0.1 > /dev/null ";
+            - '/bin/sh'
+            - '-c'
+            - 'kubectl exec -i -t pihole-0 -- dig google.com @127.0.0.1; bye'
           restartPolicy: OnFailure

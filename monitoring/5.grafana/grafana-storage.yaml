@@ -8,6 +8,6 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 3Gi
-  storageClassName: nfs
+      storage: 4Gi
+  storageClassName: local-path
   volumeName: ""

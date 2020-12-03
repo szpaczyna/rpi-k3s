@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
       - env:
-        - name: GF_INSTALL_PLUGINS
-          value: grafana-piechart-panel,novalabs-annotations-panel,yesoreyeram-boomtheme-panel,btplc-status-dot-panel,vonage-status-panel,grafana-kubernetes-app
+# - name: GF_INSTALL_PLUGINS
+#          value: novalabs-annotations-panel,yesoreyeram-boomtheme-panel,btplc-status-dot-panel,vonage-status-panel
         #image: grafana/grafana:7.0.3
         image: grafana/grafana:latest
         name: grafana
@@ -29,6 +29,16 @@ spec:
           httpGet:
             path: /api/health
             port: http
+          timeoutSeconds: 20
+          initialDelaySeconds: 240
+          periodSeconds: 120
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: http
+          timeoutSeconds: 20
+          initialDelaySeconds: 120
+          periodSeconds: 120
         resources:
           limits:
             cpu: 250m
