@@ -8,6 +8,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+  #type: NodePort
   selector:
     app: {{ template "name" . }}
   ports:
@@ -19,7 +20,7 @@ spec:
     port: 53
     targetPort: 53
     protocol:   TCP
-#  externalIPs:
-#    - 10.0.0.9
+  externalIPs:
+    - 10.0.0.13
   selector:
     app: {{ template "name" . }}

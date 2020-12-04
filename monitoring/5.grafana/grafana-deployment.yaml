@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
       - env:
-# - name: GF_INSTALL_PLUGINS
-#          value: novalabs-annotations-panel,yesoreyeram-boomtheme-panel,btplc-status-dot-panel,vonage-status-panel
+        - name: GF_INSTALL_PLUGINS
+          value: grafana-piechart-panel,novalabs-annotations-panel,yesoreyeram-boomtheme-panel,btplc-status-dot-panel,vonage-status-panel,grafana-kubernetes-app
         #image: grafana/grafana:7.0.3
         image: grafana/grafana:latest
         name: grafana

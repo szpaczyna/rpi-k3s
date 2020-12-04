@@ -22,7 +22,7 @@ spec:
   #type: LoadBalancer
   #loadBalancerIP: 0.0.0.0
   externalIPs:
+    - 10.0.0.13
     - 10.0.0.10
-    - 10.0.0.9
   selector:
     app: {{ template "name" . }}

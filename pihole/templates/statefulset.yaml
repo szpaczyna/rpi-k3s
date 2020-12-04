@@ -18,13 +18,12 @@ spec:
       labels:
         app: {{ template "name" . }}
     spec:
-     # hostNetwork: true
+      #hostNetwork: true
       dnsPolicy: "None"
       dnsConfig:
         nameservers:
         - 127.0.0.1
-        - 1.1.1.1
-        - 8.8.8.8
+        - 10.0.0.1
       nodeSelector:
         kubernetes.io/role: worker
       hostAliases:
@@ -33,7 +32,7 @@ spec:
         - pihole
       containers:
       - name: {{ .Chart.Name }}
-        image: pihole/pihole:v5.2
+        image: pihole/pihole:v5.2.1
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         stdin: true
         tty: true
@@ -51,7 +50,7 @@ spec:
         - name: 'DNS3'
           value: '9.9.9.9'
         - name: 'DNS4'
-          value: '149.112.112.112'
+          value: '8.8.8.8'
         - name: 'WEBPASSWORD'
           valueFrom:
             secretKeyRef:
@@ -81,7 +80,7 @@ spec:
           #containerPort: 67
           #protocol: UDP
         - name: dns-tcp
-          #hostPort: 53
+          hostPort: 53
           protocol: TCP
           containerPort: 53
         - name: dns-udp
@@ -100,8 +99,6 @@ spec:
           timeoutSeconds: 20
           initialDelaySeconds: 30
           periodSeconds: 180
-          # - name: {{ template "name" . }}-dns2
-          #   containerPort: 53
         volumeMounts:
             - mountPath: "/etc/pihole"
               name: {{ template "name" . }}-pvc
