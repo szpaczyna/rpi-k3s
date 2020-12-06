@@ -1,2 +1,3 @@
 #!/bin/bash
+kubectl create ns apps
 kubectl apply -f .

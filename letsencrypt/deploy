@@ -1,3 +1,6 @@
 #!/bin/bash
-kubectl apply -f . --validate=false 
-kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true 
+kubectl create namespace cert-manager
+kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.1/cert-manager.yaml
+sleep 60; echo 'Waiting for containers to be created'
+kubectl apply -f le-stage.yaml -f le-prod.yaml --validate=false 

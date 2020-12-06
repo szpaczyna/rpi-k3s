@@ -2,8 +2,8 @@ apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
   labels:
-    prometheus: k8s
-  name: k8s
+    prometheus: k3s
+  name: k3s
   namespace: monitoring
 spec:
   affinity:
@@ -21,7 +21,7 @@ spec:
           topologyKey: kubernetes.io/hostname
         weight: 100
   externalUrl: http://prometheus.k3s.shpaq.org
-  image: prom/prometheus:latest
+  image: prom/prometheus:v2.23.0
   nodeSelector:
     kubernetes.io/os: linux
     kubernetes.io/role: worker
@@ -39,7 +39,7 @@ spec:
     fsGroup: 2000
     runAsNonRoot: true
     runAsUser: 1000
-  serviceAccountName: prometheus-k8s
+  serviceAccountName: prometheus-k3s
   serviceMonitorNamespaceSelector: {}
   serviceMonitorSelector: {}
   storage:
@@ -51,7 +51,7 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 5Gi
+            storage: 3Gi
         storageClassName: local-path
         volumeName: ""
-  version: v2.21.1
+  version: v2.23.0
