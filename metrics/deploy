@@ -1,0 +1,7 @@
+#!/bin/bash
+echo 'Creating namespace'
+kubectl apply -f 01-namespace.yaml
+echo 'Installing prometheus and node_exporter'
+kubectl apply -f prometheus
+echo 'Installing grafana'
+kubectl apply -f grafana

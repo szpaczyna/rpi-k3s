@@ -1,0 +1,192 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yaml: |-
+    global:
+      scrape_interval: 30s
+    scrape_configs:
+    - job_name: 'node_exporter'
+      static_targets:
+        - targets: ['rpi-k3s-master:9100']
+        - targets: ['rpi-k3s-worker0:9100']
+        - targets: ['rpi-k3s-worker1:9100']
+        - targets: ['rpi-k3s-worker2:9100']
+        - targets: ['rpi-k3s-worker3:9100']
+        - targets: ['rpi-k3s-worker4:9100']
+
+    - job_name: 'pihole_exporter'
+      static_targets:
+        - targets: ['rpi-k3s-worker0:9311']
+
+    - job_name: 'kubernetes-apiservers'
+      kubernetes_sd_configs:
+      - role: endpoints
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: default;kubernetes;https
+      - replacement: apiserver
+        action: replace
+        target_label: job
+
+    - job_name: 'kubelet'
+      kubernetes_sd_configs:
+      - role: node
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+      - replacement: 'lens-metrics'
+        target_label: kubernetes_namespace
+      metric_relabel_configs:
+      - source_labels:
+          - namespace
+        action: replace
+        regex: (.+)
+        target_label: kubernetes_namespace
+
+    - job_name: 'kubernetes-cadvisor'
+      kubernetes_sd_configs:
+      - role: node
+      scheme: https
+      metrics_path: /metrics/cadvisor
+      tls_config:
+        insecure_skip_verify: true
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+
+      relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+      metric_relabel_configs:
+      - source_labels:
+          - namespace
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels:
+        - pod
+        regex: (.*)
+        replacement: $1
+        action: replace
+        target_label: pod_name
+      - source_labels:
+        - container
+        regex: (.*)
+        replacement: $1
+        action: replace
+        target_label: container_name
+
+    - job_name: 'kubernetes-service-endpoints'
+      kubernetes_sd_configs:
+      - role: endpoints
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+        action: replace
+        target_label: __scheme__
+        regex: (https?)
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+        action: replace
+        target_label: __address__
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+      - source_labels: [__meta_kubernetes_service_name]
+        action: replace
+        target_label: job
+      - action: replace
+        source_labels:
+        - __meta_kubernetes_pod_node_name
+        target_label: kubernetes_node
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      metric_relabel_configs:
+      - source_labels:
+          - namespace
+        action: replace
+        regex: (.+)
+        target_label: kubernetes_namespace
+
+    - job_name: 'kubernetes-services'
+      metrics_path: /probe
+      params:
+        module: [http_2xx]
+      kubernetes_sd_configs:
+      - role: service
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+        action: keep
+        regex: true
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: blackbox
+      - source_labels: [__param_target]
+        target_label: instance
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+      - source_labels: [__meta_kubernetes_service_name]
+        target_label: job
+      metric_relabel_configs:
+      - source_labels:
+          - namespace
+        action: replace
+        regex: (.+)
+        target_label: kubernetes_namespace
+
+    - job_name: 'kubernetes-pods'
+      kubernetes_sd_configs:
+      - role: pod
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: kubernetes_pod_name
+      metric_relabel_configs:
+      - source_labels:
+          - namespace
+        action: replace
+        regex: (.+)
+        target_label: kubernetes_namespace
+
+    # Rule files
+    rule_files:
+      - "/etc/prometheus/rules/*.rules"
+      - "/etc/prometheus/rules/*.yaml"
+      - "/etc/prometheus/rules/*.yml"

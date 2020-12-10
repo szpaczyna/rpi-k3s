@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  replicas: 2
+  serviceName: prometheus
+  selector:
+    matchLabels:
+      name: prometheus
+  template:
+    metadata:
+      labels:
+        name: prometheus
+        app: prometheus
+        k8s-app: prometheus
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/os
+                  operator: In
+                  values:
+                  - linux
+      serviceAccountName: prometheus
+      initContainers:
+        - name: chown
+          image: docker.io/alpine:latest
+          command: ["chown", "-R", "65534:65534", "/var/lib/prometheus"]
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/prometheus
+      containers:
+        - name: prometheus
+          image: docker.io/prom/prometheus:latest
+          args:
+            - --web.listen-address=0.0.0.0:9090
+            - --config.file=/etc/prometheus/prometheus.yaml
+            - --storage.tsdb.path=/var/lib/prometheus
+            - --storage.tsdb.retention.time=5d
+            - --storage.tsdb.retention.size=2GB
+            - --storage.tsdb.min-block-duration=1h
+            - --storage.tsdb.max-block-duration=2h
+          ports:
+            - name: web
+              containerPort: 9090
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus
+            - name: data
+              mountPath: /var/lib/prometheus
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: 9090
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /-/healthy
+              port: 9090
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: config
+          configMap:
+            name: prometheus-config
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 5Gi
