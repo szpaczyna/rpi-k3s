@@ -1204,7 +1204,6 @@
   "schemaVersion": 16,
   "style": "dark",
   "tags": [
-    "dns",
     "coredns"
   ],
   "templating": {

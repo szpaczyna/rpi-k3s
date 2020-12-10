@@ -1110,7 +1110,6 @@
    "style": "dark",
    "tags": [
       "cert-manager",
-      "infra"
    ],
    "templating": {
       "list": [

@@ -19,7 +19,6 @@ spec:
       - env:
         - name: GF_INSTALL_PLUGINS
           value: grafana-piechart-panel,novalabs-annotations-panel,yesoreyeram-boomtheme-panel,btplc-status-dot-panel,vonage-status-panel,grafana-kubernetes-app
-        #image: grafana/grafana:7.0.3
         image: grafana/grafana:latest
         name: grafana
         ports:
@@ -29,19 +28,9 @@ spec:
           httpGet:
             path: /api/health
             port: http
-          timeoutSeconds: 20
-          initialDelaySeconds: 240
-          periodSeconds: 120
-        livenessProbe:
-          httpGet:
-            path: /api/health
-            port: http
-          timeoutSeconds: 20
-          initialDelaySeconds: 120
-          periodSeconds: 120
         resources:
           limits:
-            cpu: 250m
+            cpu: 200m
             memory: 200Mi
           requests:
             cpu: 100m
@@ -142,7 +131,6 @@ spec:
           readOnly: false
       nodeSelector:
         kubernetes.io/os: linux
-        kubernetes.io/role: worker
       securityContext:
         fsGroup: 472
         runAsNonRoot: true
@@ -239,33 +227,6 @@ spec:
       - configMap:
           name: grafana-dashboard-workload-total
         name: grafana-dashboard-workload-total
-      - configMap:
-          name: grafana-dashboard-simple-dash
-        name: grafana-dashboard-simple-dash
-      - configMap:
-          name: grafana-cert-manager
-        name: grafana-cert-manager
-      - configMap:
-          name: grafana-cluster-overview
-        name: grafana-cluster-overview
-      - configMap:
-          name: grafana-hosts-overview
-        name: grafana-hosts-overview
-      - configMap:
-          name: grafana-k8s-cluster-metrics
-        name: grafana-k8s-cluster-metrics
-      - configMap:
-          name: grafana-kubernetes-cluster
-        name: grafana-kubernetes-cluster
-      - configMap:
-          name: grafana-node-exporter-server-metrics
-        name: grafana-node-exporter-server-metrics
-      - configMap:
-          name: grafana-simple-dash
-        name: grafana-simple-dash
-      - configMap:
-          name: grafana-traefik-metrics
-        name: grafana-traefik-metrics
       - name: grafana-config
         secret:
           secretName: grafana-config

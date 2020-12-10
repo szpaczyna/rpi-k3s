@@ -10165,9 +10165,7 @@
   "schemaVersion": 26,
   "style": "dark",
   "tags": [
-    "kubernetes",
-    "k8s",
-    "namespace"
+    "k3s",
   ],
   "templating": {
     "list": [

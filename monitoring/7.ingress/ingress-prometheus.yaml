@@ -15,7 +15,7 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: prometheus-k3s
+          serviceName: prometheus
           servicePort: web
         path: /
   tls:

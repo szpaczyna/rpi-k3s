@@ -2425,7 +2425,6 @@
   "schemaVersion": 26,
   "style": "dark",
   "tags": [
-    "hosts",
     "prometheus",
     "node-exporter"
   ],
