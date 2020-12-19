@@ -28,9 +28,9 @@ spec:
             - name: PROVISIONER_NAME
               value: nfs-provisioner/nfs
             - name: NFS_SERVER
-              value: rpi-k3s-worker4
+              value: rpi-k3s-worker1
             - name: NFS_PATH
-              value: /data/k8s-storage
+              value: /data/k3s/storage
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -47,5 +47,5 @@ spec:
       volumes:
         - name: nfs-client-root
           nfs:
-            server: rpi-k3s-worker4
-            path: /data/k8s-storage
+            server: rpi-k3s-worker1
+            path: /data/k3s/storage

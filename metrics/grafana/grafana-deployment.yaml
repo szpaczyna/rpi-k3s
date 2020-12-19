@@ -74,9 +74,6 @@ spec:
         - mountPath: /grafana-dashboard-definitions/0/k8s-resources-workloads-namespace
           name: grafana-dashboard-k8s-resources-workloads-namespace
           readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/kubernetes-cluster-dashboard
-          name: grafana-dashboard-kubernetes-cluster-dashboard
-          readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/namespace-by-pod
           name: grafana-dashboard-namespace-by-pod
           readOnly: false
@@ -143,9 +140,6 @@ spec:
       - configMap:
           name: grafana-dashboard-k8s-resources-workloads-namespace
         name: grafana-dashboard-k8s-resources-workloads-namespace
-      - configMap:
-          name: grafana-dashboard-kubernetes-cluster-dashboard
-        name: grafana-dashboard-kubernetes-cluster-dashboard
       - configMap:
           name: grafana-dashboard-namespace-by-pod
         name: grafana-dashboard-namespace-by-pod
