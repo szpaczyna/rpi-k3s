@@ -1,28 +1,6 @@
 apiVersion: v1
 kind: Service
 metadata:
-  # This service is meant to be used by clients of the database. It exposes a ClusterIP that will
-  # automatically load balance connections to the different database pods.
-  name: cockroachdb
-  labels:
-    app: cockroachdb
-spec:
-  ports:
-  # The main port, served by gRPC, serves Postgres-flavor SQL, internode
-  # traffic and the cli.
-  - port: 26257
-    targetPort: 26257
-    name: grpc
-  # The secondary port serves the UI as well as health and debug endpoints.
-  - port: 8080
-    targetPort: 8080
-    name: http
-  selector:
-    app: cockroachdb
----
-apiVersion: v1
-kind: Service
-metadata:
   # This service only exists to create DNS entries for each pod in the stateful
   # set such that they can resolve each other's IP addresses. It does not
   # create a load-balanced ClusterIP and should not be used directly by clients
@@ -52,7 +30,7 @@ spec:
   # the sake of the other CockroachDB pods even before they're ready, since they
   # have to be able to talk to each other in order to become ready.
   publishNotReadyAddresses: true
-  clusterIP: None
+  type: ClusterIP
   selector:
     app: cockroachdb
 ---
@@ -97,7 +75,7 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
       - name: cockroachdb
-        image: registry.k3s.shpaq.org/cockroachdb:v20.2.3
+        image: registry.shpaq.org/cockroachdb:v20.2.3
         imagePullPolicy: IfNotPresent
         # TODO: Change these to appropriate values for the hardware that you're running. You can see
         # the resources that can be allocated on each of your Kubernetes nodes by running:
@@ -156,7 +134,7 @@ spec:
             --insecure
             --advertise-host $(hostname -f)
             --http-addr 0.0.0.0
-            --join cockroachdb-0.cockroachdb,cockroachdb-1.cockroachdb,cockroachdb-2.cockroachdb
+            --join cockroachdb-0.cockroachdb,cockroachdb-1.cockroachdb
             --cache $(expr $MEMORY_LIMIT_MIB / 4)MiB
             --max-sql-memory $(expr $MEMORY_LIMIT_MIB / 4)MiB
       # No pre-stop hook is required, a SIGTERM plus some time is all that's
@@ -173,6 +151,7 @@ spec:
   - metadata:
       name: datadir
     spec:
+      storageClassName: "local-path"
       accessModes:
         - "ReadWriteOnce"
       resources:

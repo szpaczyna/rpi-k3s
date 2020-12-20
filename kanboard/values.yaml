@@ -13,7 +13,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 kanboard:
-  #databaseUrl: postgresql://user:pass@address:5432/name
+        #databaseUrl: postgresql://kanboard@cockroachdb.dev.svc:26257?sslmode=disable
   debug: false
   # apiAuthenticationToken: custom-token
 
@@ -33,9 +33,9 @@ service:
 ingress:
   enabled: true
   hosts:
-    - name: kanboard.k3s.shpaq.org
+    - name: kanboard.shpaq.org
       tls: true
-      tlsSecret: kanboard-k3s-shpaq-org-tls
+      tlsSecret: kanboard-shpaq-org-tls
       annotations:
         kubernetes.io/ingress.class: traefik
         cert-manager.io/cluster-issuer: letsencrypt-prod

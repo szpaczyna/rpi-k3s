@@ -2,7 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-
 ui:
   title: "Docker registry UI"
   delete_images: true
@@ -12,7 +11,7 @@ ui:
   image:
     registry: docker.io
     repository: joxit/docker-registry-ui
-    tag: arm32v7-static
+    tag: arm64v8
     pullPolicy: IfNotPresent
   probe:
     liveness: true
@@ -30,7 +29,8 @@ ui:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  fullnameOverride: ""
+  fullnameOverride: "registry-ui"
+  nameOverride: "registry"
 
   service:
     type: ClusterIP
@@ -55,69 +55,47 @@ ui:
 registry:
   external: false
   # URL of the registry (requiered. Note: this wont work as localhost is inside the container. Only used if the registry is external)
-  url: http://localhost:5000
+  url: http://registry.dev.cluster.local:5000
 
   replicaCount: 1
   # Image definition for the registry (Only used if the registry is not external)
   image:
     registry: docker.io
     repository: registry
-    tag: 2.7.1
+    tag: latest
     pullPolicy: IfNotPresent
   probe:
     liveness: true
     readiness: true
   resources:
-  # If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
    requests:
      cpu: 100m
      memory: 128Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  fullnameOverride: ""
-
+  fullnameOverride: "registry"
 
   persistence:
-    ## If true, use a Persistent Volume Claim, If false, use emptyDir
-    ##
     enabled: true
-    ## Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    storageClass: "nfs-storage"
-    ## Persistent Volume Claim annotations
-    ##
+    storageClass: "local-path"
     annotations:
-    ## Persistent Volume Access Mode
-    ##
     accessModes:
     # This have to be ReadWriteMany if replicaCount>1
     - ReadWriteOnce
-    ## Persistent Volume size
-    ##
-    size: 30Gi
-    ##
+    size: 10Gi
 
   service:
     type: ClusterIP
     port: 5000
 
   ingress:
-    enabled: false
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: traefik
       # kubernetes.io/tls-acme: "true"
     hosts:
-      - host: docker-registry.local
+      - host: registry.morphine
 
     tls: []
     #  - secretName: chart-example-tls
@@ -125,4 +103,4 @@ registry:
     #      - chart-example.local
 
 imagePullSecrets: []
-nameOverride: ""
+#nameOverride: "registry"
