@@ -13,7 +13,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 kanboard:
-        #databaseUrl: postgresql://kanboard@cockroachdb.dev.svc:26257?sslmode=disable
+        #databaseUrl: postgres://kanboard@cockroachdb.dev.svc:26257?sslmode=disable/kanboard
   debug: false
   # apiAuthenticationToken: custom-token
 
