@@ -5,7 +5,6 @@
 image:
   repository: kanboard/kanboard
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart version.
   tag: "latest"
 
 imagePullSecrets: []
@@ -13,10 +12,10 @@ nameOverride: ""
 fullnameOverride: ""
 
 kanboard:
-        #databaseUrl: postgres://kanboard@cockroachdb.dev.svc:26257?sslmode=disable/kanboard
+  #databaseUrl: postgresql://user:pass@address:5432/name
   debug: false
   # apiAuthenticationToken: custom-token
-
+  plugin_installer: true
   # Supply a custom config by providing the config map name here
   # customConfig: kanboard-custom
 
