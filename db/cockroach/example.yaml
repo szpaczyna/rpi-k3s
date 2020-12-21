@@ -26,14 +26,15 @@ spec:
           requests:
             storage: "20Gi"
         volumeMode: Filesystem
-  # resources:
-  #   requests:
-  #     cpu: "2"
-  #     memory: "8Gi"
-  #   limits:
-  #     cpu: "2"
-  #     memory: "8Gi"
+        storageClassName: local-path
+  resources:
+    requests:
+      cpu: "1"
+      memory: "1Gi"
+    limits:
+      cpu: "2"
+      memory: "3Gi"
   tlsEnabled: true
   image:
-    name: cockroachdb/cockroach:v20.2.0
+    name: registry.shpaq.org/cockroachdb:v20.2.3
   nodes: 2

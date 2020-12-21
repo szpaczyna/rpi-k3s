@@ -14,5 +14,6 @@ spec:
         command:
           - "/cockroach/cockroach"
           - "init"
+          - "--insecure"
           - "--host=cockroachdb-0.cockroachdb"
       restartPolicy: OnFailure

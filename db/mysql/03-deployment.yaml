@@ -2,7 +2,7 @@ apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
   name: mysql
-  namespace: apps
+  namespace: dev
 spec:
   replicas: 1
   selector:
@@ -26,20 +26,11 @@ spec:
               name: mysql-root-secret
               key: password
         - name: MYSQL_DATABASE
-          valueFrom:
-            secretKeyRef:
-              name: mysql-secret
-              key: database
+          value: gogs
         - name: MYSQL_USER
-          valueFrom:
-            secretKeyRef:
-              name: mysql-secret
-              key: username
+          value: gogs
         - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-secret
-              key: password
+          value: 123gogs321
         ports:
           - containerPort: 3306
             name: mysql
