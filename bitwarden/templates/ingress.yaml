@@ -1,6 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "bitwarden.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
+{{- $classname := .Values.ingress.classname -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -15,6 +16,7 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
+  ingressClassName: {{ $classname }} 
 {{- if .Values.ingress.tls }}
   tls:
   {{- range .Values.ingress.tls }}

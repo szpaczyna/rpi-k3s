@@ -15,20 +15,20 @@ log:
   rootPath: /data/gogs/log
 
 server:
-  appDataPath: /data/gogs/data
+  appDataPath: /data/gogs
   sshRootPath: /data/ssh
 
 repository:
   root: /data/git
 
 attachment:
-  path: /data/gogs/data/attachments
+  path: /data/gogs/attachments
 
 session:
-  providerConfig: /data/gogs/data/sessions
+  providerConfig: /data/gogs/sessions
 
 picture:
-  avatarUploadPath: /data/gogs/data/avatars
+  avatarUploadPath: /data/gogs/avatars
 
 mailer:
   enabled: false
@@ -39,13 +39,15 @@ mailer:
   passwd: averysecretpassword
   skipVerify: false
 
-persistence:
-  dataPath: /data/gogs/data
+persistence:                                                                    
+  enabled: true                                                                 
+  size: 10G                                                                      
+  accessMode: ReadWriteOnce                                                     
+  storageClass: "local-path"    
+  #  dataPath: /data/gogs/data
 
 databaseType: mysql
 mysql:
   databaseName: gogs
   databaseUser: gogs
   databasePassword: 123gogs321
-  persistence:
-    path: /data/gogs/sql
