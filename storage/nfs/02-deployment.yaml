@@ -30,7 +30,7 @@ spec:
             - name: NFS_SERVER
               value: rpi-k3s-worker1
             - name: NFS_PATH
-              value: /data/k3s/storage
+              value: /data/nfs
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -48,4 +48,4 @@ spec:
         - name: nfs-client-root
           nfs:
             server: rpi-k3s-worker1
-            path: /data/k3s/storage
+            path: /data/nfs

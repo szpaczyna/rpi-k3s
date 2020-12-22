@@ -30,6 +30,7 @@ service:
   # foo.io/bar: "true"
 ingress:
   enabled: true
+  classname: traefik-lb
   path: /
   # Used to create an Ingress record.
   hosts:

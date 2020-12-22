@@ -10,6 +10,7 @@ metadata:
     traefik.ingress.kubernetes.io/frontend-entry-points: http, https
     traefik.ingress.kubernetes.io/redirect-entry-point: https
 spec:
+  ingressClassName: traefik-lb
   rules:
   - host: shpaq.org
     http:

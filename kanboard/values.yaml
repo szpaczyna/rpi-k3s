@@ -31,6 +31,7 @@ service:
 
 ingress:
   enabled: true
+  classname: traefik-lb
   hosts:
     - name: kanboard.shpaq.org
       tls: true

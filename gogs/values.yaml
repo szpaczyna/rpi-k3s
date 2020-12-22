@@ -1,0 +1,51 @@
+imageTag: 0.12.3
+
+domainName: shpaq.org
+hostName: gogs.shpaq.org
+httpContainerPort: 3000
+sshContainerPort: 2222
+
+startSshServer: true
+
+skipTlsVerify: true
+
+secretKey: 'qPcYkDVSA6ZZtjo3Vc3JxwmJvNSNM2d9'
+
+log:
+  rootPath: /data/gogs/log
+
+server:
+  appDataPath: /data/gogs/data
+  sshRootPath: /data/ssh
+
+repository:
+  root: /data/git
+
+attachment:
+  path: /data/gogs/data/attachments
+
+session:
+  providerConfig: /data/gogs/data/sessions
+
+picture:
+  avatarUploadPath: /data/gogs/data/avatars
+
+mailer:
+  enabled: false
+  heloHostname: gogs.example.com
+  host: smtp.example.com:587
+  from: gogs@example.com
+  user: gogs@example.com
+  passwd: averysecretpassword
+  skipVerify: false
+
+persistence:
+  dataPath: /data/gogs/data
+
+databaseType: mysql
+mysql:
+  databaseName: gogs
+  databaseUser: gogs
+  databasePassword: 123gogs321
+  persistence:
+    path: /data/gogs/sql
