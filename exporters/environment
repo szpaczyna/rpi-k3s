@@ -18,6 +18,8 @@ ARGS=""
 #                            Regexp of net devices to ignore for netdev
 #                            collector.
 --collector.netstat.fields="^(.*_(InErrors|InErrs)|Ip_Forwarding|Ip(6|Ext)_(InOctets|OutOctets)|Icmp6?_(InMsgs|OutMsgs)|TcpExt_(Listen.*|Syncookies.*)|Tcp_(ActiveOpens|PassiveOpens|RetransSegs|CurrEstab)|Udp6?_(InDatagrams|OutDatagrams|NoPorts))$"
+--collector.mountstats    
+--collector.ntp           
 #                            Regexp of fields to return for netstat
 #                            collector.
 #  --collector.ntp.server="127.0.0.1"
@@ -88,13 +90,11 @@ ARGS=""
 #  --collector.meminfo       Enable the meminfo collector (default: enabled).
 #  --collector.meminfo_numa  Enable the meminfo_numa collector (default:
 #                            disabled).
-#  --collector.mountstats    Enable the mountstats collector (default:
 #                            disabled).
 #  --collector.netdev        Enable the netdev collector (default: enabled).
 #  --collector.netstat       Enable the netstat collector (default: enabled).
 #  --collector.nfs           Enable the nfs collector (default: enabled).
 #  --collector.nfsd          Enable the nfsd collector (default: enabled).
-#  --collector.ntp           Enable the ntp collector (default: disabled).
 #  --collector.qdisc         Enable the qdisc collector (default: disabled).
 #  --collector.runit         Enable the runit collector (default: disabled).
 #  --collector.sockstat      Enable the sockstat collector (default:

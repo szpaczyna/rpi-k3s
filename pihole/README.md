@@ -35,6 +35,6 @@ configData: |-
 Web Interface host for ingrss
 ```
 ingress:
-  host: pihole.k3s.shpaq.org
+  host: pihole.shpaq.org
 
 ```

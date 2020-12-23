@@ -36,3 +36,20 @@ data:
     https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/adguard_mobile_host.txt
     https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/Ad_filter_list_by_Disconnect.txt
   regex.list: |
+    ^(.+[-_.])??adse?rv(er?|ice)?s?[0-9]*[-.]	
+    ^(.+[-_.])??m?ad[sxv]?[0-9]*[-_.]
+    ^(.+[-_.])??telemetry[-.]
+    ^(.+[-_.])??xn--
+    ^adim(age|g)s?[0-9]*[-_.]
+    ^adtrack(er|ing)?[0-9]*[-.]
+    ^advert(s|is(ing|ements?))?[0-9]*[-_.]
+    ^aff(iliat(es?|ion))?[-.]
+    ^analytics?[-.]
+    ^banners?[-.]
+    ^beacons?[0-9]*[-.]
+    ^count(ers?)?[0-9]*[-.]
+    ^pixels?[-.]
+    ^stat(s|istics)?[0-9]*[-.]
+    ^track(ers?|ing)?[0-9]*[-.]
+    ^(.*)\.g00\.(.*)
+    ^traff(ic)?[-.]
