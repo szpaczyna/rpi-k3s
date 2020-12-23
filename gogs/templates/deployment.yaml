@@ -3,62 +3,84 @@ kind: Deployment
 metadata:
   name: {{ template "name" . }}
   labels:
-    app: {{ template "name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
   selector:
     matchLabels:
-      app: {{template "name" .}}
+      app: {{ template "name" . }}
   template:
     metadata:
       labels:
         app: {{ template "name" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Name }}"
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
     spec:
+      {{- with .Values.securityContext }}
+      securityContext:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
       containers:
-      - name: {{ template "name" . }}
-        image: "gogs/gogs-rpi:{{ .Values.imageTag }}"
-        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
-        env:
-        - name: DOMAIN
-          value: {{ .Values.domainName }}
-        - name: SOCAT_LINK
-          value: "false"
-        ports:
-        - name: http
-          containerPort: {{ .Values.httpContainerPort }}
-        - name: ssh
-          containerPort: {{ .Values.sshContainerPort }}
-        livenessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: 120
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /
-            port: http
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
-        volumeMounts:
-        - name: data
-          mountPath: /data
-        - name: config
-          mountPath: /data/gogs/conf
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 3000
+            - containerPort: 22
+          livenessProbe:
+            initialDelaySeconds: 180
+            httpGet:
+              {{- if .Values.service.gogs.serviceRequireSignInView }}
+              path: /user/login
+              {{- else }}
+              path: /
+              {{- end }}
+              port: 3000
+          readinessProbe:
+            initialDelaySeconds: 180
+            httpGet:
+              {{- if .Values.service.gogs.serviceRequireSignInView }}
+              path: /user/login
+              {{- else }}
+              path: /
+              {{- end }}
+              port: 3000
+          env:
+            # https://github.com/gogits/gogs/tree/master/docker#container-options
+            - name: SOCAT_LINK
+              value: "false"
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: config
+              mountPath: /data/gogs/conf/app.ini
+              subPath: app.ini
       volumes:
-      - name: config
-        configMap:
-          name: gogs-config
-      {{- if .Values.persistence.enabled }} 
-      - name: data
-        persistentVolumeClaim:                                                                                        
-          claimName: {{ template "name" . }}-data                                                        
-      {{- end }}                                                                                                      
-        #hostPath:
-        #  path: {{ .Values.persistence.dataPath }}
+        - name: config
+          configMap:
+            name: {{ template "name" . }}-config
+        - name: data
+      {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            {{- if .Values.persistence.existingClaim }}
+            claimName: {{ .Values.persistence.existingClaim }}
+            {{- else }}
+            claimName: {{ template "name" . }}-data
+            {{- end -}}
+      {{- else }}
+          emptyDir: {}
+      {{- end -}}

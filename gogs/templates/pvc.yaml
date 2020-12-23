@@ -1,5 +1,4 @@
-{{- if .Values.persistence.enabled -}}
-{{- if not .Values.persistence.existingClaim -}}
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -9,10 +8,6 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-{{- if .Values.persistence.annotations }}
-  annotations:
-{{ toYaml .Values.persistence.annotations | indent 4 }}
-{{- end }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote }}
@@ -26,5 +21,4 @@ spec:
   storageClassName: "{{ .Values.persistence.storageClass }}"
 {{- end }}
 {{- end }}
-{{- end -}}
-{{- end -}}
+{{- end }}

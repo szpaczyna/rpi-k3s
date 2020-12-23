@@ -1,12 +1,12 @@
+apiVersion: v1
+description: 'Gogs: Go Git Service'
 name: gogs
-version: 0.0.7
-description: A painless self-hosted Git service.
-home: https://gogs.io/
+version: 0.7.13
 appVersion: 0.12.3
-sources:
-  - https://github.com/gogits/gogs
-  - https://hub.docker.com/r/fabric8/gogs/
-  - https://gogs.io/docs/advanced/configuration_cheat_sheet.html
+home: https://gogs.io/
+icon: https://gogs.io/img/favicon.ico
 maintainers:
-  - name: Markus M. May
-    email: mmay@javafreedom.org
+  - name: obeyler
+  - name: poblin-orange
+keywords:
+- git
