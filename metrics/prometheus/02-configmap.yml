@@ -8,15 +8,15 @@ data:
     global:
       scrape_interval: 30s
     scrape_configs:
-    - job_name: 'node_exporter'
+    - job_name: 'speedtest'
+      metrics_path: /probe
+      params:
+        script: [speedtest]
       static_configs:
-        - targets: ['rpi-k3s-master:9100']
-        - targets: ['rpi-k3s-worker0:9100']
-        - targets: ['rpi-k3s-worker1:9100']
-        - targets: ['rpi-k3s-worker2:9100']
-        - targets: ['rpi-k3s-worker3:9100']
-        - targets: ['rpi-k3s-worker4:9100']
-        - targets: ['rpi-k3s-worker5:9100']
+        - targets:
+          - 10.0.0.2:9469
+      scrape_interval: 15m
+      scrape_timeout: 90s
 
     - job_name: 'pihole_exporter'
       static_configs:
