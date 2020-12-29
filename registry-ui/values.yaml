@@ -2,17 +2,21 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+
 ui:
+  # title of the registry
   title: "Docker registry UI"
+  # allow delete of images
   delete_images: true
+  # UI behave as a proxy of the registry
   proxy: true
 
   replicaCount: 1
   image:
     registry: docker.io
     repository: joxit/docker-registry-ui
-    tag: arm64v8
-    pullPolicy: IfNotPresent
+    tag: main-static
+    pullPolicy: Always
   probe:
     liveness: true
     readiness: true
@@ -23,14 +27,13 @@ ui:
   # limits:
   #   cpu: 100m
   #   memory: 128Mi
-   requests:
-     cpu: 100m
-     memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}
   fullnameOverride: "registry-ui"
-  nameOverride: "registry"
 
   service:
     type: ClusterIP
@@ -38,64 +41,84 @@ ui:
 
   ingress:
     enabled: true
-    annotations:
+    annotations: 
       kubernetes.io/ingress.class: traefik
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      traefik.frontend.redirect.permanent: 'true'
-      traefik.ingress.kubernetes.io/frontend-entry-points: http, https
-      traefik.ingress.kubernetes.io/redirect-entry-point: https
+      # kubernetes.io/tls-acme: "true"
     hosts:
-      - host: registry.k3s.shpaq.org
-    tls:
-    - secretName: registry-k3s-shpaq-org-tls
-      hosts:
-        - registry.k3s.shpaq.org
+      - host: registry.shpaq.org
+
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
 
 
 registry:
   external: false
   # URL of the registry (requiered. Note: this wont work as localhost is inside the container. Only used if the registry is external)
-  url: http://registry.dev.cluster.local:5000
+  url: http://localhost:5000
 
   replicaCount: 1
   # Image definition for the registry (Only used if the registry is not external)
   image:
     registry: docker.io
     repository: registry
-    tag: latest
-    pullPolicy: IfNotPresent
+    tag: 2.7.1
+    pullPolicy: Always
   probe:
     liveness: true
     readiness: true
   resources:
-   requests:
-     cpu: 100m
-     memory: 128Mi
+  # If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}
   fullnameOverride: "registry"
 
+
   persistence:
+    ## If true, use a Persistent Volume Claim, If false, use emptyDir
+    ##
     enabled: true
-    storageClass: "local-path"
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: "nfs"
+    ## Persistent Volume Claim annotations
+    ##
     annotations:
+    ## Persistent Volume Access Mode
+    ##
     accessModes:
     # This have to be ReadWriteMany if replicaCount>1
     - ReadWriteOnce
-    size: 10Gi
+    ## Persistent Volume size
+    ##
+    size: 30Gi
+    ##
 
   service:
     type: ClusterIP
     port: 5000
 
   ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: traefik
+    enabled: false
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     hosts:
-      - host: registry.morphine
+      - host: docker-registry.local
 
     tls: []
     #  - secretName: chart-example-tls
@@ -103,4 +126,4 @@ registry:
     #      - chart-example.local
 
 imagePullSecrets: []
-#nameOverride: "registry"
+nameOverride: "registry"

@@ -78,6 +78,7 @@ configData:
     addr: :5000
     headers:
       X-Content-Type-Options: [nosniff]
+      Access-Control-Allow-Origin: ['http://registry-ui.shpaq.org']
   health:
     storagedriver:
       enabled: true
