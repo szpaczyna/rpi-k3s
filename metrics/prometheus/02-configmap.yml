@@ -15,12 +15,13 @@ data:
       static_configs:
         - targets:
           - 10.0.0.2:9469
-      scrape_interval: 15m
+      scrape_interval: 30m
       scrape_timeout: 90s
 
     - job_name: 'pihole_exporter'
       static_configs:
-        - targets: ['rpi-k3s-worker0:9311']
+        - targets:
+          - 10.0.0.13:9311
 
     - job_name: 'kubernetes-apiservers'
       kubernetes_sd_configs:

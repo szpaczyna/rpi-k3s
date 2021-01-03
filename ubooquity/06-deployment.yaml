@@ -21,7 +21,7 @@ spec:
         - name: ubooquity
           securityContext:
             {}
-          image: "linuxserver/ubooquity:2.1.2-ls36"
+          image: "linuxserver/ubooquity:latest"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

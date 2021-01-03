@@ -1,4 +1,3 @@
-# rpi-k3s
-Home K3s cluster on rpis.
+## rpi-k3s
 
-ipsec/l2tp configuration.
+## Home K3s cluster on rpis.
