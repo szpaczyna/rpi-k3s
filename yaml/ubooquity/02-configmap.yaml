@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ubooquity
+  labels:
+    app.kubernetes.io/name: ubooquity
+data:
+  preferences.json: |
+    {"adminPortNumber":2203,"autoScanAtLaunch":true,"autoscanPeriod":720,"bookHeight":230,"bookWidth":160,"bookmarkUsingCookies":false,"booksPaginationNumber":30,"booksPaths":[{"pathString":"/books","userName":[]}],"bypassSingleRootFolder":false,"comicHeight":230,"comicWidth":160,"comicsPaginationNumber":30,"comicsPaths":[{"pathString":"/comics","userName":[]}],"displayTitleInsteadOfFileName":false,"enableFolderMetadataDisplay":false,"filesPaths":[{"pathString":"/files","userName":[]}],"folderExclusionPattern":"","isBooksProviderEnabled":true,"isComicsProviderEnabled":true,"isFilesProviderEnabled":true,"isOpdsProviderEnabled":false,"isRemoteAdminEnabled":false,"isShrinkingCacheEnabled":false,"isUserManagementEnabled":false,"keepUnreachableSharedFolders":false,"keystorePassword":"Dupa.0987","keystorePath":"/config/keystore","libraryPortNumber":2202,"minimizeOnStartup":false,"minimizeToTray":false,"reverseProxyPrefix":"","shrinkingCachePath":"","shrunkPageHeight":2500,"shrunkPageWidth":1536,"theme":"dark","users":[]}
+

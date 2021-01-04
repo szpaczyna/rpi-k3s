@@ -1,0 +1,84 @@
+# Default values for kanboard.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: kanboard/kanboard
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+kanboard:
+  #databaseUrl: postgresql://user:pass@address:5432/name
+  debug: false
+  # apiAuthenticationToken: custom-token
+  plugin_installer: true
+  # Supply a custom config by providing the config map name here
+  # customConfig: kanboard-custom
+
+persistence:
+  enabled: true
+  size: 2G
+  accessMode: ReadWriteOnce
+  storageClass: "local-path"
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  classname: traefik-lb
+  hosts:
+    - name: kanboard.shpaq.org
+      tls: true
+      tlsSecret: kanboard-shpaq-org-tls
+      annotations:
+        kubernetes.io/ingress.class: traefik
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        traefik.frontend.redirect.permanent: 'true'
+        traefik.ingress.kubernetes.io/frontend-entry-points: http, https
+        traefik.ingress.kubernetes.io/redirect-entry-point: https
+
+# More advanced options
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+additionalSpec: {}
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext: {}
+ # capabilities:
+ #  drop:
+ #  - ALL
+ # readOnlyRootFilesystem: true
+ # runAsNonRoot: true
+ # runAsUser: 1000
+
+resources:
+  #limits:
+   #cpu: 100m
+   #memory: 128Mi
+  requests:
+   cpu: 100m
+   memory: 128Mi
+
+nodeSelector:
+  kubernetes.io/os: linux
+  kubernetes.io/role: worker
+
+tolerations: []
+affinity: {}

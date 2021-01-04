@@ -1,0 +1,26 @@
+{{- if .Values.ingress.enabled  }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  annotations:
+{{ toYaml .Values.ingress.ingress_annotations | indent 4 }}
+spec:
+  ingressClassName: traefik-lb
+  rules:
+  - host: {{ .Values.service.http.externalHost }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ template "name" . }}-http
+          servicePort: {{ .Values.service.http.port }}
+  tls:
+{{ toYaml .Values.ingress.tls | indent 4 }}
+{{- end -}}

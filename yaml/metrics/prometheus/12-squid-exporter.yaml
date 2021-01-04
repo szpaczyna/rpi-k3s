@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: squid-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      k8s-app: squid-exporter
+  template:
+    metadata:
+      labels:
+        k8s-app: squid-exporter
+      annotations:
+         prometheus.io/scrape: "true"
+         prometheus.io/port: "9301"
+         seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/os
+                  operator: In
+                  values:
+                  - linux
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65536
+      hostPID: true
+      hostNetwork: true
+      containers:
+        - name: squid-exporter
+          image: "registry.shpaq.org/squid_exporter:latest"
+          imagePullPolicy: "Always"
+          ports:
+            - name: metrics
+              containerPort: 9301
+              hostPort: 9301
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 10m
+              memory: 24Mi
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists

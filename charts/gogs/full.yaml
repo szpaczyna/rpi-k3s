@@ -1,0 +1,262 @@
+---
+# Source: gogs/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gogs
+  labels:
+    app: gogs
+    chart: "gogs-0.7.13"
+    release: "gogs"
+    heritage: "Helm"
+type: Opaque
+data:
+  postgresql-user: "Z29ncw=="
+---
+# Source: gogs/templates/configmap-tcp.yaml
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  labels:
+    app: gogs
+    chart: "gogs-0.7.13"
+    component: gogs
+    heritage: "Helm"
+    release: "gogs"
+  name: tcp-gogs-ssh
+data:
+  2222: default/gogs:ssh
+---
+# Source: gogs/templates/configmap.yaml
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  labels:
+    app: gogs
+    chart: "gogs-0.7.13"
+    component: gogs
+    heritage: Helm
+    release: gogs
+  name: gogs-config
+data:
+  app.ini: |-
+    APP_NAME = Szpacze Gniazdo
+    RUN_MODE = prod
+
+    [repository.upload]
+    ENABLED = true
+    ALLOWED_TYPES = 
+    MAX_FILE_SIZE = 3
+    MAX_FILES = 5
+
+    [server]
+    PROTOCOL = http
+    DOMAIN = gogs.shpaq.org
+    ROOT_URL = https://gogs.shpaq.org/
+    LANDING_PAGE = home
+    SSH_DOMAIN = gogs.shpaq.org
+    SSH_PORT = 2222
+    SSH_LISTEN_PORT = 2222
+
+    [service]
+    ENABLE_CAPTCHA = true
+    ACTIVE_CODE_LIVE_MINUTES = 180
+    RESET_PASSWD_CODE_LIVE_MINUTES = 180
+    REGISTER_EMAIL_CONFIRM = false
+    DISABLE_REGISTRATION = true
+    REQUIRE_SIGNIN_VIEW = true
+    ENABLE_NOTIFY_MAIL = false
+    ENABLE_REVERSE_PROXY_AUTHENTICATION = false
+    ENABLE_REVERSE_PROXY_AUTO_REGISTRATION = false
+
+    [mailer]
+    ENABLED = false
+    HOST = 
+    DISABLE_HELO = false
+    HELO_HOSTNAME =
+    SKIP_VERIFY = false
+    SUBJECT_PREFIX = 
+    FROM = 
+    USER = 
+    PASSWD = 
+    USE_PLAIN_TEXT = text/plain
+
+    [database]
+    DB_TYPE = "mysql"
+    HOST = "mysql:3306"
+    NAME = "gogs"
+    USER = "gogs"
+    PASSWD = "123gogs321"
+    SSL_MODE = "disable"
+
+    [security]
+    INSTALL_LOCK = true
+    SECRET_KEY = "NmNpRWhTV1dMRXBGWVVPbkN5THUwQjFSWjRRVHBnakw="
+
+    [ui]
+    EXPLORE_PAGING_NUM = 20
+    ISSUE_PAGING_NUM = 10
+    FEED_MAX_COMMIT_NUM = 5
+
+    [cache]
+    ADAPTER = memory
+    INTERVAL = 60
+    HOST = 
+
+    [webhook]
+    QUEUE_LENGTH = 1000
+    DELIVER_TIMEOUT = 5
+    SKIP_TLS_VERIFY = true
+    PAGING_NUM = 10
+
+    [log]
+    MODE = console
+    LEVEL = Info
+
+    [cron]
+    ENABLED = true
+    RUN_AT_START = false
+
+    [cron.update_mirrors]
+    SCHEDULE = @every 10m
+
+    [cron.repo_health_check]
+    SCHEDULE = @every 24h
+    TIMEOUT = 60s
+    ARGS = 
+
+    [cron.check_repo_stats]
+    RUN_AT_START = true
+    SCHEDULE = @every 24h
+
+    [cron.repo_archive_cleanup]
+    RUN_AT_START = false
+    SCHEDULE = @every 24h
+    OLDER_THAN = 24h
+
+    [other]
+    SHOW_FOOTER_BRANDING = true
+    SHOW_FOOTER_VERSION = true
+    SHOW_FOOTER_TEMPLATE_LOAD_TIME = true
+---
+# Source: gogs/templates/pvc.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: gogs-data
+  labels:
+    app: gogs
+    chart: "gogs-0.7.13"
+    release: "gogs"
+    heritage: "Helm"
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "5Gi"
+  storageClassName: "local-path"
+---
+# Source: gogs/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: gogs
+  labels:
+    chart: "gogs-0.7.13"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 3000
+    targetPort: 3000
+    name: gogs-http
+  - port: 2222
+    targetPort: 22
+    name: gogs-ssh
+  selector:
+    app: gogs
+---
+# Source: gogs/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gogs
+  labels:
+    chart: "gogs-0.7.13"
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: gogs
+  template:
+    metadata:
+      labels:
+        app: gogs
+    spec:
+      containers:
+        - name: gogs
+          image: "gogs/gogs-rpi:0.12.3"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+            - containerPort: 22
+          livenessProbe:
+            initialDelaySeconds: 180
+            httpGet:
+              path: /user/login
+              port: 3000
+          readinessProbe:
+            initialDelaySeconds: 180
+            httpGet:
+              path: /user/login
+              port: 3000
+          env:
+            # https://github.com/gogits/gogs/tree/master/docker#container-options
+            - name: SOCAT_LINK
+              value: "false"
+          resources:
+            null
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: config
+              mountPath: /data/gogs/conf/app.ini
+              subPath: app.ini
+      volumes:
+        - name: config
+          configMap:
+            name: gogs-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: gogs-data
+---
+# Source: gogs/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gogs
+  labels:
+    app: gogs
+    chart: "gogs-0.7.13"
+    release: "gogs"
+    heritage: "Helm"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    traefik.frontend.redirect.permanent: "true"
+    traefik.ingress.kubernetes.io/frontend-entry-points: "http, https"
+    traefik.ingress.kubernetes.io/redirect-entry-point: "https"
+spec:
+  ingressClassName: traefik-lb
+  rules:
+    - host: gogs.shpaq.org
+      http:
+        paths:
+          - backend:
+              serviceName: gogs
+              servicePort: 3000
+  tls:
+    - hosts:
+      - gogs.shpaq.org
+      secretName: gogs-shpaq-org-tls

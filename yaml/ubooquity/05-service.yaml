@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ubooquity
+  labels:
+    app.kubernetes.io/name: ubooquity
+spec:
+  type: ClusterIP
+  ports:
+    - port: 2202
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 2203
+      targetPort: http-admin
+      protocol: TCP
+      name: http-admin
+  selector:
+    app.kubernetes.io/name: ubooquity
+
