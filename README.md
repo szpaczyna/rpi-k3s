@@ -1,4 +1,4 @@
-#### rpi-k3s - Home Cloud on Raspberry Pi
+# rpi-k3s - Home Cloud on Raspberry Pi
 ![Kubernetes](https://i.imgur.com/p1RzXjQ.png)
 
 ## :computer:&nbsp; Infrastructure
@@ -7,17 +7,6 @@
 * 2x USB DRIVE 1TB
 
 ## :gear:&nbsp; Setup
-# Namespaces
-- default           
-- kube-system      
-- kube-public       
-- kube-node-lease   
-- cert-manager      
-- apps              
-- monitoring        
-- dev               
-- storage           
-- unifi            
 
 ## :wrench:&nbsp; Workloads
 * Apps/Helm Charts:
@@ -36,17 +25,17 @@
   * [ubooquity](yaml/ubooquity) - Books Management
   * [unifi](yaml/unifi) - Unifi controller
   * [unifi-poller](yaml/unifi-poller) - Unifi pollers for Prometheus
-  * [www](yaml/www) - my personal website
+  * [www](yaml/www) - Personal website
   * [metrics](yaml/metrics) - Prometheus/Grafana stack with some additional exporters
 * System:
   * [cert-manager](https://github.com/jetstack/cert-manager) - Automated letsencrypt broker
-  * [metallb](https://github.com/metallb/metallb) - Load-balancer for bare-metal
+  * [metallb](https://github.com/metallb/metallb) - Load-balancer for bare-metal | NOT USED
   * [kubernetes-dashboard](yaml/kubernetes-dashboard) - Kubernetes Dashboard
   * [storage](yaml/storage) - local-path and nfs
   * [traefik](varia/traefik.yaml) - Traefik
   * [coredns](varia/coredns.yaml) - CoreDNS
 
-### k3s default service
+### k3s default services
 - kube-system
   - svclb - Service LoadBalancer
 
