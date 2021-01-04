@@ -1,2 +1,0 @@
-kubectl delete -f .
-kubectl delete -f verify/
