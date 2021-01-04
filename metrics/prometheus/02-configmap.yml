@@ -22,6 +22,11 @@ data:
       static_configs:
         - targets:
           - 10.0.0.13:9311
+    
+    - job_name: 'edgerouter_x'
+      static_configs:
+        - targets:
+          - 10.0.0.1:9100
 
     - job_name: 'kubernetes-apiservers'
       kubernetes_sd_configs:
