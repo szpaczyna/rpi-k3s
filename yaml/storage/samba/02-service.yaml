@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: samba
+  name: samba
+  namespace: storage
+spec:
+  ports:
+  - name: one
+    port: 139
+    protocol: TCP
+    targetPort: 139
+  - name: two
+    port: 445
+    protocol: TCP
+    targetPort: 445
+  selector:
+    app: samba
+  type: LoadBalancer
