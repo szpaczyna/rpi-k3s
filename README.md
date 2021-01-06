@@ -3,7 +3,7 @@
 
 ## :computer:&nbsp; Infrastructure
 * 2x RPI4 4GB
-* 6x RPI4B
+* 6x RPI3B
 * 2x USB DRIVE 1TB
 
 ## :gear:&nbsp; Setup
@@ -31,7 +31,7 @@
   * [cert-manager](https://github.com/jetstack/cert-manager) - Automated letsencrypt broker
   * [metallb](https://github.com/metallb/metallb) - Load-balancer for bare-metal | NOT USED
   * [kubernetes-dashboard](yaml/kubernetes-dashboard) - Kubernetes Dashboard
-  * [storage](yaml/storage) - local-path and nfs
+  * [storage](yaml/storage) - local-path, nfs and samba for home users
   * [traefik](varia/traefik.yaml) - Traefik
   * [coredns](varia/coredns.yaml) - CoreDNS
 
