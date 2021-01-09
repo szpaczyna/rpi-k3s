@@ -1,0 +1,41 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 30s
+
+scrape_configs:
+  - job_name: node
+    static_configs:
+      - targets: ['192.168.9.13:9100']
+      - targets: ['192.168.4.11:9100']
+      - targets: ['192.168.4.15:9100']
+      - targets: ['192.168.4.18:9100']
+      - targets: ['192.168.4.19:9100']
+      - targets: ['192.168.4.20:9100']
+      - targets: ['192.168.4.25:9100']
+      - targets: ['192.168.4.38:9100']
+      - targets: ['192.168.4.43:9100']
+      - targets: ['192.168.4.54:9100']
+      - targets: ['192.168.4.63:9100']
+      - targets: ['192.168.4.69:9100']
+      - targets: ['192.168.4.72:9100']
+      - targets: ['192.168.4.75:9100']
+      - targets: ['192.168.4.76:9100']
+      - targets: ['192.168.4.81:9100']
+      - targets: ['192.168.4.82:9100']
+      - targets: ['192.168.4.86:9100']
+      - targets: ['192.168.4.95:9100']
+      - targets: ['192.168.4.100:9100']
+      - targets: ['192.168.4.101:9100']
+      - targets: ['192.168.4.102:9100']
+      - targets: ['192.168.4.103:9100']
+      - targets: ['192.168.4.104:9100']
+      - targets: ['192.168.4.105:9100']
+      - targets: ['192.168.4.171:9100']
+      - targets: ['192.168.4.172:9100']
+      - targets: ['192.168.4.173:9100']
+  ## Add OpenVPN Node Exporter
+  - job_name: 'openvpn-metrics'
+    scrape_interval: 5s
+    static_configs:
+            - targets: ['192.168.9.13:9176']
+
