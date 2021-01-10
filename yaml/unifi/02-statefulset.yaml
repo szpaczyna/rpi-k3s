@@ -19,7 +19,7 @@ spec:
       containers:
         - env:
             - name: MEM_LIMIT
-              value: 768M
+              value: 384M
             - name: PGID
               value: "1000"
             - name: PUID
