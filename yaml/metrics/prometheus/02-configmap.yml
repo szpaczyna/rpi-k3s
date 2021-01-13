@@ -55,7 +55,7 @@ data:
       relabel_configs:
       - action: labelmap
         regex: __meta_kubernetes_node_label_(.+)
-      - replacement: 'lens-metrics'
+      - replacement: 'monitoring'
         target_label: kubernetes_namespace
       metric_relabel_configs:
       - source_labels:
