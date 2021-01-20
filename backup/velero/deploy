@@ -10,6 +10,6 @@ velero install \
     --use-restic \
     --backup-location-config \
     region=minio,s3ForcePathStyle=true,s3Url=http://minio.velero.svc:9000
- #   --dry-run -o yaml > velero.yaml
+#    --dry-run -o yaml > velero.yaml
 
-kubectl apply -f cm-restic.yaml
+kubectl apply -f restic-cm.yaml

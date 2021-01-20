@@ -13,7 +13,7 @@ fullnameOverride: ""
 
 kanboard:
   #databaseUrl: postgresql://user:pass@address:5432/name
-  debug: true
+  debug: false
   # apiAuthenticationToken: custom-token
   plugin_installer: true
   # Supply a custom config by providing the config map name here
