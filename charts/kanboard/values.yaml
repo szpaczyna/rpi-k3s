@@ -5,7 +5,7 @@
 image:
   repository: kanboard/kanboard
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "v1.2.18"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -45,21 +45,14 @@ ingress:
 
 # More advanced options
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: "kanboard-sa"
 
 additionalSpec: {}
-
 podAnnotations: {}
-
 podSecurityContext:
   fsGroup: 2000
-
 securityContext: {}
  # capabilities:
  #  drop:
@@ -69,9 +62,9 @@ securityContext: {}
  # runAsUser: 1000
 
 resources:
-  #limits:
-   #cpu: 100m
-   #memory: 128Mi
+  limits:
+   cpu: 500m
+   memory: 256Mi
   requests:
    cpu: 100m
    memory: 128Mi

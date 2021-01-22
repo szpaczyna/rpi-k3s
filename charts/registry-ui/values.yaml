@@ -1,14 +1,8 @@
-# Default values for docker-registry-ui.
-# This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-
 ui:
-  # title of the registry
   title: "Docker registry UI"
-  # allow delete of images
   delete_images: true
-  # UI behave as a proxy of the registry
   proxy: true
 
   replicaCount: 1
@@ -22,15 +16,14 @@ ui:
     readiness: true
 
   resources:
-  # If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
   requests:
     cpu: 100m
     memory: 128Mi
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/role: worker
   tolerations: []
   affinity: {}
   fullnameOverride: "registry-ui"
@@ -41,9 +34,8 @@ ui:
 
   ingress:
     enabled: true
-    annotations: 
+    annotations:
       kubernetes.io/ingress.class: traefik
-      # kubernetes.io/tls-acme: "true"
     hosts:
       - host: registry.shpaq.org
 
@@ -51,7 +43,6 @@ ui:
     #  - secretName: chart-example-tls
     #    hosts:
     #      - chart-example.local
-
 
 registry:
   external: false
@@ -69,44 +60,26 @@ registry:
     liveness: true
     readiness: true
   resources:
-  # If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+    limits:
+      cpu: 400m
+      memory: 256Mi
     requests:
       cpu: 100m
       memory: 128Mi
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/role: worker
   tolerations: []
   affinity: {}
   fullnameOverride: "registry"
 
-
   persistence:
-    ## If true, use a Persistent Volume Claim, If false, use emptyDir
-    ##
     enabled: true
-    ## Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
     storageClass: "nfs"
-    ## Persistent Volume Claim annotations
-    ##
     annotations:
-    ## Persistent Volume Access Mode
-    ##
     accessModes:
     # This have to be ReadWriteMany if replicaCount>1
-    - ReadWriteOnce
-    ## Persistent Volume size
-    ##
+      - ReadWriteOnce
     size: 30Gi
-    ##
 
   service:
     type: ClusterIP

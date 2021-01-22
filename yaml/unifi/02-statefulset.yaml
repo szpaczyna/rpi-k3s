@@ -24,7 +24,7 @@ spec:
               value: "1000"
             - name: PUID
               value: "1000"
-          image: "linuxserver/unifi-controller:latest"
+          image: "linuxserver/unifi-controller:version-6.0.43"
           name: unifi-controller
           ports:
             - containerPort: 3478

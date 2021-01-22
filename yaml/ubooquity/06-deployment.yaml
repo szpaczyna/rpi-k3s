@@ -21,7 +21,7 @@ spec:
         - name: ubooquity
           securityContext:
             {}
-          image: "linuxserver/ubooquity:latest"
+          image: "linuxserver/ubooquity:version-2.1.2"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -62,7 +62,7 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: ubooquity-config
-         - name: configmap
-             configMap:
-             name: ubooquity
+        - name: configmap
+          configMap:
+            name: ubooquity
 

@@ -4,7 +4,7 @@ metadata:
   name: prometheus
   namespace: monitoring
 spec:
-  replicas: 2
+  replicas: 1
   serviceName: prometheus
   selector:
     matchLabels:
@@ -85,4 +85,4 @@ spec:
         storageClassName: local-path
         resources:
           requests:
-            storage: 5Gi
+            storage: 10Gi
