@@ -12,7 +12,6 @@ spec:
       app: unifi-controller
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: unifi-controller
     spec:
@@ -29,13 +28,14 @@ spec:
           ports:
             - containerPort: 3478
               protocol: UDP
+              name: stun
             - containerPort: 10001
               protocol: UDP
+              name: discovery
             - containerPort: 8080
-            - containerPort: 8081
+              name: http
             - containerPort: 8443
-            - containerPort: 8843
-            - containerPort: 8880
+              name: https
             - containerPort: 6789
           volumeMounts:
             - mountPath: /config
