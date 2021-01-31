@@ -1,8 +1,8 @@
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: squid
-  namespace: apps
   labels:
     name: squid
 spec:
@@ -27,28 +27,16 @@ spec:
             - name: logs-data-pvc
               mountPath: /var/log/squid
               mountPath: /var/spool/squid
-            - name: user-passwords
-              mountPath: /etc/squid/passwd
           ports:
             - containerPort: 3128
-              hostPort: 3128
               protocol: TCP
       volumes:
         - name: conf
           configMap:
             name: squid-config
-        - name: blacklist-ads
-          configMap:
-            name: squid-config
-        - name: blacklist-sites
-          configMap:
-            name: squid-config
         - name: logs
           persistentVolumeClaim:
-            claimName: squid-pvc
+            claimName: squid
         - name: logs-data-pvc
           persistentVolumeClaim:
-            claimName: squid-pvc
-        - name: user-passwords
-            secret:
-            secretName: squid-shpaq-secret
+            claimName: squid

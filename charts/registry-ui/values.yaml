@@ -39,10 +39,10 @@ ui:
     hosts:
       - host: registry.shpaq.org
 
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
+    tls: 
+      - secretName: registry-shpaq-org-tls
+        hosts:
+          - registry.shpaq.org
 
 registry:
   external: false
