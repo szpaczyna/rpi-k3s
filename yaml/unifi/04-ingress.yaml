@@ -17,7 +17,7 @@ spec:
           - path: /
             backend:
               serviceName: unifi-controller
-              servicePort: 8080
+              servicePort: 8443
   tls:
     - hosts:
         - unifi.k3s.shpaq.org
