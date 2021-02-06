@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ubooquity
@@ -6,7 +6,6 @@ metadata:
     app.kubernetes.io/name: ubooquity
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    #kubernetes.io/ingress.class: traefik
     traefik.frontend.redirect.permanent: "true"
     traefik.ingress.kubernetes.io/frontend-entry-points: http, https
     traefik.ingress.kubernetes.io/redirect-entry-point: https
@@ -21,6 +20,9 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: ubooquity
-              servicePort: 2202
+              service:
+                  name: ubooquity
+                  port:
+                    number: 2202

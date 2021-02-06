@@ -1,10 +1,9 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: shpaq-org
   namespace: apps
   annotations:
-    kubernetes.io/ingress.class: traefik
     cert-manager.io/cluster-issuer: letsencrypt-prod
     traefik.frontend.redirect.permanent: 'true'
     traefik.ingress.kubernetes.io/frontend-entry-points: http, https
@@ -16,9 +15,12 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: shpaq-org
-          servicePort: 80
+          service:
+            name: shpaq-org
+            port:
+              number: 80
         path: /
+        pathType: Prefix
   tls:
   - secretName: shpaq-org-tls
     hosts:

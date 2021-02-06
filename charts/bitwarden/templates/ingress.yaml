@@ -2,7 +2,7 @@
 {{- $fullName := include "bitwarden.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $classname := .Values.ingress.classname -}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
@@ -33,8 +33,11 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
+            pathType: Prefix
             backend:
-              serviceName: {{ $fullName }}
-              servicePort: http
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: 80
   {{- end }}
 {{- end }}

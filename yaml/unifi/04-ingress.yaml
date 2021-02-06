@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: unifi-controller
@@ -15,9 +15,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: unifi-controller
-              servicePort: 8443
+              service:
+                name: unifi-controller
+                port: 
+                  number: 8443
   tls:
     - hosts:
         - unifi.k3s.shpaq.org

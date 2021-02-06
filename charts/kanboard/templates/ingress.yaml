@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled }}
 {{- range .Values.ingress.hosts }}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ template "kanboard.fullname" $ }}
@@ -21,9 +21,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: {{ template "kanboard.fullname" $ }}
-              servicePort: {{ $.Values.service.port }}
+              service:
+                name: {{ template "kanboard.fullname" $ }}
+                port:
+                  number: {{ $.Values.service.port }}
 {{- if .tls }}
   tls:
     - hosts:
