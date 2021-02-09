@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ template "name" . }}-pvc
+  name: {{ template "name" . }}-data
   labels:
     type: local
 spec:

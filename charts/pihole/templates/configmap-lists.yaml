@@ -14,6 +14,13 @@ data:
     youtu.be
     youtube.com
     hangouts.google.com
+    drive.google.com
+    forms.office.com
+    meet.google.com
+    storage.googleapis.com
+    miningcity.com
+    me.miningcity.com
+    files.catbox.moe
   adlists.list: |
     https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
     https://raw.githubusercontent.com/szpaczyna/cherry_conf/master/etc/hosts

@@ -16,11 +16,11 @@ spec:
     port: 81
     targetPort: 80
     protocol:   TCP
-  - name:       {{ template "name" . }}-dns-tcp
+  - name: {{ template "name" . }}-dns-tcp
     port: 53
     targetPort: 53
     protocol:   TCP
-  externalIPs:
-    - 10.0.0.13
+    #externalIPs:
+    #- 10.0.0.2
   selector:
     app: {{ template "name" . }}

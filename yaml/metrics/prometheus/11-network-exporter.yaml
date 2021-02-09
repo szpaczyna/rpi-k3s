@@ -26,9 +26,9 @@ spec:
                   operator: In
                   values:
                   - linux
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65535
+#      securityContext:
+#        runAsNonRoot: false
+#        runAsUser: 65535
       hostPID: true
       hostNetwork: true
       containers:

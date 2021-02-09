@@ -14,7 +14,6 @@ ui:
   probe:
     liveness: true
     readiness: true
-
   resources:
   limits:
     cpu: 250m
