@@ -4,7 +4,7 @@ metadata:
   name: prometheus
   namespace: monitoring
 spec:
-  replicas: 2
+  replicas: 1
   serviceName: prometheus
   selector:
     matchLabels:
@@ -66,11 +66,11 @@ spec:
             timeoutSeconds: 10
           resources:
             requests:
-              cpu: 100m
+              cpu: 500m
               memory: 512Mi
             limits:
-              cpu: 500m
-              memory: 1Gi
+              cpu: 1000m
+              memory: 2Gi
       terminationGracePeriodSeconds: 30
       volumes:
         - name: config
