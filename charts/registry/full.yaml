@@ -1,0 +1,188 @@
+---
+# Source: docker-registry/templates/poddisruptionbudget.yaml
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: registry
+  labels:
+    app: docker-registry
+    chart: docker-registry-1.9.6
+    release: registry
+    heritage: Helm
+spec:
+  selector:
+    matchLabels:
+      app: docker-registry
+      release: registry
+  maxUnavailable: 1
+---
+# Source: docker-registry/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry-secret
+  labels:
+    app: docker-registry
+    chart: docker-registry-1.9.6
+    heritage: Helm
+    release: registry
+type: Opaque
+data:
+  haSharedSecret: "ZG5JbFlaNjkwOEQwTlhEQQ=="
+---
+# Source: docker-registry/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registry-config
+  labels:
+    app: docker-registry
+    chart: docker-registry-1.9.6
+    heritage: Helm
+    release: registry
+data:
+  config.yml: |-
+    health:
+      storagedriver:
+        enabled: true
+        interval: 10s
+        threshold: 3
+    http:
+      addr: :5000
+      headers:
+        Access-Control-Allow-Credentials:
+        - true
+        Access-Control-Allow-Headers:
+        - Authorization
+        Access-Control-Allow-Methods:
+        - HEAD
+        - GET
+        - OPTIONS
+        - DELETE
+        Access-Control-Allow-Origin:
+        - '*'
+        Access-Control-Max-Age:
+        - 1728000
+        X-Content-Type-Options:
+        - nosniff
+    log:
+      fields:
+        service: registry
+    storage:
+      cache:
+        blobdescriptor: inmemory
+    version: 0.1
+---
+# Source: docker-registry/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry
+  labels:
+    app: docker-registry
+    chart: docker-registry-1.9.6
+    release: registry
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5000
+      protocol: TCP
+      name: registry
+      targetPort: 5000
+  selector:
+    app: docker-registry
+    release: registry
+---
+# Source: docker-registry/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+  labels:
+    app: docker-registry
+    chart: docker-registry-1.9.6
+    release: registry
+    heritage: Helm
+spec:
+  selector:
+    matchLabels:
+      app: docker-registry
+      release: registry
+  replicas: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: docker-registry
+        release: registry
+      annotations:
+        checksum/config: 30a15318d321bda3715024e8e44991dd2141de55e13daf166d00f29cc535d952
+    spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      containers:
+        - name: docker-registry
+          image: "registry:2.7.1"
+          imagePullPolicy: IfNotPresent
+          command:
+          - /bin/registry
+          - serve
+          - /etc/docker/registry/config.yml
+          ports:
+            - containerPort: 5000
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          env:
+            - name: REGISTRY_HTTP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: registry-secret
+                  key: haSharedSecret
+            - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+              value: "/var/lib/registry"
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/registry/
+            - name: "registry-config"
+              mountPath: "/etc/docker/registry"
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: registry-config
+          configMap:
+            name: registry-config
+---
+# Source: docker-registry/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: registry
+  labels:
+    app: docker-registry
+    chart: docker-registry-1.9.6
+    release: registry
+    heritage: Helm
+  annotations:
+      kubernetes.io/ingress.class: "traefik"
+spec:
+  ingressClassName: traefik-lb 
+  rules:
+    - host: registry.shpaq.org
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: registry
+              servicePort: 5000

@@ -32,29 +32,29 @@ ingress:
   enabled: true
   classname: traefik-lb
   path: /
-  # Used to create an Ingress record.
   hosts:
     - registry.shpaq.org
   annotations:
-    kubernetes.io/ingress.class: traefik
-    # kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.frontend.redirect.permanent: 'true'
+    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
   labels: {}
   tls:
-    # Secrets must be manually created in the namespace.
-    # - secretName: chart-example-tls
-    #   hosts:
-    #     - chart-example.local
+    - secretName: registry-shpaq-org-tls
+      hosts:
+      - registry.shpaq.org
 resources:
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
+  limits:
+   cpu: 500m
+   memory: 256Mi
   requests:
    cpu: 100m
    memory: 128Mi
 persistence:
   accessMode: 'ReadWriteOnce'
-  enabled: false
-  size: 10Gi
+  enabled: true
+  size: 20Gi
   storageClass: 'local-path'
 
 # set the type of filesystem to use: filesystem, s3
@@ -78,7 +78,11 @@ configData:
     addr: :5000
     headers:
       X-Content-Type-Options: [nosniff]
-      Access-Control-Allow-Origin: ['http://registry-ui.shpaq.org']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']
+      Access-Control-Allow-Headers: ['Authorization']
+      Access-Control-Max-Age: [1728000]
+      Access-Control-Allow-Credentials: [true]
   health:
     storagedriver:
       enabled: true
