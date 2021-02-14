@@ -1,0 +1,71 @@
+# Default values for version-checker.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: registry.shpaq.org/version-checker
+  tag: 0.2.1
+  pullPolicy: IfNotPresent
+
+service:
+  port: 8080
+
+versionChecker:
+  imageCacheTimeout: 30m
+  logLevel: info # debug, info, warn, error, fatal, panic
+  metricsServingAddress: 0.0.0.0:8080
+  testAllContainers: true # don't require the enable.version-checker.io annotation
+
+acr:
+  username:
+  password:
+  refreshToken:
+
+docker:
+  username:
+  password:
+  token:
+
+ecr:
+  accessKeyID:
+  secretAccessKey:
+  sessionToken:
+
+gcr:
+  token:
+
+quay:
+  token:
+
+selfhosted: 
+  - name: REGISTRY
+    host: https://registry.shpaq.org
+  #  username:
+  #  password:
+  #  token:
+  #- name: EXAMPLE
+  #  host: https://artifactory.example.com
+  #  username: foo
+  #  password: bar
+  #  token:
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+  #
+
+# Prometheus Operator
+prometheus:
+  enabled: false
+  replicas: 1
+  serviceAccountName: prometheus
+
+serviceMonitor:
+  enabled: true
+  additionalLabels: {}
