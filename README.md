@@ -16,7 +16,6 @@
   * [kanboard](https://kanboard.org/) - Kanban project management software
   * [pihole](https://pi-hole.net/) - Network-wide AD Blocking
   * [registry](https://hub.docker.com/_/registry/) - Docker registry
-  * [registry-ui](https://github.com/Joxit/docker-registry-ui) - Docker Registry GUI
 * Apps/YAML
   * [databases](yaml/db) - Mongo, Mysql, CockroachDB
   * [elastichq](yaml/elastichq) - Elasticsearch management
@@ -29,7 +28,7 @@
   * [metrics](yaml/metrics) - Prometheus/Grafana stack with some additional exporters
 * System:
   * [cert-manager](https://github.com/jetstack/cert-manager) - Automated letsencrypt broker
-  * [metallb](https://github.com/metallb/metallb) - Load-balancer for bare-metal | NOT USED
+  * [metallb](yaml/metallb) - Load-balancer for bare-metal
   * [kubernetes-dashboard](yaml/kubernetes-dashboard) - Kubernetes Dashboard
   * [storage](yaml/storage) - local-path, nfs and samba for home users
   * [traefik](varia/traefik.yaml) - Traefik
@@ -37,7 +36,6 @@
 
 ### k3s default services
 - kube-system
-  - svclb - Service LoadBalancer
 
 ## TODO
 - Automation
