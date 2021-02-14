@@ -6,7 +6,7 @@ metadata:
 spec:
   chart: https://%{KUBERNETES_API}%/static/charts/traefik-1.81.0.tgz
   valuesContent: |-
-    replicas: 4
+    replicas: 3
     rbac:
       enabled: true
     ssl:
@@ -31,6 +31,11 @@ spec:
         prometheus.io/path: /metrics
         prometheus.io/port: 9100
         prometheus.io/scrape: true
+    serviceType: LoadBalancer
+    service:
+      annotations:
+        metallb.universe.tf/address-pool: "address-pool-1"
+        metallb.universe.tf/allow-shared-ip: "true"
     image: "rancher/library-traefik"
     tolerations:
       - key: "CriticalAddonsOnly"
@@ -41,3 +46,17 @@ spec:
     nodeSelector:
       kubernetes.io/role: worker
       kubernetes.io/os: linux
+    podDisruptionBudget:                                                                                                                                   
+      minAvailable: 1
+    autoscaling:                                                                                                                                             
+      minReplicas: 1                                                                                                                                         
+      maxReplicas: 4                                                                                                                                        
+      metrics:                                                                                                                                               
+      - type: Resource                                                                                                                                       
+        resource:                                                                                                                                            
+          name: cpu                                                                                                                                          
+          targetAverageUtilization: 60                                                                                                                       
+      - type: Resource                                                                                                                                       
+        resource:                                                                                                                                            
+          name: memory                                                                                                                                       
+          targetAverageUtilization: 60
