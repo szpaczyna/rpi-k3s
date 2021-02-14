@@ -5,6 +5,9 @@ metadata:
     app: samba
   name: samba
   namespace: storage
+  annotations:
+    metallb.universe.tf/address-pool: "address-pool-1"
+    metallb.universe.tf/allow-shared-ip: "true"
 spec:
   ports:
   - name: one
