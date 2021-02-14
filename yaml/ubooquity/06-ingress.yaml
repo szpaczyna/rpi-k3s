@@ -1,9 +1,10 @@
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ubooquity
   labels:
-    app.kubernetes.io/name: ubooquity
+    app: ubooquity
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     traefik.frontend.redirect.permanent: "true"

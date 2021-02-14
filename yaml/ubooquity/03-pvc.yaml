@@ -1,9 +1,10 @@
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ubooquity-config
   labels:
-    app.kubernetes.io/name: ubooquity
+    app: ubooquity
 spec:
   accessModes:
     - "ReadWriteOnce"
@@ -12,3 +13,17 @@ spec:
       storage: "1Gi"
   storageClassName: local-path
 
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ubooquity-books
+  labels:
+    app: ubooquity
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "3Gi"
+  storageClassName: local-path
