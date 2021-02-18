@@ -28,7 +28,7 @@ spec:
         readinessProbe:
           httpGet:
             path: /api/health
-            port: http
+            port: http!
           timeoutSeconds: 20
           initialDelaySeconds: 240
           periodSeconds: 120

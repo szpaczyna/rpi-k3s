@@ -4,19 +4,19 @@
     Edit original files in
     /private/sass instead
  */
-hr,img {
+hr, img {
     border: 0
 }
 
-body,figure {
+body, figure {
     margin: 0
 }
 
-article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary {
+article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
     display: block
 }
 
-audio,canvas,video {
+audio, canvas, video {
     display: inline-block
 }
 
@@ -39,7 +39,7 @@ a:focus {
     outline: dotted thin
 }
 
-a:active,a:hover {
+a:active, a:hover {
     outline: 0
 }
 
@@ -47,7 +47,7 @@ h1 {
     margin: .67em 0
 }
 
-b,strong {
+b, strong {
     font-weight: 700
 }
 
@@ -55,7 +55,7 @@ dfn {
     font-style: italic
 }
 
-address,cite {
+address, cite {
     font-style: normal
 }
 
@@ -69,8 +69,8 @@ mark {
     color: #000
 }
 
-code,kbd,pre,samp {
-    font-family: monospace,serif;
+code, kbd, pre, samp {
+    font-family: monospace, serif;
     font-size: 1em
 }
 
@@ -79,10 +79,10 @@ pre {
 }
 
 q {
-    quotes: "\201C" "\201D" "\2018" "\2019"
+    quotes: "\201C""\201D""\2018""\2019"
 }
 
-sub,sup {
+sub, sup {
     font-size: 75%;
     line-height: 0;
     position: relative;
@@ -111,20 +111,20 @@ fieldset {
     padding: .35em .625em .75em
 }
 
-button,select {
+button, select {
     text-transform: none
 }
 
-button,html input[type=button],input[type=reset],input[type=submit] {
+button, html input[type=button], input[type=reset], input[type=submit] {
     -webkit-appearance: button;
     cursor: pointer
 }
 
-button[disabled],html input[disabled] {
+button[disabled], html input[disabled] {
     cursor: default
 }
 
-input[type=checkbox],input[type=radio] {
+input[type=checkbox], input[type=radio] {
     box-sizing: border-box;
     padding: 0
 }
@@ -134,11 +134,11 @@ input[type=search] {
     box-sizing: content-box
 }
 
-input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration {
+input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-search-decoration {
     -webkit-appearance: none
 }
 
-button::-moz-focus-inner,input::-moz-focus-inner {
+button::-moz-focus-inner, input::-moz-focus-inner {
     border: 0;
     padding: 0
 }
@@ -154,34 +154,34 @@ table {
 }
 
 @media print {
-    blockquote,img,pre,tr {
+    blockquote, img, pre, tr {
         page-break-inside: avoid
     }
 
     * {
-        text-shadow: none!important;
-        color: #000!important;
-        background: 0 0!important;
-        box-shadow: none!important
+        text-shadow: none !important;
+        color: #000 !important;
+        background: 0 0 !important;
+        box-shadow: none !important
     }
 
-    a,a:visited {
+    a, a:visited {
         text-decoration: underline
     }
 
     a[href]:after {
-        content: " (" attr(href) ")"
+        content: " ("attr(href) ")"
     }
 
     abbr[title]:after {
-        content: " (" attr(title) ")"
+        content: " ("attr(title) ")"
     }
 
-    .ir a:after,a[href^="#"]:after,a[href^="javascript:"]:after {
+    .ir a:after, a[href^="#"]:after, a[href^="javascript:"]:after {
         content: ""
     }
 
-    blockquote,pre {
+    blockquote, pre {
         border: 1px solid #999
     }
 
@@ -190,19 +190,19 @@ table {
     }
 
     img {
-        max-width: 100%!important
+        max-width: 100% !important
     }
 
     @page {
         margin: 2cm .5cm
     }
 
-    h2,h3,p {
+    h2, h3, p {
         orphans: 3;
         widows: 3
     }
 
-    h2,h3 {
+    h2, h3 {
         page-break-after: avoid
     }
 
@@ -210,12 +210,12 @@ table {
         display: none
     }
 
-    .table td,.table th {
-        background-color: #fff!important
+    .table td, .table th {
+        background-color: #fff !important
     }
 
-    .btn>.caret,.dropup>.btn>.caret {
-        border-top-color: #000!important
+    .btn>.caret, .dropup>.btn>.caret {
+        border-top-color: #000 !important
     }
 
     .label {
@@ -223,19 +223,19 @@ table {
     }
 
     .table {
-        border-collapse: collapse!important
+        border-collapse: collapse !important
     }
 
-    .table-bordered td,.table-bordered th {
-        border: 1px solid #ddd!important
+    .table-bordered td, .table-bordered th {
+        border: 1px solid #ddd !important
     }
 }
 
-.img-thumbnail,body {
+.img-thumbnail, body {
     background-color: transparent
 }
 
-*,:after,:before {
+*, :after, :before {
     box-sizing: border-box
 }
 
@@ -245,20 +245,20 @@ html {
 }
 
 body {
-    font-family: Open Sans Regular,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-family: Open Sans Regular, Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.71428571;
     color: #eee
 }
 
-button,input,select,textarea {
+button, input, select, textarea {
     margin: 0;
     font-family: inherit;
     font-size: inherit;
     line-height: inherit
 }
 
-button,input,select[multiple],textarea {
+button, input, select[multiple], textarea {
     background-image: none
 }
 
@@ -267,7 +267,7 @@ a {
     text-decoration: none
 }
 
-a:focus,a:hover {
+a:focus, a:hover {
     text-decoration: underline
 }
 
@@ -326,7 +326,7 @@ p {
 
 @media (min-width: 768px) {
     .lead {
-        font-size:21px
+        font-size: 21px
     }
 }
 
@@ -370,43 +370,43 @@ small {
     text-align: center
 }
 
-.h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6 {
-    font-family: Open Sans Regular,Helvetica Neue,Helvetica,Arial,sans-serif;
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-family: Open Sans Regular, Helvetica Neue, Helvetica, Arial, sans-serif;
     font-weight: 400;
     line-height: 1.5
 }
 
-.h1 small,.h2 small,.h3 small,.h4 small,.h5 small,.h6 small,h1 small,h2 small,h3 small,h4 small,h5 small,h6 small {
+.h1 small, .h2 small, .h3 small, .h4 small, .h5 small, .h6 small, h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
     font-weight: 400;
     line-height: 1;
     color: #999
 }
 
-h1,h2,h3 {
+h1, h2, h3 {
     margin-top: 24px
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
     margin-bottom: 12px
 }
 
-h4,h5,h6 {
+h4, h5, h6 {
     margin-top: 12px
 }
 
-.h1,h1 {
+.h1, h1 {
     font-size: 36px
 }
 
-.h2,h2 {
+.h2, h2 {
     font-size: 30px
 }
 
-.h3,h3 {
+.h3, h3 {
     font-size: 24px
 }
 
-.h4,h4 {
+.h4, h4 {
     font-size: 18px
 }
 
@@ -416,20 +416,20 @@ h4,h5,h6 {
     border-bottom: 1px solid #323232
 }
 
-blockquote p:last-child,ol ol,ol ul,ul ol,ul ul {
+blockquote p:last-child, ol ol, ol ul, ul ol, ul ul {
     margin-bottom: 0
 }
 
-address,dl {
+address, dl {
     margin-bottom: 24px
 }
 
-ol,ul {
+ol, ul {
     margin-top: 0;
     margin-bottom: 12px
 }
 
-.list-inline,.list-unstyled {
+.list-inline, .list-unstyled {
     padding-left: 0;
     list-style: none
 }
@@ -440,7 +440,7 @@ ol,ul {
     padding-right: 5px
 }
 
-dd,dt {
+dd, dt {
     line-height: 1.71428571
 }
 
@@ -454,7 +454,7 @@ dd {
 
 @media (min-width: 768px) {
     .dl-horizontal dt {
-        float:left;
+        float: left;
         width: 160px;
         clear: left;
         text-align: right;
@@ -467,7 +467,7 @@ dd {
         margin-left: 180px
     }
 
-    .dl-horizontal dd:after,.dl-horizontal dd:before {
+    .dl-horizontal dd:after, .dl-horizontal dd:before {
         content: " ";
         display: table
     }
@@ -477,12 +477,12 @@ dd {
     }
 }
 
-address,blockquote small {
+address, blockquote small {
     display: block;
     line-height: 1.71428571
 }
 
-abbr[data-original-title],abbr[title] {
+abbr[data-original-title], abbr[title] {
     cursor: help;
     border-bottom: 1px dotted #999
 }
@@ -519,7 +519,7 @@ blockquote.pull-right {
     border-left: 0
 }
 
-blockquote.pull-right p,blockquote.pull-right small {
+blockquote.pull-right p, blockquote.pull-right small {
     text-align: right
 }
 
@@ -531,7 +531,7 @@ blockquote.pull-right small:after {
     content: "\A0 \2014"
 }
 
-blockquote:after,blockquote:before,q:after,q:before {
+blockquote:after, blockquote:before, q:after, q:before {
     content: ""
 }
 
@@ -562,7 +562,7 @@ blockquote:after,blockquote:before,q:after,q:before {
     list-style: none
 }
 
-.nav:after,.nav:before {
+.nav:after, .nav:before {
     content: " ";
     display: table
 }
@@ -571,7 +571,7 @@ blockquote:after,blockquote:before,q:after,q:before {
     clear: both
 }
 
-.nav>li,.nav>li>a {
+.nav>li, .nav>li>a {
     position: relative;
     display: block
 }
@@ -580,9 +580,9 @@ blockquote:after,blockquote:before,q:after,q:before {
     padding: 10px 15px
 }
 
-.nav>li>a:focus,.nav>li>a:hover {
+.nav>li>a:focus, .nav>li>a:hover {
     text-decoration: none;
-    background-color: rgba(255,255,255,.05)
+    background-color: rgba(255, 255, 255, .05)
 }
 
 .nav-bar-nav {
@@ -601,12 +601,12 @@ blockquote:after,blockquote:before,q:after,q:before {
 }
 
 .nav-bar-right {
-    float: right!important
+    float: right !important
 }
 
 .QuickSearch-container-2PWkB {
     font-size: 13px;
-    font-family: Open Sans Semibold,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-family: Open Sans Semibold, Helvetica Neue, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     position: relative;
@@ -618,13 +618,13 @@ blockquote:after,blockquote:before,q:after,q:before {
 
 @media only screen and (max-width: 768px) {
     .QuickSearch-container-2PWkB {
-        display:none
+        display: none
     }
 }
 
 .QuickSearchInput-container-R2-wn {
     font-size: 13px;
-    font-family: Open Sans Semibold,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-family: Open Sans Semibold, Helvetica Neue, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     display: -ms-flexbox;
@@ -637,9 +637,9 @@ blockquote:after,blockquote:before,q:after,q:before {
     padding: 4px;
     height: 30px;
     border-radius: 4px;
-    background: rgba(255,255,255,.25);
+    background: rgba(255, 255, 255, .25);
     color: #eee;
-    transition: background-color .2s,color .2s
+    transition: background-color .2s, color .2s
 }
 
 .QuickSearchInput-searchInput-2HU6- {
@@ -660,7 +660,7 @@ blockquote:after,blockquote:before,q:after,q:before {
     background: #eee
 }
 
-.QuickSearchInput-focused-2kpW8 .QuickSearchInput-closeIcon-3AV1c,.QuickSearchInput-focused-2kpW8 .QuickSearchInput-searchIcon-1f6m9 {
+.QuickSearchInput-focused-2kpW8 .QuickSearchInput-closeIcon-3AV1c, .QuickSearchInput-focused-2kpW8 .QuickSearchInput-searchIcon-1f6m9 {
     color: #555
 }
 
@@ -690,12 +690,15 @@ blockquote:after,blockquote:before,q:after,q:before {
 .glyphicon.home:before {
     content: "\E021"
 }
+
 .glyphicon.heart:before {
     content: "\E020"
 }
+
 .glyphicon.eye:before {
     content: "\E052"
 }
+
 .glyphicon.book-read:before {
     content: "\E088"
 }
@@ -721,7 +724,7 @@ blockquote:after,blockquote:before,q:after,q:before {
     src: url(./static/plexicons.woff) format("woff")
 }
 
-[class*=" plex-icon-"],[class^=plex-icon-] {
+[class*=" plex-icon-"], [class^=plex-icon-] {
     position: relative;
     top: -2px;
     display: inline-block;
@@ -742,7 +745,7 @@ blockquote:after,blockquote:before,q:after,q:before {
     content: "\EA51"
 }
 
-body,html {
+body, html {
     height: 100%
 }
 
@@ -754,43 +757,43 @@ body {
     background-attachment: fixed
 }
 
-#banner,.navigation {
+#banner, .navigation {
     width: 100%;
     height: 60px;
     padding: 0 10px 0 3px;
-    background: rgba(0,0,0,.7)
+    background: rgba(0, 0, 0, .7)
 }
 
-#banner .glyphicon,.navigation .glyphicon {
+#banner .glyphicon, .navigation .glyphicon {
     top: 7px;
     font-size: 24px
 }
 
-#banner .back-btn,#banner .home-btn,.navigation .back-btn,.navigation .home-btn {
+#banner .back-btn, #banner .home-btn, .navigation .back-btn, .navigation .home-btn {
     padding: 0 15px
 }
 
-#banner .back-btn,.navigation .back-btn {
+#banner .back-btn, .navigation .back-btn {
     padding-right: 8px
 }
 
-#banner a:active,#banner a:focus,#banner a:hover,.navigation a:active,.navigation a:focus,.navigation a:hover {
+#banner a:active, #banner a:focus, #banner a:hover, .navigation a:active, .navigation a:focus, .navigation a:hover {
     color: #eee;
     outline: 0;
-    background: 0 0!important
+    background: 0 0 !important
 }
 
-#banner .QuickSearchInput-searchIcon-1f6m9,.navigation .QuickSearchInput-searchIcon-1f6m9 {
+#banner .QuickSearchInput-searchIcon-1f6m9, .navigation .QuickSearchInput-searchIcon-1f6m9 {
     left: 5px;
     top: 0;
     font-size: 12px
 }
 
-#banner .QuickSearchInput-searchInput-2HU6-,.navigation .QuickSearchInput-searchInput-2HU6- {
+#banner .QuickSearchInput-searchInput-2HU6-, .navigation .QuickSearchInput-searchInput-2HU6- {
     padding-left: 16px
 }
 
-#poweredby,#searchbox,#userinfo {
+#poweredby, #searchbox, #userinfo {
     display: none
 }
 
@@ -803,14 +806,14 @@ body {
     color: #bbb;
     padding: 10px 15px;
     border-radius: 3px;
-    border: 1px solid rgba(0,0,0,.15);
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    border: 1px solid rgba(0, 0, 0, .15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     background-color: #191a1c;
     background-clip: padding-box
 }
 
 #settingsbox .popuptitle {
-    font-family: Open Sans Bold,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-family: Open Sans Bold, Helvetica Neue, Helvetica, Arial, sans-serif;
     width: 200px;
     color: #777;
     text-transform: uppercase;
@@ -848,19 +851,19 @@ body {
     text-align: center;
     padding-top: 25px;
     margin: 25px 0;
-    border-top: 1px solid rgba(0,0,0,.1)
+    border-top: 1px solid rgba(0, 0, 0, .1)
 }
 
 .pagination a {
     margin: 0 10px
 }
 
-.pagination a:active,.pagination a:focus,.pagination a:hover {
+.pagination a:active, .pagination a:focus, .pagination a:hover {
     text-decoration: none;
     outline: 0
 }
 
-.actionbutton,.btn-link {
+.actionbutton, .btn-link {
     font-family: Open Sans Bold;
     color: #fff;
     font-size: 14px;
@@ -872,16 +875,16 @@ body {
     background-color: #cc7b19
 }
 
-.actionbutton:hover,.btn-link:hover {
+.actionbutton:hover, .btn-link:hover {
     background-color: #9f6013
 }
 
 .btn-dark {
-    background: rgba(255,255,255,.25)
+    background: rgba(255, 255, 255, .25)
 }
 
 .btn-dark:hover {
-    background-color: rgba(0,0,0,.25)
+    background-color: rgba(0, 0, 0, .25)
 }
 
 #group {
@@ -909,15 +912,15 @@ body {
     text-align: center;
     text-transform: uppercase;
     line-height: 1.4;
-    box-shadow: 0 0 2px rgba(0,0,0,.35);
-    background-color: rgba(0,0,0,.45)
+    box-shadow: 0 0 2px rgba(0, 0, 0, .35);
+    background-color: rgba(0, 0, 0, .45)
 }
 
-#group>a:active,#group>a:focus,#group>a:hover {
+#group>a:active, #group>a:focus, #group>a:hover {
     color: #fff;
     text-decoration: none;
     box-shadow: 0 0 0 2px #cc7b19;
-    background-color: rgba(0,0,0,.8)!important
+    background-color: rgba(0, 0, 0, .8) !important
 }
 
 #group #comics {
@@ -932,7 +935,7 @@ body {
     background-color: #fcce36
 }
 
-#group #latest-books,#group #latest-comics,#group .rootlink {
+#group #latest-books, #group #latest-comics, #group .rootlink {
     color: #fff;
     border-color: #fff
 }
@@ -960,7 +963,7 @@ body {
 
 .cellcontainer * {
     transition: all .2s;
-    transform: translate3d(0,0,0);
+    transform: translate3d(0, 0, 0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden
 }
@@ -969,7 +972,7 @@ body {
     color: #fff;
     text-decoration: none;
     box-shadow: 0 0 0 2px #cc7b19;
-    background-color: rgba(0,0,0,.8)!important
+    background-color: rgba(0, 0, 0, .8) !important
 }
 
 .cellcontainer:hover .thumb img {
@@ -991,8 +994,8 @@ body {
     width: [[COMIC_W]]px;
     height: [[COMIC_H]]px;
     text-align: center;
-    box-shadow: 0 0 2px rgba(0,0,0,.35);
-    background-color: rgba(0,0,0,.45)
+    box-shadow: 0 0 2px rgba(0, 0, 0, .35);
+    background-color: rgba(0, 0, 0, .45)
 }
 
 .cellcontainer .thumb a {
@@ -1030,17 +1033,17 @@ body {
     line-height: 24px;
     padding: 0 8px;
     background-color: #cc7b19;
-    box-shadow: 0 0 4px rgba(0,0,0,.6)
+    box-shadow: 0 0 4px rgba(0, 0, 0, .6)
 }
 
-#bookdetails,#comicdetails {
+#bookdetails, #comicdetails {
     display: none;
     position: absolute;
     left: 0;
     top: 0
 }
 
-#bookdetails #details,#comicdetails #details {
+#bookdetails #details, #comicdetails #details {
     position: fixed;
     clear: both;
     overflow: hidden;
@@ -1051,29 +1054,29 @@ body {
     top: 0;
     padding: 0;
     z-index: 1080;
-    box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
     background-color: #282828;
     border-radius: 3px;
     background-clip: padding-box;
     outline: 0
 }
 
-#bookdetails #details_cover,#comicdetails #details_cover {
+#bookdetails #details_cover, #comicdetails #details_cover {
     float: left;
     padding-right: 25px
 }
 
-#bookdetails #details_cover img,#comicdetails #details_cover img {
+#bookdetails #details_cover img, #comicdetails #details_cover img {
     width: 300px
 }
 
 @media only screen and (max-width: 768px) {
-    #bookdetails #details_cover img,#comicdetails #details_cover img {
-        display:none
+    #bookdetails #details_cover img, #comicdetails #details_cover img {
+        display: none
     }
 }
 
-#bookdetails #details_title,#comicdetails #details_title {
+#bookdetails #details_title, #comicdetails #details_title {
     color: #eee;
     font-size: 20px;
     line-height: 1.4;
@@ -1083,24 +1086,24 @@ body {
     background: #323232
 }
 
-#bookdetails #details_description,#bookdetails #details_language_pubdate,#bookdetails #details_size,#comicdetails #details_description,#comicdetails #details_language_pubdate,#comicdetails #details_size {
+#bookdetails #details_description, #bookdetails #details_language_pubdate, #bookdetails #details_size, #comicdetails #details_description, #comicdetails #details_language_pubdate, #comicdetails #details_size {
     color: #999;
     padding: 5px 20px
 }
 
-#bookdetails #details_description,#comicdetails #details_description {
+#bookdetails #details_description, #comicdetails #details_description {
     padding-bottom: 15px
 }
 
-#bookdetails #details_download:before,#comicdetails #details_download:before {
+#bookdetails #details_download:before, #comicdetails #details_download:before {
     content: "Download"
 }
 
-#bookdetails #details_read:before,#comicdetails #details_read:before {
+#bookdetails #details_read:before, #comicdetails #details_read:before {
     content: "Read Now"
 }
 
-#bookdetails #details_download,#bookdetails #details_read,#comicdetails #details_download,#comicdetails #details_read {
+#bookdetails #details_download, #bookdetails #details_read, #comicdetails #details_download, #comicdetails #details_read {
     display: inline-block;
     font-family: Open Sans Bold;
     color: #fff;
@@ -1114,18 +1117,18 @@ body {
     background-color: #cc7b19
 }
 
-#bookdetails #details_download:active,#bookdetails #details_download:focus,#bookdetails #details_download:hover,#bookdetails #details_read:active,#bookdetails #details_read:focus,#bookdetails #details_read:hover,#comicdetails #details_download:active,#comicdetails #details_download:focus,#comicdetails #details_download:hover,#comicdetails #details_read:active,#comicdetails #details_read:focus,#comicdetails #details_read:hover {
+#bookdetails #details_download:active, #bookdetails #details_download:focus, #bookdetails #details_download:hover, #bookdetails #details_read:active, #bookdetails #details_read:focus, #bookdetails #details_read:hover, #comicdetails #details_download:active, #comicdetails #details_download:focus, #comicdetails #details_download:hover, #comicdetails #details_read:active, #comicdetails #details_read:focus, #comicdetails #details_read:hover {
     text-decoration: none;
     background-color: #9f6013
 }
 
-#bookdetails #details_download,#comicdetails #details_download {
+#bookdetails #details_download, #comicdetails #details_download {
     margin-right: 20px;
-    background: rgba(255,255,255,.25)
+    background: rgba(255, 255, 255, .25)
 }
 
-#bookdetails #details_download:active,#bookdetails #details_download:focus,#bookdetails #details_download:hover,#comicdetails #details_download:active,#comicdetails #details_download:focus,#comicdetails #details_download:hover {
-    background-color: rgba(0,0,0,.25)
+#bookdetails #details_download:active, #bookdetails #details_download:focus, #bookdetails #details_download:hover, #comicdetails #details_download:active, #comicdetails #details_download:focus, #comicdetails #details_download:hover {
+    background-color: rgba(0, 0, 0, .25)
 }
 
 #details_close {
@@ -1162,17 +1165,18 @@ body {
 
 .reading {
     bottom: 0;
-    background-color: red; /*#009218;*/
+    background-color: red;
+    /*#009218;*/
     top: initial !important;
 }
 
 .gauge {
-	background-color:rgba(0,0,0,.7);
-	line-height: normal;
-	padding: unset;
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
+    background-color: rgba(0, 0, 0, .7);
+    line-height: normal;
+    padding: unset;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
 }
 
 .read {

@@ -9,7 +9,7 @@ $(() => {
     new Search();
 
     // add title to covers
-    $('.cellcontainer').each(function (index, item) {
+    $('.cellcontainer').each(function(index, item) {
         var text = $(item).find('.label').text();
         $(item).prop('title', text)
     });

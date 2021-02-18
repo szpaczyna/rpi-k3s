@@ -1,52 +1,52 @@
 {
-  "filesPaths" : [ {
-    "pathString" : "/files",
-    "userName" : [ ]
-  } ],
-  "comicsPaths" : [ {
-    "pathString" : "/comics",
-    "userName" : [ ]
-  } ],
-  "booksPaths" : [ {
-    "pathString" : "/books",
-    "userName" : [ "ami" ]
-  } ],
-  "users" : [ {
-    "name" : "ami",
-    "passwordHash" : "d8f187c3523977492658eea568f171dbd78557993a40e3d22214d8351f7718d5"
-  } ],
-  "isFilesProviderEnabled" : true,
-  "isComicsProviderEnabled" : true,
-  "isBooksProviderEnabled" : true,
-  "isUserManagementEnabled" : true,
-  "libraryPortNumber" : 2202,
-  "adminPortNumber" : 2203,
-  "comicWidth" : 160,
-  "comicHeight" : 230,
-  "comicsPaginationNumber" : 100,
-  "bookWidth" : 160,
-  "bookHeight" : 230,
-  "booksPaginationNumber" : 100,
-  "minimizeToTray" : false,
-  "minimizeOnStartup" : false,
-  "autoscanPeriod" : 720,
-  "isRemoteAdminEnabled" : false,
-  "theme" : "plextheme-reading",
-  "isShrinkingCacheEnabled" : false,
-  "shrunkPageWidth" : 1536,
-  "shrunkPageHeight" : 2500,
-  "shrinkingCachePath" : "",
-  "autoScanAtLaunch" : true,
-  "reverseProxyPrefix" : "",
-  "keystorePath" : "/config/keystore",
-  "keystorePassword" : "Dupa.0987",
-  "isOpdsProviderEnabled" : true,
-  "folderExclusionPattern" : "",
-  "bypassSingleRootFolder" : false,
-  "enableFolderMetadataDisplay" : false,
-  "bookmarkUsingCookies" : false,
-  "displayTitleInsteadOfFileName" : false,
-  "keepUnreachableSharedFolders" : false,
-  "isCalibreLibrary" : false,
-  "instanceId" : "87473792de9f47198876cb431e02fb20"
+    "filesPaths": [{
+        "pathString": "/files",
+        "userName": []
+    }],
+    "comicsPaths": [{
+        "pathString": "/comics",
+        "userName": []
+    }],
+    "booksPaths": [{
+        "pathString": "/books",
+        "userName": ["ami"]
+    }],
+    "users": [{
+        "name": "ami",
+        "passwordHash": "d8f187c3523977492658eea568f171dbd78557993a40e3d22214d8351f7718d5"
+    }],
+    "isFilesProviderEnabled": true,
+    "isComicsProviderEnabled": true,
+    "isBooksProviderEnabled": true,
+    "isUserManagementEnabled": true,
+    "libraryPortNumber": 2202,
+    "adminPortNumber": 2203,
+    "comicWidth": 160,
+    "comicHeight": 230,
+    "comicsPaginationNumber": 100,
+    "bookWidth": 160,
+    "bookHeight": 230,
+    "booksPaginationNumber": 100,
+    "minimizeToTray": false,
+    "minimizeOnStartup": false,
+    "autoscanPeriod": 720,
+    "isRemoteAdminEnabled": false,
+    "theme": "plextheme-reading",
+    "isShrinkingCacheEnabled": false,
+    "shrunkPageWidth": 1536,
+    "shrunkPageHeight": 2500,
+    "shrinkingCachePath": "",
+    "autoScanAtLaunch": true,
+    "reverseProxyPrefix": "",
+    "keystorePath": "/config/keystore",
+    "keystorePassword": "Dupa.0987",
+    "isOpdsProviderEnabled": true,
+    "folderExclusionPattern": "",
+    "bypassSingleRootFolder": false,
+    "enableFolderMetadataDisplay": false,
+    "bookmarkUsingCookies": false,
+    "displayTitleInsteadOfFileName": false,
+    "keepUnreachableSharedFolders": false,
+    "isCalibreLibrary": false,
+    "instanceId": "87473792de9f47198876cb431e02fb20"
 }
