@@ -32,10 +32,11 @@ spec:
         prometheus.io/port: 9100
         prometheus.io/scrape: true
     serviceType: LoadBalancer
+    loadBalancerIP: 10.1.0.30
     service:
       annotations:
-        metallb.universe.tf/address-pool: "address-pool-1"
-        metallb.universe.tf/allow-shared-ip: "true"
+          #metallb.universe.tf/address-pool: "address-pool-1"
+          #metallb.universe.tf/allow-shared-ip: "true"
     image: "rancher/library-traefik"
     tolerations:
       - key: "CriticalAddonsOnly"
