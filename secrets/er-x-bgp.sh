@@ -1,0 +1,20 @@
+{
+	"data": "ENC[AES256_GCM,data:htRSs9YingRVEN2uU9SChR3V02IqjZxZD6H4SegVxOr5gp2YMyksXS4/zPqK7G1FBMfyIFuOERZj/8lGdMKl518koawQzHe7mSMDHHCJsUmEtTqY7lv1niIlLIKoxlhOBobG828UxRq9tR9TAuuyguIgaw9AzenEOZ46PwCAR3gAMmOu+ym12K2Tcsu6HrX6JY5uiY2w5mMme1iRQ7dc2KKqe15DZ+P7+gFMixYwb0GWLptachRb1ve18liLPHUH0vEPR5s4AQ3875kJ4MaorUGZZbD5hdEXrSHpVEYxlDKTEqdbIDJFt/95JFpkbbxh/bKLMu7ET9snpdIVf2ysJAnfBL/m94Y7GJP51FQCTuymgiv6o0j1c19GxNSf19sjqbCy8lR8wHWcUDNdZsPvofZlSXH0TNUP2FnjkYCQdm+eHiqrwTlLLz75wCGyxe3S8V1z8ESFh5QKq5KacqQLlCixOc5lA/0P02f01OCauIo65gbUYmRMk1eAPoCWkdNgB+tIJpT1x6NvKWcnlfGL3zzOYJucoAr/vti4+qAt6e4s+dAbyfXPf9W6+gbwG5cnKnXM4fUZotLjNm4=,iv:vN3xhzrn3BvM/EGVvV0oeruKCnG8vOeK5XipjrqN6bo=,tag:IPVtFSMBbdGSYnhsnVQpCQ==,type:str]",
+	"sops": {
+		"kms": null,
+		"gcp_kms": null,
+		"azure_kv": null,
+		"hc_vault": null,
+		"lastmodified": "2021-02-20T11:53:40Z",
+		"mac": "ENC[AES256_GCM,data:C6U6lPSBTiG5i0rtipbTlFUvjdw82C2Y93VGvWWEsQ+yR5G3AuE42lOKzOXsk3wketOO6mLW7YIPShNKC/H92mkF7ln+KEU0KPDHpSxDvEqeHxWhF1ffrnX7kuZ0N65Zn6S9ZxKq5ZBVNUEe8eYws23Fu4umQvY8rPqQRRjoupM=,iv:Ky5KzdyBeszp++I1ft7uR69BDLT9QvK7vKp/C2MoQ48=,tag:Lq8CNSsBhA9cf0xp/NqjOA==,type:str]",
+		"pgp": [
+			{
+				"created_at": "2021-02-20T11:53:23Z",
+				"enc": "-----BEGIN PGP MESSAGE-----\n\nhQIMA4APDMemWJ+LARAAndlAuimxg1Tb98XL7xnWWcYmFJ5eOsa8ye2COyNaAt4N\nN0kvHlnUKnHSHQIwNYNGvB7XE6Ga7sOpyCvllF+Ge0Zc438uSff3/DULpYaEDnyn\nmhaOQPQ65gZ0ZXMo4ngd6ThAh2kL+UjSRtWfabQmUsWgPBP403I6zlvpsBfn2QFe\nMavFqpNutYD73YHOyIgAGH1tV36LMnImaQJqVug/qdJZwKbnx2rjYa1OfIQq13L8\n6OINWQ/EqsMjeRbAi86SoYjeN6P8wWyp9GIcYz2RTgUpiVq6qliRzXLPPHHSNR15\npFzVqIzxJnrhSlvaMjgEb+U0CIAR89npsMifMUsPfrw0VaeXjmItYO/8QXFUhIu9\n/eeucCy8zbDenelzUuOCrbqILloxhKq7UYGvoNjnL801ZAblQte5IbbS/AG3A9CF\npp87vKhJifArBPYxzU5VXiVrFjBujnr3BxB1M5NxNQRhWVZvj6RvaNOYbREHd/+j\nh049XGua/z12hRm2aVix4tUQb6WQbezj8pK1LoyqAjeg93gp5kjiNd4W1QtO6J9U\nv/BlSyOPtR03RvTLi20x9SZqAJG4qJ/tJQt2tmUgd9Ig4UzTB8i904JJ1Z+JrCge\n/NuazurnXYHlkTAHPdbIlr0qc3/IlLf3nc7GskNL4ZFVSBBx0S6TBz2etKDYG3/S\nXgG1GI1CetadRzOPgt25Nq9J/tNIW2nZlbPTq+nP5oOzjvDUoUt2t/Ad4COVC3v4\nQDrEbeSEXMUZZ8APVVh/as7HM0IZTwNTrVGVb00H22CFukoVP2MIob3KzyZwQbQ=\n=RN95\n-----END PGP MESSAGE-----\n",
+				"fp": "D6380604E0A09E002380524F0AECB9DCA67CB14C"
+			}
+		],
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.6.1"
+	}
+}
