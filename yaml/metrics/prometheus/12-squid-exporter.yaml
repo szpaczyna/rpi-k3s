@@ -32,7 +32,7 @@ spec:
       hostNetwork: true
       containers:
         - name: squid-exporter
-          image: "registry.shpaq.org/squid_exporter:1.0.1"
+          image: "registry.shpaq.org/squid_exporter:1.0.2"
           imagePullPolicy: "Always"
           ports:
             - name: metrics
