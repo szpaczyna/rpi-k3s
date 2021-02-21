@@ -31,20 +31,23 @@ spec:
       hostPID: true
       hostNetwork: true
       containers:
-        - name: squid-exporter
-          image: "registry.shpaq.org/squid_exporter:1.0.2"
-          imagePullPolicy: "Always"
-          ports:
-            - name: metrics
-              containerPort: 9301
-              hostPort: 9301
-          resources:
-            limits:
-              cpu: 100m
-              memory: 100Mi
-            requests:
-              cpu: 10m
-              memory: 24Mi
+      - env:
+        - name: "SQUID_HOSTNAME"
+          value: "10.1.0.1"
+        name: squid-exporter
+        image: "registry.shpaq.org/squid_exporter:1.0.2"
+        imagePullPolicy: "Always"
+        ports:
+          - name: metrics
+            containerPort: 9301
+            hostPort: 9301
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 10m
+            memory: 24Mi
       tolerations:
         - effect: NoSchedule
           operator: Exists
