@@ -336,6 +336,7 @@ spec:
       hostNetwork: true
       nodeSelector:
         kubernetes.io/os: linux
+        kubernetes.io/role: worker
       serviceAccountName: speaker
       terminationGracePeriodSeconds: 2
       tolerations:
@@ -387,6 +388,7 @@ spec:
           readOnlyRootFilesystem: true
       nodeSelector:
         kubernetes.io/os: linux
+        kubernetes.role/os: worker
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534

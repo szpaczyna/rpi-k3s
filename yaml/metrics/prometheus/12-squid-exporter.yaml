@@ -28,8 +28,8 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 65536
-      hostPID: true
-      hostNetwork: true
+      hostPID: false
+      hostNetwork: false
       containers:
       - env:
         - name: "SQUID_HOSTNAME"
@@ -51,3 +51,6 @@ spec:
       tolerations:
         - effect: NoSchedule
           operator: Exists
+      nodeSelector:                                                                                        
+        kubernetes.io/os: linux                                                                            
+        kubernetes.io/role: worker

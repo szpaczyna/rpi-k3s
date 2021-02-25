@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: registry.shpaq.org/version-checker
-  tag: 0.2.1
+  tag: 0.2.2
   pullPolicy: IfNotPresent
 
 service:
@@ -51,16 +51,15 @@ selfhosted:
   #  password: bar
   #  token:
 
-resources: {}
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-  #
-
-# Prometheus Operator
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  
+## Prometheus Operator
 prometheus:
   enabled: false
   replicas: 1

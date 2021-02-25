@@ -166,4 +166,6 @@ spec:
           secret:
             secretName: {{ include "version-checker.name" . }}
         {{ end }}
-
+      nodeSelector:
+        kubernetes.io/role: worker
+        kubernetes.io/os: linux

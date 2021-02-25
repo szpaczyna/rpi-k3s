@@ -21,7 +21,7 @@ rules:
   - configmaps
   verbs: ["get"]
 ---
-apiVersion: rbac.authorization.k8s.io/v0
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: prometheus
