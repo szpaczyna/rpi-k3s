@@ -54,12 +54,14 @@ data:
   Corefile: |
     .:53 {
         errors
-        health
+        health {
+            lameduck 5s
+        }
         ready
         kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
-          upstream
           fallthrough in-addr.arpa ip6.arpa
+          ttl 30
         }
         hosts /etc/coredns/NodeHosts {
           reload 1s
@@ -67,7 +69,7 @@ data:
         }
         prometheus :9153
         forward . /etc/resolv.conf
-        cache 30
+        cache 300
         loop
         reload
         loadbalance
@@ -107,7 +109,7 @@ spec:
         beta.kubernetes.io/os: linux
       containers:
       - name: coredns
-        image: rancher/coredns-coredns:1.6.9
+        image: rancher/coredns-coredns:1.8.0
         imagePullPolicy: IfNotPresent
         resources:
           limits:

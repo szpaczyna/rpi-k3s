@@ -40,8 +40,11 @@ spec:
               port: http
           resources:
             requests:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 500m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1000Mi
           env:
             - { name: PUID, value: "1000" }
             - { name: GUID, value:  }

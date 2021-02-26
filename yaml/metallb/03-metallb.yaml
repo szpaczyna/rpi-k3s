@@ -388,7 +388,6 @@ spec:
           readOnlyRootFilesystem: true
       nodeSelector:
         kubernetes.io/os: linux
-        kubernetes.role/os: worker
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
