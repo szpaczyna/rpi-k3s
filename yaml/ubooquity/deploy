@@ -2,3 +2,4 @@
 kubens apps
 ./decrypt.sh
 kubectl apply -f .
+rm -rf 02-configmap.yaml
