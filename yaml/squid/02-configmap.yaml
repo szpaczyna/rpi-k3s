@@ -73,13 +73,16 @@ data:
     cache_mgr shpaq@shpaq.org                                                                              
     http_port 3128                                                                                         
     access_log stdio:/var/log/squid/access.log squid                                                       
-    
+    request_header_access  X-Forwarded-For  allow all
+    forwarded_for on
+    log_ip_on_direct on
+    log_fqdn on
     #access_log tcp://elk-svc-squid.default.svc.cluster.local:1025
     #---START ADD X-Forwarded-For header in access.log---                                                  
-    #http_port 3128 require-proxy-header                                                                   
-    #proxy_protocol_access allow localnet                                                                  
-    #follow_x_forwarded_for allow localhost                                                                
-    #follow_x_forwarded_for allow localnet                                                                 
+    http_port 3128 require-proxy-header                                                                   
+    proxy_protocol_access allow localnet                                                                  
+    follow_x_forwarded_for allow localhost                                                                
+    follow_x_forwarded_for allow localnet                                                                 
     #acl_uses_indirect_client on                                                                           
     #delay_pool_uses_indirect_client on                                                                    
     #log_uses_indirect_client on                                                                           

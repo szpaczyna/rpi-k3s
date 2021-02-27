@@ -7,6 +7,7 @@ metadata:
     app: ubooquity
   annotations:
     backup.velero.io/backup-volumes: ubooquity-books
+    backup.velero.io/backup-volumes: ubooquity-config
 spec:
   replicas: 1
   selector:
@@ -55,9 +56,9 @@ spec:
               name: config
             - mountPath: /books
               name: books
-            - mountPath: /config/
-              name: configmap
+            - mountPath: /config/preferences.json
               subPath: preferences.json
+              name: configmap
       volumes:
         - name: books
           persistentVolumeClaim:
