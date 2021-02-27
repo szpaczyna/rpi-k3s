@@ -1,0 +1,38 @@
+--
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ubooquity-cpu
+  labels:
+    app.kubernetes.io/name: ubooquity
+    app.kubernetes.io/instance: ubooquity
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ubooquity
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageValue: 512M
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ubooquity-memory
+  labels:
+    app.kubernetes.io/name: ubooquity
+    app.kubernetes.io/instance: ubooquity
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ubooquity
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 100

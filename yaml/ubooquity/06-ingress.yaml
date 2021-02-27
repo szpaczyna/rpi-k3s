@@ -5,6 +5,8 @@ metadata:
   name: ubooquity
   labels:
     app: ubooquity
+    app.kubernetes.io/name: ubooquity
+    app.kubernetes.io/instance: ubooquity
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     traefik.frontend.redirect.permanent: "true"

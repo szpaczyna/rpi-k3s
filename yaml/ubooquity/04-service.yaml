@@ -4,6 +4,8 @@ kind: Service
 metadata:
   name: ubooquity
   labels:
+    app.kubernetes.io/name: ubooquity
+    app.kubernetes.io/instance: ubooquity
     app: ubooquity
 spec:
   type: ClusterIP
@@ -18,4 +20,3 @@ spec:
       name: http-admin
   selector:
     app: ubooquity
-

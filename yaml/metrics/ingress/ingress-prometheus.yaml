@@ -24,4 +24,4 @@ spec:
   tls:
   - hosts:
     - prometheus.shpaq.org
-    secretName: prometheus-shpaq-org-tls
+    secretName: prometheus-shpaq-org-ssl

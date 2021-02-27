@@ -5,6 +5,8 @@ metadata:
   name: ubooquity-config
   labels:
     app: ubooquity
+    app.kubernetes.io/name: ubooquity
+    app.kubernetes.io/instance: ubooquity
 spec:
   accessModes:
     - "ReadWriteOnce"
@@ -20,6 +22,8 @@ metadata:
   name: ubooquity-books
   labels:
     app: ubooquity
+    app.kubernetes.io/name: ubooquity
+    app.kubernetes.io/instance: ubooquity
 spec:
   accessModes:
     - "ReadWriteOnce"
