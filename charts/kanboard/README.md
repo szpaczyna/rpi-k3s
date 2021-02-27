@@ -6,10 +6,11 @@
 
 This chart bootstraps a Kanboard deployment on a Kubernetes cluster using the Helm package manager.
 
-## Prerequisites
-- Kubernetes 1.12+
-- Helm 2.12+ or Helm 3.0-beta3+
-- PV provisioner support in the underlying infrastructure for persistence
+## Installation
+```
+cd <path-to-repo>
+helm install -n <my-namespace> kanboard -f values.yaml .
+```
 
 ## Parameters
 The following table lists the configurable parameters of the Kanboard chart and their default values.
@@ -24,4 +25,11 @@ The following table lists the configurable parameters of the Kanboard chart and 
 | `nameOverride`                       | String to partially override kanboard.fullname template with a string (will prepend the release name) | `nil`                                                        |
 | `fullnameOverride`                   | String to fully override kanboard.fullname template with a string                                     | `nil`                                                        |
 
-## Persistence
+## Additional Parameters
+
+| Parameter                            | Default                 |
+|--------------------------------------|-------------------------|
+| `persistence`                        | `true`                  |
+| `hpa`                                | `enabled`               |
+| `podDisruptionBudget`                | `minUnavailable: 1`     |
+| `ingress`                            | `true`                  |

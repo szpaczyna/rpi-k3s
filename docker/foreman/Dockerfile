@@ -8,9 +8,7 @@ ENV FOREMAN_DOMAIN=example.com
 RUN \
   echo -e "[nodejs]\nname=nodejs\nstream=${NODEJS_VERSION}\nprofiles=\nstate=enabled\n" > /etc/dnf/modules.d/nodejs.module && \
   echo -e "[ruby]\nname=ruby\nstream=${RUBY_VERSION}\nprofiles=\nstate=enabled\n" > /etc/dnf/modules.d/ruby.module && \
-  microdnf install postgresql-libs ruby{,gems} rubygem-{rake,bundler} npm nc hostname \
-  # needed for VNC/SPICE websockets
-  python2-numpy && \
+  microdnf install postgresql-libs ruby{,gems} rubygem-{rake,bundler} npm nc hostname python2-numpy && \
   microdnf clean all
 
 ARG HOME=/home/foreman

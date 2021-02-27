@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12,7 +13,6 @@ data:
     ; This file lists the default values used by Gitea
     ; Copy required sections to your own app.ini (default is custom/conf/app.ini)
     ; and modify as needed.
-
     ; see https://docs.gitea.io/en-us/config-cheat-sheet/ for additional documentation.
 
     ; App name that shows in every page title

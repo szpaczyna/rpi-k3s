@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -58,7 +59,6 @@ spec:
       - name: gitea-config
         configMap:
           name: {{ template "name" . }}-config
-
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}

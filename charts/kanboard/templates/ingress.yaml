@@ -1,4 +1,5 @@
 {{- if .Values.ingress.enabled }}
+---
 {{- range .Values.ingress.hosts }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -15,7 +16,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: traefik-lb 
+  ingressClassName: traefik-lb
   rules:
     - host: {{ .name | quote }}
       http:

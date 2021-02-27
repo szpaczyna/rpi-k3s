@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -43,7 +44,7 @@ data:
     https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/adguard_mobile_host.txt
     https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-pihole-filters/Ad_filter_list_by_Disconnect.txt
   regex.list: |
-    ^(.+[-_.])??adse?rv(er?|ice)?s?[0-9]*[-.]	
+    ^(.+[-_.])??adse?rv(er?|ice)?s?[0-9]*[-.]
     ^(.+[-_.])??m?ad[sxv]?[0-9]*[-_.]
     ^(.+[-_.])??telemetry[-.]
     ^(.+[-_.])??xn--

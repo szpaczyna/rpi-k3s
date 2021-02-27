@@ -1,5 +1,4 @@
 FROM ghcr.io/linuxserver/baseimage-alpine:3.12
-
 # set version label
 ARG BUILD_DATE
 ENV VERSION=0.0.1
@@ -32,7 +31,7 @@ RUN \
 
 # copy local files
 COPY root/ /
-COPY themes/ /config/
+COPY themes/ /app/ubooquity/config/
 
 # ports and volumes
 EXPOSE 2202 2203
