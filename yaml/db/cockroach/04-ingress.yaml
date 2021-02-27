@@ -1,10 +1,7 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: cockroachdb
-  namespace: dev
-  annotations:
-    kubernetes.io/ingress.class: traefik
 spec:
   ingressClassName: traefik-lb
   rules:
@@ -12,6 +9,9 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: cockroachdb
-          servicePort: http
+          service:
+            name: cockroachdb
+            port:
+              number: 8080
         path: /
+        pathType: Prefix

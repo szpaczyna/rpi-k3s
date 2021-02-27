@@ -75,7 +75,7 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
       - name: cockroachdb
-        image: registry.shpaq.org/cockroachdb:v20.2.3
+        image: registry.shpaq.org/cockroachdb:v20.2.5
         imagePullPolicy: IfNotPresent
         # TODO: Change these to appropriate values for the hardware that you're running. You can see
         # the resources that can be allocated on each of your Kubernetes nodes by running:
@@ -87,7 +87,7 @@ spec:
             memory: "512Mi"
           limits:
             cpu: "4"
-            memory: "2Gi"
+            memory: "1Gi"
         ports:
         - containerPort: 26257
           name: grpc
@@ -156,4 +156,4 @@ spec:
         - "ReadWriteOnce"
       resources:
         requests:
-          storage: 20Gi
+          storage: 8Gi
