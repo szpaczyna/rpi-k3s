@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elk-svc-kibana
+  labels:
+    name: elk
+spec:
+  selector:
+    app: elk
+  ports:
+    - port: 5601
+      targetPort: 5601
+      protocol: TCP
+      name: kibana
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elk-svc-elasticsearch
+  labels:
+    name: elk
+spec:
+  selector:
+    app: elk
+  ports:
+    - port: 9200
+      targetPort: 9200
+      protocol: TCP
+      name: elasticsearch
+  type: LoadBalancer
+  loadBalancerIP: 10.1.0.11
