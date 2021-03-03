@@ -6,10 +6,11 @@ velero install \
     --provider aws \
     --bucket velero \
     --secret-file ./credentials-minio \
-    --use-volume-snapshots=false \
+    --use-volume-snapshots=true \
     --use-restic \
     --backup-location-config \
     region=minio,s3ForcePathStyle=true,s3Url=http://minio.velero.svc:9000
 #    --dry-run -o yaml > velero.yaml
 
 kubectl apply -f restic-cm.yaml
+#kubectl apply -f velero.yaml
