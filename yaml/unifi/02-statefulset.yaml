@@ -45,3 +45,10 @@ spec:
         - name: unifi
           persistentVolumeClaim:
             claimName: unifi
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      nodeSelector:                                                                                        
+        kubernetes.io/os: linux                                                                            
+        kubernetes.io/role: worker
+        kubernetes.io/hostname: rpi-k3s-worker1

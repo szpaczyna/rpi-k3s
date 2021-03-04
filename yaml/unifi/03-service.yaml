@@ -4,7 +4,10 @@ metadata:
   name: unifi-controller
   labels:
     app: unifi-controller
+  annotations:
+    metallb.universe.tf/address-pool: morphine
 spec:
+  #type: LoadBalancer
   ports:
     - name: "3478"
       port: 3478
