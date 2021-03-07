@@ -18,7 +18,8 @@ spec:
       containers:
       - name: eshq
         #image:  carlosedp/elasticsearch-hq:v3.4.0-arm64
-        image:  registry.shpaq.org/eshq:3.5.12
+        image:  registry.shpaq.org/eshq:3.5.12.1
+        imagePullPolicy: Always
         env:
         - name: HQ_DEFAULT_URL
           value: http://elk-svc-elasticsearch.monitoring.svc.cluster.local:9200

@@ -40,9 +40,6 @@ metadata:
   name: filebeat-cluster-role
   labels:
     app: "filebeat"
-    chart: "filebeat-7.10.2"
-    heritage: "Helm"
-    release: "filebeat"
 rules:
 - apiGroups:
   - ""
@@ -113,8 +110,8 @@ spec:
           path: /var/run/docker.sock
       containers:
       - name: "filebeat"
-        image: "kasaoden/filebeat:7.2.0"
-        #image: "registry.shpaq.org/filebeat:7.11.1"
+        #image: "kasaoden/filebeat:7.2.0"
+        image: "registry.shpaq.org/filebeat:7.11.1"
         imagePullPolicy: "IfNotPresent"
         args:
         - "-e"
