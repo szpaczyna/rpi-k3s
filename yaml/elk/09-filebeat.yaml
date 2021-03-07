@@ -29,11 +29,14 @@ data:
     output.elasticsearch:
       host: '${NODE_NAME}'
       hosts: [ "elk-svc-elasticsearch:9200" ]
-
+      index: "filebeat-%{+yyyy.MM.dd}"
+    
+    setup.template.name: "filebeat"
+    setup.template.pattern: "filebeat-*"
+    
     xpack.monitoring:
       enabled: "true"
 ---
-# Source: filebeat/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -67,7 +70,6 @@ subjects:
   name: filebeat
   namespace: monitoring
 ---
-# Source: filebeat/templates/daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -82,8 +84,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
-        configChecksum: 03ea06f78e93428e76a1ab4cbcc58538b03eb84d4e1b729923fb5c9353b639b
       name: "filebeat"
       labels:
         app: "filebeat"
@@ -105,30 +105,14 @@ spec:
       - name: varlog
         hostPath:
           path: /var/log
-      - name: varrundockersock
-        hostPath:
-          path: /var/run/docker.sock
       containers:
       - name: "filebeat"
-        #image: "kasaoden/filebeat:7.2.0"
-        image: "registry.shpaq.org/filebeat:7.11.2"
-        imagePullPolicy: "IfNotPresent"
+        image: "mrnr91/filebeat-alpine:v7.10.2"
+        imagePullPolicy: "Always"
         args:
         - "-e"
         - "-E"
         - "http.enabled=true"
-        livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - |
-              #!/usr/bin/env bash -e
-              curl --fail 127.0.0.1:5066
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          timeoutSeconds: 5
         readinessProbe:
           exec:
             command:
@@ -172,9 +156,4 @@ spec:
           readOnly: true
         - name: varlog
           mountPath: /var/log
-          readOnly: true
-        # Necessary when using autodiscovery; avoid mounting it otherwise
-        # See: https://www.elastic.co/guide/en/beats/filebeat/7.10/configuration-autodiscover.html
-        - name: varrundockersock
-          mountPath: /var/run/docker.sock
           readOnly: true

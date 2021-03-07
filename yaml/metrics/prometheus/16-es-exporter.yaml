@@ -30,7 +30,7 @@ spec:
       containers:
       - command:
         - /bin/elasticsearch_exporter
-        - -es.uri=http://elk-svc-elasticsearch:9200
+        - -es.uri=http://elk-svc-elasticsearch.logging.svc:9200
         - -es.timeout=60s
         - -es.all=true
         image: "carlosedp/elasticsearch-exporter:1.0.4rc1-arm64"
