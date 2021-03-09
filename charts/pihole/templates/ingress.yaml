@@ -18,13 +18,13 @@ spec:
   - host: {{ .Values.ingress.host }}
     http:
       paths:
-      - path: /
+      - path: /admin
         pathType: Prefix
         backend:
           service:
-            name: {{ template "name" . }}-web
+            name: {{ template "name" . }}
             port:
-              number: 81
+              number: {{ $.Values.service.tcp.webport }}
   tls:
 {{ toYaml .Values.ingress.tls | indent 4 }}
 {{- end -}}
