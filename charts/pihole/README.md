@@ -39,3 +39,5 @@ ingress:
   host: pihole.shpaq.org
 
 ```
+
+TODO: Refactor pvs, ingress and services
