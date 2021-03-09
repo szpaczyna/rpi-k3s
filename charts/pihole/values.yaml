@@ -1,0 +1,23 @@
+image:
+  pullPolicy: IfNotPresent
+  image: pihole/pihole:latest
+
+persistence:
+  enabled: true
+  keep: true
+  accessMode: ReadWriteOnce
+  size: 3Gi
+
+configData: |-
+
+nodeSelector:
+    kubernetes.io/os: linux
+    kubernetes.io/role: worker
+
+ingress:
+  host: pihole.k3s.shpaq.org
+
+podDisruptionBudget:
+  minAvailable: 1 
+hpa:
+  enabled: true

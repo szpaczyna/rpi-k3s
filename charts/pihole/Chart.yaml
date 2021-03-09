@@ -1,8 +1,8 @@
 apiVersion: v2
 description: Pi Hole
 name: pihole
-version: 0.0.27
-appVersion: v5.8
+version: 0.0.5
+appVersion: v5.7
 keywords:
   - DNS
 maintainers:
