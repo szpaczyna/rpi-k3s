@@ -9,16 +9,19 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  #type: NodePort
+  type: {{ .Values.service.tcp.type }}
+{{- if .Values.service.tcp.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.tcp.loadBalancerIP }}
+{{- end }}
   selector:
     app: {{ template "name" . }}
   ports:
   - name: {{ template "name" . }}-web
-    port: 81
+    port: {{ .Values.service.tcp.webport }}
     targetPort: 80
     protocol:   TCP
   - name: {{ template "name" . }}-dns-tcp
-    port: 53
+    port: {{ .Values.service.tcp.dnsport }}
     targetPort: 53
     protocol:   TCP
   selector:

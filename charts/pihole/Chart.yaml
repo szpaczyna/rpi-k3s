@@ -1,10 +1,5 @@
 apiVersion: v2
-description: Pi Hole
+description: "Pi Hole"
 name: pihole
-version: 0.0.5
-appVersion: v5.7
-keywords:
-  - DNS
-maintainers:
-  - name: shpaq
-    email: shpaq@shpaq.org
+version: 0.0.7
+appVersion: "v5.7"

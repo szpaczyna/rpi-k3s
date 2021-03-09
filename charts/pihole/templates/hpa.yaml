@@ -3,7 +3,7 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "name" . }}-cpu
+  name: {{ template "name" . }}-cpu
   labels:
     chart: {{ .Chart.Name}}-{{ .Chart.Version | replace "+" "_" }}
     app: {{ template "name" . }}
@@ -27,7 +27,7 @@ spec:
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "name" . }}-memory
+  name: {{ template "name" . }}-memory
   labels:
     chart: {{ .Chart.Name}}-{{ .Chart.Version | replace "+" "_" }}
     app: {{ template "name" . }}

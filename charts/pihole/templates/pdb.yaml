@@ -3,15 +3,15 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "name" . }}
+  name: {{ template "name" . }}
   labels:
     chart: {{ .Chart.Name}}-{{ .Chart.Version | replace "+" "_" }}
     app: {{ template "name" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
+{{ toYaml .Values.podDisruptionBudget | nindent 2 }}
   selector:
     matchLabels:
       app: {{ template "name" . }}
-{{ toYaml .Values.podDisruptionBudget | indent 2 }}
 {{- end -}}

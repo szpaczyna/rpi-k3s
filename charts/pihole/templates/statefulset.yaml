@@ -8,8 +8,12 @@ metadata:
     app: {{ template "name" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  {{- if .Values.statefulsetAnnotattions }}
+  annotations:
+    backup.velero.io/backup-volumes: {{ template "name" . }}-data
+  {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   serviceName: {{ template "name" . }}
   selector:
     matchLabels:
@@ -18,20 +22,35 @@ spec:
     metadata:
       labels:
         app: {{ template "name" . }}
+# TODO
+#      annotations:
+#        prometheus.io/scrape: "true"
+#        prometheus.io/port: "9311"
+#        seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/os
+                  operator: In
+                  values:
+                  - linux
       hostNetwork: false
       dnsPolicy: "None"
       dnsConfig:
         nameservers:
-        - 10.0.0.1
-        - 127.0.0.1
-        - 10.0.0.1
+        - {{ .Values.dns.local.ns1 }}
+        - {{ .Values.dns.local.ns2 }}
+    {{- with .Values.nodeSelector }}
       nodeSelector:
-        kubernetes.io/role: worker
+{{ toYaml . | indent 8 }}
+    {{- end }}
       hostAliases:
       - ip: 127.0.0.1
         hostnames:
-        - pihole
+        - {{ .Values.ingress.host }}
       containers:
       - name: {{ .Chart.Name }}
         image: {{ .Values.image.image }}
@@ -39,48 +58,46 @@ spec:
         stdin: true
         tty: true
         resources:
-          requests:
-            memory: 256Mi
-            cpu: 100m
+{{ toYaml .Values.resources | indent 12 }}
         env:
-        - name: 'ServerIP'
-          value: 10.1.0.13
-        - name: 'DNS1'
-          value: '1.1.1.1'
-        - name: 'DNS2'
-          value: '1.0.0.1'
-        - name: 'DNS3'
-          value: '9.9.9.9'
-        - name: 'DNS4'
-          value: '8.8.8.8'
-        - name: 'WEBPASSWORD'
-          valueFrom:
-            secretKeyRef:
-              name: pihole-admin-secret
-              key: webpassword
+        - name: ServerIP
+          value: "{{ .Values.env.serverip }}"
+        - name: DNS1
+          value: "{{ .Values.env.dns1 }}"
+        - name: DNS2
+          value: "{{ .Values.env.dns2 }}"
+        - name: DNS3
+          value: "{{ .Values.env.dns3 }}"
+        - name: DNS4
+          value: "{{ .Values.env.dns4 }}"
         - name: TZ
-          value: Europe/Warsaw
+          value: "{{ .Values.env.timezone }}"
         - name: CONDITIONAL_FORWARDING
-          value: 'false'
+          value: "{{ .Values.env.condforwarding }}"
         - name: CONDITIONAL_FORWARDING_IP
-          value: '10.0.0.1'
+          value: "{{ .Values.env.condforwardingip }}"
         - name: CONDITIONAL_FORWARDING_DOMAIN
-          value: 'morphine'
+          value: "{{ .Values.env.condforwardingdomain }}"
+        - name: DNSSEC
+          value: "{{ .Values.env.dnssec }}"
+        - name: 'WEBUIBOXEDLAYOUT'
+          value: 'traditional'
         - name: ADMIN_EMAIL
           valueFrom:
             secretKeyRef:
               name: pihole-admin-secret
               key: email
-        - name: DNSSEC
-          value: 'true'
-        - name: 'WEBUIBOXEDLAYOUT'
-          value: 'traditional'
+        - name: WEBPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pihole-admin-secret
+              key: webpassword
         ports:
         - name: web
           containerPort: 81
-        #- name: dhcp
-          #containerPort: 67
-          #protocol: UDP
+        - name: dhcp
+          containerPort: 67
+          protocol: UDP
         - name: dns-tcp
           protocol: TCP
           containerPort: 53
@@ -121,6 +138,22 @@ spec:
             - mountPath: "/etc/pihole/custom.list"
               name: {{ template "name" . }}-custom-config-list
               subPath: custom.list
+# TODO
+#      - name: pihole-exporter
+#          image: "registry.shpaq.org/pihole_exporter:0.4.6"
+#          imagePullPolicy: "Always"
+#          ports:
+#            - name: metrics
+#              containerPort: 9311
+#              hostPort: 9311
+#          resources:
+#            limits:
+#              cpu: 100m
+#              memory: 100Mi
+#            requests:
+#              cpu: 10m
+#              memory: 24Mi
+      terminationGracePeriodSeconds: 30
       volumes:
         - name: {{ template "name" . }}-custom-config
           configMap:
@@ -129,5 +162,25 @@ spec:
           configMap:
             name: {{ template "name" . }}-custom-config-list
         - name: {{ template "name" . }}-data
+          {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
             claimName: {{ template "name" . }}-data
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+{{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+        - {{ .Values.persistence.accessMode | quote }}
+{{- if .Values.persistence.storageClass }}
+        storageClassName: "{{ .Values.persistence.storageClass }}"
+{{- else }}
+        storageClassName: ""
+{{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | quote }}
+{{- end }}
