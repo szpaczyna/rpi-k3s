@@ -50,7 +50,7 @@ spec:
             hostPort: 9100
         resources:
           requests:
-            cpu: 10m
+            cpu: 30m
             memory: 24Mi
           limits:
             cpu: 200m
