@@ -51,7 +51,7 @@ spec:
     resources:
       requests:
         cpu: 100m
-        memory: 24Mi
+        memory: 50Mi
     limits:
         cpu: 1000m
         memory: 128Mi
@@ -59,7 +59,7 @@ spec:
       minAvailable: 1
     autoscaling:
       minReplicas: 1
-      maxReplicas: 4
+      maxReplicas: 3
       metrics:
       - type: Resource
         resource:
