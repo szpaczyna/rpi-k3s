@@ -19,6 +19,7 @@ env:
 
 nameOverride: pihole
 fullnameOverride: ""
+serviceaccount: pihole
 
 dns:
     local:

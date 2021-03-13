@@ -24,5 +24,3 @@ spec:
     port: {{ .Values.service.tcp.dnsport }}
     targetPort: 53
     protocol:   TCP
-  selector:
-    app: {{ template "name" . }}

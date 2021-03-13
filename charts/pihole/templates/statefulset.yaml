@@ -39,6 +39,9 @@ spec:
                   - linux
       hostNetwork: false
       dnsPolicy: "None"
+      {{- if .Values.serviceaccount }}
+      serviceAccountName: {{ .Values.serviceaccount }}
+      {{- end }}
       dnsConfig:
         nameservers:
         - {{ .Values.dns.local.ns1 }}
@@ -118,10 +121,10 @@ spec:
           periodSeconds: 180
         volumeMounts:
             - mountPath: "/etc/pihole"
-              name: {{ template "name" . }}-data
+              name: data
               subPath: "pihole"
             - mountPath: "/etc/dnsmasq.d"
-              name: {{ template "name" . }}-data
+              name: data
               subPath: "dnsmasq"
             - mountPath: "/etc/dnsmasq.d/05-custom.conf"
               name: {{ template "name" . }}-custom-config
@@ -161,13 +164,6 @@ spec:
         - name: {{ template "name" . }}-custom-config-list
           configMap:
             name: {{ template "name" . }}-custom-config-list
-        - name: {{ template "name" . }}-data
-          {{- if .Values.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ template "name" . }}-data
-          {{- else }}
-          emptyDir: {}
-          {{- end }}
 {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
