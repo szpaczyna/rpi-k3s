@@ -59,13 +59,13 @@ spec:
       minAvailable: 1
     autoscaling:
       minReplicas: 1
-      maxReplicas: 3
+      maxReplicas: 4
       metrics:
       - type: Resource
         resource:
           name: cpu
-          targetAverageUtilization: 100
+          targetAverageUtilization: 60
       - type: Resource
         resource:
           name: memory
-          targetAverageUtilization: 120
+          targetAverageUtilization: 100
