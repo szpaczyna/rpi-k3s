@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # https://retropie.org.uk/forum/topic/2295/runcommand-warning-if-voltage-temperature-throttling
+export LD_LIBRARY_PATH=/opt/vc/lib
 
 #Flag Bits
 UNDERVOLTED=0x1
@@ -20,7 +21,7 @@ GOOD="${GREEN}NO${NC}"
 BAD="${RED}YES${NC}"
 
 #Get Status, extract hex
-STATUS=$(vcgencmd get_throttled)
+STATUS=$(/opt/vc/bin/vcgencmd get_throttled)
 STATUS=${STATUS#*=}
 
 echo -n "Status: "

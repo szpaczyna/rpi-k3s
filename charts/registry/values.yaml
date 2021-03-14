@@ -21,10 +21,11 @@ image:
 service:
   name: registry
   type: ClusterIP
+  #type: LoadBalancer
   # clusterIP:
   port: 5000
   # nodePort:
-  # loadBalancerIP:
+  #loadBalancerIP: 10.1.0.5
   # loadBalancerSourceRanges:
   annotations: {}
   # foo.io/bar: "true"
@@ -74,6 +75,8 @@ configData:
   storage:
     cache:
       blobdescriptor: inmemory
+    delete:
+      enabled: true
   http:
     addr: :5000
     headers:
