@@ -19,7 +19,8 @@ spec:
       containers:
         - name: elasticsearch
           image: registry.shpaq.org/elasticsearch:v7.5.1
-          imagePullPolicy: Always
+          #image: arm64v8/elasticsearch:7.11.1
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: elasticsearch-vol01
               mountPath: /usr/share/elasticsearch/data
@@ -37,7 +38,8 @@ spec:
               memory: 512Mi
         - name: kibana
           image: registry.shpaq.org/kibana:v7.5.1
-          imagePullPolicy: Always
+          #image:  jamesgarside/kibana:7.11.1
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5601
               protocol: TCP
