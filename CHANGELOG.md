@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.0.1 (2021-03-18)
+
 ### [1.0.2](https://github.com/szpaczyna/rpi-k3s/compare/v1.0.1...v1.0.2) (2021-03-18)
 
 * [chore(release): 1.0.1](https://github.com/szpaczyna/rpi-k3s/commit/4112901e6eca7abf8a7e510cb9a0d07400063b6b)
