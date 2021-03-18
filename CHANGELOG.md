@@ -4,9 +4,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### 1.0.1 (2021-03-18)
 
-### [1.0.2](https://github.com/szpaczyna/rpi-k3s/compare/v1.0.1...v1.0.2) (2021-03-18)
-
-* [chore(release): 1.0.1](https://github.com/szpaczyna/rpi-k3s/commit/4112901e6eca7abf8a7e510cb9a0d07400063b6b)
 * [pull policy changed](https://github.com/szpaczyna/rpi-k3s/commit/5e8edb19746779e2ee7d625fe91f4d8292eb955a)
 * [dsadsadsada](https://github.com/szpaczyna/rpi-k3s/commit/edc68ce8ba3ed4b722fe70b9e286556cb4697e38)
 * [audit rules and modules](https://github.com/szpaczyna/rpi-k3s/commit/69c7cec7d5121be611deb65ae372342028ae025e)
