@@ -50,7 +50,7 @@ spec:
               memory: 1000Mi
           env:
             - { name: PUID, value: "1000" }
-            - { name: GUID, value:  }
+            - { name: GUID, value: }
             - { name: TZ, value: "Europe/Warsaw" }
             - { name: MAXMEM, value: "1024" }
           volumeMounts:
@@ -72,4 +72,4 @@ spec:
           configMap:
             name: ubooquity
       nodeSelector:
-          kubernetes.io/role: "worker"
+        kubernetes.io/role: "worker"

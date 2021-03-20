@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,7 +34,7 @@ spec:
           - -r
           - -n
           - -w
-          - "MORPHINE"  
+          - "MORPHINE"
           - -s
           - "media;/data/smb;yes;no;yes"
         ports:

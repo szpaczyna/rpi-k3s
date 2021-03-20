@@ -33,7 +33,7 @@ spec:
           resources:
             limits:
               cpu: 1
-            requests: 
+            requests:
               cpu: 0.25
               memory: 512Mi
         - name: kibana
@@ -47,7 +47,7 @@ spec:
             limits:
               cpu: 1
               memory: 368Mi
-            requests: 
+            requests:
               cpu: 0.25
               memory: 256Mi
           volumeMounts:

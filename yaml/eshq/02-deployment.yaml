@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: eshq
-        image:  registry.shpaq.org/elastic-hq:3.5.12
+        image: registry.shpaq.org/elastic-hq:3.5.12
         imagePullPolicy: Always
         env:
         - name: HQ_DEFAULT_URL

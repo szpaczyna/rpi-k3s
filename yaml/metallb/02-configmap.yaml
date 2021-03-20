@@ -20,4 +20,3 @@ data:
     - peer-address: 10.0.0.1
       peer-asn: 64512
       my-asn: 64512
-

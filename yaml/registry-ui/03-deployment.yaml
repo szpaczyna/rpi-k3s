@@ -49,4 +49,4 @@ spec:
           configMap:
             name: registry-ui-config
       nodeSelector:
-          kubernetes.io/role: "worker"
+        kubernetes.io/role: "worker"

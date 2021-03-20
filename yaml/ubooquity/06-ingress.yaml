@@ -26,6 +26,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                  name: ubooquity
-                  port:
-                    number: 2202
+                name: ubooquity
+                port:
+                  number: 2202

@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -46,7 +47,5 @@ spec:
         - name: config
           mountPath: "/config"
       nodeSelector:
-          kubernetes.io/os: linux
-          kubernetes.io/role: worker
-          #kubernetes.io/hostname: rpi-k3s-worker1
-
+        kubernetes.io/os: linux
+        kubernetes.io/role: worker
