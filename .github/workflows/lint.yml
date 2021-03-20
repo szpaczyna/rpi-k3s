@@ -13,7 +13,6 @@ jobs:
     - name: yaml-lint
       uses: ibiqlik/action-yamllint@v3
       with:
-        file_or_dir: yaml/**/*.yaml
         config_file: yaml/.yamllint.yml
   jsonLint:
     runs-on: ubuntu-latest
