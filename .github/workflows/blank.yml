@@ -1,14 +1,17 @@
-# This is a basic workflow to help you get started with Actions
-
+---
 name: generate changelog
-
-# Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+#  push:
+#    branches: [ main ]
+#  pull_request:
+#    branches: [ main ]
+
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Generate changelog'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
