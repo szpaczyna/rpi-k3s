@@ -1,5 +1,5 @@
 ---
-name: generate changelog
+name: generate and release
 on:
 #  push:
 #    branches: [ main ]
@@ -26,6 +26,7 @@ jobs:
         run: |
           git config user.name szpaczyna
           git config user.email shpaq@shpaq.org
+          git log --pretty=format:"* [%s](https://github.com/szpaczyna/rpi-k3s/commit/%H)" $(git tag --sort=-committerdate | head -1)...$(git tag --sort=-committerdate | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}') > RELEASE.md
           npx standard-version -i RELEASE.md --skip.commit --header "# Changelog for Szpacze Gniazdo K3s"
       - name: publish tag
         id: publish_tag
