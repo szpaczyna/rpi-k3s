@@ -25,5 +25,4 @@ rules:
     level: warning
     indent-sequences: whatever
   line-length: disable
-    allow-non-breakable-inline-mappings: true
   truthy: disable
