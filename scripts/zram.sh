@@ -7,11 +7,13 @@ swapoff -a
 totalmem=`free | grep -e "^Mem:" | awk '{print $2}'`
 mem=$(( ($totalmem / $cores)* 1024 ))
 
+
 core=0
 while [ $core -lt $cores ]; do
-  echo $mem > /sys/block/zram$core/disksize
-  echo lz4 > /sys/block/zram$core/comp_algorithm
+  zramctl -f -a lz4 -t 8 -s $mem
   mkswap /dev/zram$core
   swapon -p 5 /dev/zram$core
   let core=core+1
 done
+
+
