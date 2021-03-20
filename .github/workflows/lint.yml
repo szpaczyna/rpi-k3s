@@ -6,7 +6,7 @@ on:
       name:
         description: 'Linter'
 jobs:
-  lintAllTheThings:
+  yamlLint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -15,9 +15,11 @@ jobs:
       with:
         file_or_dir: yaml/**/*.yaml
         config_file: .yamllint.yml
-  jsonnetLint:
+  jsonLint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Lint jsonnet
-      uses: dadav/jsonnet-lint-action@0.1.1
+    - name: json-lint
+      uses: ocular-d/json-linter@0.0.1
+      with:
+        file_or_dir: json/*.json
