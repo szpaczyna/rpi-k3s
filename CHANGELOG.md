@@ -1,17 +1,12 @@
 # Changelog for Szpacze Gniazdo K3s
-### [0.0.2](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.1...v0.0.2) (2021-03-20)
+## 0.0.0 (2021-03-20)
 
-* [chore(release): 0.0.1](https://github.com/szpaczyna/rpi-k3s/commit/f918636373b4baa2749f82c40be1fc3525514d57)
-* [chore(release): 1.0.4](https://github.com/szpaczyna/rpi-k3s/commit/90e73502238b2c451f1cd0f2e51c200e2e18a3c7)
 * [test](https://github.com/szpaczyna/rpi-k3s/commit/9c60a30ddff6088f92bc7203f3f2b3aefb4cb9c5)
-* [chore(release): 1.0.4](https://github.com/szpaczyna/rpi-k3s/commit/8ce196b9a1b073a748c59d82e5a8c5ab00e55212)
-* [chore(release): 1.0.4](https://github.com/szpaczyna/rpi-k3s/commit/805f2493e257308a8b6ca81aa154c765e14150f6)
 * [test](https://github.com/szpaczyna/rpi-k3s/commit/7a62d298602ce0f12af002cddc5b39a5ecfa5c49)
 * [test: test](https://github.com/szpaczyna/rpi-k3s/commit/3e567d734baa77649491acfb87786ffe34c13a8d)
 * [commitizen](https://github.com/szpaczyna/rpi-k3s/commit/475216f5afa715b80a61691d2e4214d298e28bcf)
 * [Update blank.yml](https://github.com/szpaczyna/rpi-k3s/commit/f702686d6dd171f072dff371398a71cd3bc76f35)
 * [Create blank.yml](https://github.com/szpaczyna/rpi-k3s/commit/c9114b4f6c8b84f10d4c7ad4365b05beaee9c897)
-* [chore(release): 1.0.4](https://github.com/szpaczyna/rpi-k3s/commit/6c3da8cd24df3265afc59dc00f1646f10265c69e)
 * [grafana version bump and zram scripts](https://github.com/szpaczyna/rpi-k3s/commit/618b2963b762eff98d7dfa2b8e70b2e62dd21c42)
 * [Merge branch 'main' of github.com:szpaczyna/rpi-k3s into main](https://github.com/szpaczyna/rpi-k3s/commit/b7272f8c712e438795900029b74e9b9664a9f3ea)
 * [Delete _config.yml](https://github.com/szpaczyna/rpi-k3s/commit/c66927c174a760d556ce67fe95ccffa448154b1b)
