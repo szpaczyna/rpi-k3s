@@ -25,7 +25,5 @@ rules:
     level: warning
     indent-sequences: whatever
   line-length: disable
-  #max: 180
-  #level: warning
     allow-non-breakable-inline-mappings: true
   truthy: disable
