@@ -1,8 +1,8 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: generate changelog
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
@@ -21,8 +21,8 @@ jobs:
           fetch-depth: 0 # gives standard-version access to all previous commits
       - name: generate tag and release body
         run: |
-          git config user.name example
-          git config user.email mail@example.com
+          git config user.name szpaczyna
+          git config user.email shpaq@shpaq.org
           npx standard-version -i RELEASE.md --skip.commit
       - name: publish tag
         id: publish_tag
@@ -37,4 +37,3 @@ jobs:
           release_name: Release ${{ steps.publish_tag.outputs.tag_name }}
           tag_name: ${{ steps.publish_tag.outputs.tag_name }}
           body_path: RELEASE.md
-          echo test, and deploy your project.
