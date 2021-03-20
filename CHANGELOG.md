@@ -1,4 +1,14 @@
-# Changelog for Szpacze Gniazdo K3s
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.0.2](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.1...v0.0.2) (2021-03-20)
+
+
+### Bug Fixes
+
+* some order with releases and changelog generation ([954be9f](https://github.com/szpaczyna/rpi-k3s/commits/954be9f5cf7f1de225c4109ca36345b9825c3858))
+
 ## 0.0.0 (2021-03-20)
 
 * [test](https://github.com/szpaczyna/rpi-k3s/commit/9c60a30ddff6088f92bc7203f3f2b3aefb4cb9c5)
