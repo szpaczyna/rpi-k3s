@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -50,9 +51,9 @@ spec:
       labels:
         app: local-path-provisioner
     spec:
-      nodeSelector:                                                                                 
-        kubernetes.io/role: worker                                                                  
-        kubernetes.io/os: linux      
+      nodeSelector:
+        kubernetes.io/role: worker
+        kubernetes.io/os: linux
       serviceAccountName: local-path-provisioner-service-account
       containers:
       - name: local-path-provisioner
@@ -147,5 +148,3 @@ data:
           containers:
           - name: helper-pod
             image: busybox
-
-

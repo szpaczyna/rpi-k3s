@@ -1,6 +1,7 @@
 ### sops
 .sops.yaml
 
+.notes
 ### Node
 # Logs
 logs

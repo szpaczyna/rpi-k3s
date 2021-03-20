@@ -1,21 +1,22 @@
-apiVersion: autoscaling/v2beta2 
+---
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: shpaq-org-mem-scale
   namespace: apps
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1 
-    kind: Deployment 
-    name: shpaq-org 
-  minReplicas: 1 
+    apiVersion: apps/v1
+    kind: Deployment
+    name: shpaq-org
+  minReplicas: 1
   maxReplicas: 2
-  metrics: 
+  metrics:
   - type: Resource
     resource:
-      name: memory 
+      name: memory
       target:
-        type: Utilization 
+        type: Utilization
         averageValue: 24M
 ---
 apiVersion: autoscaling/v1
@@ -31,4 +32,3 @@ spec:
   minReplicas: 1
   maxReplicas: 2
   targetCPUUtilizationPercentage: 25
-

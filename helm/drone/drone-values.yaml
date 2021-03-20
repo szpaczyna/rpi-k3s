@@ -1,3 +1,4 @@
+---
 image:
   repository: drone/drone
   tag: 1.9.0

@@ -15,7 +15,6 @@ spec:
   selector:
     app.kubernetes.io/name: unifi-poller
 ---
-# Source: unifi-poller/templates/common.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,9 +34,9 @@ spec:
       labels:
         app.kubernetes.io/name: unifi-poller
         app.kubernetes.io/instance: unifi-poller
-      annotations:                                                                                                                            
+      annotations:
          prometheus.io/scrape: "true"
-         prometheus.io/port: "9130" 
+         prometheus.io/port: "9130"
          seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
     spec:
       serviceAccountName: default

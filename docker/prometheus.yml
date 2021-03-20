@@ -1,3 +1,4 @@
+---
 global:
   scrape_interval:     15s
   evaluation_interval: 30s
@@ -38,4 +39,3 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
             - targets: ['192.168.9.13:9176']
-

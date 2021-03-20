@@ -1,4 +1,5 @@
-apiVersion: networking.k8s.io/v1beta1
+---
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nextcloud
@@ -48,8 +49,12 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: nextcloud
-          servicePort: 8080
+          service:
+            name: nextcloud
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
   tls:
     - hosts:
       - cloud.shpaq.org

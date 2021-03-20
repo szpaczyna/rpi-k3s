@@ -1,5 +1,5 @@
 #!/bin/bash
-#wget -O /usr/bin/zram.sh https://raw.githubusercontent.com/novaspirit/rpi_zram/master/zram.sh 
+#wget -O /usr/bin/zram.sh https://raw.githubusercontent.com/novaspirit/rpi_zram/master/zram.sh
 
 cat <<EOF > /etc/systemd/system/zram.service
 [Unit]

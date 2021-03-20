@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -74,4 +75,3 @@ data:
     </body>
     </html>
     <!-- vim: set foldmethod=manual : -->
-

@@ -60,6 +60,6 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
     {{- if .Values.rbac.create }}
-      serviceAccount: {{ include "velero-pvc-watcher.fullname" . }}
+      serviceAccountName: {{ include "velero-pvc-watcher.fullname" . }}
     {{- end }}
 
