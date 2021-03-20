@@ -1,6 +1,10 @@
-# Changelog
+# Changelog for Szpacze Gniazdo K3s
+### [0.0.3](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.2...v0.0.3) (2021-03-20)
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### Features
+
+* pihole exporter added to pihole plus some minor templating ([e697214](https://github.com/szpaczyna/rpi-k3s/commits/e697214fac512e6e334f3745c94f6bd9361b4af6))
 
 ### [0.0.2](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.1...v0.0.2) (2021-03-20)
 
