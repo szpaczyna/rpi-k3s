@@ -19,6 +19,6 @@ spec:
           servicePort: http
         path: /
   tls:
-  - hosts: 
+  - hosts:
     - grafana.shpaq.org
     secretName: grafana-shpaq-org-tls
