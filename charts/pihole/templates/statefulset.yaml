@@ -22,11 +22,6 @@ spec:
     metadata:
       labels:
         app: {{ template "name" . }}
-# TODO
-#      annotations:
-#        prometheus.io/scrape: "true"
-#        prometheus.io/port: "9311"
-#        seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
     spec:
       affinity:
         nodeAffinity:
@@ -141,21 +136,6 @@ spec:
             - mountPath: "/etc/pihole/custom.list"
               name: {{ template "name" . }}-custom-config-list
               subPath: custom.list
-# TODO
-#      - name: pihole-exporter
-#          image: "registry.shpaq.org/pihole_exporter:0.4.6"
-#          imagePullPolicy: "Always"
-#          ports:
-#            - name: metrics
-#              containerPort: 9311
-#              hostPort: 9311
-#          resources:
-#            limits:
-#              cpu: 100m
-#              memory: 100Mi
-#            requests:
-#              cpu: 10m
-#              memory: 24Mi
       terminationGracePeriodSeconds: 30
       volumes:
         - name: {{ template "name" . }}-custom-config

@@ -1,83 +1,88 @@
 replicaCount: 1
 
 image:
-    pullPolicy: IfNotPresent
-    image: pihole/pihole:latest
-
+  pullPolicy: IfNotPresent
+  image: pihole/pihole:latest
+  exporter: registry.shpaq.org/pihole_go_exporter:0.0.11
+  
 configData: |-
 env:
-    serverip: 10.1.0.13
-    dns1: 1.1.1.1
-    dns2: 1.0.0.1
-    dns3: 9.9.9.9
-    dns4: 8.8.8.8
-    timezone: Europe/Warsaw
-    condforwarding: false
-    condforwardingip: 10.0.0.1
-    condforwardingdomain: morphine
-    dnssec: true
+  serverip: 10.1.0.13
+  dns1: 1.1.1.1
+  dns2: 1.0.0.1
+  dns3: 9.9.9.9
+  dns4: 8.8.8.8
+  timezone: Europe/Warsaw
+  condforwarding: false
+  condforwardingip: 10.0.0.1
+  condforwardingdomain: morphine
+  dnssec: true
 
 nameOverride: pihole
 fullnameOverride: ""
 serviceaccount: pihole
 
 dns:
-    local:
-        ns1: 10.0.0.1
-        ns2: 127.0.0.1
+  local:
+    ns1: 10.0.0.1
+    ns2: 127.0.0.1
+
 service:
-    tcp:
-        type: ClusterIP
-        webport: 80
-        dnsport: 53
-        loadBalancerIP: null
-    udp:
-        type: LoadBalancer
-        dhcpport: 67
-        dnsport: 53
-        loadBalancerIP: 10.1.0.13
+  tcp:
+    type: ClusterIP
+    webport: 80
+    dnsport: 53
+    loadBalancerIP: null
+  udp:
+    type: LoadBalancer
+    dhcpport: 67
+    dnsport: 53
+    loadBalancerIP: 10.1.0.13
 
 ingress:
-    enabled: true
-    classname: traefik-lb
-    annotations:
-        kubernetes.io/tls-acme: "true"
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        traefik.ingress.kubernetes.io/frontend-entry-points: http, https
-        traefik.ingress.kubernetes.io/redirect-entry-point: https
-    host: pihole.k3s.shpaq.org
-    tls:
-    - secretName: pihole-k3s-shpaq-org-tls
-      hosts:
-      - pihole.k3s.shpaq.org
+  enabled: true
+  classname: traefik-lb
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+  host: pihole.k3s.shpaq.org
+  tls:
+  - secretName: pihole-k3s-shpaq-org-tls
+    hosts:
+    - pihole.k3s.shpaq.org
 
 resources:
-    limits:
-        cpu: 200m
-        memory: 368Mi
-    requests:
-        cpu: 100m
-        memory: 256Mi
+  limits:
+    cpu: 200m
+    memory: 368Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
 
 nodeSelector:
-    kubernetes.io/os: linux
-    kubernetes.io/role: worker
+  kubernetes.io/os: linux
+  kubernetes.io/role: worker
 
 tolerations: []
 podAnnotations: {}
 
 statefulsetAnnotattions:
-    backup.velero.io/backup-volumes: pihole-data
+  backup.velero.io/backup-volumes: pihole-data
 
 persistence:
-    enabled: true
-    keep: true
-    accessMode: ReadWriteOnce
-    size: 1Gi
-    storageClass: local-path
+  enabled: true
+  keep: true
+  accessMode: ReadWriteOnce
+  size: 1Gi
+  storageClass: local-path
 
 podDisruptionBudget:
-    minAvailable: 1
+  minAvailable: 1
 
 hpa:
-    enabled: true
+  enabled: true
+
+prometheus:
+  enabled: true
