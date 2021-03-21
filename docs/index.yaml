@@ -3,30 +3,30 @@ entries:
   bitwarden:
   - apiVersion: v2
     appVersion: 1.18.0
-    created: "2021-03-21T16:40:55.139050739+01:00"
+    created: "2021-03-21T16:44:11.185221679+01:00"
     description: A Bitwarden Helm chart for Kubernetes
     digest: ce2074d5decbb6096a5238bc50c0e233bccf2ad6213c7d2d13dfe819cc145240
     icon: https://github.com/bitwarden/brand/blob/master/icons/256x256.png
     name: bitwarden
     type: application
     urls:
-    - https://szpaczyna.github.io/rpi-k3s/charts/bitwarden-0.1.9.tgz
+    - https://szpaczyna.github.io/rpi-k3s/bitwarden-0.1.9.tgz
     version: 0.1.9
   cert-exporter:
   - apiVersion: v2
     appVersion: v2.4.0
-    created: "2021-03-21T16:40:55.139573231+01:00"
+    created: "2021-03-21T16:44:11.185783332+01:00"
     description: Monitors and exposes PKI information as Prometheus metrics
     digest: 2c2af964d7acdbb7d26a6012ed57f5eab7ebb92b36363d5ac0321346ccfb5abf
     name: cert-exporter
     type: application
     urls:
-    - https://szpaczyna.github.io/rpi-k3s/charts/cert-exporter-2.4.0.tgz
+    - https://szpaczyna.github.io/rpi-k3s/cert-exporter-2.4.0.tgz
     version: 2.4.0
   docker-registry:
   - apiVersion: v1
     appVersion: 2.7.1
-    created: "2021-03-21T16:40:55.140320105+01:00"
+    created: "2021-03-21T16:44:11.186528058+01:00"
     description: A Helm chart for Docker Registry
     digest: 5cecfce8705bec1e2c47063f0c841ab1def51ce35c02d4286c6598382d6ad3f0
     home: https://hub.docker.com/_/registry/
@@ -35,12 +35,12 @@ entries:
     sources:
     - https://github.com/docker/distribution-library-image
     urls:
-    - https://szpaczyna.github.io/rpi-k3s/charts/docker-registry-1.9.7.tgz
+    - https://szpaczyna.github.io/rpi-k3s/docker-registry-1.9.7.tgz
     version: 1.9.7
   gitea:
   - apiVersion: v2
     appVersion: 1.14.0-dev
-    created: "2021-03-21T16:40:55.141140809+01:00"
+    created: "2021-03-21T16:44:11.187383301+01:00"
     description: Git with a cup of tea
     digest: 1899941ea45ed70e694955cb61d43ab8154ca0c5ffb759bd56bf834f80f723c6
     icon: https://docs.gitea.io/images/gitea.png
@@ -49,24 +49,24 @@ entries:
     - https://github.com/go-gitea/gitea
     - https://hub.docker.com/r/gitea/gitea/
     urls:
-    - https://szpaczyna.github.io/rpi-k3s/charts/gitea-0.2.20.tgz
+    - https://szpaczyna.github.io/rpi-k3s/gitea-0.2.20.tgz
     version: 0.2.20
   kanboard:
   - apiVersion: v2
     appVersion: v1.2.18
-    created: "2021-03-21T16:40:55.141696061+01:00"
+    created: "2021-03-21T16:44:11.187974745+01:00"
     description: A Helm chart for Kubernetes
     digest: a770edf1238c6360e38fd869bb1350b817289ae592824051ee8d91fb71cbcb90
     icon: https://user-images.githubusercontent.com/40141083/41202259-db1c76a8-6cb5-11e8-8cdc-cf6c3d560b3b.png
     name: kanboard
     type: application
     urls:
-    - https://szpaczyna.github.io/rpi-k3s/charts/kanboard-0.1.15.tgz
+    - https://szpaczyna.github.io/rpi-k3s/kanboard-0.1.15.tgz
     version: 0.1.15
   locust:
   - apiVersion: v1
     appVersion: 0.9.0
-    created: "2021-03-21T16:40:55.142229636+01:00"
+    created: "2021-03-21T16:44:11.188996482+01:00"
     description: A modern load testing framework
     digest: c34195a29d6db15d7f6758fbfd685e027b137cfbfe7f0de45b6fa7f05a666d85
     home: http://locust.io
@@ -80,38 +80,38 @@ entries:
     sources:
     - https://github.com/greenbird/locust
     urls:
-    - https://szpaczyna.github.io/rpi-k3s/charts/locust-1.2.1.tgz
+    - https://szpaczyna.github.io/rpi-k3s/locust-1.2.1.tgz
     version: 1.2.1
   pihole:
   - apiVersion: v2
     appVersion: v5.7
-    created: "2021-03-21T16:40:55.14286448+01:00"
+    created: "2021-03-21T16:44:11.189742261+01:00"
     description: Pi Hole
     digest: cda56e5de3e8bb234b7439df3dff8f7843b8963e5471f45003171de26bdf8b1e
     icon: https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png
     name: pihole
     urls:
-    - https://szpaczyna.github.io/rpi-k3s/charts/pihole-0.0.13.tgz
+    - https://szpaczyna.github.io/rpi-k3s/pihole-0.0.13.tgz
     version: 0.0.13
   velero-pvc-watcher:
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2021-03-21T16:40:55.143219989+01:00"
+    created: "2021-03-21T16:44:11.190135162+01:00"
     description: A Helm chart for Kubernetes
     digest: 6935e7a72337d224d0bcbfbfaca0a32e3a8c77c7123fbe168e594f097e44d156
     name: velero-pvc-watcher
     urls:
-    - https://szpaczyna.github.io/rpi-k3s/charts/velero-pvc-watcher-0.1.0.tgz
+    - https://szpaczyna.github.io/rpi-k3s/velero-pvc-watcher-0.1.0.tgz
     version: 0.1.0
   version-checker:
   - apiVersion: v2
     appVersion: 0.2.2
-    created: "2021-03-21T16:40:55.143604191+01:00"
+    created: "2021-03-21T16:44:11.19059307+01:00"
     description: A Helm chart for version-checker
     digest: 4e4c6d5a14b397a3046fd9d0926b5d0800deb6b1f22cada19770a72da212314d
     home: https://github.com/joshvanl/verison-checker
     name: version-checker
     urls:
-    - https://szpaczyna.github.io/rpi-k3s/charts/version-checker-0.2.2.tgz
+    - https://szpaczyna.github.io/rpi-k3s/version-checker-0.2.2.tgz
     version: 0.2.2
-generated: "2021-03-21T16:40:55.138659308+01:00"
+generated: "2021-03-21T16:44:11.184829181+01:00"
