@@ -1,7 +1,3 @@
----
-layout: default
----
-
 ## rpi-k3s - Home Cloud on Raspberry Pie(s)
 
 <p align="center">
