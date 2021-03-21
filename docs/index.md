@@ -63,7 +63,7 @@ layout: default
 ## Helm
 
 ```
-helm repo add shpaq https://szpaczyna.github.io/rpi-k3s
+helm repo add shpaq https://szpaczyna.github.io/rpi-k3s/charts
 ```
 
     bitwarden
