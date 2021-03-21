@@ -10,7 +10,7 @@ entries:
     name: bitwarden
     type: application
     urls:
-    - https://szpaczyna.github.com/charts/bitwarden-0.1.9.tgz
+    - https://szpaczyna.github.com/rpi-k3s/bitwarden-0.1.9.tgz
     version: 0.1.9
   cert-exporter:
   - apiVersion: v2
@@ -21,7 +21,7 @@ entries:
     name: cert-exporter
     type: application
     urls:
-    - https://szpaczyna.github.com/charts/cert-exporter-2.4.0.tgz
+    - https://szpaczyna.github.com/rpi-k3s/cert-exporter-2.4.0.tgz
     version: 2.4.0
   docker-registry:
   - apiVersion: v1
@@ -35,7 +35,7 @@ entries:
     sources:
     - https://github.com/docker/distribution-library-image
     urls:
-    - https://szpaczyna.github.com/charts/docker-registry-1.9.7.tgz
+    - https://szpaczyna.github.com/rpi-k3s/docker-registry-1.9.7.tgz
     version: 1.9.7
   gitea:
   - apiVersion: v2
@@ -49,7 +49,7 @@ entries:
     - https://github.com/go-gitea/gitea
     - https://hub.docker.com/r/gitea/gitea/
     urls:
-    - https://szpaczyna.github.com/charts/gitea-0.2.20.tgz
+    - https://szpaczyna.github.com/rpi-k3s/gitea-0.2.20.tgz
     version: 0.2.20
   kanboard:
   - apiVersion: v2
@@ -61,7 +61,7 @@ entries:
     name: kanboard
     type: application
     urls:
-    - https://szpaczyna.github.com/charts/kanboard-0.1.15.tgz
+    - https://szpaczyna.github.com/rpi-k3s/kanboard-0.1.15.tgz
     version: 0.1.15
   locust:
   - apiVersion: v1
@@ -80,7 +80,7 @@ entries:
     sources:
     - https://github.com/greenbird/locust
     urls:
-    - https://szpaczyna.github.com/charts/locust-1.2.1.tgz
+    - https://szpaczyna.github.com/rpi-k3s/locust-1.2.1.tgz
     version: 1.2.1
   pihole:
   - apiVersion: v2
@@ -91,7 +91,7 @@ entries:
     icon: https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png
     name: pihole
     urls:
-    - https://szpaczyna.github.com/charts/pihole-0.0.13.tgz
+    - https://szpaczyna.github.com/rpi-k3s/pihole-0.0.13.tgz
     version: 0.0.13
   velero-pvc-watcher:
   - apiVersion: v1
@@ -101,7 +101,7 @@ entries:
     digest: 6935e7a72337d224d0bcbfbfaca0a32e3a8c77c7123fbe168e594f097e44d156
     name: velero-pvc-watcher
     urls:
-    - https://szpaczyna.github.com/charts/velero-pvc-watcher-0.1.0.tgz
+    - https://szpaczyna.github.com/rpi-k3s/velero-pvc-watcher-0.1.0.tgz
     version: 0.1.0
   version-checker:
   - apiVersion: v2
@@ -112,6 +112,6 @@ entries:
     home: https://github.com/joshvanl/verison-checker
     name: version-checker
     urls:
-    - https://szpaczyna.github.com/charts/version-checker-0.2.2.tgz
+    - https://szpaczyna.github.com/rpi-k3s/version-checker-0.2.2.tgz
     version: 0.2.2
 generated: "2021-03-21T15:45:36.603253831+01:00"
