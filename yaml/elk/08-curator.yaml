@@ -12,7 +12,7 @@ spec:
           containers:
           - name: curator
             image: registry.shpaq.org/elk-curator:5.8.3
-            imagePullPolicy: Always
+            imagePullPolicy: IfNotPresent
             args:
             - --config
             - /etc/config/config.yml

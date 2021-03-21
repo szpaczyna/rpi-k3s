@@ -1,3 +1,5 @@
 #!/bin/bash
-kubectl delete namespace/velero clusterrolebinding/velero
-kubectl delete crds -l component=velero
+kubectl delete clusterrolebinding/velero --force
+kubectl delete crds -l component=velero --force
+kubectl delete deployments.apps minio --force
+kubectl delete namespace/velero 
