@@ -23,7 +23,7 @@ velero install \
     --velero-pod-mem-limit=256Mi \
     --velero-pod-mem-request=32Mi
 
-kubectl apply -f minio
+kubectl apply -f minio/
 kubectl apply -f restic-cm.yaml
 kubectl apply -f slave-storage-location.yaml
 rm -rf credentials
