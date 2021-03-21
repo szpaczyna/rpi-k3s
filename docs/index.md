@@ -3,9 +3,9 @@ layout: default
 ---
 
 <p align="center">
-  <img src="../pics/rpi.png" width="140"/>
-  <img src="../pics/k8s.png" width="140"/>
-  <img src="../pics/logo.png" width="140"/>
+  <img src="https://github.com/szpaczyna/rpi-k3s/blob/main/pics/k8s.png" width="140"/>
+  <img src="https://github.com/szpaczyna/rpi-k3s/blob/main/pics/rpi.png" width="140"/>
+  <img src="https://github.com/szpaczyna/rpi-k3s/blob/main/pics/logo.png" width="140"/>
 </p>
 
 ## Workloads
@@ -67,7 +67,10 @@ layout: default
     -   [xbrowsersync](https://hub.docker.com/repository/docker/szpaczyn/xbrowsersync)
 
 ## Helm
-[Chart repository](https://szpaczyna.github.io/rpi-k3s) with following contents:
+
+```
+helm repo add shpaq https://szpaczyna.github.io/rpi-k3s
+```
 
     bitwarden
     cert-exporter
@@ -78,7 +81,3 @@ layout: default
     registry
     velero-pvc-watcher
     version-checker
-
-```
-helm repo add shpaq https://szpaczyna.github.io/rpi-k3s
-```
