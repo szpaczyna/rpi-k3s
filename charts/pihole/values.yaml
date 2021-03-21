@@ -69,7 +69,7 @@ tolerations: []
 podAnnotations: {}
 
 statefulsetAnnotattions:
-  backup.velero.io/backup-volumes: pihole-data
+  backup.velero.io/backup-volumes: data-pihole-0
 
 persistence:
   enabled: true

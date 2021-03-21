@@ -4,3 +4,4 @@ description: A Bitwarden Helm chart for Kubernetes
 type: application
 name: bitwarden
 version: 0.1.9
+icon: https://github.com/bitwarden/brand/blob/master/icons/256x256.png

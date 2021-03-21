@@ -1,5 +1,6 @@
 apiVersion: v2
 description: "Pi Hole"
 name: pihole
-version: 0.0.12
+version: 0.0.13
 appVersion: "v5.7"
+icon: https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png

@@ -8,8 +8,9 @@ metadata:
     app.kubernetes.io/name: ubooquity
     app.kubernetes.io/instance: ubooquity
   annotations:
-    backup.velero.io/backup-volumes: ubooquity-books
-    backup.velero.io/backup-volumes: ubooquity-config
+    backup.velero.io/backup-volumes: |
+        ubooquity-books
+        ubooquity-config
 spec:
   replicas: 1
   selector:

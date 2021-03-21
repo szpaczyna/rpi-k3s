@@ -1,9 +1,16 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "kanboard.fullname" . }}
   labels:
     {{- include "kanboard.labels" . | nindent 4 }}
+  {{- if .Values.deploymentAnnotations }}
+  annotations:
+    {{- range $key, $value := .Values.deploymentAnnotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   replicas: 1
   selector:

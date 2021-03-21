@@ -5,6 +5,8 @@ metadata:
   labels:
     app: unifi-controller
   name: unifi-controller
+  annotations:
+    backup.velero.io/backup-volumes: unifi
 spec:
   replicas: 1
   serviceName: unifi-controller

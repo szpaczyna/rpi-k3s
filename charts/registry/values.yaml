@@ -12,6 +12,8 @@ updateStrategy:
 podAnnotations: {}
 podLabels: {}
 
+deploymentAnnotations:
+    backup.velero.io/backup-volumes: registry
 image:
   repository: registry
   tag: 2.7.1
@@ -66,6 +68,23 @@ storage: filesystem
 secrets:
   haSharedSecret: ""
   htpasswd: ""
+
+secrets:
+  haSharedSecret: ""
+  htpasswd: ""
+
+# Secrets for S3 access and secret keys
+#   s3:
+#     accessKey: ""
+#     secretKey: ""
+
+# Options for s3 storage type:
+# s3:
+#  region: us-east-1
+#  regionEndpoint: s3.us-east-1.amazonaws.com
+#  bucket: my-bucket
+#  encrypt: false
+#  secure: true
 
 configData:
   version: 0.1

@@ -10,7 +10,9 @@ metadata:
     heritage: "{{ .Release.Service }}"
   {{- if .Values.statefulsetAnnotattions }}
   annotations:
-    backup.velero.io/backup-volumes: {{ template "name" . }}-data
+    {{- range $key, $value := .Values.statefulsetAnnotattions }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}

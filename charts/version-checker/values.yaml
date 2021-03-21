@@ -39,7 +39,7 @@ gcr:
 quay:
   token:
 
-selfhosted: 
+selfhosted:
   - name: REGISTRY
     host: https://registry.shpaq.org
   #  username:
@@ -58,7 +58,7 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
-  
+
 ## Prometheus Operator
 prometheus:
   enabled: false

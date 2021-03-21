@@ -6,6 +6,8 @@ metadata:
   namespace: apps
   labels:
     name: squid
+  annotations:
+    backup.velero.io/backup-volumes: squid
 spec:
   replicas: 1
   serviceName: squid

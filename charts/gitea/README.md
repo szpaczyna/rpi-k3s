@@ -1,12 +1,12 @@
 # Helm chart
 
-Installs the project as a Deployment for Bitwarden community version.
+Installs Gitea standalone version.
 
 # Installing chart
 
     cd <path-to-repo>
     ./decrypt.sh
-    helm install -n <my-namespace> bitwarden -f values.yaml .
+    helm install -n <my-namespace> gitea -f values.yaml .
 
 or use a deploy script
 

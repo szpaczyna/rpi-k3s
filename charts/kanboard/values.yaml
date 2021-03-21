@@ -1,3 +1,4 @@
+---
 image:
   repository: kanboard/kanboard
   pullPolicy: IfNotPresent
@@ -39,22 +40,24 @@ serviceAccount:
   name: "kanboard-sa"
 additionalSpec: {}
 podAnnotations: {}
+deploymentAnnotations:
+    backup.velero.io/backup-volumes: kanboard-data
 podSecurityContext:
   fsGroup: 2000
 securityContext: {}
-# capabilities:
-#   drop:
-#   - ALL
-# readOnlyRootFilesystem: true
-# runAsNonRoot: true
-# runAsUser: 1000
+#  capabilities:
+#    drop:
+#    - ALL
+#  readOnlyRootFilesystem: true
+#  runAsNonRoot: false
+#  runAsUser: 2000
 resources:
   limits:
    cpu: 1000m
-   memory: 450Mi
+   memory: 250Mi
   requests:
    cpu: 100m
-   memory: 128Mi
+   memory: 40Mi
 nodeSelector:
   kubernetes.io/os: linux
   kubernetes.io/role: worker
