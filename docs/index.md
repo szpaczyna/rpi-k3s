@@ -2,12 +2,6 @@
 layout: default
 ---
 
-<p align="center">
-  <img src="https://github.com/szpaczyna/rpi-k3s/blob/main/pics/k8s.png" width="140"/>
-  <img src="https://github.com/szpaczyna/rpi-k3s/blob/main/pics/rpi.png" width="140"/>
-  <img src="https://github.com/szpaczyna/rpi-k3s/blob/main/pics/logo.png" width="140"/>
-</p>
-
 ## Workloads
 
 -   Apps/Helm Charts:
