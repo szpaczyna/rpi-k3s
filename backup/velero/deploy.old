@@ -1,0 +1,29 @@
+#!/bin/bash
+REGION=eu-central-1
+BUCKET=rpi-k3s-shpaq-backup
+
+sops -d ../../secrets/aws-credentials > credentials 
+
+velero install \
+    --provider aws \
+    --plugins registry.shpaq.org/velero-plugin-for-aws:v1.1.0 \
+    --bucket $BUCKET \
+    --backup-location-config region=$REGION \
+    --snapshot-location-config region=$REGION \
+    --secret-file ./credentials \
+    --use-volume-snapshots=true \
+    --use-restic \
+    --restic-pod-cpu-request=200m \
+    --restic-pod-cpu-limit=200m \
+    --restic-pod-mem-request=32Mi \
+    --restic-pod-mem-limit=128Mi \
+    --default-volumes-to-restic \
+    --velero-pod-cpu-limit=1000m \
+    --velero-pod-cpu-request=200m \
+    --velero-pod-mem-limit=256Mi \
+    --velero-pod-mem-request=32Mi
+
+kubectl apply -f minio/
+kubectl apply -f restic-cm.yaml
+kubectl apply -f slave-storage-location.yaml
+rm -rf credentials
