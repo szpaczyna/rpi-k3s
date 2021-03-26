@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      k8s-app: pihole-exporter
+  template:
+    metadata:
+      labels:
+        k8s-app: pihole-exporter
+      annotations:
+         prometheus.io/scrape: "true"
+         prometheus.io/port: "9617"
+         seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/os
+                  operator: In
+                  values:
+                  - linux
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65536
+      containers:
+        - env:
+            - name: PIHOLE_HOSTNAME
+              value: pihole.shpaq.org
+            - name: PIHOLE_PROTOCOL
+              value: https
+            - name: PIHOLE_API_TOKEN                                                                                                                                   
+              valueFrom:                                                                                                                                               
+                secretKeyRef:                                                                                                                                          
+                  name: pihole-exporter-secret                                                                                                        
+                  key: PIHOLE_API_TOKEN                                                                                                                                
+            - name: PIHOLE_PORT                                                                                                                                        
+              value: "443"                                                                                                                                             
+            - name: INTERVAL                                                                                                                                           
+              value: 15s        
+          name: pihole-exporter
+          image: "registry.shpaq.org/pihole_go_exporter:0.0.12"
+          imagePullPolicy: "Always"
+          ports:
+            - name: metrics
+              containerPort: 9617
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 200Mi
+            requests:
+              cpu: 10m
+              memory: 24Mi
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      nodeSelector:
+        kubernetes.io/role: worker
