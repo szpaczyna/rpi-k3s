@@ -43,7 +43,8 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
       - name: unifi-poller
-        image: "golift/unifi-poller:2.0.1"
+        #image: "golift/unifi-poller:2.0.1"
+        image: "golift/unifi-poller:2.1.0"
         imagePullPolicy: IfNotPresent
         env:
         - name: TZ
