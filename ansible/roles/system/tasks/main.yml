@@ -1,0 +1,285 @@
+---
+
+# # Enable this if you run into issues updating
+# - name: Reset dpkg
+#   command: dpkg --configure -a
+
+- name: Upgrade system
+  apt:
+    upgrade: dist
+    # Need the force_apt_get until
+    # https://github.com/ansible/ansible/issues/56832
+    force_apt_get: true
+  register: apt_upgrade
+  retries: 5
+  until: apt_upgrade is success
+
+- name: Upgrade all packages to the latest version
+  apt:
+    name: "*"
+    state: latest
+    # Need the force_apt_get until
+    # https://github.com/ansible/ansible/issues/56832
+    force_apt_get: true
+  register: apt_update
+  retries: 5
+  until: apt_update is success
+
+- name: Install Common Packages
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - dnsutils
+      - neovim
+      - tmux
+      - fzf
+      - git
+      - gnupg2
+      - apparmor
+      - htop
+      - iputils-ping
+      - libnss-mdns
+      - neofetch
+      - net-tools
+      - nfs-common
+      - nmap
+      - psmisc
+      - python3
+      - python3-pip
+      - rsync
+      - software-properties-common
+      - mtr
+      - unattended-upgrades
+      - wget
+      - chrony
+      - zsh
+      - tmux
+    install_recommends: false
+    update_cache: true
+    # Need the force_apt_get until
+    # https://github.com/ansible/ansible/issues/56832
+    force_apt_get: true
+  register: apt_install_common
+  retries: 5
+  until: apt_install_common is success
+
+- name: Clean up apt
+  apt:
+    autoremove: true
+    # Need the force_apt_get until
+    # https://github.com/ansible/ansible/issues/56832
+    force_apt_get: true
+
+- name: Copy unattended-upgrades configuration files in place
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/apt/apt.conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - 10periodic
+    - 50unattended-upgrades
+
+# See: https://github.com/kubernetes/kubernetes/issues/71305
+- name: Use iptables-legacy instead of nftables.
+  alternatives:
+    name: iptables
+    path: /usr/sbin/iptables-legacy
+
+- name: Restart chrony service
+  systemd:
+    name: chrony
+    enabled: true
+    state: restarted
+
+- name: Enable chrony service and assure it is started
+  systemd:
+    name: chrony
+    enabled: true
+    state: started
+
+- name: Deploy custom hosts file
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+
+- name: Create sysctl dir if it does not exist
+  file:
+    path: /etc/sysctl.d
+    state: directory
+    mode: '0755'
+
+- name: Create audit rules dir if it does not exist
+  file:
+    path: /etc/audit/rules.d
+    state: directory
+    mode: '0755'
+
+- name: Sysctl
+  template:
+    src: sysctl/99-local.conf.j2
+    dest: /etc/sysctl.d/99-local.conf
+
+- name: Auditd configuration
+  copy:
+    src: auditd/{{ item }}
+    dest: "/etc/audit/rules.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - 90-shpaq.rules
+    - 99-finalize.rules
+
+- name: Disable system modules
+  template:
+    src: modules/hardening.conf.j2
+    dest: /etc/modprobe.d/hardening.conf
+
+- name: Syslog to elasticsearch
+  template:
+    src: syslog/01-elk.conf.j2
+    dest: /etc/rsyslog.d/01-elk.conf
+
+- name: Efemeric journald
+  template:
+    src: journald.conf.j2
+    dest: /etc/systemd/journald.conf
+
+# Allowed to fail inorder to be idempotent
+- name: Stop log2ram service
+  systemd:
+    name: log2ram
+    state: stopped
+  ignore_errors: true
+
+- name: Cloning log2ram from GitHub
+  git:
+    repo: https://github.com/azlux/log2ram.git
+    dest: /opt/log2ram
+    version: "{{ log2ram_version }}"
+
+- name: Changing perms of "/opt/log2ram/install.sh"
+  file:
+    dest: /opt/log2ram/install.sh
+    mode: a+x
+
+- name: Install log2ram
+  command: /bin/sh ./install.sh
+  args:
+    chdir: "/opt/log2ram"
+  register: log2ram
+  changed_when: '"Reboot to activate log2ram" in log2ram.stdout'
+
+- name: Copy log2ram.conf
+  template:
+    src: log2ram.conf.j2
+    dest: /etc/log2ram.conf
+## zram
+- name: Cloning zram-swap-config from GitHub
+  git:
+    repo: https://github.com/StuartIanNaylor/zram-swap-config.git
+    dest: /opt/zram-swap-config
+
+- name: Changing perms of "/opt/zram-swap-config/install.sh"
+  file:
+    dest: /opt/zram-swap-config/install.sh
+    mode: a+x
+
+- name: Install zram-swap-config
+  command: /bin/sh ./install.sh
+  args:
+    chdir: "/opt/zram-swap-config"
+
+- name: Copy zram-swap-config.conf
+  template:
+    src: zram-swap-config.conf.j2
+    dest: /etc/zram-swap-config.conf
+
+## some system stuff
+- name: Create a firmware folder if it does not exist
+  file:
+    path: /boot/firmware
+    state: directory
+    mode: '0755'
+
+- name: Create the config files if they do not exist
+  file:
+    path: "{{ item }}"
+    state: touch
+  with_items:
+    - /boot/firmware/nobtcmd.txt
+    - /boot/firmware/syscfg.txt
+
+- name: Enable required cgroup features and disable IPv6
+  lineinfile:
+    path: /boot/firmware/cmdline.txt
+    backrefs: true
+    regexp: '^(.*fixrtc)$'
+    line: '\1 cgroup_memory=1 cgroup_enable=memory cgroup_enable=cpuset apparmor=0 mitigations=off max_loop=32'
+    state: present
+  when: deploy_target != 'vagrant'
+
+- name: Disable WiFi
+  blockinfile:
+    path: /boot/firmware/usercfg.txt
+    marker: "# {mark} ANSIBLE DISABLE WIFI"
+    block: |
+      dtoverlay=pi3-disable-wifi
+  when: deploy_target != 'vagrant'
+
+- name: Disable Bluetooth
+  blockinfile:
+    path: /boot/firmware/usercfg.txt
+    marker: "# {mark} ANSIBLE DISABLE BLUETOOTH"
+    block: |
+      dtoverlay=pi3-disable-bt
+  when: deploy_target != 'vagrant'
+
+- name: Disable HDMI
+  blockinfile:
+    path: /boot/firmware/syscfg.txt
+    marker: "# {mark} ANSIBLE DISABLE HDMI"
+    block: |
+      hdmi_blanking=2
+  when: deploy_target != 'vagrant'
+
+- name: Disable Audio
+  blockinfile:
+    path: /boot/firmware/syscfg.txt
+    marker: "# {mark} ANSIBLE DISABLE AUDIO"
+    block: |
+      dtparam=audio=off
+  when: deploy_target != 'vagrant'
+
+- name: Disable Uart
+  blockinfile:
+    path: /boot/firmware/syscfg.txt
+    marker: "# {mark} ANSIBLE DISABLE UART"
+    block: |
+      enable_uart=0
+  when: deploy_target != 'vagrant'
+
+- name: Trottle GPU
+  blockinfile:
+    path: /boot/firmware/usercfg.txt
+    marker: "# {mark} ANSIBLE THROTTLE GPU"
+    block: |
+      gpu_mem=16
+  when: deploy_target != 'vagrant'
+
+- name: Overclock CPU and Memory
+  blockinfile:
+    path: /boot/firmware/usercfg.txt
+    marker: "# {mark} ANSIBLE OVERCLOCK CPU"
+    block: |
+      arm_freq=1750
+      core_freq=500
+      sdram_freq=500
+      over_voltage=6
+      over_voltage_sdram=6
+      sdram_schmoo=0x02000020
+  when: deploy_target != 'vagrant'

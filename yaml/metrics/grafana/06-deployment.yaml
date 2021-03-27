@@ -19,7 +19,7 @@ spec:
       containers:
       - env:
         - name: GF_INSTALL_PLUGINS
-          value: grafana-piechart-panel,novalabs-annotations-panel,yesoreyeram-boomtheme-panel,btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel
+          value: btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/provisioning"
         #image: grafana/grafana:7.4.5

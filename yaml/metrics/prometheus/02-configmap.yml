@@ -15,14 +15,15 @@ data:
         script: [speedtest]
       static_configs:
         - targets:
-          - 10.0.0.2:9469
+          - 10.0.0.11:9469
       scrape_interval: 30m
       scrape_timeout: 90s
 
-    - job_name: 'pihole_exporter'
+    - job_name: 'pihole'
       static_configs:
         - targets:
-          - 10.0.0.13:9617
+          - 10.0.0.10:9617
+          - 10.0.0.10:9100
 
     - job_name: 'edgerouter_x'
       static_configs:

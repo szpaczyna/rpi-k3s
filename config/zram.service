@@ -1,8 +1,0 @@
-[Unit]
-Description=Zram
-
-[Service]
-ExecStart=/usr/bin/zram.sh
-
-[Install]
-WantedBy=multi-user.target
