@@ -1,4 +1,48 @@
 # Changelog for Szpacze Gniazdo K3s
+### [0.0.4](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.3...v0.0.4) (2021-03-27)
+
+
+### Features
+
+* added velero annotations to charts and yamls, updated readmes ([b3588ef](https://github.com/szpaczyna/rpi-k3s/commits/b3588efc1352ba399f6eed556509af92da84e82f))
+* ansible for basic setup ([3f0eaf8](https://github.com/szpaczyna/rpi-k3s/commits/3f0eaf89689ee7cfb9e641955b1feda94e146e0c))
+* drone server and runners values, yeah, i know there is a password ([d26596a](https://github.com/szpaczyna/rpi-k3s/commits/d26596afa90ac1944292b92185d0795f94acbe04))
+* gh-page ([4990104](https://github.com/szpaczyna/rpi-k3s/commits/499010415d9022a92a9e844964e07f9fe751e420))
+* gh-page v2 ([107d4c4](https://github.com/szpaczyna/rpi-k3s/commits/107d4c4314f2c106b9eb7dc5ca3fa21a928650ec))
+* gh-page v3 and updated readme ([c664735](https://github.com/szpaczyna/rpi-k3s/commits/c664735fbf8ff04daa587d419239fa7efc645370))
+* gh-page v4 ([07f7ce0](https://github.com/szpaczyna/rpi-k3s/commits/07f7ce08db42d7d34e487dd4ae88e5cc39a82505))
+* gitea dashboard ([6fb02a5](https://github.com/szpaczyna/rpi-k3s/commits/6fb02a59abe6c4592b92305f1b801090c17866fc))
+* grafana, unifi-poller version bump ([00dea60](https://github.com/szpaczyna/rpi-k3s/commits/00dea60c6b6eb3a3c902a55d672b42ca0c47835b))
+* helm charts repo ([33f1bef](https://github.com/szpaczyna/rpi-k3s/commits/33f1bef8a071ab32907c9e110b8911cd24ec2db1))
+* migrate backups to free tier aws; local slave storage location, resources/limits defined for velero/restic ([251395f](https://github.com/szpaczyna/rpi-k3s/commits/251395f90258c3a026c583dd71367b380d078d2b))
+* not working go exporter, segmentation fault ([f1f82c9](https://github.com/szpaczyna/rpi-k3s/commits/f1f82c9a4d3264f98f605f11ce7a107c586d67cb))
+* updated vpn to use outside NIC device ([c4ed8e4](https://github.com/szpaczyna/rpi-k3s/commits/c4ed8e414f85900a6f66f1801be113d4e64a2212))
+
+
+### Bug Fixes
+
+* aws free tier is no go with its limits, added longhorn for testing proper storage ([fc45e7c](https://github.com/szpaczyna/rpi-k3s/commits/fc45e7ca50655b6401c8356271b13e7ec9ee1aed))
+* charts repo url ([7f2dfd2](https://github.com/szpaczyna/rpi-k3s/commits/7f2dfd2499332cf34a8975d13dedcc93b2a1963c))
+* charts repo url ([1093dca](https://github.com/szpaczyna/rpi-k3s/commits/1093dcad2f7587439a5d734084790e09ef0651f5))
+* fixing, fixing and fixing minor stuff, i think i need to have some local tests before this ([6a5e355](https://github.com/szpaczyna/rpi-k3s/commits/6a5e355e1a440dce4559de29be688348da974b9a))
+* gh-page v5 ([771b03a](https://github.com/szpaczyna/rpi-k3s/commits/771b03a43ce2b369f91654a5ebc5ca21042ddca0))
+* gh-page v6 ([5284fcb](https://github.com/szpaczyna/rpi-k3s/commits/5284fcbe877792530b7e998b61a9b8fa84f6d2aa))
+* linter is a bitch ([4152516](https://github.com/szpaczyna/rpi-k3s/commits/4152516ae9c2d5632fc6b1def2aeb5eff70836d9))
+* linter is a bitch v2 ([e4c62fd](https://github.com/szpaczyna/rpi-k3s/commits/e4c62fd0d6276b8fe91b3713911121561b2d2476))
+* linter is a bitch v3 ([3bb90e9](https://github.com/szpaczyna/rpi-k3s/commits/3bb90e9ebc831346a2fbf4bd08f2b985ea5ac8da))
+* linter is a bitch v3.1 ([7ddd9f9](https://github.com/szpaczyna/rpi-k3s/commits/7ddd9f9d49449e2e6cd9f2fc6b4424746965b8fb))
+* linter is a bitch v3.2 ([fdee28f](https://github.com/szpaczyna/rpi-k3s/commits/fdee28f9727906a5d98efb736b9108801e7aec41))
+* linter is a bitch v3.3 ([82af4b6](https://github.com/szpaczyna/rpi-k3s/commits/82af4b6ffa9b88de659cde7114e0d6acbadbcd56))
+* linter is a bitch v3.4 ([e87db96](https://github.com/szpaczyna/rpi-k3s/commits/e87db9652052bb10d08bc526ccb74776f713cbb2))
+* linter is a bitch v3.5 ([154859b](https://github.com/szpaczyna/rpi-k3s/commits/154859bf08667451a9bb6dc2dea7ed885b4d53ec))
+* linter is a bitch v3.6 ([24251d2](https://github.com/szpaczyna/rpi-k3s/commits/24251d2bbfbcbd12469c289c07084e5eac1618cd))
+* linter is a bitch v3.7 ([abdcd13](https://github.com/szpaczyna/rpi-k3s/commits/abdcd13d0e82a3e4e0a9d2d695e0e58fcb177369))
+* move charts repo ([6933f67](https://github.com/szpaczyna/rpi-k3s/commits/6933f67a1eee1c6bab38cdd95d4d786db0bf502e))
+
+* [chore(release): 0.0.3](https://github.com/szpaczyna/rpi-k3s/commit/2d901dcc42d1c54a4316c42a8aff43ed6f3b368a)
+* [feat: pihole exporter added to pihole plus some minor templating](https://github.com/szpaczyna/rpi-k3s/commit/e697214fac512e6e334f3745c94f6bd9361b4af6)
+
+
 ### [0.0.3](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.2...v0.0.3) (2021-03-20)
 
 
