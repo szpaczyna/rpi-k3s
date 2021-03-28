@@ -6,6 +6,9 @@
   <img src="assets/logo.png" width="140"/>
 </p>
 
+<!--START_SECTION_PROFILE_VIEWS:readme-info-->
+<!--END_SECTION_PROFILE_VIEWS:readme-info-->
+
 ## Workloads
 
 -   Apps/Helm Charts:
@@ -80,3 +83,6 @@
 ```
 helm repo add shpaq https://szpaczyna.github.io/rpi-k3s
 ```
+
+<!--START_SECTION_LINES_OF_CODE:readme-info-->
+<!--END_SECTION_LINES_OF_CODE:readme-info-->
