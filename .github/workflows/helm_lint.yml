@@ -1,0 +1,20 @@
+name: Helm Linter
+on:
+  push:
+jobs:
+  lint-helm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Lint Helm
+        uses: WyriHaximus/github-action-helm3@v2
+        with:
+          exec: helm lint ./charts/bitwarden
+          exec: helm lint ./charts/gitea
+          exec: helm lint ./charts/locust
+          exec: helm lint ./charts/pihole
+          exec: helm lint ./charts/kanboard
+          exec: helm lint ./charts/registry
+          exec: helm lint ./charts/version-checker
+          exec: helm lint ./charts/velero-pvc-watcher
+          exec: helm lint ./charts/cert-exporter

@@ -34,7 +34,7 @@ jobs:
       uses: reviewdog/action-shellcheck@v1
       with:
         path: "./scripts"
-        
+
   check-json:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci-skip]')"
@@ -46,3 +46,16 @@ jobs:
         uses: limitusus/json-syntax-check@v1
         with:
           pattern: "\\.json$"
+
+  ansible-lint:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci-skip]')"
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-dept: 1
+    - name: Lint Ansible Playbook
+      uses: ansible/ansible-lint-action@master
+      with:
+        targets: "./ansible"
+        args: ""
