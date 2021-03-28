@@ -5,6 +5,8 @@ ignore: |
   ignore/
   *-crds.yaml
   *.asc.yaml
+
+
 extends: default
 rules:
   truthy:
@@ -23,3 +25,5 @@ rules:
     indent-sequences: whatever
   hyphens:
     max-spaces-after: 1
+  key-duplicates: 
+    level: warning
