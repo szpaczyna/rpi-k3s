@@ -1,9 +1,9 @@
 ## rpi-k3s - Home Cloud on Raspberry Pie(s)
 
 <p align="center">
-  <img src="pics/rpi.png" width="140"/>
-  <img src="pics/k8s.png" width="140"/>
-  <img src="pics/logo.png" width="140"/>
+  <img src="assets/rpi.png" width="140"/>
+  <img src="assets/k8s.png" width="140"/>
+  <img src="assets/logo.png" width="140"/>
 </p>
 
 ## Workloads

@@ -39,4 +39,4 @@ spec:
   selector:
     app: unifi-controller
   externalIPs:
-    - "10.0.0.2"
+    - "10.0.0.11"
