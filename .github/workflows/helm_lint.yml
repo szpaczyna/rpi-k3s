@@ -12,3 +12,4 @@ jobs:
       with:
         path: ./charts
         config: ./docs
+        strict: false

@@ -1,3 +1,0 @@
-# Arm exporter
-
-To reconsider.
