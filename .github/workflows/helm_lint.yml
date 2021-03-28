@@ -13,3 +13,4 @@ jobs:
         path: ./charts
         config: ./docs
         strict: false
+        ignore_missing_schemas: true
