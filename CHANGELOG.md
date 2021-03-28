@@ -1,4 +1,15 @@
 # Changelog for Szpacze Gniazdo K3s
+
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.0.5](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.4...v0.0.5) (2021-03-28)
+
+
+### Features
+
+* unifi controller version bump, changed ip addresses of workers for predictable ones, pictures moved to assets ([85fbeff](https://github.com/szpaczyna/rpi-k3s/commits/85fbeffa6a0c500a9d584556db6f2edafd4e9cf7))
+
 ### [0.0.4](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.3...v0.0.4) (2021-03-27)
 
 
