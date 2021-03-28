@@ -13,9 +13,9 @@ spec:
       labels:
         k8s-app: pihole-exporter
       annotations:
-         prometheus.io/scrape: "true"
-         prometheus.io/port: "9617"
-         seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9617"
+        seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
     spec:
       affinity:
         nodeAffinity:
@@ -35,15 +35,15 @@ spec:
               value: pihole.shpaq.org
             - name: PIHOLE_PROTOCOL
               value: https
-            - name: PIHOLE_API_TOKEN                                                                                                                                   
-              valueFrom:                                                                                                                                               
-                secretKeyRef:                                                                                                                                          
-                  name: pihole-exporter-secret                                                                                                        
-                  key: PIHOLE_API_TOKEN                                                                                                                                
-            - name: PIHOLE_PORT                                                                                                                                        
-              value: "443"                                                                                                                                             
-            - name: INTERVAL                                                                                                                                           
-              value: 15s        
+            - name: PIHOLE_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: pihole-exporter-secret
+                  key: PIHOLE_API_TOKEN
+            - name: PIHOLE_PORT
+              value: "443"
+            - name: INTERVAL
+              value: 15s
           name: pihole-exporter
           image: "registry.shpaq.org/pihole_go_exporter:0.0.12"
           imagePullPolicy: "Always"
