@@ -1,4 +1,4 @@
-name: Helm Linter
+name: Readme append
 on:
   push:
 
