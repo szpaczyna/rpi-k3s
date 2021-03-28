@@ -1,7 +1,7 @@
 name: lint
 
 on:
-  push:
+  tag:
     branches:
     - main
 
