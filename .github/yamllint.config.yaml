@@ -2,7 +2,6 @@ ignore: |
   .yamllint.yml
   .github/
   ansible/
-  integrations/
   ignore/
   *-crds.yaml
   *.asc.yaml
