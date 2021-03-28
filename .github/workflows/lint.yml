@@ -1,4 +1,4 @@
-name: lint
+name: Linter
 
 on:
   push:
@@ -41,8 +41,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-dept: 1
-      - name: json-syntax-check
+          fetch-depth: 1
+   
+      - name: Json Syntax Check
         uses: limitusus/json-syntax-check@v1
         with:
           pattern: "\\.json$"
@@ -53,8 +54,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-dept: 1
-    - name: Lint Ansible Playbook
+        fetch-depth: 1
+   
+    - name: Lint Ansible
       uses: ansible/ansible-lint-action@master
       with:
         targets: "./ansible"
