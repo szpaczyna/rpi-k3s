@@ -33,7 +33,7 @@ jobs:
     - name: Lint shell scripts
       uses: reviewdog/action-shellcheck@v1
       with:
-        file_ord_dir: "./scripts"
+        path: "./scripts"
         
   check-json:
     runs-on: ubuntu-latest
@@ -45,4 +45,4 @@ jobs:
       - name: json-syntax-check
         uses: limitusus/json-syntax-check@v1
         with:
-          file_or_dir: "./json"
+          pattern: "\\.json$"
