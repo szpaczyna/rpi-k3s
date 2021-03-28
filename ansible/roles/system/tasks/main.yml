@@ -228,7 +228,7 @@
     path: /boot/firmware/usercfg.txt
     marker: "# {mark} ANSIBLE DISABLE WIFI"
     block: |
-      dtoverlay=pi3-disable-wifi
+      dtoverlay=disable-wifi
   when: deploy_target != 'vagrant'
 
 - name: Disable Bluetooth
@@ -236,7 +236,7 @@
     path: /boot/firmware/usercfg.txt
     marker: "# {mark} ANSIBLE DISABLE BLUETOOTH"
     block: |
-      dtoverlay=pi3-disable-bt
+      dtoverlay=disable-bt
   when: deploy_target != 'vagrant'
 
 - name: Disable HDMI

@@ -36,7 +36,7 @@ spec:
         - name: "SQUID_HOSTNAME"
           value: "10.1.0.1"
         name: squid-exporter
-        image: "registry.shpaq.org/squid_exporter:1.0.2"
+        image: "registry.shpaq.org/squid-exporter:1.0.2"
         imagePullPolicy: "Always"
         ports:
           - name: metrics

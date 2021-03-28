@@ -1,6 +1,10 @@
+---
 name: Readme append
 on:
-  push:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Readme Append'
 
 jobs:
   README:
