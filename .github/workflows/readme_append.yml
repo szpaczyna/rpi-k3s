@@ -18,4 +18,4 @@ jobs:
         SHOW_DAILY_COMMIT: false
         SHOW_WEEKLY_COMMIT: false
         SHOW_LINES_OF_CODE: true
-        SHOW_PROFILE_VIEWS: truu
+        SHOW_PROFILE_VIEWS: true
