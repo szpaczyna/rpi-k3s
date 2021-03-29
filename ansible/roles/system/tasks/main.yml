@@ -32,12 +32,8 @@
       - ca-certificates
       - curl
       - dnsutils
-      - neovim
-      - tmux
-      - fzf
       - git
       - gnupg2
-      - apparmor
       - htop
       - iputils-ping
       - libnss-mdns
@@ -54,8 +50,6 @@
       - unattended-upgrades
       - wget
       - chrony
-      - zsh
-      - tmux
     install_recommends: false
     update_cache: true
     # Need the force_apt_get until
