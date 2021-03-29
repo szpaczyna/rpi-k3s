@@ -17,9 +17,6 @@
 - name: Upgrade all packages to the latest version
   apt:
     name: "*"
-    state: latest
-    # Need the force_apt_get until
-    # https://github.com/ansible/ansible/issues/56832
     force_apt_get: true
   register: apt_update
   retries: 5
@@ -177,6 +174,7 @@
   git:
     repo: https://github.com/StuartIanNaylor/zram-swap-config.git
     dest: /opt/zram-swap-config
+    version: latest
 
 - name: Changing perms of "/opt/zram-swap-config/install.sh"
   file:
