@@ -109,7 +109,7 @@ spec:
       - name: "filebeat"
         #image: "mrnr91/filebeat-alpine:v7.10.2"
         image: "mrnr91/filebeat-alpine:v7.11.1"
-        imagePullPolicy: "Always"
+        imagePullPolicy: "IfNotPresent"
         args:
         - "-e"
         - "-E"

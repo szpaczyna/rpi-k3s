@@ -3,7 +3,7 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "name" . }}-cpu
+  name: {{ template "name" . }}-memory
   labels:
     chart: {{ .Chart.Name}}-{{ .Chart.Version | replace "+" "_" }}
     app: {{ template "name" . }}
@@ -27,7 +27,7 @@ spec:
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "name" . }}-memory
+  name: {{ template "name" . }}-cpu
   labels:
     chart: {{ .Chart.Name}}-{{ .Chart.Version | replace "+" "_" }}
     app: {{ template "name" . }}
@@ -40,5 +40,5 @@ spec:
     name: {{ include "name" . }}
   minReplicas: 1
   maxReplicas: {{ .Values.hpa.limit | default 2}}
-  targetCPUUtilizationPercentage: 100
+  targetCPUUtilizationPercentage: 250
 {{- end }}

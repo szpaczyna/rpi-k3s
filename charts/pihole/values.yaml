@@ -47,18 +47,18 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     traefik.ingress.kubernetes.io/frontend-entry-points: http, https
     traefik.ingress.kubernetes.io/redirect-entry-point: https
-  host: pihole.k3s.shpaq.org
+  host: pihole.shpaq.org
   tls:
-  - secretName: pihole-k3s-shpaq-org-tls
+  - secretName: pihole-shpaq-org-tls
     hosts:
-    - pihole.k3s.shpaq.org
+    - pihole.shpaq.org
 
 resources:
   limits:
-    cpu: 200m
+    cpu: 1000m
     memory: 368Mi
   requests:
-    cpu: 100m
+    cpu: 250m
     memory: 256Mi
 
 nodeSelector:
@@ -82,7 +82,7 @@ podDisruptionBudget:
   minAvailable: 1
 
 hpa:
-  enabled: true
+  enabled: false
 
 prometheus:
-  enabled: true
+  enabled: false

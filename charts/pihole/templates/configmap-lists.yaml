@@ -10,13 +10,13 @@ metadata:
     release: {{ .Release.Name }}
 data:
   custom.list: |
-    10.0.0.13 rpi-k3s-worker0.morphine
-    10.0.0.17 rpi-k3s-master.morphine
-    10.0.0.2 rpi-k3s-worker1.morphine
-    10.0.0.11 rpi-k3s-worker3.morphine
-    10.0.0.12 rpi-k3s-worker4.morphine
-    10.0.0.3 rpi-k3s-worker2.morphine
-    10.0.0.10 rpi-k3s-worker5.morphine
+    10.0.0.9 rpi-k3s-master.morphine
+    10.0.0.10 rpi-k3s-worker0.morphine
+    10.0.0.11 rpi-k3s-worker1.morphine
+    10.0.0.12 rpi-k3s-worker2.morphine
+    10.0.0.13 rpi-k3s-worker3.morphine
+    10.0.0.14 rpi-k3s-worker4.morphine
+    10.0.0.15 rpi-k3s-worker5.morphine
     10.0.0.5 ap.morphine
     10.0.0.18 cocaine.morphine
     10.1.0.30 traefik.morphine
