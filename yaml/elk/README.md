@@ -7,3 +7,5 @@ additionalArguments:
   - "--accesslog.filepath=/tmp/access.log"
 
 ```
+
+https://coralogix.com/log-analytics-blog/elasticsearch-logstash-kibana-on-kubernetes/
