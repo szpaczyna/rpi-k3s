@@ -1,10 +1,9 @@
-{{ ansible_managed | comment }}
 module(load="omelasticsearch") # Elasticsearch output module
 
 # this is for index names to be like: logstash-YYYY.MM.DD
-template(name="logstash-index"
+template(name="syslog-index"
   type="list") {
-    constant(value="logstash-")
+    constant(value="syslog-")
     property(name="timereported" dateFormat="rfc3339" position.from="1" position.to="4")
     constant(value=".")
     property(name="timereported" dateFormat="rfc3339" position.from="6" position.to="7")
@@ -32,7 +31,7 @@ action(type="omelasticsearch"
   server="10.1.0.11"
   serverport="9200"
   template="plain-syslog"  # use the template defined earlier
-  searchIndex="logstash-index"
+  searchIndex="syslog-index"
   dynSearchIndex="on"
   searchType="events"
   bulkmode="on"                   # use the Bulk API

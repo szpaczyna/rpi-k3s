@@ -47,6 +47,7 @@
       - unattended-upgrades
       - wget
       - chrony
+      - rsyslog-elasticsearch
     install_recommends: false
     update_cache: true
     # Need the force_apt_get until

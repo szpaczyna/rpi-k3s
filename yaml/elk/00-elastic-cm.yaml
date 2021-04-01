@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-config
+  labels:
+    name: elk
+data:
+  elasticsearch.yml: |
+    ---
+    cluster.name: "morphine-cluster"
+    node.name: "elasticsearch"
+    node.master: true
+    node.data: true
+    network.host: 0.0.0.0
+    discovery.type: single-node
+  jvm.options: |
+    -Xms256M
+    -Xmx256M
+    -XX:CMSInitiatingOccupancyFraction=75
+    -XX:+UseCMSInitiatingOccupancyOnly
+    -Djava.io.tmpdir=/tmp
+    -XX:+HeapDumpOnOutOfMemoryError
+    -XX:HeapDumpPath=data
+    -XX:ErrorFile=logs/hs_err_pid%p.log

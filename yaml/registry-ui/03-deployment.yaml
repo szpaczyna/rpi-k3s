@@ -20,7 +20,7 @@ spec:
       containers:
         - name: registry-ui
           image: "registry.shpaq.org/registry-ui:v0.9.2"
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               protocol: TCP

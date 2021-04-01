@@ -10,6 +10,8 @@ data:
     ---
     server.name: kibana
     server.host: "0.0.0.0"
+    server.port: 5601
     elasticsearch.hosts: [ "http://elk-svc-elasticsearch:9200" ]
     elasticsearch.ssl.verificationMode: none
     status.allowAnonymous: true
+    logging.dest: stdout

@@ -18,31 +18,68 @@ spec:
     spec:
       containers:
         - name: elasticsearch
-          image: registry.shpaq.org/elasticsearch:v7.5.1
-          #image: arm64v8/elasticsearch:7.11.1
-          imagePullPolicy: Always
+          image: registry.shpaq.org/elasticsearch:v7.9.3
+          imagePullPolicy: IfNotPresent
           volumeMounts:
+            - name: elasticsearch-config
+              mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+              subPath: elasticsearch.yml
+            - name: elasticsearch-config
+              mountPath: /usr/share/elasticsearch/config/jvm.options
+              subPath: jvm.options
             - name: elasticsearch-vol01
               mountPath: /usr/share/elasticsearch/data
           workingDir: /usr/share/elasticsearch/data
           ports:
             - containerPort: 9200
               protocol: TCP
+              name: elasticsearch
             - containerPort: 9300
               protocol: TCP
           resources:
             limits:
               cpu: 1
+              memory: 368Mi
             requests:
               cpu: 0.1
               memory: 256Mi
+        - name: logstash
+          image: registry.shpaq.org/logstash:v7.9.3
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5044
+              protocol: TCP
+              name: filebeat
+            - containerPort: 9600
+              protocol: TCP
+              name: logstash
+          resources:
+            limits:
+              cpu: 1
+              memory: 368Mi
+            requests:
+              cpu: 0.25
+              memory: 256Mi
+          volumeMounts:
+            - name: logstash-config
+              mountPath: /usr/share/logstash/config/logstash.yml
+              subPath: logstash.yml
+            - name: logstash-config
+              mountPath: /usr/share/logstash/config/jvm.options
+              subPath: jvm.options
+            - name: logstash-pipeline
+              mountPath: /usr/share/logstash/config/10-pihole.conf
+              subPath: 10-pihole.conf
+            - name: logstash-config
+              mountPath: /etc/logstash/patterns/dns
+              subPath: dns
         - name: kibana
-          image: registry.shpaq.org/kibana:v7.5.1
-          #image:  jamesgarside/kibana:7.11.1
+          image: registry.shpaq.org/kibana:v7.9.3
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5601
               protocol: TCP
+              name: kibana
           resources:
             limits:
               cpu: 1
@@ -53,6 +90,7 @@ spec:
           volumeMounts:
             - name: kibana-config
               mountPath: /usr/share/kibana/config
+      terminationGracePeriodSeconds: 30
       volumes:
       - name: elasticsearch-vol01
         persistentVolumeClaim:
@@ -60,6 +98,16 @@ spec:
       - name: kibana-config
         configMap:
           name: kibana-config
+      - name: logstash-config
+        configMap:
+          name: logstash-config
+      - name: logstash-pipeline
+        configMap:
+          name: logstash-pipeline
+      - name: elasticsearch-config
+        configMap:
+          name: elasticsearch-config
+      nodeSelector:
       nodeSelector:
         kubernetes.io/role: worker
         kubernetes.io/os: linux

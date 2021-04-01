@@ -1,4 +1,2 @@
 #!/bin/bash
 sops -d ../../secrets/kibana-secret.yaml > 00-kibana-auth.yaml
-kubectl apply -f .
-rm -rf 00-kibana-auth.yaml
