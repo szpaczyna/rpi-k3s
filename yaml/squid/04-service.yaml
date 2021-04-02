@@ -6,8 +6,6 @@ metadata:
   labels:
     name: squid
   annotations:
-      #    metallb.universe.tf/address-pool: "address-pool-1"
-      #    metallb.universe.tf/allow-shared-ip: "true"
 spec:
   type: LoadBalancer
   loadBalancerIP: 10.1.0.1

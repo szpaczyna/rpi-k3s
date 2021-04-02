@@ -26,7 +26,6 @@ spec:
               value: "1000"
             - name: PUID
               value: "1000"
-          #image: "linuxserver/unifi-controller:version-6.0.45"
           image: "linuxserver/unifi-controller:version-6.1.71"
           name: unifi-controller
           ports:

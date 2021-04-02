@@ -8,7 +8,7 @@ metadata:
   annotations:
     metallb.universe.tf/address-pool: morphine
 spec:
-  #type: LoadBalancer
+#  type: LoadBalancer
   ports:
     - name: "3478"
       port: 3478

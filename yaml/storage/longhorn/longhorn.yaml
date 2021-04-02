@@ -570,11 +570,11 @@ data:
       numberOfReplicas: "2"
       staleReplicaTimeout: "2880"
       fromBackup: ""
-    #  diskSelector: "ssd,fast"
+#      diskSelector: "ssd,fast"
       nodeSelector: "disktype=external"
-    #  recurringJobs: '[{"name":"snap", "task":"snapshot", "cron":"*/1 * * * *", "retain":1},
-    #                   {"name":"backup", "task":"backup", "cron":"*/2 * * * *", "retain":1,
-    #                    "labels": {"interval":"2m"}}]'
+#      recurringJobs: '[{"name":"snap", "task":"snapshot", "cron":"*/1 * * * *", "retain":1},
+#                       {"name":"backup", "task":"backup", "cron":"*/2 * * * *", "retain":1,
+#                        "labels": {"interval":"2m"}}]'
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -641,7 +641,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        # Should be: mount path of the volume longhorn-default-setting + the key of the configmap data in 04-default-setting.yaml
         - name: DEFAULT_SETTING_PATH
           value: /var/lib/longhorn-setting/default-setting.yaml
       volumes:
@@ -657,8 +656,6 @@ spec:
       - name: longhorn-default-setting
         configMap:
           name: longhorn-default-setting
-#      imagePullSecrets:
-#      - name: ""
       serviceAccountName: longhorn-service-account
   updateStrategy:
     rollingUpdate:
@@ -710,8 +707,6 @@ spec:
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
-#      imagePullSecrets:
-#      - name:
 ---
 kind: Service
 apiVersion: v1
@@ -774,33 +769,6 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.serviceAccountName
-          # Manually set root directory for csi
-          #- name: KUBELET_ROOT_DIR
-          #  value: /var/lib/rancher/k3s/agent/kubelet
-          # For AirGap Installation
-          # Replace PREFIX with your private registery
-          #- name: CSI_ATTACHER_IMAGE
-          #  value: PREFIX/csi-attacher:v2.2.1-lh1
-          #- name: CSI_PROVISIONER_IMAGE
-          #  value: PREFIX/csi-provisioner:v1.6.0-lh1
-          #- name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
-          #  value: PREFIX/csi-node-driver-registrar:v1.2.0-lh1
-          #- name: CSI_RESIZER_IMAGE
-          #  value: PREFIX/csi-resizer:v0.5.1-lh1
-          #- name: CSI_SNAPSHOTTER_IMAGE
-          #  value: PREFIX/csi-snapshotter:v2.1.1-lh1
-          # Manually specify number of CSI attacher replicas
-          #- name: CSI_ATTACHER_REPLICA_COUNT
-          #  value: "3"
-          # Manually specify number of CSI provisioner replicas
-          #- name: CSI_PROVISIONER_REPLICA_COUNT
-          #  value: "3"
-          #- name: CSI_RESIZER_REPLICA_COUNT
-          #  value: "3"
-          #- name: CSI_SNAPSHOTTER_REPLICA_COUNT
-          #  value: "3"
-      #imagePullSecrets:
-      #- name:
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
