@@ -30,10 +30,10 @@ data:
     output.elasticsearch:
       host: '${NODE_NAME}'
       hosts: [ "elk-svc-elasticsearch:9200" ]
-      index: "filebeat-%{+yyyy.MM.dd}"
+      index: "k3s-%{+yyyy.MM.dd}"
 
-    setup.template.name: "filebeat"
-    setup.template.pattern: "filebeat-*"
+    setup.template.name: "k3s"
+    setup.template.pattern: "k3s-*"
 
     xpack.monitoring:
       enabled: "true"

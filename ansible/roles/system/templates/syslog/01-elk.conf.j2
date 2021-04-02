@@ -24,6 +24,8 @@ template(name="plain-syslog"
     constant(value="\",\"facility\":\"")        property(name="syslogfacility-text")
     constant(value="\",\"syslogtag\":\"")       property(name="syslogtag" format="json")
     constant(value="\",\"message\":\"")         property(name="msg" format="json")
+    constant(value="\",\"programname\":\"")     property(name="programname")
+    constant(value="\",\"procid\":\"")          property(name="procid")
     constant(value="\"}")
   }
 

@@ -62,13 +62,19 @@ spec:
               memory: 256Mi
           volumeMounts:
             - name: logstash-config
-              mountPath: /usr/share/logstash/config/logstash.yml
+              mountPath: /etc/logstash/logstash.yml
               subPath: logstash.yml
             - name: logstash-config
-              mountPath: /usr/share/logstash/config/jvm.options
+              mountPath: /etc/logstash/pipelines.yml
+              subPath: pipelines.yml
+            - name: logstash-config
+              mountPath: /etc/logstash/jvm.options
               subPath: jvm.options
-            - name: logstash-pipeline
-              mountPath: /usr/share/logstash/config/10-pihole.conf
+            - name: logstash-config
+              mountPath: /etc/logstash/log4j2.properties
+              subPath: log4j2.properties
+            - name: logstash-config
+              mountPath: /etc/logstash/conf.d/10-pihole.conf
               subPath: 10-pihole.conf
             - name: logstash-config
               mountPath: /etc/logstash/patterns/dns
@@ -98,16 +104,12 @@ spec:
       - name: kibana-config
         configMap:
           name: kibana-config
-      - name: logstash-config
-        configMap:
-          name: logstash-config
-      - name: logstash-pipeline
-        configMap:
-          name: logstash-pipeline
       - name: elasticsearch-config
         configMap:
           name: elasticsearch-config
-      nodeSelector:
+      - name: logstash-config
+        configMap:
+          name: logstash-config
       nodeSelector:
         kubernetes.io/role: worker
         kubernetes.io/os: linux

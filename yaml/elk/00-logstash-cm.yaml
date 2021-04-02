@@ -3,28 +3,29 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: logstash-config
-  labels:
-    name: elk
 data:
   logstash.yml: |
-    ---
-    node.name: "logstash"
-    http.host: "0.0.0.0"
-    config.reload.automatic: true
-    config.reload.interval: 60s
-    #config.test_and_exit: true
-    #config.debug: true
-    log.format: json
-    log.level: info
-    pipeline.id: pihole
-    path.config: "/usr/share/logstash/config/10-pihole.conf"
-  dns: |
-    HOSTNAMEPTR \b(?:[\._0-9A-Za-z][0-9A-Za-z-]{0,62})(?:\.(?:[\._0-9A-Za-z][0-9A-Za-z-]{0,62}))*(\.?|\b)
-    NODATA NODATA-[[:word:]]+
-    SRV _+.+\S
-    FQDN \b(?:[\w-][\w-]{0,62})(?:\.(?:[\w-][\w-]{0,62}))*(\.?|\b)
-    DNSMASQPREFIX %{SYSLOGTIMESTAMP:date} %{SYSLOGPROG}: %{INT:logrow} %{IP:source_host}\/%{POSINT:source_port}
-    URI %{URIPROTO}:(//)?(?:%{URIHOST})?(?:%{URIPATH})?
+     http.host: "0.0.0.0"
+  pipelines.yml: |
+    - pipeline.id: pihole
+      path.config: "/etc/logstash/conf.d/10-pihole.conf"
+  log4j2.properties: |
+    status = error
+    name = LogstashPropertiesConfig
+
+    appender.console.type = Console
+    appender.console.name = plain_console
+    appender.console.layout.type = PatternLayout
+    appender.console.layout.pattern = [%d{ISO8601}][%-5p][%-25c]%notEmpty{[%X{pipeline.id}]}%notEmpty{[%X{plugin.id}]} %m%n
+
+    appender.json_console.type = Console
+    appender.json_console.name = json_console
+    appender.json_console.layout.type = JSONLayout
+    appender.json_console.layout.compact = true
+    appender.json_console.layout.eventEol = true
+
+    rootLogger.level = ${sys:ls.log.level}
+    rootLogger.appenderRef.console.ref = ${sys:ls.log.format}_console
   jvm.options: |
     -Xms256M
     -Xmx256M
@@ -33,270 +34,92 @@ data:
     -Djava.io.tmpdir=/tmp
     -XX:+HeapDumpOnOutOfMemoryError
     -XX:HeapDumpPath=data
-    -XX:ErrorFile=logs/hs_err_pid%p.log
-  10-input.conf: |
-    input {
-    beats {
-      port => 5044
-      type => "logs"
-      tags => ["pihole","5044"]
-      }
-    }
-  20-filter.conf: |
-    filter {
-      if "pihole" in [tags] {
-        grok {
-          patterns_dir => ["/etc/logstash/patterns/"]
-          match => {
-                    "message" => [
-
-     # request - query type
-     "^%{DNSMASQPREFIX} query\[%{DATA:query_type}\] %{FQDN:domain_request} from %{IP:request_from}$",
-
-     # reponse domain to ip
-     "^%{DNSMASQPREFIX} reply %{FQDN:domain_request} is %{IP:ip_response}$",
-
-     # response domain is NXDOMAIN
-     "^%{DNSMASQPREFIX} reply %{FQDN:domain_request} is NXDOMAIN$",
-
-     # response config domain is NXDOMAIN
-     "^%{DNSMASQPREFIX} config %{FQDN:domain_request} is NXDOMAIN$",
-
-     # response config domain is no-DATA
-     "^%{DNSMASQPREFIX} config %{FQDN:domain_request} is NODATA-IPv[4,6]$",
-
-     # reponse domain to ip cname
-     "^%{DNSMASQPREFIX} reply %{FQDN:domain_request} is \<CNAME\>$",
-
-     # respone ip to domain
-     "^%{DNSMASQPREFIX} reply %{IP:ip_request} is %{FQDN:domain_response}$",
-
-     # piholed
-     "^%{DNSMASQPREFIX} \/etc\/pihole\/gravity\.list %{FQDN:blocked_domain} is %{IP:pihole}$",
-
-     # piholed 5.0
-     "^%{DNSMASQPREFIX} gravity blocked %{FQDN:blocked_domain} is %{IP:pihole}$",
-
-     # piholed local
-     "^%{DNSMASQPREFIX} \/etc\/pihole\/local\.list %{FQDN:blocked_domain} is %{IP:pihole}$",
-
-     # piholed CNAME inspection
-     "^%{DNSMASQPREFIX} reply %{FQDN:domain_request} is blocked during CNAME inspection",
-
-     # blacklist
-     "^%{DNSMASQPREFIX} \/etc\/pihole\/black\.list %{FQDN:blocked_domain} is %{IP:pihole}$",
-
-     # regex
-     "^%{DNSMASQPREFIX} \/etc\/pihole\/regex\.list %{FQDN:blocked_domain} is %{IP:pihole}$",
-
-     # reverse response etc hosts ip to domain
-     "^%{DNSMASQPREFIX} \/etc\/hosts %{IP:ip_request} is %{FQDN:domain_response}$",
-
-     # reverse response etc hosts domain to ip
-     "^%{DNSMASQPREFIX} \/etc\/hosts %{FQDN:domain_request} is %{IP:ip_response}$",
-
-     # forward dns to
-     "^%{DNSMASQPREFIX} forwarded %{FQDN:domain_request_forward} to %{IP:dns_forward_to}$",
-
-     # cached domain to ip
-     "^%{DNSMASQPREFIX} cached %{FQDN:domain_request} is %{IP:ip_response}$",
-
-     # cached ip to domain
-     "^%{DNSMASQPREFIX} cached %{IP:ip_request} is %{FQDN:domain_response}$",
-
-     # cached is srv
-     "^%{DNSMASQPREFIX} cached %{SRV} is \<SRV\>$",
-
-     # response is srv
-     "^%{DNSMASQPREFIX} reply %{SRV} is \<SRV\>$",
-
-     # cached domain to ip cname
-     "^%{DNSMASQPREFIX} cached %{FQDN:domain_request} is \<CNAME\>$",
-
-     # cached domain is NXDOMAIN
-     "^%{DNSMASQPREFIX} cached %{FQDN:domain_request} is NXDOMAIN$",
-
-     # cached domain is no-DATA
-     "^%{DNSMASQPREFIX} cached %{FQDN:domain_request} is NODATA-IPv[4,6]$",
-
-     # cached domain is no-DATA
-     "^%{DNSMASQPREFIX} cached %{FQDN:domain_request} is NODATA$",
-
-     # domain is no-DATA
-     "^%{DNSMASQPREFIX} reply %{FQDN:domain_request} is NODATA-IPv[4,6]$",
-
-     # domain is no-DATA
-     "^%{DNSMASQPREFIX} reply %{FQDN:domain_request} is NODATA$",
-
-     # exactly blacklisted
-     "^%{DNSMASQPREFIX} exactly blacklisted %{FQDN:blocked_domain} is %{IP:pihole}$",
-
-     # regex blacklisted
-     "^%{DNSMASQPREFIX} regex blacklisted %{FQDN:blocked_domain} is %{IP:pihole}$",
-
-     # clients sending url instead of domain
-     "^%{DNSMASQPREFIX} (query\[.*\]|config|forwarded|reply|cached) %{URI:URI}.*$",
-
-     # SERVFAIL
-     "^%{DNSMASQPREFIX} reply error is SERVFAIL"
-
-                      ]
-          }
-    }
-
-    # to do cached and cached reverse
-
-          if [message] =~ "cached" and [message] =~ "NXDOMAIN" {
-            mutate {
-              add_tag => [ "cached NXDOMAIN" ]
-            }
-          }
-
-          else if [NODATA] {
-            mutate {
-              add_tag => [ "NODATA" ]
-            }
-          }
-
-          else if [request_from] and [message] =~ "query" {
-            mutate {
-              add_tag => [ "request and query type" ]
-            }
-          }
-
-          else if [ip_response] and [message] =~ "reply" {
-            geoip {
-              source => "ip_response"
-            }
-            mutate {
-              add_tag => [ "response domain to ip" ]
-            }
-          }
-
-          else if [message] =~ "CNAME" and [message] =~ "reply" {
-            mutate {
-              add_tag => [ "response domain to ip CNAME" ]
-            }
-          }
-
-          else if [domain_response] and [message] =~ "reply" {
-            mutate {
-              add_tag => [ "response ip to domain" ]
-            }
-            geoip {
-              source => "ip_request"
-            }
-          }
-
-          else if [blocked_domain] {
-            mutate {
-              add_tag => [ "piholed" ]
-            }
-          }
-
-          else if [message] =~ "\/etc\/hosts" {
-            mutate {
-              add_tag => [ "reverse hostsfile" ]
-            }
-          }
-
-          else if [dns_forward_to] {
-            mutate {
-              add_tag => [ "dns forward" ]
-            }
-          }
-
-          else if [ip_request] and [message] =~ "cached" {
-            mutate {
-              add_tag => [ "cached ip to domain" ]
-            }
-            geoip {
-              source => "ip_request"
-            }
-          }
-
-          else if [domain_request] and [message] =~ "cached" and [message] =~ "CNAME" {
-            mutate {
-              add_tag => [ "cached domain to ip cname" ]
-            }
-          }
-
-          else if [domain_request] and [message] =~ "cached" {
-            mutate {
-              add_tag => [ "cached domain to ip" ]
-            }
-            geoip {
-              source => "ip_response"
-            }
-          }
-
-          if [domain_request] {
-            geoip {
-    #          cache_size => "10000"
-              source => "domain_request"
-            }
-          }
-
-          if [ip_response] {
-            mutate {
-              add_field => { "ip_or_domain_response" => "%{domain_request}" }
-            }
-          }
-
-          if [domain_response] {
-            mutate {
-              add_field => { "ip_or_domain_response" => "%{domain_response}" }
-            }
-          }
-
-          if [blocked_domain] {
-            mutate {
-              add_field => { "ip_or_domain_response" => "%{blocked_domain}" }
-            }
-          }
-
-      mutate {
-          add_field => {
-            "[source_fqdn]" => "%{source_host}"
-          }
-        }
-
-      mutate {
-          remove_field => ["port"]
-          }
-
-        dns {
-          nameserver => "localhost"
-          reverse => ["source_fqdn"]
-          action => "replace"
-          hit_cache_size => 10000
-          hit_cache_ttl => 900
-          failed_cache_size => 512
-          failed_cache_ttl => 900
-        }
-
-      date {
-        match => [ "date", "MMM  d HH:mm:ss","MMM dd HH:mm:ss" ]
-    	timezone => "CET"
-      }
-
-      }
-
-       if "%" in [source_host] {
-        mutate {
-            gsub => [
-              "source_host", "%.*$",""
-            ]
-        }
-      }
-    }
-  30-output.conf: |
-    output {
-      if "pihole" in [tags]{
-        elasticsearch {
-        hosts => ["elk-svc-elasticsearch:9200"]
-        manage_template => false
-        index => "pihole-%{+YYYY.MM}"
-        }
-      }
-    }
+  dns: "HOSTNAMEPTR \\b(?:[\\._0-9A-Za-z][0-9A-Za-z-]{0,62})(?:\\.(?:[\\._0-9A-Za-z][0-9A-Za-z-]{0,62}))*(\\.?|\\b)\r\nNODATA
+    NODATA-[[:word:]]+\r\nSRV _+.+\\S\r\nFQDN \\b(?:[\\w-][\\w-]{0,62})(?:\\.(?:[\\w-][\\w-]{0,62}))*(\\.?|\\b)\r\nDNSMASQPREFIX
+    %{SYSLOGTIMESTAMP:date} %{SYSLOGPROG}: %{INT:logrow} %{IP:source_host}\\/%{POSINT:source_port}\r\nURI
+    %{URIPROTO}:(//)?(?:%{URIHOST})?(?:%{URIPATH})?\r\n"
+  10-pihole.conf: "input {\n       beats {\n       port => 5044\n       type => \"logs\"\n
+    \      tags => [\"pihole\",\"5044\"]\n       }\n}\n\nfilter {\n\n  if \"pihole\"
+    in [tags] {\n    grok {\n      patterns_dir => [\"/etc/logstash/patterns/\"]\n
+    \     match => {\n                \"message\" => [\n\n # request - query type\n
+    \"^%{DNSMASQPREFIX} query\\[%{DATA:query_type}\\] %{FQDN:domain_request} from
+    %{IP:request_from}$\",\n\n # reponse domain to ip\n \"^%{DNSMASQPREFIX} reply
+    %{FQDN:domain_request} is %{IP:ip_response}$\",\n\n # response domain is NXDOMAIN\n
+    \"^%{DNSMASQPREFIX} reply %{FQDN:domain_request} is NXDOMAIN$\",\n\n # response
+    config domain is NXDOMAIN\n \"^%{DNSMASQPREFIX} config %{FQDN:domain_request}
+    is NXDOMAIN$\",\n\n # response config domain is no-DATA\n \"^%{DNSMASQPREFIX}
+    config %{FQDN:domain_request} is NODATA-IPv[4,6]$\",\n\n # reponse domain to ip
+    cname\n \"^%{DNSMASQPREFIX} reply %{FQDN:domain_request} is \\<CNAME\\>$\",\n\n
+    # respone ip to domain\n \"^%{DNSMASQPREFIX} reply %{IP:ip_request} is %{FQDN:domain_response}$\",\n\n
+    # piholed\n \"^%{DNSMASQPREFIX} \\/etc\\/pihole\\/gravity\\.list %{FQDN:blocked_domain}
+    is %{IP:pihole}$\",\n\n # piholed 5.0\n \"^%{DNSMASQPREFIX} gravity blocked %{FQDN:blocked_domain}
+    is %{IP:pihole}$\",\n\n # piholed local\n \"^%{DNSMASQPREFIX} \\/etc\\/pihole\\/local\\.list
+    %{FQDN:blocked_domain} is %{IP:pihole}$\",\n\n # piholed CNAME inspection\n \"^%{DNSMASQPREFIX}
+    reply %{FQDN:domain_request} is blocked during CNAME inspection\",\n \n # blacklist\n
+    \"^%{DNSMASQPREFIX} \\/etc\\/pihole\\/black\\.list %{FQDN:blocked_domain} is %{IP:pihole}$\",\n\n
+    # regex\n \"^%{DNSMASQPREFIX} \\/etc\\/pihole\\/regex\\.list %{FQDN:blocked_domain}
+    is %{IP:pihole}$\",\n\n # reverse response etc hosts ip to domain\n \"^%{DNSMASQPREFIX}
+    \\/etc\\/hosts %{IP:ip_request} is %{FQDN:domain_response}$\",\n\n # reverse response
+    etc hosts domain to ip\n \"^%{DNSMASQPREFIX} \\/etc\\/hosts %{FQDN:domain_request}
+    is %{IP:ip_response}$\",\n\n # forward dns to\n \"^%{DNSMASQPREFIX} forwarded
+    %{FQDN:domain_request_forward} to %{IP:dns_forward_to}$\",\n\n # cached domain
+    to ip\n \"^%{DNSMASQPREFIX} cached %{FQDN:domain_request} is %{IP:ip_response}$\",\n\n
+    # cached ip to domain\n \"^%{DNSMASQPREFIX} cached %{IP:ip_request} is %{FQDN:domain_response}$\",\n\n
+    # cached is srv\n \"^%{DNSMASQPREFIX} cached %{SRV} is \\<SRV\\>$\",\n\n # response
+    is srv\n \"^%{DNSMASQPREFIX} reply %{SRV} is \\<SRV\\>$\",\n\n # cached domain
+    to ip cname\n \"^%{DNSMASQPREFIX} cached %{FQDN:domain_request} is \\<CNAME\\>$\",\n\n
+    # cached domain is NXDOMAIN\n \"^%{DNSMASQPREFIX} cached %{FQDN:domain_request}
+    is NXDOMAIN$\",\n\n # cached domain is no-DATA\n \"^%{DNSMASQPREFIX} cached %{FQDN:domain_request}
+    is NODATA-IPv[4,6]$\",\n\n # cached domain is no-DATA\n \"^%{DNSMASQPREFIX} cached
+    %{FQDN:domain_request} is NODATA$\",\n\n # domain is no-DATA\n \"^%{DNSMASQPREFIX}
+    reply %{FQDN:domain_request} is NODATA-IPv[4,6]$\",\n\n # domain is no-DATA\n
+    \"^%{DNSMASQPREFIX} reply %{FQDN:domain_request} is NODATA$\",\n\n # exactly blacklisted\n
+    \"^%{DNSMASQPREFIX} exactly blacklisted %{FQDN:blocked_domain} is %{IP:pihole}$\",\n\n
+    # regex blacklisted\n \"^%{DNSMASQPREFIX} regex blacklisted %{FQDN:blocked_domain}
+    is %{IP:pihole}$\",\n\n\n # PTR - delete?\n #\"^%{DNSMASQPREFIX} query\\[%{WORD:query_type}\\]
+    %{HOSTNAMEPTR:request} from %{IP:request_from}$\",\n\n # PTR forwarded - delete?\n
+    #\"^%{DNSMASQPREFIX} forwarded %{HOSTNAMEPTR:request} to %{IP:dns_forward_to}$\"
+    ,\n\n # clients sending url instead of domain\n \"^%{DNSMASQPREFIX} (query\\[.*\\]|config|forwarded|reply|cached)
+    %{URI:URI}.*$\",\n\n # SERVAIL\n \"^%{DNSMASQPREFIX} reply error is SERVFAIL\"\n\n
+    \                 ]\n      }\n}\n\n# to do cached and cached reverse\n\n      if
+    [message] =~ \"cached\" and [message] =~ \"NXDOMAIN\" {\n        mutate {\n          add_tag
+    => [ \"cached NXDOMAIN\" ]\n        }\n      }\n\n      else if [NODATA] {\n        mutate
+    {\n          add_tag => [ \"NODATA\" ]\n        }\n      }\n\n      else if [request_from]
+    and [message] =~ \"query\" {\n        mutate {\n          add_tag => [ \"request
+    and query type\" ]\n        }\n      }\n\n      else if [ip_response] and [message]
+    =~ \"reply\" {\n        geoip {\n          source => \"ip_response\"\n        }\n
+    \       mutate {\n          add_tag => [ \"response domain to ip\" ]\n        }\n
+    \     }\n\n      else if [message] =~ \"CNAME\" and [message] =~ \"reply\" {\n
+    \       mutate {\n          add_tag => [ \"response domain to ip CNAME\" ]\n        }\n
+    \     }\n\n      else if [domain_response] and [message] =~ \"reply\" {\n        mutate
+    {\n          add_tag => [ \"response ip to domain\" ]\n        }\n        geoip
+    {\n          source => \"ip_request\"\n        }\n      }\n\n      else if [blocked_domain]
+    {\n        mutate {\n          add_tag => [ \"piholed\" ]\n        }\n      }\n\n
+    \     else if [message] =~ \"\\/etc\\/hosts\" {\n        mutate {\n          add_tag
+    => [ \"reverse hostsfile\" ]\n        }\n      }\n\n      else if [dns_forward_to]
+    {\n        mutate {\n          add_tag => [ \"dns forward\" ]\n        }\n      }\n\n
+    \     else if [ip_request] and [message] =~ \"cached\" {\n        mutate {\n          add_tag
+    => [ \"cached ip to domain\" ]\n        }\n        geoip {\n          source =>
+    \"ip_request\"\n        }\n      }\n\n      else if [domain_request] and [message]
+    =~ \"cached\" and [message] =~ \"CNAME\" {\n        mutate {\n          add_tag
+    => [ \"cached domain to ip cname\" ]\n        }\n      }\n\n      else if [domain_request]
+    and [message] =~ \"cached\" {\n        mutate {\n          add_tag => [ \"cached
+    domain to ip\" ]\n        }\n        geoip {\n          source => \"ip_response\"\n
+    \       }\n      }\n\n      if [domain_request] {\n        geoip {\n#          cache_size
+    => \"10000\"\n          source => \"domain_request\"\n        }\n      } \n      \n
+    \     if [ip_response] {\n        mutate {\n          add_field => { \"ip_or_domain_response\"
+    => \"%{domain_request}\" }\n        }\n      }\n\n      if [domain_response] {\n
+    \       mutate {\n          add_field => { \"ip_or_domain_response\" => \"%{domain_response}\"
+    }\n        }              \n      }\n\n      if [blocked_domain] {\n        mutate
+    {\n          add_field => { \"ip_or_domain_response\" => \"%{blocked_domain}\"
+    }\n        }\n      }\n\n  mutate {\n      add_field => {\n        \"[source_fqdn]\"
+    => \"%{source_host}\"\n      }\n    }\n\n  mutate {\n      remove_field => [\"port\"]\n
+    \     }\n\n    dns {\n      nameserver => \"localhost\"\n      reverse => [\"source_fqdn\"]\n
+    \     action => \"replace\"\n      hit_cache_size => 10000\n      hit_cache_ttl
+    => 900\n      failed_cache_size => 512\n      failed_cache_ttl => 900\n    }\n\n\n
+    \ date {\n    match => [ \"date\", \"MMM  d HH:mm:ss\",\"MMM dd HH:mm:ss\" ]\n\ttimezone
+    => \"CET\"\t\t\t\t \n  }\n\n  }\n  \n   if \"%\" in [source_host] {\n    mutate
+    {\n        gsub => [\n          \"source_host\", \"%.*$\",\"\"\n        ]\n    }\n
+    \ }\n  \n}\n\n\noutput {\n  if \"pihole\" in [tags]{\n    elasticsearch {\n      hosts
+    => [\"elasticsearch.morphine:9200\"]\n      manage_template => false\n      index
+    => \"pihole-dns-%{+yyyy.MM.dd}\"\n    }\n  }\n}\n"
