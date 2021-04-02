@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.19.7
+        image: nginx:1.19.9
         ports:
         - containerPort: 80
           name: http
@@ -30,6 +30,9 @@ spec:
           - mountPath: /usr/share/nginx/html/index.html
             name: nginx-conf
             subPath: index.html
+          - mountPath: /usr/share/nginx/html/robots.txt
+            name: nginx-conf
+            subPath: robots.txt
         resources:
           requests:
             cpu: 24m

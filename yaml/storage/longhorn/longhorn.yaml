@@ -570,7 +570,6 @@ data:
       numberOfReplicas: "2"
       staleReplicaTimeout: "2880"
       fromBackup: ""
-#      diskSelector: "ssd,fast"
       nodeSelector: "disktype=external"
 #      recurringJobs: '[{"name":"snap", "task":"snapshot", "cron":"*/1 * * * *", "retain":1},
 #                       {"name":"backup", "task":"backup", "cron":"*/2 * * * *", "retain":1,
