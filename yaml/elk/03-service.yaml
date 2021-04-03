@@ -28,11 +28,15 @@ spec:
     - port: 9600
       targetPort: 9600
       protocol: TCP
-      name: logstash-9600
+      name: logstash
     - port: 5044
       targetPort: 5044
       protocol: TCP
-      name: logstash-5044
+      name: filebeat-pihole
+    - port: 5045
+      targetPort: 5045
+      protocol: TCP
+      name: filebeat-sshd
   type: LoadBalancer
   loadBalancerIP: 10.1.0.12
 ---

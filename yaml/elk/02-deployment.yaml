@@ -49,7 +49,10 @@ spec:
           ports:
             - containerPort: 5044
               protocol: TCP
-              name: filebeat
+              name: filebeat-pihole
+            - containerPort: 5045
+              protocol: TCP
+              name: filebeat-sshd
             - containerPort: 9600
               protocol: TCP
               name: logstash
@@ -76,6 +79,9 @@ spec:
             - name: logstash-config
               mountPath: /etc/logstash/conf.d/10-pihole.conf
               subPath: 10-pihole.conf
+            - name: logstash-config
+              mountPath: /etc/logstash/conf.d/20-sshd.conf
+              subPath: 20-sshd.conf
             - name: logstash-config
               mountPath: /etc/logstash/patterns/dns
               subPath: dns
