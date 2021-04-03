@@ -48,6 +48,8 @@
       - wget
       - chrony
       - rsyslog-elasticsearch
+      - pigz
+      - pv
     install_recommends: false
     update_cache: true
     # Need the force_apt_get until
@@ -213,7 +215,7 @@
     regexp: '^(.*fixrtc)$'
     line: '\1 cgroup_memory=1 cgroup_enable=memory cgroup_enable=cpuset apparmor=0 mitigations=off max_loop=32'
     state: present
-  when: deploy_target != 'vagrant'
+  when: deploy_target != 'pihole'
 
 - name: Disable WiFi
   blockinfile:
@@ -221,7 +223,7 @@
     marker: "# {mark} ANSIBLE DISABLE WIFI"
     block: |
       dtoverlay=disable-wifi
-  when: deploy_target != 'vagrant'
+  when: deploy_target != 'pihole'
 
 - name: Disable Bluetooth
   blockinfile:
@@ -229,7 +231,7 @@
     marker: "# {mark} ANSIBLE DISABLE BLUETOOTH"
     block: |
       dtoverlay=disable-bt
-  when: deploy_target != 'vagrant'
+  when: deploy_target != 'pihole'
 
 - name: Disable HDMI
   blockinfile:
@@ -237,7 +239,7 @@
     marker: "# {mark} ANSIBLE DISABLE HDMI"
     block: |
       hdmi_blanking=2
-  when: deploy_target != 'vagrant'
+  when: deploy_target != 'pihole'
 
 - name: Disable Audio
   blockinfile:
@@ -245,7 +247,7 @@
     marker: "# {mark} ANSIBLE DISABLE AUDIO"
     block: |
       dtparam=audio=off
-  when: deploy_target != 'vagrant'
+  when: deploy_target != 'pihole'
 
 - name: Disable Uart
   blockinfile:
@@ -253,7 +255,7 @@
     marker: "# {mark} ANSIBLE DISABLE UART"
     block: |
       enable_uart=0
-  when: deploy_target != 'vagrant'
+  when: deploy_target != 'pihole'
 
 - name: Trottle GPU
   blockinfile:
@@ -261,7 +263,7 @@
     marker: "# {mark} ANSIBLE THROTTLE GPU"
     block: |
       gpu_mem=16
-  when: deploy_target != 'vagrant'
+  when: deploy_target != 'pihole'
 
 - name: Overclock CPU and Memory
   blockinfile:
@@ -274,4 +276,4 @@
       over_voltage=6
       over_voltage_sdram=6
       sdram_schmoo=0x02000020
-  when: deploy_target != 'vagrant'
+  when: deploy_target != 'pihole'
