@@ -7,4 +7,6 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
 subjects:
-
+- kind: ServiceAccount
+  name: system-upgrade
+  namespace: system-upgrade
