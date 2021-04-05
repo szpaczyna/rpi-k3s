@@ -1,20 +1,4 @@
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: unifi-poller
-  labels:
-    app.kubernetes.io/name: unifi-poller
-spec:
-  type: ClusterIP
-  ports:
-    - port: 9130
-      targetPort: http
-      protocol: TCP
-      name: http
-  selector:
-    app.kubernetes.io/name: unifi-poller
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -43,7 +27,6 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
       - name: unifi-poller
-        #image: "golift/unifi-poller:2.0.1"
         image: "golift/unifi-poller:2.1.0"
         imagePullPolicy: IfNotPresent
         env:
