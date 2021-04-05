@@ -214,6 +214,7 @@
   file:
     path: "{{ item }}"
     state: touch
+    mode: 0640
   with_items:
     - /boot/firmware/nobtcmd.txt
     - /boot/firmware/syscfg.txt
