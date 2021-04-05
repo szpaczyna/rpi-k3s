@@ -1,3 +1,4 @@
+#!/bin/bash
 ## global
 export http_proxy="http://10.0.0.2:3128/"
 export https_proxy="http://10.0.0.2:3128/"

@@ -12,9 +12,9 @@ HAS_CAPPED=0x20000
 HAS_THROTTLED=0x40000
 
 #Text Colors
-GREEN=`tput setaf 2`
-RED=`tput setaf 1`
-NC=`tput sgr0`
+GREEN=$(tput setaf 2)
+RED=$(tput setaf 1)
+NC=$(tput sgr0)
 
 #Output Strings
 GOOD="${GREEN}NO${NC}"

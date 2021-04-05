@@ -10,7 +10,10 @@
     "cz-conventional-changelog": "^3.3.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "jsonlint": "jsonlint json/*/*.json",
+    "yammllint": "yamllint yaml/*",
+    "shellint": "shellcheck scripts/*.sh",
+    "test": "npm run jsonlint; npm run yammlint; npm run shellint",
     "release": "standard-version -i CHANGELOG.md ",
     "release:minor": "standard-version --release-as minor",
     "release:patch": "standard-version --release-as patch",
