@@ -1,12 +1,9 @@
-## rpi-k3s - Home Cloud on Raspberry Pie(s)
+<img src="assets/rpi.png" align="left" width="130"/>      
+<img src="https://raspbernetes.github.io/img/logo.svg" align="left" width="130px" height="130px"/>
 
-<p align="center">
-  <img src="assets/logo.png" width="140"/>
-  <br>
-  <img src="assets/rpi.png" width="140"/>
-  <img src="https://raspbernetes.github.io/img/logo.svg" width="140"/>
-</p>
-
+## rpi-k3s
+### Home Cloud on Raspberry Pie(s)
+<br>
 <!--START_SECTION_PROFILE_VIEWS:readme-info-->
 
 <!--END_SECTION_PROFILE_VIEWS:readme-info-->
