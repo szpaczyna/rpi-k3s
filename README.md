@@ -1,6 +1,8 @@
 <br>
-<img src="assets/rpi.png" align="right" width="120px" height="120px"/>      
-<img src="https://raspbernetes.github.io/img/logo.svg" align="left" width="130px" height="130px"/>
+<img src="assets/rpi.png" align="right" width="144px" height="144px"/>      
+<img src="https://raspbernetes.github.io/img/logo.svg" align="left" width="144px"
+height="144px"/>
+
 
 ## rpi-k3s
 ### Home Cloud on Raspberry Pie(s)
