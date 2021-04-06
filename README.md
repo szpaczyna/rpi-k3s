@@ -1,4 +1,4 @@
-<img src="assets/rpi.png" align="left" width="130"/>      
+<img src="assets/rpi.png" align="right" width="130px" height="130px"/>      
 <img src="https://raspbernetes.github.io/img/logo.svg" align="left" width="130px" height="130px"/>
 
 ## rpi-k3s
@@ -90,10 +90,11 @@
 
 ## TODO
 
--   Automation
--   Logging (partially done)
--   Wazuh (security stuff)
--   Zalando postgres operator
+- [ ]  Automation
+- [x]  Logging
+- [ ]  Sealed secrets
+- [ ]  Wazuh (security stuff)
+- [ ]  Zalando postgres operator
 
 * * *
 
