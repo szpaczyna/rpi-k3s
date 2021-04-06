@@ -50,7 +50,6 @@ layout: default
     -   [scripts](varia/scripts) - some custom stuff, quite simple
     -   [config](varia/config) - performance and some hardening
 
-* * *
 
 ## Docker Stuff
 
@@ -72,14 +71,9 @@ layout: default
 
 > <https://szpaczyna.github.io/rpi-k3s>
 
-    helm repo add shpaq https://szpaczyna.github.io/rpi-k3s
-    helm repo update
-
 <!--START_SECTION_LINES_OF_CODE:readme-info-->
 
 <!--END_SECTION_LINES_OF_CODE:readme-info-->
-
-* * *
 
 ## TODO
 
@@ -87,12 +81,3 @@ layout: default
 -   Logging (partially done)
 -   Wazuh (security stuff)
 -   Zalando postgres operator
-
-* * *
-
-## :handshake:  Thanks
-
-A lot of inspiration for my cluster came from the people that have shared their
-clusters over at [awesome-home-kubernetes].
-
-[awesome-home-kubernetes]: https://github.com/k8s-at-home/awesome-home-kubernetes
