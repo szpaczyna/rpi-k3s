@@ -13,3 +13,19 @@ spec:
     requests:
       storage: "8Gi"
   storageClassName: local-path
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elk-data2
+  labels:
+    app: elk
+    name: elk
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "3Gi"
+  storageClassName: local-path
+

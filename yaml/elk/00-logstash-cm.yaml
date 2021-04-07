@@ -40,6 +40,33 @@ data:
     NODATA-[[:word:]]+\r\nSRV _+.+\\S\r\nFQDN \\b(?:[\\w-][\\w-]{0,62})(?:\\.(?:[\\w-][\\w-]{0,62}))*(\\.?|\\b)\r\nDNSMASQPREFIX
     %{SYSLOGTIMESTAMP:date} %{SYSLOGPROG}: %{INT:logrow} %{IP:source_host}\\/%{POSINT:source_port}\r\nURI
     %{URIPROTO}:(//)?(?:%{URIHOST})?(?:%{URIPATH})?\r\n"
+  sshd: |+
+    PAM_MODULE_NAME pam_\w+
+    PAM_MESSAGE_AUTHFAIL authentication failure;\s*%{GREEDYDATA:pam_kvdata}
+    PAM_MESSAGE_SESSOPEN session opened for user %{USER:pam_user} by %{DATA:pam_openedby}\(%{GREEDYDATA:pam_kvdata}\)
+    PAM_MESSAGE_SESSCLOSED session closed for user %{USER:pam_user}
+    PAM_MESSAGE_GENERIC %{GREEDYDATA}
+    PAM_MESSAGE %{PAM_MESSAGE_AUTHFAIL}|%{PAM_MESSAGE_SESSOPEN}|%{PAM_MESSAGE_SESSCLOSED}|%{PAM_MESSAGE_GENERIC}
+    PAM %{PAM_MODULE_NAME:pam_module}\(%{DATA:pam_service}:%{WORD:pam_module_interface}\): %{PAM_MESSAGE:pam_message}
+    SSH_AUTHFAIL_WRONGUSER Failed %{WORD:ssh_authmethod} for invalid user %{USERNAME:ssh_user} from %{IP:ssh_client_ip} port %{NUMBER:ssh_client_port} (?<ssh_protocol>\w+\d+)
+    SSH_AUTHFAIL_WRONGCREDS Failed %{WORD:ssh_authmethod} for %{USERNAME:ssh_user} from %{IP:ssh_client_ip} port %{NUMBER:ssh_client_port} (?<ssh_protocol>\w+\d+)
+    SSH_AUTH_SUCCESS Accepted %{WORD:ssh_authmethod} for %{USERNAME:ssh_user} from %{IP:ssh_client_ip} port %{NUMBER:ssh_client_port} (?<ssh_protocol>\w+\d+)(?:: %{WORD:ssh_pubkey_type} %{GREEDYDATA:ssh_pubkey_fingerprint})?
+    SSH_DISCONNECT Received disconnect from %{IP:ssh_client_ip} port %{INT:ssh_client_port}.*?:\s+%{GREEDYDATA:ssh_disconnect_reason}
+    SUDO \s*%{USERNAME:sudo_user}\s*:\s*TTY=%{DATA:sudo_tty}\s*;\s*PWD=%{DATA:sudo_pwd}\s*;\s*USER=%{DATA:sudo_targetuser}\s*;\s*COMMAND=%{GREEDYDATA:sudo_command}
+    SU \+\s+%{DATA:su_tty}\s+%{USER:su_user}:%{USER:su_targetuser}
+    SYSTEMD_LOGIND_NEW New session %{INT:systemd_login_sessionid} of user %{USER:systemd_login_user}\.
+    SYSTEMD_LOGIND_REMOVED Removed session %{INT:systemd_login_sessionid}\.
+    SYSTEMD_LOGIND %{SYSTEMD_LOGIND_NEW}|%{SYSTEMD_LOGIND_REMOVED}
+    USERMOD_CHANGE (?<account_action>change) user '%{USER:account_name}' %{WORD:account_attribute}( from '%{DATA:account_from}' to '%{DATA:account_to}')?
+    USERMOD_GROUP_MEMBERSHIP (?<account_action>add|delete) '%{USER:account_name}' (?:to|from) %{DATA:account_grouptype} '%{DATA:account_groupname}'
+    USERMOD %{USERMOD_CHANGE}|%{USERMOD_GROUP_MEMBERSHIP}
+    NEW_ACCOUNT new %{DATA:account_type}:\s+%{GREEDYDATA:account_kvdata}
+    ACCOUNT_ADD %{NEW_ACCOUNT}|%{USERMOD_GROUP_MEMBERSHIP}
+    USERDEL_USER (?<account_action>delete) user '%{USER:account_name}'
+    USERDEL_GROUP (?<account_action>remove)d %{DATA:account_grouptype} '%{DATA:account_groupname}' owned by '%{DATA:account_groupowner}'
+    USERDEL_GROUP_DELUSER (?<account_action>delete) '%{USER:account_name}' from %{DATA:account_grouptype} '%{DATA:account_groupname}'
+    USERDEL %{USERDEL_USER}|%{USERDEL_GROUP}|%{USERDEL_GROUP_DELUSER}
+    GROUPDEL %{DATA:account_type} '%{USER:account_name}' removed( from %{GREEDYDATA:account_repository})?
   10-pihole.conf: "input {\n       beats {\n       port => 5044\n       type => \"logs\"\n
     \      tags => [\"pihole\",\"5044\"]\n       }\n}\n\nfilter {\n\n  if \"pihole\"
     in [tags] {\n    grok {\n      patterns_dir => [\"/etc/logstash/patterns/\"]\n
@@ -105,7 +132,7 @@ data:
     \"ip_request\"\n        }\n      }\n\n      else if [domain_request] and [message]
     =~ \"cached\" and [message] =~ \"CNAME\" {\n        mutate {\n          add_tag
     => [ \"cached domain to ip cname\" ]\n        }\n      }\n\n      else if [domain_request]
-    and [message] =~ \"cached\" {\n        mutate {\n          add_tag => [ \"cached
+    and [message] =~ \"cached\" {\n        mutate {\n          add_tag => [ \"cache
     domain to ip\" ]\n        }\n        geoip {\n          source => \"ip_response\"\n
     \       }\n      }\n\n      if [domain_request] {\n        geoip {\n#          cache_size
     => \"10000\"\n          source => \"domain_request\"\n        }\n      } \n      \n
@@ -125,22 +152,36 @@ data:
     \ }\n  \n}\n\n\noutput {\n  if \"pihole\" in [tags]{\n    elasticsearch {\n      hosts
     => [\"elasticsearch.morphine:9200\"]\n      manage_template => false\n      index
     => \"pihole-dns-%{+yyyy.MM.dd}\"\n    }\n  }\n}\n"
-  20-sshd.conf: "input {\n       beats {\n       port => 5045\n       type =>
-    \"logs\"\n       tags => [\"sshd\"]\n  }\n}\n\n\nfilter {\n  grok {\n     match
-    => [\n      \"message\", \"%{SYSLOGTIMESTAMP:syslog_date} %{SYSLOGHOST:syslog_host}
-    %{DATA:syslog_program}(?:\\[%{POSINT}\\])?: %{WORD:login} password for %{USERNAME:username}
-    from %{IP:ip} %{GREEDYDATA}\",\n      \"message\", \"%{SYSLOGTIMESTAMP:syslog_date}
-    %{SYSLOGHOST:syslog_host} %{DATA:syslog_program}(?:\\[%{POSINT}\\])?: message
-    repeated 2 times: \\[ %{WORD:login} password for %{USERNAME:username} from %{IP:ip}
-    %{GREEDYDATA}\",\n      \"message\", \"%{SYSLOGTIMESTAMP:syslog_date} %{SYSLOGHOST:syslog_host}
-    %{DATA:syslog_program}(?:\\[%{POSINT}\\])?: %{WORD:login} password for invalid
-    user %{USERNAME:username} from %{IP:ip} %{GREEDYDATA}\",\n      \"message\", \"%{SYSLOGTIMESTAMP:syslog_date}
-    %{SYSLOGHOST:syslog_host} %{DATA:syslog_program}(?:\\[%{POSINT}\\])?: %{WORD:login}
-    %{WORD:auth_method} for %{USERNAME:username} from %{IP:ip} %{GREEDYDATA}\"\n    ]\n
-    \ }\n\n  if \"sshd\" not in [tags] {\n    drop { }\n  }\n\n  mutate {\n    lowercase
-    => [ \"login\" ]\n  }\n  \n\n  date {\n    match => [ \"syslog_date\", \"MMM  d
-    HH:mm:ss\", \"MMM dd HH:mm:ss\", \"ISO8601\" ]\n    timezone => \"Europe/Warsaw\"\n
-    \ }\n\n  geoip {\n    source => \"ip\"\n  }\n}\n\n\noutput {\n  if \"sshd\" in
-    [tags]{\n    elasticsearch {\n        hosts => [\"elasticsearch.morphine:9200\"]\n
-    \       manage_template => false\n        index => \"sshd-%{+yyyy.MM.dd}\"\n    }\n
-    \ }\n}\n"
+  20-sshd.conf: "input {\n    beats {\n    port => 5045\n    type => \"auth\"\n    tags
+    => [\"sshd\"]\n    }\n}\n\nfilter {\n    if [type] == \"auth\" {\n  grok {\n\t
+    \   match => { \"message\" => [\"%{SYSLOGTIMESTAMP:[system][auth][timestamp]}
+    %{SYSLOGHOST:[system][auth][hostname]} sshd(?:\\[%{POSINT:[system][auth][pid]}\\])?:
+    %{DATA:[system][auth][ssh][event]} %{DATA:[system][auth][ssh][method]} for (invalid
+    user )?%{DATA:[system][auth][user]} from %{IPORHOST:[system][auth][ssh][ip]} port
+    %{NUMBER:[system][auth][ssh][port]} ssh2(: %{GREEDYDATA:[system][auth][ssh][signature]})?\",\n
+    \     \"%{SYSLOGTIMESTAMP:[system][auth][timestamp]} %{SYSLOGHOST:[system][auth][hostname]}
+    sshd(?:\\[%{POSINT:[system][auth][pid]}\\])?: %{DATA:[system][auth][ssh][event]}
+    user %{DATA:[system][auth][user]} from %{IPORHOST:[system][auth][ssh][ip]}\",\n
+    \     \"%{SYSLOGTIMESTAMP:[system][auth][timestamp]} %{SYSLOGHOST:[system][auth][hostname]}
+    sshd(?:\\[%{POSINT:[system][auth][pid]}\\])?: Did not receive identification string
+    from %{IPORHOST:[system][auth][ssh][dropped_ip]}\",\n      \"%{SYSLOGTIMESTAMP:[system][auth][timestamp]}
+    %{SYSLOGHOST:[system][auth][hostname]} sudo(?:\\[%{POSINT:[system][auth][pid]}\\])?:
+    \\s*%{DATA:[system][auth][user]} :( %{DATA:[system][auth][sudo][error]} ;)? TTY=%{DATA:[system][auth][sudo][tty]}
+    ; PWD=%{DATA:[system][auth][sudo][pwd]} ; USER=%{DATA:[system][auth][sudo][user]}
+    ; COMMAND=%{GREEDYDATA:[system][auth][sudo][command]}\",\n      \"%{SYSLOGTIMESTAMP:[system][auth][timestamp]}
+    %{SYSLOGHOST:[system][auth][hostname]} groupadd(?:\\[%{POSINT:[system][auth][pid]}\\])?:
+    new group: name=%{DATA:system.auth.groupadd.name}, GID=%{NUMBER:system.auth.groupadd.gid}\",\n
+    \     \"%{SYSLOGTIMESTAMP:[system][auth][timestamp]} %{SYSLOGHOST:[system][auth][hostname]}
+    useradd(?:\\[%{POSINT:[system][auth][pid]}\\])?: new user: name=%{DATA:[system][auth][useradd][name]},
+    UID=%{NUMBER:[system][auth][useradd][uid]}, GID=%{NUMBER:[system][auth][useradd][gid]},
+    home=%{DATA:[system][auth][useradd][home]}, shell=%{DATA:[system][auth][useradd][shell]}$\",\n
+    \     \"%{SYSLOGTIMESTAMP:[system][auth][timestamp]} %{SYSLOGHOST:[system][auth][hostname]}
+    %{DATA:[system][auth][program]}(?:\\[%{POSINT:[system][auth][pid]}\\])?: %{GREEDYMULTILINE:[system][auth][message]}\"]
+    }\n\n        pattern_definitions => {\n          \"GREEDYMULTILINE\"=> \"(.|\\n)*\"\n
+    \       }\n        remove_field => \"message\"\n  }\n  date {\n      match =>
+    [ \"[system][auth][timestamp]\", \"MMM  d HH:mm:ss\", \"MMM dd HH:mm:ss\" ]\n
+    \     timezone => \"Europe/Warsaw\"\n  }\n  geoip {\n      source => \"[system][auth][ssh][ip]\"\n
+    \     target => \"[system][auth][ssh][geoip]\"\n  }\n  }\n}\n\noutput {\n    if
+    \"sshd\" in [tags]{\n        elasticsearch {\n            hosts => [\"elasticsearch.morphine:9200\"]\n
+    \           manage_template => false\n            index => \"sshd-%{+yyyy.MM.dd}\"\n
+    \   }\n  }\n}\n"

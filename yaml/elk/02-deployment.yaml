@@ -83,8 +83,11 @@ spec:
               mountPath: /etc/logstash/conf.d/20-sshd.conf
               subPath: 20-sshd.conf
             - name: logstash-config
-              mountPath: /etc/logstash/patterns/dns
+              mountPath: /etc/logstash/patterns/dns.grok
               subPath: dns
+            - name: logstash-config
+              mountPath: /etc/logstash/patterns/sshd.grok
+              subPath: sshd
         - name: kibana
           image: registry.shpaq.org/kibana:v7.9.3
           imagePullPolicy: IfNotPresent
@@ -100,6 +103,8 @@ spec:
               cpu: 0.25
               memory: 256Mi
           volumeMounts:
+            - name: kibana-vol01
+              mountPath: /usr/share/kibana/data
             - name: kibana-config
               mountPath: /usr/share/kibana/config
       terminationGracePeriodSeconds: 30
@@ -107,6 +112,9 @@ spec:
       - name: elasticsearch-vol01
         persistentVolumeClaim:
           claimName: elk-data
+      - name: kibana-vol01
+        persistentVolumeClaim:
+          claimName: elk-data2
       - name: kibana-config
         configMap:
           name: kibana-config
