@@ -125,21 +125,21 @@ data:
     \ }\n  \n}\n\n\noutput {\n  if \"pihole\" in [tags]{\n    elasticsearch {\n      hosts
     => [\"elk-svc-elasticsearch:9200\"]\n      manage_template => false\n      index
     => \"pihole-dns-%{+yyyy.MM.dd}\"\n    }\n  }\n}\n"
-  20-auth.conf: "input {\n       beats {\n       port => 5045\n       type =>
-    \"logs\"\n  }\n}\n\n\nfilter {\n  grok {\n    match => [\n      \"message\", \"%{SYSLOGTIMESTAMP:syslog_date}
-    %{SYSLOGHOST:syslog_host} %{DATA:syslog_program}(?:\\[%{POSINT}\\])?: %{WORD:login}
+  20-auth.conf: "input {\n       beats {\n       port => 5045\n       type => \"logs\"\n
+    \      tags => [\"auth\"]\n  }\n}\n\n\nfilter {\n  grok {\n    match => [\n      \"message\",
+    \"%{SYSLOGTIMESTAMP:syslog_date} %{SYSLOGHOST:syslog_host} %{DATA:syslog_program}(?:\\[%{POSINT}\\])?:
+    %{WORD:login} password for %{USERNAME:username} from %{IP:ip} %{GREEDYDATA}\",\n
+    \     \"message\", \"%{SYSLOGTIMESTAMP:syslog_date} %{SYSLOGHOST:syslog_host}
+    %{DATA:syslog_program}(?:\\[%{POSINT}\\])?: message repeated 2 times: \\[ %{WORD:login}
     password for %{USERNAME:username} from %{IP:ip} %{GREEDYDATA}\",\n      \"message\",
     \"%{SYSLOGTIMESTAMP:syslog_date} %{SYSLOGHOST:syslog_host} %{DATA:syslog_program}(?:\\[%{POSINT}\\])?:
-    message repeated 2 times: \\[ %{WORD:login} password for %{USERNAME:username}
-    from %{IP:ip} %{GREEDYDATA}\",\n      \"message\", \"%{SYSLOGTIMESTAMP:syslog_date}
-    %{SYSLOGHOST:syslog_host} %{DATA:syslog_program}(?:\\[%{POSINT}\\])?: %{WORD:login}
-    password for invalid user %{USERNAME:username} from %{IP:ip} %{GREEDYDATA}\",\n
+    %{WORD:login} password for invalid user %{USERNAME:username} from %{IP:ip} %{GREEDYDATA}\",\n
     \     \"message\", \"%{SYSLOGTIMESTAMP:syslog_date} %{SYSLOGHOST:syslog_host}
     %{DATA:syslog_program}(?:\\[%{POSINT}\\])?: %{WORD:login} %{WORD:auth_method}
     for %{USERNAME:username} from %{IP:ip} %{GREEDYDATA}\"\n    ]\n  }\n\n  if \"auth\"
     not in [tags] {\n    drop { }\n  }\n\n  mutate {\n    lowercase => [ \"login\"
     ]\n  }\n  \n\n  date {\n    match => [ \"syslog_date\", \"MMM  d HH:mm:ss\", \"MMM
     dd HH:mm:ss\" ]\n    timezone => \"Europe/Warsaw\"\n  }\n\n  geoip {\n    source
-    => \"ip\"\n  }\n}\n\n\noutput {\n  if \"sshd\" in [tags]{\n    elasticsearch {\n
-    \       hosts => [\"elk-svc-elasticsearch:9200\"]\n        manage_template =>
-    false\n        index => \"auth-%{+yyyy.MM.dd}\"\n    }\n  }\n}\n"
+    => \"ip\"\n  }\n}\n\n\noutput {\n  if \"auth\" in [tags]{\n    elasticsearch {\n
+    \       hosts => [\"elk-svc-elasticsearch:9200\"]\n        manage_template => false\n
+    \       index => \"auth-%{+yyyy.MM.dd}\"\n    }\n  }\n}\n"
