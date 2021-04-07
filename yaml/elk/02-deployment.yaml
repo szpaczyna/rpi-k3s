@@ -80,14 +80,14 @@ spec:
               mountPath: /etc/logstash/conf.d/10-pihole.conf
               subPath: 10-pihole.conf
             - name: logstash-config
-              mountPath: /etc/logstash/conf.d/20-sshd.conf
-              subPath: 20-sshd.conf
+              mountPath: /etc/logstash/conf.d/20-auth.conf
+              subPath: 20-auth.conf
             - name: logstash-config
               mountPath: /etc/logstash/patterns/dns.grok
               subPath: dns
             - name: logstash-config
-              mountPath: /etc/logstash/patterns/sshd.grok
-              subPath: sshd
+              mountPath: /etc/logstash/patterns/auth.grok
+              subPath: auth
         - name: kibana
           image: registry.shpaq.org/kibana:v7.9.3
           imagePullPolicy: IfNotPresent
