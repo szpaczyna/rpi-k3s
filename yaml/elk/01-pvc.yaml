@@ -28,4 +28,3 @@ spec:
     requests:
       storage: "3Gi"
   storageClassName: local-path
-
