@@ -5,6 +5,7 @@
 .Makefile
 ./charts/bitwarden/values.yaml
 
+test
 ### Node
 # Logs
 logs

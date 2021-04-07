@@ -6,11 +6,14 @@ metadata:
 data:
   logstash.yml: |
      http.host: "0.0.0.0"
+     node.name: "logstash"
+     config.reload.automatic: true
+     config.reload.interval: 60s
   pipelines.yml: |
     - pipeline.id: pihole
       path.config: "/etc/logstash/conf.d/10-pihole.conf"
-    - pipeline.id: sshd
-      path.config: "/etc/logstash/conf.d/20-sshd.conf"
+    - pipeline.id: auth
+      path.config: "/etc/logstash/conf.d/20-auth.conf"
   log4j2.properties: |
     status = error
     name = LogstashPropertiesConfig
@@ -152,7 +155,7 @@ data:
     \ }\n  \n}\n\n\noutput {\n  if \"pihole\" in [tags]{\n    elasticsearch {\n      hosts
     => [\"elasticsearch.morphine:9200\"]\n      manage_template => false\n      index
     => \"pihole-dns-%{+yyyy.MM.dd}\"\n    }\n  }\n}\n"
-  20-sshd.conf: "input {\n    beats {\n    port => 5045\n    type => \"auth\"\n    tags
+  20-auth.conf: "input {\n    beats {\n    port => 5045\n    type => \"auth\"\n    tags
     => [\"sshd\"]\n    }\n}\n\nfilter {\n    if [type] == \"auth\" {\n  grok {\n\t
     \   match => { \"message\" => [\"%{SYSLOGTIMESTAMP:[system][auth][timestamp]}
     %{SYSLOGHOST:[system][auth][hostname]} sshd(?:\\[%{POSINT:[system][auth][pid]}\\])?:
@@ -183,5 +186,5 @@ data:
     \     timezone => \"Europe/Warsaw\"\n  }\n  geoip {\n      source => \"[system][auth][ssh][ip]\"\n
     \     target => \"[system][auth][ssh][geoip]\"\n  }\n  }\n}\n\noutput {\n    if
     \"sshd\" in [tags]{\n        elasticsearch {\n            hosts => [\"elasticsearch.morphine:9200\"]\n
-    \           manage_template => false\n            index => \"sshd-%{+yyyy.MM.dd}\"\n
+    \           manage_template => false\n            index => \"auth-%{+yyyy.MM.dd}\"\n
     \   }\n  }\n}\n"
