@@ -18,7 +18,7 @@ spec:
         app: samba
     spec:
       containers:
-      - image: dperson/samba
+      - image: registry.shpaq.org/samba:4.11.0
         name: samba-server
         resources:
           limits:
