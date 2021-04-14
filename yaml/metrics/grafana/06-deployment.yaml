@@ -22,7 +22,7 @@ spec:
           value: btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/provisioning"
-        image: grafana/grafana:7.5.2
+        image: grafana/grafana:7.5.3
         name: grafana
         ports:
         - containerPort: 3000

@@ -36,13 +36,14 @@ spec:
               name: elasticsearch
             - containerPort: 9300
               protocol: TCP
+              name: el-cluster
           resources:
             limits:
               cpu: 1
-              memory: 368Mi
+              memory: 400Mi
             requests:
-              cpu: 0.1
-              memory: 256Mi
+              cpu: 0.3
+              memory: 300Mi
         - name: logstash
           image: registry.shpaq.org/logstash:v7.9.3
           imagePullPolicy: Always

@@ -368,7 +368,7 @@ spec:
       - args:
         - --port=7472
         - --config=config
-        image: quay.io/metallb/controller:main
+        image: quay.io/metallb/controller:v0.9
         imagePullPolicy: Always
         name: controller
         ports:
