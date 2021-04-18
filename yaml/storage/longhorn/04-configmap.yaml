@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: longhorn-default-setting
+  namespace: longhorn-system
+data:
+  default-setting.yaml: |-
+    backup-target: s3://rpi-k3s-longhorn-backup@eu-central-1/
+    backup-target-credential-secret: longhorn-s3-secret
+    allow-recurring-job-while-volume-detached:
+    create-default-disk-labeled-nodes:
+    default-data-path: /data/longhorn
+    replica-soft-anti-affinity:
+    storage-over-provisioning-percentage: 200
+    storage-minimal-available-percentage: 15
+    upgrade-checker: true
+    default-replica-count: 2
+    default-data-locality:
+    guaranteed-engine-cpu:
+    default-longhorn-static-storage-class: longhorn-static
+    backupstore-poll-interval:
+    taint-toleration:
+    priority-class:
+    auto-salvage:
+    auto-delete-pod-when-volume-detached-unexpectedly:
+    disable-scheduling-on-cordoned-node:
+    replica-zone-soft-anti-affinity:
+    volume-attachment-recovery-policy:
+    node-down-pod-deletion-policy:
+    allow-node-drain-with-last-healthy-replica:
+    mkfs-ext4-parameters: -b 4096
+    disable-replica-rebuild:
+    replica-replenishment-wait-interval:
+    disable-revision-counter:
+    system-managed-pods-image-pull-policy:
+    allow-volume-creation-with-degraded-availability: false
+    auto-cleanup-system-generated-snapshot:

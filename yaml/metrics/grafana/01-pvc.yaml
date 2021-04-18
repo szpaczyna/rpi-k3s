@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: grafana-storage
+  name: grafana-data
   namespace: monitoring
 spec:
   accessModes:
@@ -10,5 +10,5 @@ spec:
   resources:
     requests:
       storage: 2Gi
-  storageClassName: local-path
+  storageClassName: longhorn
   volumeName: ""

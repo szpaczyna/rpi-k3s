@@ -42,7 +42,7 @@ spec:
             - --config.file=/etc/prometheus/prometheus.yaml
             - --storage.tsdb.path=/var/lib/prometheus
             - --storage.tsdb.retention.time=21d
-            - --storage.tsdb.retention.size=8GB
+            - --storage.tsdb.retention.size=10GB
             - --storage.tsdb.min-block-duration=1h
             - --storage.tsdb.max-block-duration=2h
           ports:
@@ -67,7 +67,7 @@ spec:
             timeoutSeconds: 10
           resources:
             requests:
-              cpu: 500m
+              cpu: 200m
               memory: 512Mi
             limits:
               cpu: 1000m
@@ -77,13 +77,15 @@ spec:
         - name: config
           configMap:
             name: prometheus-config
+      nodeSelector:
+        disktype: external
   volumeClaimTemplates:
     - metadata:
         name: data
       spec:
         accessModes:
         - ReadWriteOnce
-        storageClassName: local-path
+        storageClassName: longhorn
         resources:
           requests:
-            storage: 10Gi
+            storage: 12Gi

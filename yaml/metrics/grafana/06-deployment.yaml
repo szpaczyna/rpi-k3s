@@ -16,6 +16,23 @@ spec:
       labels:
         app: grafana
     spec:
+      initContainers:
+        - name: "create-directory"
+          image: busybox:1.32.0
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh"]
+          args: ["-c", "mkdir -p /var/lib/grafana/provisioning/{datasources,plugins,notifiers,dashboards}"]
+        volumeMounts:
+          - mountPath: /var/lib/grafana
+            name: grafana-data
+        - name: "change-permissions"
+          image: busybox:1.32.0
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh"]
+          args: ["-c", "chown -R 472:472 /var/lib/grafana/provisioning"]
+        volumeMounts:
+          - mountPath: /var/lib/grafana
+            name: grafana-data
       containers:
       - env:
         - name: GF_INSTALL_PLUGINS
@@ -50,12 +67,12 @@ spec:
             memory: 100Mi
         volumeMounts:
         - mountPath: /var/lib/grafana
-          name: grafana-storage
+          name: grafana-data
           readOnly: false
-        - mountPath: /etc/grafana/provisioning/datasources
+        - mountPath: /var/lib/grafana/provisioning/datasources
           name: grafana-datasources
           readOnly: false
-        - mountPath: /etc/grafana/provisioning/dashboards
+        - mountPath: /var/lib/grafana/provisioning/dashboards
           name: grafana-dashboards
           readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/cluster-total
@@ -115,9 +132,9 @@ spec:
         runAsUser: 472
       serviceAccountName: grafana
       volumes:
-      - name: grafana-storage
+      - name: grafana-data
         persistentVolumeClaim:
-          claimName: grafana-storage
+          claimName: grafana-data
       - name: grafana-datasources
         secret:
           secretName: grafana-datasources

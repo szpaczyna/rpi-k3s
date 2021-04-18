@@ -15,7 +15,7 @@ spec:
       protocol: TCP
       name: http
     - port: 2203
-      targetPort: http-admin
+      targetPort: http
       protocol: TCP
       name: http-admin
   selector:

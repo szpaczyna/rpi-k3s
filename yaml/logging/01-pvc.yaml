@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: elk-data
+  name: elk-data-01
   labels:
     app: elk
     name: elk
@@ -11,13 +11,13 @@ spec:
     - "ReadWriteOnce"
   resources:
     requests:
-      storage: "8Gi"
-  storageClassName: local-path
+      storage: "10Gi"
+  storageClassName: longhorn
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: elk-data2
+  name: elk-data-02
   labels:
     app: elk
     name: elk
@@ -27,4 +27,4 @@ spec:
   resources:
     requests:
       storage: "3Gi"
-  storageClassName: local-path
+  storageClassName: longhorn

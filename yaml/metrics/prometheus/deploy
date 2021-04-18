@@ -1,4 +1,3 @@
 #!/bin/bash
 kubectl create ns monitoring
-kubectl apply -f 00-setup/
 kubectl apply -f .

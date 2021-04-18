@@ -1,0 +1,2 @@
+#!/bin/bash
+sops -d ../../secrets/kibana-secret.yaml > 04-kibana-auth.yaml

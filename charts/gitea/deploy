@@ -3,6 +3,6 @@ sops -d \
     --output  values.yaml \
     ../../secrets/gitea-values.yaml
 
-helm upgrade --install gitea --namespace dev . --values values.yaml
+helm upgrade --install gitea --namespace apps . --values values.yaml
 
 rm -rf values.yaml

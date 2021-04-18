@@ -1,4 +1,4 @@
 #!/bin/bash
-sops -d ../../secrets/kibana-secret.yaml > 00-kibana-auth.yaml
+./decrypt
 kubectl apply -f .
 rm -rf 00-kibana-auth.yaml

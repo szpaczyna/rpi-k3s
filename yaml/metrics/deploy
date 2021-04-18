@@ -1,6 +1,7 @@
 #!/bin/bash
-echo 'Creating namespace'
-kubectl apply -f 00-namespace.yaml
+#echo 'Creating namespace'
+#kubectl apply -f 00-namespace.yaml
+./decrypt
 
 echo 'Installing prometheus and node_exporter'
 kubectl apply -f prometheus

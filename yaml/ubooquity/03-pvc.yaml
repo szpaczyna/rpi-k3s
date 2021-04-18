@@ -12,14 +12,14 @@ spec:
     - "ReadWriteOnce"
   resources:
     requests:
-      storage: "1Gi"
-  storageClassName: local-path
+      storage: "300Mi"
+  storageClassName: longhorn
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ubooquity-books
+  name: ubooquity-data
   labels:
     app: ubooquity
     app.kubernetes.io/name: ubooquity
@@ -29,5 +29,5 @@ spec:
     - "ReadWriteOnce"
   resources:
     requests:
-      storage: "3Gi"
-  storageClassName: local-path
+      storage: "4Gi"
+  storageClassName: longhorn

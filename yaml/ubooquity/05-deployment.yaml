@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/instance: ubooquity
   annotations:
     backup.velero.io/backup-volumes: |
-        ubooquity-books
+        ubooquity-data
         ubooquity-config
 spec:
   replicas: 1
@@ -22,7 +22,6 @@ spec:
         app: ubooquity
     spec:
       serviceAccountName: ubooquity
-      securityContext: {}
       containers:
         - name: ubooquity
           image: "registry.shpaq.org/ubooquity:2.1.2"
@@ -44,28 +43,33 @@ spec:
               port: http
           resources:
             requests:
-              cpu: 500m
+              cpu: 250m
               memory: 256Mi
             limits:
-              cpu: 1000m
-              memory: 1000Mi
+              cpu: 500m
+              memory: 512Mi
           env:
             - { name: PUID, value: "1000" }
-            - { name: GUID, value: }
+            - { name: GUID, value: "911" }
             - { name: TZ, value: "Europe/Warsaw" }
-            - { name: MAXMEM, value: "1024" }
+            - { name: MAXMEM, value: "512" }
           volumeMounts:
-            - mountPath: /config
-              name: config
-            - mountPath: /books
-              name: books
-            - mountPath: /config/preferences.json
+            - name: config
+              mountPath: /config
+            - name: books
+              mountPath: /books
+            - name: configmap
+              mountPath: /config/preferences.json
               subPath: preferences.json
-              name: configmap
+      terminationGracePeriodSeconds: 15
+      securityContext: {}
+      #  fsGroup: 911
+      #  runAsNonRoot: true
+      #  runAsUser: 1000
       volumes:
         - name: books
           persistentVolumeClaim:
-            claimName: ubooquity-books
+            claimName: ubooquity-data
         - name: config
           persistentVolumeClaim:
             claimName: ubooquity-config
