@@ -11,4 +11,3 @@ spec:
     requests:
       storage: 2Gi
   storageClassName: longhorn
-  volumeName: ""

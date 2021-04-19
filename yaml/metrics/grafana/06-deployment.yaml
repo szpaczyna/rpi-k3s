@@ -22,17 +22,17 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh"]
           args: ["-c", "mkdir -p /var/lib/grafana/provisioning/{datasources,plugins,notifiers,dashboards}"]
-        volumeMounts:
-          - mountPath: /var/lib/grafana
-            name: grafana-data
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: grafana-data
         - name: "change-permissions"
           image: busybox:1.32.0
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh"]
           args: ["-c", "chown -R 472:472 /var/lib/grafana/provisioning"]
-        volumeMounts:
-          - mountPath: /var/lib/grafana
-            name: grafana-data
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: grafana-data
       containers:
       - env:
         - name: GF_INSTALL_PLUGINS
