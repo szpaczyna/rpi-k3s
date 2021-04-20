@@ -1,11 +1,12 @@
-
 <!--img src="assets/rpi.png" align="left" width="144px" height="144px"/-->      
+
 <img src="https://raspbernetes.github.io/img/logo.svg" align="left" width="144px"
 height="144px"/>
 
-
 ## rpi-k3s
+
 ### Home Cloud on Raspberry Pie(s)
+
 <br>
 <!--START_SECTION_PROFILE_VIEWS:readme-info-->
 
@@ -46,7 +47,7 @@ height="144px"/>
     -   [cert-manager](https://github.com/jetstack/cert-manager) - Automated letsencrypt broker
     -   [metallb](yaml/metallb) - Load-balancer for bare-metal with BGP
     -   [kubernetes-dashboard](yaml/kubernetes-dashboard) - Kubernetes Dashboard
-    -   [storage](yaml/storage) - local-path, nfs and samba for home users
+    -   [storage](yaml/storage) - local-path, nfs, samba and default longhorn
     -   [traefik](varia/traefik.yaml) - Traefik
     -   [coredns](varia/coredns.yaml) - CoreDNS
 
@@ -93,11 +94,11 @@ height="144px"/>
 
 ## TODO
 
-- [ ]  Automation
-- [x]  Logging
-- [ ]  Sealed secrets
-- [ ]  Wazuh (security stuff)
-- [ ]  Zalando postgres operator
+-   [ ]  Automation
+-   [x]  Logging
+-   [ ]  Sealed secrets
+-   [ ]  Wazuh (security stuff)
+-   [ ]  Zalando postgres operator
 
 * * *
 

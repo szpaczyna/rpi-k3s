@@ -2,23 +2,25 @@
 image:
   repository: kanboard/kanboard
   pullPolicy: IfNotPresent
-  tag: "v1.2.18"
+  tag: "v1.2.19"
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 kanboard:
   #databaseUrl: postgresql://user:pass@address:5432/name
-  debug: false
+  debug: true
   # apiAuthenticationToken: custom-token
   plugin_installer: true
   # Supply a custom config by providing the config map name here
-  # customConfig: kanboard-custom
+  customConfig: kanboard-config
 persistence:
   enabled: true
-  size: 2G
+  size: 3G
   accessMode: ReadWriteOnce
-  storageClass: "local-path"
+  storageClass: "longhorn"
+  annotations:                                                                                                                                    
+    helm.sh/resource-policy: keep     
 service:
   type: ClusterIP
   port: 80
@@ -53,7 +55,7 @@ securityContext: {}
 #  runAsUser: 2000
 resources:
   limits:
-   cpu: 1000m
+   cpu: 500m
    memory: 250Mi
   requests:
    cpu: 100m

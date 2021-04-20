@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "kanboard.fullname" . }}-config
+  labels:
+    {{- include "kanboard.labels" . | nindent 4 }}
+data:
+  config.php: |
+    <?php
+
+    define('DEBUG', true);
+    define('PLUGIN_INSTALLER', true);
+    defined('ENABLE_URL_REWRITE') or define('ENABLE_URL_REWRITE', true);
+    defined('LOG_DRIVER') or define('LOG_DRIVER', 'file');
+    define('LOG_FILE', '/var/www/app/data/debug.log');

@@ -1,3 +1,4 @@
+---
 certManagerDeployment:
   deployment:
     replicaCount: 1
@@ -16,10 +17,10 @@ certManagerDeployment:
     securityContext: {}
     resources:
       requests:
-        cpu: 100m
+        cpu: 50m
         memory: 64Mi
       limits:
-        cpu: 300m
+        cpu: 150m
         memory: 128Mi
     nodeSelector:
       kubernetes.io/role: worker
