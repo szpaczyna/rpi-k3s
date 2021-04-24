@@ -435,7 +435,7 @@ data:
     ; Issue indexer storage path, available when ISSUE_INDEXER_TYPE is bleve
     ISSUE_INDEXER_PATH = indexers/issues.bleve
     ; Issue indexer queue, currently support: channel, levelqueue or redis, default is levelqueue
-    ISSUE_INDEXER_QUEUE_TYPE = levelqueue
+    ISSUE_INDEXER_QUEUE_TYPE = redis
     ; When ISSUE_INDEXER_QUEUE_TYPE is levelqueue, this will be the queue will be saved path,
     ; default is indexers/issues.queue
     ISSUE_INDEXER_QUEUE_DIR = indexers/issues.queue
@@ -701,12 +701,12 @@ data:
     ; if the cache enabled
     ENABLED = true
     ; Either "memory", "redis", or "memcache", default is "memory"
-    ADAPTER = memcache
+    ADAPTER = redis
     ; For "memory" only, GC interval in seconds, default is 60
     INTERVAL = 60
     ; For "redis" and "memcache", connection host address
     ;redis: network=tcp,addr=:6379,password=macaron,db=0,pool_size=100,idle_timeout=180
-    HOST = 127.0.0.1:11211
+    HOST = 127.0.0.1:6379
     ; Time to keep items in cache if not used, default is 16 hours.
     ; Setting it to 0 disables caching
     ITEM_TTL = 16h

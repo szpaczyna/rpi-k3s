@@ -1,6 +1,3 @@
-{{/*
-Create helm partial for gitea server
-*/}}
 {{- define "init" }}
 - name: init
   image: {{ .Values.images.gitea }}
@@ -13,7 +10,11 @@ Create helm partial for gitea server
         key: dbPassword
   - name: SCRIPT
     value: &script |-
-      mkdir -p /datatmp/{attachments,avatars,git,gitea,lfs,queues,repo-avatars,sessions,ssh}
+      for f in attachments avatars git gitea lfs queues repo-avatars sessions ssh;
+        do mkdir -p /datatmp/$f;
+        done
+      mkdir -p /datatmp/gitea/conf/
+      chown git:git /datatmp/* -R
       if [ ! -f /datatmp/gitea/conf/app.ini ]; then
         sed "s/POSTGRES_PASSWORD/${POSTGRES_PASSWORD}/g" < /etc/gitea/app.ini > /datatmp/gitea/conf/app.ini
       fi
@@ -23,4 +24,4 @@ Create helm partial for gitea server
     mountPath: /datatmp
   - name: gitea-config
     mountPath: /etc/gitea
-{}{- end }}
+{{- end }}

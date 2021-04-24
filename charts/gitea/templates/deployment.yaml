@@ -27,7 +27,7 @@ spec:
       {{ include "postgres" . | indent 6 }}
       {{- end -}}
       {{ include "gitea" . | indent 6 }}
-      {{ include "memcached" . | indent 6 }}
+      {{ include "redis" . | indent 6 }}
       initContainers:
       {{ include "init" . | indent 6 }}
       {{ include "initPostgres" . | indent 6 }}
