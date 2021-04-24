@@ -8,9 +8,7 @@ metadata:
     app.kubernetes.io/name: ubooquity
     app.kubernetes.io/instance: ubooquity
   annotations:
-    backup.velero.io/backup-volumes: |
-        ubooquity-data
-        ubooquity-config
+    backup.velero.io/backup-volumes: ubooquity-config
 spec:
   replicas: 1
   selector:
@@ -25,7 +23,7 @@ spec:
       containers:
         - name: ubooquity
           image: "registry.shpaq.org/ubooquity:2.1.2"
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               protocol: TCP
@@ -63,13 +61,13 @@ spec:
               subPath: preferences.json
       terminationGracePeriodSeconds: 15
       securityContext: {}
-      #  fsGroup: 911
+      #  fsGroup: 1000
       #  runAsNonRoot: true
-      #  runAsUser: 1000
+      #  runAsUser: 911
       volumes:
         - name: books
-          persistentVolumeClaim:
-            claimName: ubooquity-data
+          hostPath:
+            path: /data/nfs/books
         - name: config
           persistentVolumeClaim:
             claimName: ubooquity-config
