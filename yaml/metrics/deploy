@@ -1,6 +1,4 @@
 #!/bin/bash
-#echo 'Creating namespace'
-#kubectl apply -f 00-namespace.yaml
 ./decrypt
 
 echo 'Installing prometheus and node_exporter'
@@ -8,3 +6,5 @@ kubectl apply -f prometheus
 
 echo 'Installing grafana'
 kubectl apply -f grafana
+
+rm -rf prometheus/15-auth.yaml

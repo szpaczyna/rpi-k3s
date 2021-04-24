@@ -22,10 +22,10 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                - key: kubernetes.io/os
+                - key: kubernetes.io/role
                   operator: In
                   values:
-                  - linux
+                  - worker
       serviceAccountName: prometheus
       initContainers:
         - name: chown
