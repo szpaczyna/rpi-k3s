@@ -1,4 +1,5 @@
 #!/bin/bash
+kubens logging
 ./decrypt
 kubectl apply -f .
 rm -rf 00-kibana-auth.yaml
