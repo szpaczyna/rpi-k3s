@@ -6,7 +6,7 @@ metadata:
   namespace: longhorn-system
 data:
   default-setting.yaml: |-
-    backup-target: s3://rpi-k3s-longhorn-backup@eu-central-1/
+    backup-target: s3://rpi-k3s-shpaq-backup@eu-central-1/
     backup-target-credential-secret: longhorn-s3-secret
     allow-recurring-job-while-volume-detached:
     create-default-disk-labeled-nodes:
@@ -36,3 +36,7 @@ data:
     system-managed-pods-image-pull-policy:
     allow-volume-creation-with-degraded-availability: false
     auto-cleanup-system-generated-snapshot:
+    concurrent-automatic-engine-upgrade-per-node-limit:
+    backing-image-cleanup-wait-interval:
+    guaranteed-engine-manager-cpu:
+    guaranteed-replica-manager-cpu:
