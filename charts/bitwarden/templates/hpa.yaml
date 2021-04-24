@@ -3,7 +3,7 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "bitwarden.fullname" . }}-cpu
+  name: {{ include "bitwarden.fullname" . }}-memory
   labels:
     app.kubernetes.io/name: {{ include "bitwarden.name" . }}
     helm.sh/chart: {{ include "bitwarden.chart" . }}
@@ -27,7 +27,7 @@ spec:
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "bitwarden.fullname" . }}-memory
+  name: {{ include "bitwarden.fullname" . }}-cpu
   labels:
     app.kubernetes.io/name: {{ include "bitwarden.name" . }}
     helm.sh/chart: {{ include "bitwarden.chart" . }}
