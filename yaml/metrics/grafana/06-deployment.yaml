@@ -21,15 +21,7 @@ spec:
           image: busybox:1.32.0
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh"]
-          args: ["-c", "mkdir -p /var/lib/grafana/provisioning/{datasources,plugins,notifiers,dashboards}"]
-          volumeMounts:
-            - mountPath: /var/lib/grafana
-              name: grafana-data
-        - name: "change-permissions"
-          image: busybox:1.32.0
-          imagePullPolicy: IfNotPresent
-          command: ["/bin/sh"]
-          args: ["-c", "chown -R 472:472 /var/lib/grafana/provisioning"]
+          args: ["-c", "for f in datasources plugins notifiers dashboards; do mkdir -p /var/lib/grafana/provisioning/$f; done"]
           volumeMounts:
             - mountPath: /var/lib/grafana
               name: grafana-data
