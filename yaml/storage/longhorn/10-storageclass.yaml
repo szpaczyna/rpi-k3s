@@ -15,7 +15,7 @@ data:
     reclaimPolicy: Delete
     volumeBindingMode: Immediate
     parameters:
-      numberOfReplicas: "2"
+      numberOfReplicas: "1"
       staleReplicaTimeout: "2880"
       fromBackup: ""
     #  backingImage: "bi-test"

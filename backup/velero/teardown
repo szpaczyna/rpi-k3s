@@ -1,4 +1,5 @@
 #!/bin/bash
+kns velero
 kubectl delete clusterrolebinding/velero --force
 kubectl delete crds -l component=velero --force
 kubectl delete deployments.apps minio --force

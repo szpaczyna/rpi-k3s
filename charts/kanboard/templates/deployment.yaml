@@ -63,14 +63,14 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /login
               port: http
             timeoutSeconds: 180
             periodSeconds: 300
             initialDelaySeconds: 30
           readinessProbe:
             httpGet:
-              path: /
+              path: /login
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
