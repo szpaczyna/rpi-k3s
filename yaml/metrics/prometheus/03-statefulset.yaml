@@ -18,14 +18,15 @@ spec:
         k8s-app: prometheus
     spec:
       affinity:
-        nodeAffinity:
+        podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                - key: kubernetes.io/role
+          - labelSelector:
+              matchExpressions:
+                - key: "app"
                   operator: In
                   values:
-                  - worker
+                  - prometheus
+            topologyKey: "kubernetes.io/hostname"
       serviceAccountName: prometheus
       initContainers:
         - name: chown
