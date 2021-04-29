@@ -46,13 +46,13 @@ spec:
           - name: KUBELET_ROOT_DIR
             value: /var/lib/kubelet
           - name: CSI_ATTACHER_REPLICA_COUNT
-            value: "2"
+            value: "1"
           - name: CSI_PROVISIONER_REPLICA_COUNT
-            value: "2"
+            value: "1"
           - name: CSI_RESIZER_REPLICA_COUNT
-            value: "2"
+            value: "1"
           - name: CSI_SNAPSHOTTER_REPLICA_COUNT
-            value: "2"
+            value: "1"
       serviceAccountName: longhorn-sa
       securityContext:
         runAsUser: 0
