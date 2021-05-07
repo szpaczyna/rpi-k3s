@@ -116,8 +116,8 @@ spec:
           name: grafana-config
           readOnly: false
       nodeSelector:
-        kubernetes.io/os: linux
         kubernetes.io/role: worker
+        disktype: internal
       securityContext:
         fsGroup: 472
         runAsNonRoot: true

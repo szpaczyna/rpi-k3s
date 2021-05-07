@@ -1,52 +1,4 @@
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  # This service only exists to create DNS entries for each pod in the stateful
-  # set such that they can resolve each other's IP addresses. It does not
-  # create a load-balanced ClusterIP and should not be used directly by clients
-  # in most circumstances.
-  name: cockroachdb
-  labels:
-    app: cockroachdb
-  annotations:
-    # Use this annotation in addition to the actual publishNotReadyAddresses
-    # field below because the annotation will stop being respected soon but the
-    # field is broken in some versions of Kubernetes:
-    # https://github.com/kubernetes/kubernetes/issues/58662
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
-    # Enable automatic monitoring of all instances when Prometheus is running in the cluster.
-    prometheus.io/scrape: "true"
-    prometheus.io/path: "_status/vars"
-    prometheus.io/port: "8080"
-spec:
-  ports:
-  - port: 26257
-    targetPort: 26257
-    name: grpc
-  - port: 8080
-    targetPort: 8080
-    name: http
-  # We want all pods in the StatefulSet to have their addresses published for
-  # the sake of the other CockroachDB pods even before they're ready, since they
-  # have to be able to talk to each other in order to become ready.
-  publishNotReadyAddresses: true
-  type: ClusterIP
-  selector:
-    app: cockroachdb
----
-apiVersion: policy/v1beta1
-kind: PodDisruptionBudget
-metadata:
-  name: cockroachdb-budget
-  labels:
-    app: cockroachdb
-spec:
-  selector:
-    matchLabels:
-      app: cockroachdb
-  maxUnavailable: 1
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -76,18 +28,14 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
       - name: cockroachdb
-        image: registry.shpaq.org/cockroachdb:v20.2.5
+        image: registry.shpaq.org/cockroachdb:v20.2.8
         imagePullPolicy: IfNotPresent
-        # TODO: Change these to appropriate values for the hardware that you're running. You can see
-        # the resources that can be allocated on each of your Kubernetes nodes by running:
-        #   kubectl describe nodes
-        # Note that requests and limits should have identical values.
         resources:
           requests:
             cpu: "1"
             memory: "512Mi"
           limits:
-            cpu: "4"
+            cpu: "2"
             memory: "1Gi"
         ports:
         - containerPort: 26257
@@ -152,7 +100,7 @@ spec:
   - metadata:
       name: datadir
     spec:
-      storageClassName: "local-path"
+      storageClassName: "longhorn"
       accessModes:
         - "ReadWriteOnce"
       resources:

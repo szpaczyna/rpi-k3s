@@ -125,7 +125,7 @@ podDisruptionBudget:
 nodeSelector:
   disktype: external
 #  kubernetes.io/os: linux
-#  kubernetes.io/role: worker
+  kubernetes.io/role: worker
 
 affinity: {}
 

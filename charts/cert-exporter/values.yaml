@@ -24,6 +24,7 @@ certManagerDeployment:
         memory: 128Mi
     nodeSelector:
       kubernetes.io/role: worker
+      disktype: internal
     tolerations: []
     affinity: {}
   service:
@@ -54,7 +55,7 @@ rbac:
     create: true
 dashboards:
   additionalLabels:
-    grafana-dashboard: "1"
+    grafana-dashboard: "0"
   certManagerDashboard:
     create: false
   namespace: monitoring

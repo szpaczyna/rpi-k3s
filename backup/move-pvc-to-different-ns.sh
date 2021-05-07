@@ -23,6 +23,3 @@ PVCUID=$( kubectl get -n "$NAMESPACE2" pvc "$PVC" -o custom-columns=UID:.metadat
 kubectl patch pv "$PV" -p '{"spec":{"claimRef":{"uid":"'$PVCUID'","name":null}}}'
 kubectl patch pv "$PV" -p '{"spec":{"persistentVolumeReclaimPolicy":"Delete"}}'
 kubectl get pv $PV -o yaml | grep -e Reclaim -e namespace
-
-
-

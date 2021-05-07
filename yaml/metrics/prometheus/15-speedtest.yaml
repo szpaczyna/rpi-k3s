@@ -51,4 +51,4 @@ spec:
         - effect: NoSchedule
           operator: Exists
       nodeSelector:
-        kubernetes.io/hostname: rpi-k3s-worker1
+        disktype: internal
