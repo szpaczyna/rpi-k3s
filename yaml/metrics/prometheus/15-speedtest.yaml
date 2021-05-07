@@ -52,3 +52,4 @@ spec:
           operator: Exists
       nodeSelector:
         disktype: internal
+        kubernetes.io/hostname: rpi-k3s-worker2

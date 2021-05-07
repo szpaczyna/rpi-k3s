@@ -1,0 +1,3 @@
+#!/bin/bash
+
+helm upgrade --install morphine bitnami/postgresql -n apps -f values.yaml

@@ -15,7 +15,7 @@ data:
         script: [speedtest]
       static_configs:
         - targets:
-          - 10.0.0.11:9469
+          - 10.0.0.12:9469
       scrape_interval: 29m
       scrape_timeout: 90s
 
