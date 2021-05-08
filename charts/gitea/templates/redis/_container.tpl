@@ -1,7 +1,10 @@
 {{- define "redis" }}
 - name: redis
-  image: {{ .Values.images.redis }}
-  imagePullPolicy: {{ .Values.images.imagePullPolicy }}
+  image: {{ .Values.redis.image }}
+  imagePullPolicy: {{ .Values.image.pullPolicy }}
+  command:
+    - redis-server
+    - '--save "" --appendonly no'
   ports:
   - name: redis
     containerPort: 6379
@@ -18,5 +21,5 @@
   securityContext:
     runAsUser: 1000
   resources:
-{{ toYaml .Values.resources.redis | indent 10 }}
+{{ toYaml .Values.redis.resources | indent 4 }}
 {{- end }}loglevel  
