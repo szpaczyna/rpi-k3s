@@ -10,4 +10,3 @@ spec:
     matchLabels:
       app: cockroachdb
   maxUnavailable: 1
-

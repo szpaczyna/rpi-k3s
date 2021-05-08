@@ -67,7 +67,7 @@ height="144px"/>
 
 > <https://github.com/szpaczyna/docker>
 
-#### Images
+#### Images for arm64
 
 -   [gitlab-ce](https://hub.docker.com/repository/docker/szpaczyn/gitlab-ce)
 -   [elastic-hq](https://hub.docker.com/repository/docker/szpaczyn/elastic-hq)
@@ -82,9 +82,11 @@ height="144px"/>
 ## Helm
 
 > <https://szpaczyna.github.io/rpi-k3s>
-
-    helm repo add shpaq https://szpaczyna.github.io/rpi-k3s
-    helm repo update
+>
+> ```sh
+>     helm repo add shpaq https://szpaczyna.github.io/rpi-k3s
+>     helm repo update
+> ```
 
 <!--START_SECTION_LINES_OF_CODE:readme-info-->
 
@@ -98,7 +100,8 @@ height="144px"/>
 -   [x]  Logging
 -   [ ]  Sealed secrets
 -   [ ]  Wazuh (security stuff)
--   [ ]  Zalando postgres operator
+-   [x]  Database for apps
+-   [ ]  Rewrite helm charts with init containers for database creation
 
 * * *
 

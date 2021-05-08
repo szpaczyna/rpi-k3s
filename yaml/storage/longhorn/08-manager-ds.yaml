@@ -66,7 +66,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        # Should be: mount path of the volume longhorn-default-setting + the key of the configmap data in 04-default-setting.yaml
         - name: DEFAULT_SETTING_PATH
           value: /var/lib/longhorn-setting/default-setting.yaml
       volumes:
@@ -82,17 +81,6 @@ spec:
       - name: longhorn-default-setting
         configMap:
           name: longhorn-default-setting
-#      imagePullSecrets:
-#      - name: ""
-#      priorityClassName:
-#      tolerations:
-#      - key: "key"
-#        operator: "Equal"
-#        value: "value"
-#        effect: "NoSchedule"
-#      nodeSelector:
-#        label-key1: "label-value1"
-#        label-key2: "label-value2"
       serviceAccountName: longhorn-sa
   updateStrategy:
     rollingUpdate:
