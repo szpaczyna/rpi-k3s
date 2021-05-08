@@ -6,7 +6,7 @@ kubectl run morphine-postgresql-client \
     --namespace apps \
     --image docker.io/postgres:13 \
     --env="PGPASSWORD=$POSTGRES_PASSWORD" \
-    --command -- \
-    psql --host morphine-postgresql \
+    --command \ 
+    -- psql --host morphine-postgresql \
     -U postgres -p 5432 \
     -d $1

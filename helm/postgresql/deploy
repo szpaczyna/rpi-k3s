@@ -1,3 +1,8 @@
 #!/bin/bash
+sops -d \
+    --output  values.yaml \
+    ../../secrets/postgresql-values.yaml
 
 helm upgrade --install morphine bitnami/postgresql -n apps -f values.yaml
+
+rm -rf values.yaml
