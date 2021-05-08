@@ -64,6 +64,68 @@ All notable changes to this project will be documented in this file. See [standa
 * updated secrets ([95e0c7d](https://github.com/szpaczyna/rpi-k3s/commits/95e0c7d4bc7aeaa591efd8a84730e7ccc3a01a09))
 * vpn adjustements ([afbce87](https://github.com/szpaczyna/rpi-k3s/commits/afbce87734588206a89ae67d29c0b4f4f9710f16))
 
+### [0.0.8](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.6...v0.0.8) (2021-05-08)
+
+
+### Features
+
+* ansible usercfg.txt update, kanboard/bitwarden charts updated ([0d9a98f](https://github.com/szpaczyna/rpi-k3s/commits/0d9a98f67d3d137ff95ff546ba9c5619b77e8a18))
+* bitwarden migrated to external postgres, readme updated with obfuscated values ([d053355](https://github.com/szpaczyna/rpi-k3s/commits/d0533552f9b850a2ce316a470cd05639df23c5ea))
+* cockroach version bump and remove ingress in favour of service ([eb0462f](https://github.com/szpaczyna/rpi-k3s/commits/eb0462f8e681df8535da5662ae1cfcdb0b1ddb78))
+* completly rewritten gitea uses now statefulset, configuration is also simpler ([8625830](https://github.com/szpaczyna/rpi-k3s/commits/8625830c6f95796e455d3a307fb70478e5e4b829))
+* downscale csi-* replicas to 1 ([8da87f4](https://github.com/szpaczyna/rpi-k3s/commits/8da87f4286e7d7c2176b9134cea190cf81430a22))
+* dsada ([97bb0cd](https://github.com/szpaczyna/rpi-k3s/commits/97bb0cdcd1aeee0cd32f27c71248705420755ded))
+* filebeat version bump, changed storage provider ([bf44257](https://github.com/szpaczyna/rpi-k3s/commits/bf44257876c04c5f65ebafbea27f7bc41826983e))
+* gitea cache changed to redis, changes in init containers (missing directories) ([03c113e](https://github.com/szpaczyna/rpi-k3s/commits/03c113edac412c450bb3f0a5c33935dc399668ee))
+* grafana and bitwarden version bump ([dbd9942](https://github.com/szpaczyna/rpi-k3s/commits/dbd9942296813110f58a35e8e151191a75888eb0))
+* grafana version bump ([22ae977](https://github.com/szpaczyna/rpi-k3s/commits/22ae977af016b2ce093f51e9ef37e8a6402fc0d2))
+* grafana/prometheus versions bump, changed storage provider and small update on deploy/teardown scripts ([40c12ac](https://github.com/szpaczyna/rpi-k3s/commits/40c12acf9b16da75fc5086be8921847aaa96f832))
+* kubernetes dashboard splitted ([8935ef1](https://github.com/szpaczyna/rpi-k3s/commits/8935ef1dc54d13ac96f6c9579a54a9bb5b6eda59))
+* linter on scripts ([5ef8b04](https://github.com/szpaczyna/rpi-k3s/commits/5ef8b04d0b8f17fb14768c3c33c8d447ab810c4f))
+* logstash polishing ([bd33316](https://github.com/szpaczyna/rpi-k3s/commits/bd33316f8236e6ee2ebb9add0f573c6e97506d1d))
+* logstash polishing v2 ([933581b](https://github.com/szpaczyna/rpi-k3s/commits/933581b40a59daa6708bbe4f8abcc42379fbab53))
+* longhorn version bump ([8ad2917](https://github.com/szpaczyna/rpi-k3s/commits/8ad2917345a12024774686aa433b81c85a3d31f2))
+* memcached update… again ([56e9c0d](https://github.com/szpaczyna/rpi-k3s/commits/56e9c0ddcb1450449ec96357b9d70edf441fc6c9))
+* migrated kanboard and bitwarden to external db provided by postgres-operator from zalando ([e874a8d](https://github.com/szpaczyna/rpi-k3s/commits/e874a8d4aa0a3cac62b0092e1aae5e7d1279a07e))
+* migrated kanboard to postgresql ([c4395e0](https://github.com/szpaczyna/rpi-k3s/commits/c4395e0b7093d4abd14878c6fcb717d0d9cbff3d))
+* move some stuff to longhorn storageclass ([053501d](https://github.com/szpaczyna/rpi-k3s/commits/053501dd6979e16431bb903259f7dae4cc8d4c48))
+* nginx version bump and robots, linted yamls ([5baf997](https://github.com/szpaczyna/rpi-k3s/commits/5baf997a3e19069fae197754a29963a233b0d213))
+* own samba image ([bebbeac](https://github.com/szpaczyna/rpi-k3s/commits/bebbeac395333f191db83c883b23f6a444e2a6b9))
+* personal website version bump, added change namespace to deploy/teardown scripts ([7e45d21](https://github.com/szpaczyna/rpi-k3s/commits/7e45d217251554ada911b13ab3928345ec74ee5f))
+* postgres instance ([acb076f](https://github.com/szpaczyna/rpi-k3s/commits/acb076f395adb1f0f82c07974c84f333aa08ea4d))
+* remove docker as it was moved to different repo ([6b6633e](https://github.com/szpaczyna/rpi-k3s/commits/6b6633eb40dea54c8f9a93612fe010ca2933a31c))
+* remove ipv6 from motd since i'm resigning from this ([ef3218f](https://github.com/szpaczyna/rpi-k3s/commits/ef3218f26d55807aade8ef49d8453ab440217832))
+* remove kanboard hpa ([6818044](https://github.com/szpaczyna/rpi-k3s/commits/6818044a02ce97fdafb265b9ae636f7e3f2590e4))
+* removed commitizen ([4a86b4c](https://github.com/szpaczyna/rpi-k3s/commits/4a86b4c557972b4929a61165d3e58fed0b5116c7))
+* removed ubooquity hpa, changed storage provider and real books storage ([4d536e3](https://github.com/szpaczyna/rpi-k3s/commits/4d536e39f32c80864e8ca24664c79fd845978d09))
+* second logstsh pipeline for sshd ([b58e86c](https://github.com/szpaczyna/rpi-k3s/commits/b58e86c45a7ba02a99609752fb08184de7e97862))
+* some repo order and fix ansible system role ([268ab2b](https://github.com/szpaczyna/rpi-k3s/commits/268ab2b41a679c06beca927bfdfbd75a1c564276))
+* split big yamls into multiple ([632635b](https://github.com/szpaczyna/rpi-k3s/commits/632635b68098cd0e60f2eb911123537f8adad375))
+* system upgrade controller ([2319bcb](https://github.com/szpaczyna/rpi-k3s/commits/2319bcbe33d95839f5a017a01adfad4b6b075c93))
+* system upgrade controller after linting ([83663a7](https://github.com/szpaczyna/rpi-k3s/commits/83663a7d577e10f81b228f57d5f24721a804e413))
+* to many changes to describe, my bad ([4a5b14b](https://github.com/szpaczyna/rpi-k3s/commits/4a5b14b2b0a696640df1e9b427c0f9c6a70b9435))
+* unifi poller version bump and encrypted secret ([d2a02c0](https://github.com/szpaczyna/rpi-k3s/commits/d2a02c007949294e11a0eab4fbcb0fc44ae79d71))
+* updated npm packages ([aaad245](https://github.com/szpaczyna/rpi-k3s/commits/aaad245e7c77942ed7db509055726fea0cd0b0a1))
+* updated readme and site, added thanks ([ef60efe](https://github.com/szpaczyna/rpi-k3s/commits/ef60efeccc0fdb17da54a3508378d08288b0dcab))
+* velero, letsencrypt, nginx, unifi poller version bumps ([0e752d3](https://github.com/szpaczyna/rpi-k3s/commits/0e752d3e961891286ff24c466421ef1b067d2fff))
+* velero, letsencrypt, nginx, unifi poller version bumps ([d3ecc23](https://github.com/szpaczyna/rpi-k3s/commits/d3ecc235e51cfc239f834dc0fe9076dfab455a5f))
+
+
+### Bug Fixes
+
+* bitwarden hpa and pvc ([5e56afa](https://github.com/szpaczyna/rpi-k3s/commits/5e56afaacaedfc8cccc4aa87fe9efffd408684e7))
+* gitea init containers and kanboard configuration ([2ead9e7](https://github.com/szpaczyna/rpi-k3s/commits/2ead9e7cafb8701ae240c905e7bf61d09f809382))
+* linter again, damn ([3bc549b](https://github.com/szpaczyna/rpi-k3s/commits/3bc549b4e69076f0e48cb3790f985059179126b9))
+* linter again, damn ([0d6d8c5](https://github.com/szpaczyna/rpi-k3s/commits/0d6d8c57b8cd24344896cab470a0a23b52207947))
+* linting (again…) ([06e1d14](https://github.com/szpaczyna/rpi-k3s/commits/06e1d1497c9ebde74e7140d008ea80ee64444241))
+* playing with logstash, again… ([0a14607](https://github.com/szpaczyna/rpi-k3s/commits/0a14607d1a4705c6c348573dc7722d1cc32083a6))
+* prometheus node affinity/topology ([90d23f6](https://github.com/szpaczyna/rpi-k3s/commits/90d23f6ac3c12b4660d1941a4da5e12ad2423898))
+* reorder local-path path ([5d11566](https://github.com/szpaczyna/rpi-k3s/commits/5d11566e63359dcc56d314521ed56adc9ddd608c))
+* some linting stuff and readmes ([eac44a2](https://github.com/szpaczyna/rpi-k3s/commits/eac44a2f1a2a5ecb370b503eeab3fd26b3a50d05))
+* typo in logstash configmap ([95cb559](https://github.com/szpaczyna/rpi-k3s/commits/95cb559f07397d9638a6c5bc96af97a5287ea485))
+* updated secrets ([95e0c7d](https://github.com/szpaczyna/rpi-k3s/commits/95e0c7d4bc7aeaa591efd8a84730e7ccc3a01a09))
+* vpn adjustements ([afbce87](https://github.com/szpaczyna/rpi-k3s/commits/afbce87734588206a89ae67d29c0b4f4f9710f16))
+
 ### [0.0.6](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.5...v0.0.6) (2021-04-02)
 
 
