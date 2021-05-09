@@ -1,3 +1,4 @@
+---
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -5,7 +6,7 @@ metadata:
   namespace: velero
   labels:
     component: velero
-    name: restic 
+    name: restic
   annotations:
     seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
 spec:

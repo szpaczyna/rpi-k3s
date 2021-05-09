@@ -2,7 +2,7 @@
 REGION=eu-central-1
 BUCKET=rpi-k3s-shpaq-backup
 
-sops -d ../../secrets/aws-credentials > credentials 
+sops -d ../../secrets/aws-credentials > credentials
 
 velero install \
     --provider aws \

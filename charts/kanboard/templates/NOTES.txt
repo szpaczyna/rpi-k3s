@@ -3,4 +3,3 @@
   kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:80
 
   Visit https://{{ include "kanboard.fullname" . }}.shpaq.org to use your application
-

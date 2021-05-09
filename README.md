@@ -1,4 +1,4 @@
-<!--img src="assets/rpi.png" align="left" width="144px" height="144px"/-->      
+<!--img src="assets/rpi.png" align="left" width="144px" height="144px"/-->
 
 <img src="https://raspbernetes.github.io/img/logo.svg" align="left" width="144px"
 height="144px"/>

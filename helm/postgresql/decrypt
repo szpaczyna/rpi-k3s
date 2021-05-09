@@ -2,4 +2,3 @@
 sops -d \
     --output  values.yaml \
     ../../secrets/postgresql-values.yaml
-

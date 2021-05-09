@@ -61,11 +61,11 @@ set -o pipefail
 
 ## check if destination dir exists, create if not
 [ -d $DEST ] && mkdir -p "$DEST"
-  
+
 ## Start backing up databases and check if today's backup already exists
 STARTTIME=$(date +%s)
 for db in ${DBS[@]};
-do  
+do
 
 skipdb=-1
 if  [ "$NOBKDB" != "" ];
@@ -78,7 +78,7 @@ fi
 
     GZ_FILENAME=$HOST-$db-$DATE.sql.gz
 
-    if [[ -f ${DEST}${GZ_FILENAME} ]]; then 
+    if [[ -f ${DEST}${GZ_FILENAME} ]]; then
     echo "Backup file ${DEST}$GZ_FILENAME already exists for today. Exiting."
     gen_email $SEND_EMAIL $TMP_MSG_FILE 1 "Error: Backup files ${DEST}$GZ_FILENAME: already exists for today."
     elif  [ "$skipdb" == "-1" ] ; then
@@ -117,7 +117,7 @@ echo ""
 ## Make sure we have a minimum number of files.  If we don't than e-mail.
 DATABASE_COUNT=$(mysql -u root -e 'show databases;' | egrep -v '^Database$|hold$' | grep -v 'performance_schema\|information_schema'| wc -l)
 BACKUP_COUNT=$(find ${DEST} -maxdepth 1 -iname '*.gz' | wc -l)
-if [ "$BACKUP_COUNT" -eq 0 ] 
+if [ "$BACKUP_COUNT" -eq 0 ]
 then
 NOTIFY_MESSAGE="No backup files exist in $DEST. total files: $BACKUP_COUNT  ERROR!!!!"
 gen_email $SEND_EMAIL $TMP_MSG_FILE 1 "$NOTIFY_MESSAGE"
@@ -164,20 +164,20 @@ echo ""
 for i in ${DEST}*.sql.gz
 do
     ## Check to make sure we have a backup from today. If we don't then e-mail
-    if [[ ! -f ${DEST}/${GZ_FILENAME} ]]; then 
+    if [[ ! -f ${DEST}/${GZ_FILENAME} ]]; then
         echo "Today's backup file, ${DEST}/${GZ_FILENAME}, not found.";
         NOTIFY_MESSAGE="Today's backup file, ${DEST}/${GZ_FILENAME}, not found.";
-        gen_email $SEND_EMAIL $TMP_MSG_FILE 1 "$NOTIFY_MESSAGE" 
+        gen_email $SEND_EMAIL $TMP_MSG_FILE 1 "$NOTIFY_MESSAGE"
     fi
 
     ## Make sure the backups has some reasonable size to it. If it doesn't then e-mail
     SIZE_BYTES=$(stat -c%s "${i}" )
     SIZE=$(( SIZE_BYTES + 512 / 1024 ))
-    
+
     if [[ ! $SIZE -gt $MIN_BACKUP ]]; then
         echo "Backup file: ${i} is smaller than the expected size.  Expecting > ${MIN_BACKUP} bit and got ${SIZE} bit";
         NOTIFY_MESSAGE="Backup file: ${i} is smaller than the expected size.  Expecting > ${MIN_BACKUP} bit and got ${SIZE} bit";
-        gen_email $SEND_EMAIL $TMP_MSG_FILE 1 "$NOTIFY_MESSAGE" 
+        gen_email $SEND_EMAIL $TMP_MSG_FILE 1 "$NOTIFY_MESSAGE"
     fi
 done
 
@@ -187,7 +187,7 @@ echo ""
 
 ## Disk space stats of backup file system
 if [ $SEND_EMAIL -eq 1 ]; then
-    $DF -h "$DEST" >> "$TMP_MSG_FILE"  
+    $DF -h "$DEST" >> "$TMP_MSG_FILE"
 fi
 $DF -h "$DEST"
 

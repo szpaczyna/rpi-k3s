@@ -3,4 +3,3 @@
 helm upgrade --install kanboard --namespace apps . --values values.yaml
 
 rm -rf values.yaml
-

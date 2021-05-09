@@ -22,4 +22,4 @@
     runAsUser: 1000
   resources:
 {{ toYaml .Values.redis.resources | indent 4 }}
-{{- end }}loglevel  
+{{- end }}loglevel

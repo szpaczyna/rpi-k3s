@@ -26,5 +26,5 @@ rules:
     indent-sequences: whatever
   hyphens:
     max-spaces-after: 1
-  key-duplicates: 
+  key-duplicates:
     level: warning
