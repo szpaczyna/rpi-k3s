@@ -4,8 +4,8 @@
   "description": "Szpacze Gniazdo k3s",
   "main": "index.js",
   "dependencies": {
-    "semantic-release": "^17.4.2",
-    "merge": ">=2.1.1"
+    "merge": ">=2.1.1",
+    "semantic-release": "^17.4.2"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0"
