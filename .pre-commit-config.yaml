@@ -9,6 +9,8 @@ repos:
   - id: check-merge-conflict
   - id: detect-private-key
   - id: end-of-file-fixer
+  - id: check-json
+  - id: check-symlinks
 - repo: https://github.com/adrienverge/yamllint.git
   rev: v1.26.1
   hooks:
@@ -16,10 +18,6 @@ repos:
     - -c
     - '/home/shpaq/git/rpi-k3s/.github/yamllint.config.yaml'
     id: yamllint
-- repo: https://gitlab.com/devopshq/gitlab-ci-linter
-  rev: v1.0.3
-  hooks:
-  - id: gitlab-ci-linter
 - repo: https://github.com/sirosen/fix-smartquotes
   rev: 0.2.0
   hooks:
