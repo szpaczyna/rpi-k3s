@@ -14,7 +14,7 @@ repos:
   hooks:
   - args:
     - -c
-    - .github/yamllint.config.yaml
+    - '/home/shpaq/git/rpi-k3s/.github/yamllint.config.yaml'
     id: yamllint
 - repo: https://gitlab.com/devopshq/gitlab-ci-linter
   rev: v1.0.3
@@ -24,7 +24,6 @@ repos:
   rev: 0.2.0
   hooks:
   - id: fix-smartquotes
-
 - repo: https://github.com/Lucas-C/pre-commit-hooks
   rev: v1.1.9
   hooks:

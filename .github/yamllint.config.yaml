@@ -4,6 +4,7 @@ ignore: |
   ansible/
   ignore/
   charts/
+  secrets/
   *-crds.yaml
   *.asc.yaml
 
