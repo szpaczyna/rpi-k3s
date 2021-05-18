@@ -31,7 +31,7 @@ spec:
           value: btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel,grafana-worldmap-panel,digrich-bubblechart-panel,jdbranham-diagram-panel,michaeldmoore-multistat-panel,novatec-sdg-panel,magnesium-wordcloud-panel,ayoungprogrammer-finance-datasource,
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/provisioning"
-        image: grafana/grafana:7.5.5
+        image: grafana/grafana:7.5.6
         name: grafana
         ports:
         - containerPort: 3000
@@ -70,17 +70,11 @@ spec:
         - mountPath: /grafana-dashboard-definitions/0/cluster-total
           name: grafana-dashboard-cluster-total
           readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/coredns-dashboard
-          name: grafana-dashboard-coredns-dashboard
-          readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/k8s-resources-cluster
-          name: grafana-dashboard-k8s-resources-cluster
+        - mountPath: /grafana-dashboard-definitions/0/k8s-resources-pod
+          name: grafana-dashboard-k8s-resources-pod
           readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/k8s-resources-namespace
           name: grafana-dashboard-k8s-resources-namespace
-          readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/k8s-resources-pod
-          name: grafana-dashboard-k8s-resources-pod
           readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/k8s-resources-workloads-namespace
           name: grafana-dashboard-k8s-resources-workloads-namespace
@@ -88,29 +82,8 @@ spec:
         - mountPath: /grafana-dashboard-definitions/0/namespace-by-pod
           name: grafana-dashboard-namespace-by-pod
           readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/node-cluster-rsrc-use
-          name: grafana-dashboard-node-cluster-rsrc-use
-          readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/node-rsrc-use
-          name: grafana-dashboard-node-rsrc-use
-          readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/nodes
-          name: grafana-dashboard-nodes
-          readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/pod-total
           name: grafana-dashboard-pod-total
-          readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/prometheus-dashboard
-          name: grafana-dashboard-prometheus-dashboard
-          readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/prometheus
-          name: grafana-dashboard-prometheus
-          readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/traefik-dashboard
-          name: grafana-dashboard-traefik-dashboard
-          readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/cert-manager
-          name: grafana-dashboard-cert-manager
           readOnly: false
         - mountPath: /etc/grafana
           name: grafana-config
@@ -137,12 +110,6 @@ spec:
           name: grafana-dashboard-cluster-total
         name: grafana-dashboard-cluster-total
       - configMap:
-          name: grafana-dashboard-coredns-dashboard
-        name: grafana-dashboard-coredns-dashboard
-      - configMap:
-          name: grafana-dashboard-k8s-resources-cluster
-        name: grafana-dashboard-k8s-resources-cluster
-      - configMap:
           name: grafana-dashboard-k8s-resources-namespace
         name: grafana-dashboard-k8s-resources-namespace
       - configMap:
@@ -155,38 +122,8 @@ spec:
           name: grafana-dashboard-namespace-by-pod
         name: grafana-dashboard-namespace-by-pod
       - configMap:
-          name: grafana-dashboard-node-cluster-rsrc-use
-        name: grafana-dashboard-node-cluster-rsrc-use
-      - configMap:
-          name: grafana-dashboard-node-rsrc-use
-        name: grafana-dashboard-node-rsrc-use
-      - configMap:
-          name: grafana-dashboard-nodes
-        name: grafana-dashboard-nodes
-      - configMap:
           name: grafana-dashboard-pod-total
         name: grafana-dashboard-pod-total
-      - configMap:
-          name: grafana-dashboard-prometheus-dashboard
-        name: grafana-dashboard-prometheus-dashboard
-      - configMap:
-          name: grafana-dashboard-prometheus
-        name: grafana-dashboard-prometheus
-      - configMap:
-          name: grafana-dashboard-proxy
-        name: grafana-dashboard-proxy
-      - configMap:
-          name: grafana-dashboard-scheduler
-        name: grafana-dashboard-scheduler
-      - configMap:
-          name: grafana-dashboard-statefulset
-        name: grafana-dashboard-statefulset
-      - configMap:
-          name: grafana-dashboard-traefik-dashboard
-        name: grafana-dashboard-traefik-dashboard
-      - configMap:
-          name: grafana-dashboard-cert-manager
-        name: grafana-dashboard-cert-manager
       - name: grafana-config
         secret:
           secretName: grafana-config
