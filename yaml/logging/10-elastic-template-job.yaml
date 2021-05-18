@@ -1,0 +1,19 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: elastic-template-job
+spec:
+  schedule: "*/2 * * * *"
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: elastic-template-job
+            image: curlimages/curl:7.72.0
+            command: ['sh', '-c', 'curl -H "Content-Type: application/json" -X PUT "http://elk-svc-elasticsearch:9200/_template/default"  -d "{\"template\":[\"*\"],\"index_patterns\":[\"*\"],\"order\":\"-1\",\"settings\":{\"number_of_shards\":\"2\",\"number_of_replicas\":\"0\"}}"']
+          restartPolicy: OnFailure
