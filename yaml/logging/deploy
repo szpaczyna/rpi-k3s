@@ -2,4 +2,4 @@
 kubens logging
 ./decrypt
 kubectl apply -f .
-rm -rf 00-kibana-auth.yaml
+rm -rf 04-kibana-auth.yaml

@@ -33,8 +33,7 @@ height="144px"/>
     -   [databases](yaml/db) - Mongo, Mysql, CockroachDB
     -   [squid](yaml/squid) - Squid Proxy Service
     -   [ubooquity](yaml/ubooquity) - Books Management
-    -   [unifi](yaml/unifi) - Unifi controller
-    -   [unifi poller](yaml/unifi-poller) - Unifi pollers for Prometheus
+    -   [unifi](yaml/unifi) - Unifi controller/prometheus poller
     -   [www](yaml/www) - Personal website
     -   [prometheus stack](yaml/metrics) - Prometheus/Grafana stack with some additional exporters
     -   [elk stack](yaml/elk) - Elasticsearch/Kibana/Logstash/Filebeat

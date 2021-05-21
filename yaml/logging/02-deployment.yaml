@@ -11,10 +11,18 @@ spec:
   selector:
     matchLabels:
       app: elk
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
   template:
     metadata:
       labels:
         app: elk
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9108"
     spec:
       initContainers:
         - name: "create-directory"
@@ -61,6 +69,35 @@ spec:
             requests:
               cpu: 0.1
               memory: 256Mi
+        - name: elasticsearch-exporter
+          command:
+          - /bin/elasticsearch_exporter
+          - -es.uri=http://elk-svc-elasticsearch:9200
+          - -es.timeout=60s
+          - -es.all=true
+          image: "carlosedp/elasticsearch-exporter:1.0.4rc1-arm64"
+          ports:
+          - name: metrics
+            containerPort: 9108
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 9108
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 25m
+              memory: 64Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9108
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
         - name: logstash
           image: registry.shpaq.org/logstash:v7.9.3
           imagePullPolicy: IfNotPresent
@@ -144,4 +181,7 @@ spec:
           name: logstash-config
       nodeSelector:
         kubernetes.io/role: worker
-        kubernetes.io/os: linux
+        disktype: external
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
