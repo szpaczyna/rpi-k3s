@@ -1,46 +1,54 @@
 {
   "annotations": {
-    "list": [{
-      "builtIn": 1,
-      "datasource": "-- Grafana --",
-      "enable": true,
-      "hide": true,
-      "iconColor": "rgba(0, 211, 255, 1)",
-      "name": "Annotations & Alerts",
-      "type": "dashboard"
-        }]
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
   },
   "editable": true,
   "gnetId": null,
   "graphTooltip": 1,
-  "id": 82,
-  "iteration": 1614873899702,
+  "id": 29,
+  "iteration": 1621578559752,
   "links": [],
-  "panels": [{
+  "panels": [
+    {
       "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-            ],
       "datasource": "$server",
-      "editable": true,
-      "error": false,
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "$$hashKey": "object:110",
+              "id": 0,
+              "op": "=",
+              "text": "N/A",
+              "type": 1,
+              "value": "null"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
         },
         "overrides": []
-      },
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
       },
       "gridPos": {
         "h": 4,
@@ -51,60 +59,39 @@
       "id": 8,
       "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [{
-          "$$hashKey": "object:107",
-          "name": "value to text",
-          "value": 1
-                },
-        {
-          "$$hashKey": "object:108",
-          "name": "range to text",
-          "value": 2
-                }
-            ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [{
-        "from": "null",
-        "text": "N/A",
-        "to": "null"
-            }],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
       },
-      "tableColumn": "",
-      "targets": [{
-        "expr": "sum(elasticsearch_cluster_health_number_of_nodes{cluster=~\"$cluster\"})/count(elasticsearch_cluster_health_number_of_nodes{cluster=~\"$cluster\"})",
-        "interval": "",
-        "intervalFactor": 2,
-        "legendFormat": "",
-        "metric": "elasticsearch_cluster_health_number_of_nodes",
-        "refId": "A",
-        "step": 1800
-            }],
-      "thresholds": "",
+      "pluginVersion": "7.5.6",
+      "targets": [
+        {
+          "expr": "sum(elasticsearch_cluster_health_number_of_nodes{cluster=~\"$cluster\"})/count(elasticsearch_cluster_health_number_of_nodes{cluster=~\"$cluster\"})",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "",
+          "metric": "elasticsearch_cluster_health_number_of_nodes",
+          "refId": "A",
+          "step": 1800
+        }
+      ],
       "timeFrom": null,
       "timeShift": null,
       "title": "Running Nodes",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [{
-        "$$hashKey": "object:110",
-        "op": "=",
-        "text": "N/A",
-        "value": "null"
-            }],
-      "valueName": "current"
-        },
+      "type": "stat"
+    },
     {
       "datasource": "$server",
       "fieldConfig": {
@@ -112,14 +99,15 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{
-              "color": "green",
-              "value": null
-                        }]
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": null
+              }
+            ]
           }
         },
         "overrides": []
@@ -139,27 +127,29 @@
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-                        "lastNotNull"
-                    ],
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.4.3",
-      "targets": [{
-        "expr": "sum(elasticsearch_indices_docs{cluster=~\"$cluster\"})",
-        "intervalFactor": 2,
-        "legendFormat": "Documents",
-        "refId": "A",
-        "step": 240
-            }],
+      "pluginVersion": "7.5.6",
+      "targets": [
+        {
+          "expr": "sum(elasticsearch_indices_docs{cluster=~\"$cluster\"})",
+          "intervalFactor": 2,
+          "legendFormat": "Documents",
+          "refId": "A",
+          "step": 240
+        }
+      ],
       "timeFrom": null,
       "timeShift": null,
       "title": "Documents indexed",
       "type": "stat"
-        },
+    },
     {
       "datasource": "$server",
       "fieldConfig": {
@@ -167,15 +157,16 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "min": 0,
           "thresholds": {
             "mode": "absolute",
-            "steps": [{
-              "color": "green",
-              "value": null
-                        }]
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": null
+              }
+            ]
           },
           "unit": "none"
         },
@@ -189,37 +180,40 @@
       },
       "id": 72,
       "links": [],
-      "options": {
+     "options": {
         "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-                        "lastNotNull"
-                    ],
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.4.3",
-      "targets": [{
-        "expr": "elasticsearch_indices_get_total{cluster=~\"$cluster\"}",
-        "interval": "",
-        "intervalFactor": 2,
-        "legendFormat": "",
-        "refId": "A",
-        "step": 240
-            }],
+      "pluginVersion": "7.5.6",
+      "targets": [
+        {
+          "expr": "elasticsearch_indices_get_total{cluster=~\"$cluster\"}",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
       "timeFrom": null,
       "timeShift": null,
       "title": "Total Indices",
       "type": "stat"
-        },
+    },
     {
       "aliasColors": {
+        "Active": "light-green",
         "Initializing": "yellow",
         "Relocating": "blue",
         "Unassigned": "red"
@@ -232,12 +226,6 @@
       "error": false,
       "fieldConfig": {
         "defaults": {
-          "color": {},
-          "custom": {},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          },
           "unit": "short"
         },
         "overrides": []
@@ -270,7 +258,7 @@
         "alertThreshold": false
       },
       "percentage": true,
-      "pluginVersion": "7.4.3",
+      "pluginVersion": "7.5.6",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -278,16 +266,19 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [{
+      "targets": [
+        {
+          "exemplar": true,
           "expr": "sum(elasticsearch_cluster_health_active_shards{cluster=~\"$cluster\"})",
           "format": "time_series",
           "hide": false,
+          "instant": false,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Active",
           "refId": "A",
           "step": 240
-                },
+        },
         {
           "expr": "sum(elasticsearch_cluster_health_unassigned_shards{cluster=~\"$cluster\"})",
           "format": "time_series",
@@ -297,7 +288,7 @@
           "legendFormat": "Unassigned",
           "refId": "B",
           "step": 240
-                },
+        },
         {
           "expr": "sum(elasticsearch_cluster_health_initializing_shards{cluster=~\"$cluster\"})",
           "format": "time_series",
@@ -307,7 +298,7 @@
           "legendFormat": "Initializing",
           "refId": "C",
           "step": 240
-                },
+        },
         {
           "expr": "sum(elasticsearch_cluster_health_relocating_shards{cluster=~\"$cluster\"})",
           "format": "time_series",
@@ -317,8 +308,8 @@
           "legendFormat": "Relocating",
           "refId": "D",
           "step": 240
-                }
-            ],
+        }
+      ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
@@ -338,14 +329,15 @@
         "show": true,
         "values": []
       },
-      "yaxes": [{
+      "yaxes": [
+        {
           "$$hashKey": "object:838",
           "format": "short",
           "logBase": 1,
           "max": null,
           "min": null,
           "show": true
-                },
+        },
         {
           "$$hashKey": "object:839",
           "format": "short",
@@ -353,38 +345,43 @@
           "max": null,
           "min": null,
           "show": true
-                }
-            ],
+        }
+      ],
       "yaxis": {
         "align": false,
         "alignLevel": null
       }
-        },
+    },
     {
       "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-            ],
       "datasource": "$server",
-      "editable": true,
-      "error": false,
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "$$hashKey": "object:110",
+              "id": 0,
+              "op": "=",
+              "text": "N/A",
+              "type": 1,
+              "value": "null"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
         },
         "overrides": []
-      },
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
       },
       "gridPos": {
         "h": 4,
@@ -395,85 +392,73 @@
       "id": 67,
       "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [{
-          "$$hashKey": "object:107",
-          "name": "value to text",
-          "value": 1
-                },
-        {
-          "$$hashKey": "object:108",
-          "name": "range to text",
-          "value": 2
-                }
-            ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [{
-        "from": "null",
-        "text": "N/A",
-        "to": "null"
-            }],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
       },
-      "tableColumn": "",
-      "targets": [{
-        "expr": "sum(elasticsearch_cluster_health_total_scrapes)",
-        "interval": "",
-        "intervalFactor": 2,
-        "legendFormat": "",
-        "metric": "elasticsearch_cluster_health_number_of_nodes",
-        "refId": "A",
-        "step": 1800
-            }],
-      "thresholds": "",
+      "pluginVersion": "7.5.6",
+      "targets": [
+        {
+          "expr": "sum(elasticsearch_cluster_health_total_scrapes)",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "",
+          "metric": "elasticsearch_cluster_health_number_of_nodes",
+          "refId": "A",
+          "step": 1800
+        }
+      ],
       "timeFrom": null,
       "timeShift": null,
       "title": "Total Scrapes",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [{
-        "$$hashKey": "object:110",
-        "op": "=",
-        "text": "N/A",
-        "value": "null"
-            }],
-      "valueName": "current"
-        },
+      "type": "stat"
+    },
     {
       "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-            ],
       "datasource": "$server",
-      "editable": true,
-      "error": false,
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "$$hashKey": "object:110",
+              "id": 0,
+              "op": "=",
+              "text": "N/A",
+              "type": 1,
+              "value": "null"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
+            ]
+          },
+          "unit": "none"
         },
         "overrides": []
-      },
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
       },
       "gridPos": {
         "h": 4,
@@ -484,60 +469,39 @@
       "id": 68,
       "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [{
-          "$$hashKey": "object:107",
-          "name": "value to text",
-          "value": 1
-                },
-        {
-          "$$hashKey": "object:108",
-          "name": "range to text",
-          "value": 2
-                }
-            ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [{
-        "from": "null",
-        "text": "N/A",
-        "to": "null"
-            }],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
       },
-      "tableColumn": "",
-      "targets": [{
-        "expr": "sum(rate(elasticsearch_cluster_health_json_parse_failures[1h]))",
-        "interval": "",
-        "intervalFactor": 2,
-        "legendFormat": "",
-        "metric": "elasticsearch_cluster_health_number_of_nodes",
-        "refId": "A",
-        "step": 1800
-            }],
-      "thresholds": "",
+      "pluginVersion": "7.5.6",
+      "targets": [
+        {
+          "expr": "sum(rate(elasticsearch_cluster_health_json_parse_failures[1h]))",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "",
+          "metric": "elasticsearch_cluster_health_number_of_nodes",
+          "refId": "A",
+          "step": 1800
+        }
+      ],
       "timeFrom": null,
       "timeShift": null,
       "title": "Json Parse Errors",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [{
-        "$$hashKey": "object:110",
-        "op": "=",
-        "text": "N/A",
-        "value": "null"
-            }],
-      "valueName": "current"
-        },
+      "type": "stat"
+    },
     {
       "datasource": "$server",
       "fieldConfig": {
@@ -545,15 +509,16 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "min": 0,
           "thresholds": {
             "mode": "absolute",
-            "steps": [{
-              "color": "green",
-              "value": null
-                        }]
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": null
+              }
+            ]
           },
           "unit": "bytes"
         },
@@ -574,29 +539,33 @@
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-                        "lastNotNull"
-                    ],
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.4.3",
-      "targets": [{
-        "expr": "sum(elasticsearch_indices_store_size_bytes{cluster=~\"$cluster\"})",
-        "intervalFactor": 2,
-        "legendFormat": "Index Size",
-        "refId": "A",
-        "step": 240
-            }],
+      "pluginVersion": "7.5.6",
+      "targets": [
+        {
+          "expr": "sum(elasticsearch_indices_store_size_bytes{cluster=~\"$cluster\"})",
+          "intervalFactor": 2,
+          "legendFormat": "Index Size",
+          "refId": "A",
+          "step": 240
+        }
+      ],
       "timeFrom": null,
       "timeShift": null,
       "title": "Index Size",
       "type": "stat"
-        },
+    },
     {
-      "aliasColors": {},
+      "aliasColors": {
+        "Docs": "dark-purple"
+      },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -604,9 +573,7 @@
       "editable": true,
       "error": false,
       "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -637,7 +604,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.4.3",
+      "pluginVersion": "7.5.6",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -645,7 +612,8 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [{
+      "targets": [
+        {
           "expr": "elasticsearch_indices_merges_total{cluster=~\"$cluster\"}",
           "format": "time_series",
           "hide": false,
@@ -654,7 +622,7 @@
           "legendFormat": "Total",
           "refId": "A",
           "step": 240
-                },
+        },
         {
           "expr": "elasticsearch_indices_merges_current{cluster=~\"$cluster\"}",
           "format": "time_series",
@@ -664,15 +632,15 @@
           "legendFormat": "Current",
           "refId": "B",
           "step": 240
-                },
+        },
         {
           "expr": "elasticsearch_indices_merges_docs_total{cluster=~\"$cluster\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "Docs",
           "refId": "C"
-                }
-            ],
+        }
+      ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
@@ -692,14 +660,15 @@
         "show": true,
         "values": []
       },
-      "yaxes": [{
+      "yaxes": [
+        {
           "$$hashKey": "object:104",
           "format": "short",
           "logBase": 1,
           "max": null,
           "min": null,
           "show": true
-                },
+        },
         {
           "$$hashKey": "object:105",
           "format": "short",
@@ -707,15 +676,17 @@
           "max": null,
           "min": null,
           "show": true
-                }
-            ],
+        }
+      ],
       "yaxis": {
         "align": false,
         "alignLevel": null
       }
-        },
+    },
     {
-      "aliasColors": {},
+      "aliasColors": {
+        "elasticsearch": "dark-orange"
+      },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -723,9 +694,7 @@
       "editable": true,
       "error": false,
       "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -758,7 +727,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.4.3",
+      "pluginVersion": "7.5.6",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -766,14 +735,16 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [{
-        "expr": "avg_over_time(elasticsearch_jvm_memory_used_bytes{area=\"heap\",cluster=~\"$cluster\"}[15m]) / elasticsearch_jvm_memory_max_bytes{area=\"heap\",cluster=~\"$cluster\"}",
-        "interval": "",
-        "intervalFactor": 2,
-        "legendFormat": "{{ name }}",
-        "refId": "A",
-        "step": 240
-            }],
+      "targets": [
+        {
+          "expr": "avg_over_time(elasticsearch_jvm_memory_used_bytes{area=\"heap\",cluster=~\"$cluster\"}[15m]) / elasticsearch_jvm_memory_max_bytes{area=\"heap\",cluster=~\"$cluster\"}",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "{{ name }}",
+          "refId": "A",
+          "step": 240
+        }
+      ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
@@ -793,7 +764,8 @@
         "show": true,
         "values": []
       },
-      "yaxes": [{
+      "yaxes": [
+        {
           "$$hashKey": "object:697",
           "format": "percentunit",
           "label": "",
@@ -801,7 +773,7 @@
           "max": 1,
           "min": 0,
           "show": true
-                },
+        },
         {
           "$$hashKey": "object:698",
           "format": "short",
@@ -810,13 +782,13 @@
           "max": null,
           "min": null,
           "show": false
-                }
-            ],
+        }
+      ],
       "yaxis": {
         "align": false,
         "alignLevel": null
       }
-        },
+    },
     {
       "aliasColors": {},
       "bars": false,
@@ -826,9 +798,7 @@
       "editable": true,
       "error": false,
       "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -859,7 +829,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.4.3",
+      "pluginVersion": "7.5.6",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -867,16 +837,18 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [{
-        "expr": "sum(elasticsearch_thread_pool_active_count{cluster=~\"$cluster\", type!=\"management\"}) by (type)",
-        "format": "time_series",
-        "hide": false,
-        "interval": "",
-        "intervalFactor": 2,
-        "legendFormat": "Type: {{ type }}",
-        "refId": "A",
-        "step": 240
-            }],
+      "targets": [
+        {
+          "expr": "sum(elasticsearch_thread_pool_active_count{cluster=~\"$cluster\", type!=\"management\"}) by (type)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "Type: {{ type }}",
+          "refId": "A",
+          "step": 240
+        }
+      ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
@@ -896,26 +868,27 @@
         "show": true,
         "values": []
       },
-      "yaxes": [{
-          "format": "short",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-                },
+      "yaxes": [
         {
           "format": "short",
           "logBase": 1,
           "max": null,
           "min": null,
           "show": true
-                }
-            ],
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
       "yaxis": {
         "align": false,
         "alignLevel": null
       }
-        },
+    },
     {
       "aliasColors": {},
       "bars": false,
@@ -925,9 +898,7 @@
       "editable": true,
       "error": false,
       "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -958,7 +929,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.4.3",
+      "pluginVersion": "7.5.6",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -966,14 +937,16 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [{
-        "expr": "irate(elasticsearch_jvm_gc_collection_seconds_sum{cluster=~\"$cluster\"}[1m])",
-        "interval": "",
-        "intervalFactor": 2,
-        "legendFormat": "{{ name }} {{ gc }}",
-        "refId": "A",
-        "step": 240
-            }],
+      "targets": [
+        {
+          "expr": "irate(elasticsearch_jvm_gc_collection_seconds_sum{cluster=~\"$cluster\"}[1m])",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "{{ name }} {{ gc }}",
+          "refId": "A",
+          "step": 240
+        }
+      ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
@@ -993,26 +966,27 @@
         "show": true,
         "values": []
       },
-      "yaxes": [{
-          "format": "short",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-                },
+      "yaxes": [
         {
           "format": "short",
           "logBase": 1,
           "max": null,
           "min": null,
           "show": true
-                }
-            ],
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
       "yaxis": {
         "align": false,
         "alignLevel": null
       }
-        },
+    },
     {
       "aliasColors": {},
       "bars": false,
@@ -1022,9 +996,7 @@
       "editable": true,
       "error": false,
       "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -1055,7 +1027,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.4.3",
+      "pluginVersion": "7.5.6",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1063,14 +1035,16 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [{
-        "expr": "rate(elasticsearch_thread_pool_rejected_count{cluster=~\"$cluster\", type!=\"management\"}[5m])",
-        "interval": "",
-        "intervalFactor": 2,
-        "legendFormat": "{{ name }} {{ type }}",
-        "refId": "A",
-        "step": 240
-            }],
+      "targets": [
+        {
+          "expr": "rate(elasticsearch_thread_pool_rejected_count{cluster=~\"$cluster\", type!=\"management\"}[5m])",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "{{ name }} {{ type }}",
+          "refId": "A",
+          "step": 240
+        }
+      ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
@@ -1090,26 +1064,27 @@
         "show": true,
         "values": []
       },
-      "yaxes": [{
-          "format": "short",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-                },
+      "yaxes": [
         {
           "format": "short",
           "logBase": 1,
           "max": null,
           "min": null,
           "show": true
-                }
-            ],
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
       "yaxis": {
         "align": false,
         "alignLevel": null
       }
-        },
+    },
     {
       "aliasColors": {},
       "bars": false,
@@ -1119,9 +1094,7 @@
       "editable": true,
       "error": false,
       "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -1153,7 +1126,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.4.3",
+      "pluginVersion": "7.5.6",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1161,14 +1134,16 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [{
-        "expr": "sum(elasticsearch_thread_pool_queue_count{cluster=~\"$cluster\", type!=\"management\"}) by (type)",
-        "interval": "",
-        "intervalFactor": 2,
-        "legendFormat": "Type: {{type}}",
-        "refId": "A",
-        "step": 240
-            }],
+      "targets": [
+        {
+          "expr": "sum(elasticsearch_thread_pool_queue_count{cluster=~\"$cluster\", type!=\"management\"}) by (type)",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "Type: {{type}}",
+          "refId": "A",
+          "step": 240
+        }
+      ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
@@ -1188,14 +1163,15 @@
         "show": true,
         "values": []
       },
-      "yaxes": [{
+      "yaxes": [
+        {
           "$$hashKey": "object:612",
           "format": "short",
           "logBase": 1,
           "max": null,
           "min": null,
           "show": true
-                },
+        },
         {
           "$$hashKey": "object:613",
           "format": "short",
@@ -1203,24 +1179,25 @@
           "max": null,
           "min": null,
           "show": true
-                }
-            ],
+        }
+      ],
       "yaxis": {
         "align": false,
         "alignLevel": null
       }
-        }
-    ],
+    }
+  ],
   "refresh": "1m",
   "schemaVersion": 27,
   "style": "dark",
   "tags": [
-        "infra",
-        "b2c",
-        "elastic"
-    ],
+    "infra",
+    "b2c",
+    "elastic"
+  ],
   "templating": {
-    "list": [{
+    "list": [
+      {
         "current": {
           "selected": false,
           "text": "prometheus",
@@ -1239,17 +1216,17 @@
         "regex": "",
         "skipUrlSync": false,
         "type": "datasource"
-            },
+      },
       {
         "allValue": null,
         "current": {
           "selected": true,
           "text": [
-                        "morphine-cluster"
-                    ],
+            "morphine-cluster"
+          ],
           "value": [
-                        "morphine-cluster"
-                    ]
+            "morphine-cluster"
+          ]
         },
         "datasource": "prometheus",
         "definition": "label_values(elasticsearch_cluster_health_status,cluster)",
@@ -1274,40 +1251,40 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-            }
-        ]
+      }
+    ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-        ],
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
     "time_options": [
-            "5m",
-            "15m",
-            "1h",
-            "6h",
-            "12h",
-            "24h",
-            "2d",
-            "7d",
-            "30d"
-        ]
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
   },
   "timezone": "",
   "title": "ElasticSearch",
   "uid": "1MUnPYnmk",
-  "version": 3
+  "version": 4
 }

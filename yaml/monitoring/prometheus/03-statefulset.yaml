@@ -57,13 +57,13 @@ spec:
           readinessProbe:
             httpGet:
               path: /-/ready
-              port: 9090
+              port: web
             initialDelaySeconds: 10
             timeoutSeconds: 10
           livenessProbe:
             httpGet:
               path: /-/healthy
-              port: 9090
+              port: web
             initialDelaySeconds: 10
             timeoutSeconds: 10
           resources:

@@ -29,7 +29,7 @@ data:
     volume-attachment-recovery-policy:
     node-down-pod-deletion-policy:
     allow-node-drain-with-last-healthy-replica:
-    mkfs-ext4-parameters: -b 4096
+    mkfs-ext4-parameters: -b 4096 -m 0
     disable-replica-rebuild:
     replica-replenishment-wait-interval:
     disable-revision-counter:
