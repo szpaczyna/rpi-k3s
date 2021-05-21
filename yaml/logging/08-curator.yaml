@@ -4,7 +4,10 @@ kind: CronJob
 metadata:
   name: curator
 spec:
-  schedule: 1 0 * * *
+  schedule: "* */12 * * *"
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
