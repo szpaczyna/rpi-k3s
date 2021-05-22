@@ -22,7 +22,8 @@ spec:
         app: elk
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "9108"
+        prometheus.io/port: "9114"
+        #prometheus.io/port: "9108"
     spec:
       initContainers:
         - name: "create-directory"
@@ -69,20 +70,23 @@ spec:
             requests:
               cpu: 0.1
               memory: 256Mi
-        - name: elasticsearch-exporter
+        - name: exporter
           command:
           - /bin/elasticsearch_exporter
-          - -es.uri=http://elk-svc-elasticsearch:9200
-          - -es.timeout=60s
-          - -es.all=true
-          image: "carlosedp/elasticsearch-exporter:1.0.4rc1-arm64"
+          - --es.uri=http://elk-svc-elasticsearch:9200
+          - --es.timeout=60s
+          - --es.all
+          - --es.indices
+          - --es.shards
+          image: "registry.shpaq.org/elasticsearch_exporter:1.1.1"
+          imagePullPolicy: Always
           ports:
           - name: metrics
-            containerPort: 9108
+            containerPort: 9114
           readinessProbe:
             httpGet:
               path: /health
-              port: 9108
+              port: 9114
             initialDelaySeconds: 10
             timeoutSeconds: 10
           resources:
@@ -95,7 +99,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: 9108
+              port: 9114
             initialDelaySeconds: 30
             timeoutSeconds: 10
         - name: logstash
