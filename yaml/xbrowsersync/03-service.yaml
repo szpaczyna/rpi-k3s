@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xbrowsersync
+  annotations:
+    prometheus.io/scrape: 'true'
+  labels:
+    app: xbrowsersync
+spec:
+  type: LoadBalancer
+  selector:
+    app: xbrowsersync
+  ports:
+    - name: api
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
