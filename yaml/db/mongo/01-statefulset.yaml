@@ -30,7 +30,7 @@ spec:
       containers:
       - image: "registry.shpaq.org/mongodb:v4.0.5"
         name: database
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
         - name: MONGOD_ROOT_PASSWORD
           valueFrom:
@@ -49,18 +49,14 @@ spec:
         - name: MONGODB_PASSWORD
           value: "Ef8OnoK3xOIoTAYHo8S9btyllKpdoRYO"
         - name: MONGODB_VERBOSE
-          value: "true"
+          value: "false"
         ports:
           - containerPort: 27017
             name: mongodb
-          - containerPort: 27018
-            name: mongodb2
-          - containerPort: 27019
-            name: mongodb3
         resources:
           limits:
-            cpu: 200m
-            memory: 200Mi
+            cpu: 1000m
+            memory: 750Mi
           requests:
             cpu: 100m
             memory: 100Mi
@@ -69,7 +65,7 @@ spec:
           mountPath: /var/lib/mongodb
       - name: exporter
         image: "registry.shpaq.org/mongodb_exporter:v0.20.5"
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         command:
         - /bin/mongodb_exporter
         - --mongodb.uri=mongodb://127.0.0.1:27017
