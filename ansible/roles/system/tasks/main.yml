@@ -50,6 +50,7 @@
       - rsyslog-elasticsearch
       - pigz
       - pv
+      - zsh
     install_recommends: false
     update_cache: true
     # Need the force_apt_get until
