@@ -3,7 +3,7 @@
 <img src="https://raspbernetes.github.io/img/logo.svg" align="left" width="144px"
 height="144px"/>
 
-## rpi-k3s
+## rpi-k3s / twojastara
 
 ### Home Cloud on Raspberry Pie(s)
 
