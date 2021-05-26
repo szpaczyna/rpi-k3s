@@ -33,7 +33,7 @@ data:
           - 10.0.10.13:9100
           - 10.0.10.14:9100
 
-      - job_name: 'erx'
+    - job_name: 'erx'
       static_configs:
         - targets:
           - 10.0.0.1:9100
