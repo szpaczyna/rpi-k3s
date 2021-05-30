@@ -34,7 +34,8 @@ spec:
       hostNetwork: true
       containers:
         - name: speedtest
-          image: "billimek/prometheus-speedtest-exporter:1.1.0"
+          #image: "billimek/prometheus-speedtest-exporter:1.1.0"
+          image: "registry.shpaq.org/prometheus-speedtest-exporter:v1.1.0"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -51,5 +52,4 @@ spec:
         - effect: NoSchedule
           operator: Exists
       nodeSelector:
-        disktype: internal
         kubernetes.io/hostname: rpi-k3s-worker2
