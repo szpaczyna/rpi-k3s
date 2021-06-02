@@ -14,6 +14,9 @@ data:
     node.data: true
     network.host: 0.0.0.0
     discovery.type: single-node
+    http.cors.allow-origin: '*'
+    http.cors.enabled: true
+    http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
   jvm.options: |
     -Xms256M
     -Xmx256M
