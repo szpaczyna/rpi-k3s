@@ -8,7 +8,9 @@
     "semantic-release": "^17.4.2"
   },
   "devDependencies": {
-    "cz-conventional-changelog": "^3.3.0"
+    "cz-conventional-changelog": "^3.3.0",
+    "trim-newlines": ">=3.0.1",
+    "normalize-url": ">=6.0.1"
   },
   "scripts": {
     "jsonlint": "jsonlint json/*/*.json",
