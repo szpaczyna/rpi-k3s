@@ -15,11 +15,11 @@ data:
     storage-over-provisioning-percentage: 200
     storage-minimal-available-percentage: 15
     upgrade-checker: true
-    default-replica-count: 1
-    default-data-locality:
+    default-replica-count: 2
+    default-data-locality: best-effort
     guaranteed-engine-cpu:
     default-longhorn-static-storage-class: longhorn-static
-    backupstore-poll-interval:
+    backupstore-poll-interval: 0
     taint-toleration:
     priority-class:
     auto-salvage:
@@ -27,13 +27,13 @@ data:
     disable-scheduling-on-cordoned-node:
     replica-zone-soft-anti-affinity:
     volume-attachment-recovery-policy:
-    node-down-pod-deletion-policy:
+    node-down-pod-deletion-policy: delete-deployment-pod
     allow-node-drain-with-last-healthy-replica:
     mkfs-ext4-parameters: -b 4096 -m 0
     disable-replica-rebuild:
     replica-replenishment-wait-interval:
     disable-revision-counter:
-    system-managed-pods-image-pull-policy:
+    system-managed-pods-image-pull-policy: if-not-present
     allow-volume-creation-with-degraded-availability: false
     auto-cleanup-system-generated-snapshot:
     concurrent-automatic-engine-upgrade-per-node-limit:
