@@ -28,10 +28,12 @@ spec:
       containers:
       - env:
         - name: GF_INSTALL_PLUGINS
-          value: btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel,grafana-worldmap-panel,digrich-bubblechart-panel,jdbranham-diagram-panel,michaeldmoore-multistat-panel,novatec-sdg-panel,magnesium-wordcloud-panel,ayoungprogrammer-finance-datasource,
+          value: btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel,grafana-worldmap-panel,digrich-bubblechart-panel,jdbranham-diagram-panel,novatec-sdg-panel,grafana-singlestat-panel,farski-blendstat-panel,grafana-polystat-panel
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/provisioning"
-        image: grafana/grafana:7.5.7
+            #image: grafana/grafana:7.5.7
+        image: grafana/grafana:8.0.0
+        imagePullPolicy: IfNotPresent
         name: grafana
         ports:
         - containerPort: 3000
@@ -41,7 +43,7 @@ spec:
             path: /api/health
             port: http
           timeoutSeconds: 20
-          initialDelaySeconds: 240
+          initialDelaySeconds: 120
           periodSeconds: 120
         livenessProbe:
           httpGet:
