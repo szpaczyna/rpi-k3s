@@ -28,6 +28,9 @@ height="144px"/>
     -   [cert-exporter](charts/cert-exporter) - certificates monitoring
     -   [postgresql](helm/postgresql) - self explanatory
     -   [drone](helm/drone) - CI/CD
+    -   [keycloak](helm/keycloak) - identity provider
+    -   [nextcloud](helm/nextcloud) - personal cloud service
+    -   [calibre-web](helm/calibre-web) - replacement for [ubooquity](yaml/ubooquity)
 
 -   Apps/YAML
 
@@ -57,35 +60,8 @@ height="144px"/>
     -   [scripts](scripts) - some custom stuff, quite simple
     -   [config](config) - performance and some hardening
 
-* * *
-
-## Docker Stuff
-
-> <https://github.com/szpaczyna/docker>
-
-#### Images for arm64
-
--   [gitlab-ce](https://hub.docker.com/repository/docker/szpaczyn/gitlab-ce)
--   [elastic-hq](https://hub.docker.com/repository/docker/szpaczyn/elastic-hq)
--   [cockroachdb](https://hub.docker.com/repository/docker/szpaczyn/cockroachdb)
--   [squid](https://hub.docker.com/repository/docker/szpaczyn/squid)
--   [elasticsearch](https://hub.docker.com/repository/docker/szpaczyn/elasticsearch-arm64)
--   [kibana](https://hub.docker.com/repository/docker/szpaczyn/kibana-arm64)
--   [logstash](https://hub.docker.com/repository/docker/szpaczyn/logstash-arm64)
--   [elastic-curator](https://hub.docker.com/repository/docker/szpaczyn/elasticsearch-curator)
--   [xbrowsersync](https://hub.docker.com/repository/docker/szpaczyn/xbrowsersync)
-
-## Helm
-
-> <https://szpaczyna.github.io/rpi-k3s>
->
-> ```sh
->     helm repo add shpaq https://szpaczyna.github.io/rpi-k3s
->     helm repo update
-> ```
 
 <!--START_SECTION_LINES_OF_CODE:readme-info-->
-
 <!--END_SECTION_LINES_OF_CODE:readme-info-->
 
 * * *
