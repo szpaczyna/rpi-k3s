@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: xbrowsersync
-        image: "registry.shpaq.org/xbrowsersync:v1.1.13"
+        image: szpaczyn/xbrowsersync:v1.1.13"
         imagePullPolicy: IfNotPresent
         env:
         - name: XBROWSERSYNC_DB_USER

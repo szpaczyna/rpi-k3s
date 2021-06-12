@@ -28,11 +28,10 @@ spec:
       containers:
       - env:
         - name: GF_INSTALL_PLUGINS
-          value: btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel,grafana-worldmap-panel,digrich-bubblechart-panel,jdbranham-diagram-panel,novatec-sdg-panel,grafana-singlestat-panel,farski-blendstat-panel,grafana-polystat-panel
+          value: btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel,novatec-sdg-panel,grafana-singlestat-panel,farski-blendstat-panel,grafana-polystat-panel
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/provisioning"
-            #image: grafana/grafana:7.5.7
-        image: grafana/grafana:8.0.0
+        image: grafana/grafana:8.0.1
         imagePullPolicy: IfNotPresent
         name: grafana
         ports:

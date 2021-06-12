@@ -35,7 +35,7 @@ spec:
       containers:
         - name: speedtest
           #image: "billimek/prometheus-speedtest-exporter:1.1.0"
-          image: "registry.shpaq.org/prometheus-speedtest-exporter:v1.1.0"
+          image: szpaczyn/prometheus-speedtest-exporter:v1.1.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

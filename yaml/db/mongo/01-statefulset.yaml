@@ -28,7 +28,7 @@ spec:
                   - mongodb
             topologyKey: "kubernetes.io/hostname"
       containers:
-      - image: "registry.shpaq.org/mongodb:v4.0.5"
+      - image: szpaczyn/mongodb-arm64:v4.0.5
         name: database
         imagePullPolicy: IfNotPresent
         env:
@@ -64,7 +64,7 @@ spec:
         - name: data
           mountPath: /var/lib/mongodb
       - name: exporter
-        image: "registry.shpaq.org/mongodb_exporter:v0.20.5"
+        image: szpaczyn/mongodb_exporter-arm-64:v0.20.5
         imagePullPolicy: IfNotPresent
         command:
         - /bin/mongodb_exporter

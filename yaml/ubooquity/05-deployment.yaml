@@ -22,7 +22,7 @@ spec:
       serviceAccountName: ubooquity
       containers:
         - name: ubooquity
-          image: "registry.shpaq.org/ubooquity:2.1.2"
+          image: szpaczyn/ubooquity-arm64:v2.1.2
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

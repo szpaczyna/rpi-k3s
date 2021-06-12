@@ -44,7 +44,7 @@ spec:
               mountPath: /usr/share/elasticsearch/data
       containers:
         - name: elasticsearch
-          image: registry.shpaq.org/elasticsearch:v7.9.3
+          image: szpaczyn/elasticsearch-arm64:v7.9.3
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: elasticsearch-config
@@ -78,7 +78,7 @@ spec:
           - --es.all
           - --es.indices
           - --es.shards
-          image: "registry.shpaq.org/elasticsearch_exporter:1.1.1"
+          image: szpaczyn/elasticsearch_exporter-arm64:v1.1.1"
           imagePullPolicy: Always
           ports:
           - name: metrics
@@ -103,7 +103,7 @@ spec:
             initialDelaySeconds: 30
             timeoutSeconds: 10
         - name: logstash
-          image: registry.shpaq.org/logstash:v7.9.3
+          image: szpaczyn/logstash-arm64:v7.9.3
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5044
@@ -148,7 +148,7 @@ spec:
               mountPath: /etc/logstash/patterns/auth.grok
               subPath: auth
         - name: kibana
-          image: registry.shpaq.org/kibana:v7.9.3
+          image: szpaczyn/kibana-arm64:v7.9.3
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5601
