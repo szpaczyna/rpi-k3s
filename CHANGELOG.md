@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.7...v0.0.8) (2021-06-12)
+
+
+### Features
+
+* added another cluster to prometheus ([5f5c0aa](https://github.com/szpaczyna/rpi-k3s/commits/5f5c0aa6680fbfa2c2c86ea934a1cfad86f07177))
+* ansbile stuff ([92acd4c](https://github.com/szpaczyna/rpi-k3s/commits/92acd4c6e7a3bf580c7e2d0cab1c5b26acdc94e9))
+* calibre-web ([72e0e0b](https://github.com/szpaczyna/rpi-k3s/commits/72e0e0b4d6c92700141ac1f8df0c5032546756e9))
+* change images to dockerhub / kanboard version dump ([29f347f](https://github.com/szpaczyna/rpi-k3s/commits/29f347f2347e22bba900200c20119c512bebdeac))
+* curl version bump ([91e46c9](https://github.com/szpaczyna/rpi-k3s/commits/91e46c96b04b6943081e5fc7a2611c4d3559e32f))
+* elastic configuration alter for es gui ([4b2a746](https://github.com/szpaczyna/rpi-k3s/commits/4b2a7466f725160dca3a752b3f1f1bcbac9f6cc1))
+* elastic job to create default shards template ([47e1b3f](https://github.com/szpaczyna/rpi-k3s/commits/47e1b3f7757adea997c7c2d4b0ebaf05bd99a2b2))
+* elk lower shards ([49ad4de](https://github.com/szpaczyna/rpi-k3s/commits/49ad4de3920037c20d4e84cfa55e90997734f880))
+* fix speedtest labels and changed to own registry ([c9f4858](https://github.com/szpaczyna/rpi-k3s/commits/c9f4858bf9ffe0b5d100541db033270ae12a665a))
+* grafana bump to v8.0 ([17baeca](https://github.com/szpaczyna/rpi-k3s/commits/17baeca0dc450cd6bc464ec3c722a4224c41bd97))
+* grafana cleaned unused dashboard, grafana and prometheus version bump ([b603af9](https://github.com/szpaczyna/rpi-k3s/commits/b603af96faef2eedb1b4f42a0cbdd821f4d3e12e))
+* grafana dashboard for mongo ([8d4f9fc](https://github.com/szpaczyna/rpi-k3s/commits/8d4f9fcaaf7288f918acc89fa5de8f5191818cd8))
+* grafana, nginx version bump, added new cluster to prometheus endpoints ([f3ce655](https://github.com/szpaczyna/rpi-k3s/commits/f3ce655f209dc13545b210e220bca470b8e114cf))
+* kanboard image version bump ([d7051ff](https://github.com/szpaczyna/rpi-k3s/commits/d7051ff66c3e071597a22afb7900cc6026f7e898))
+* keycloak ([7ac80a6](https://github.com/szpaczyna/rpi-k3s/commits/7ac80a61afcbf831f8576d61157946bfeb237b0a))
+* merge elastic exporter to elk container ([968a593](https://github.com/szpaczyna/rpi-k3s/commits/968a59349e0186f2cf863df6fa7a06ef518ce744))
+* mongo pull policy updated ([3138f31](https://github.com/szpaczyna/rpi-k3s/commits/3138f31e6d86183632cbd2e6006268c5315e02d2))
+* mongo with exporter for xbrowsersync, registry ui version bump ([f2081e1](https://github.com/szpaczyna/rpi-k3s/commits/f2081e11c2d35f7027346fc7cd44694901e27cc6))
+* nextcloud ([793abd1](https://github.com/szpaczyna/rpi-k3s/commits/793abd1da9f2976f35a0f4f89d28af77759cff11))
+* prometheus metrics for longhorn ([7c18321](https://github.com/szpaczyna/rpi-k3s/commits/7c18321f9936398e413afb408086f4fa1a438764))
+* readme project name update ([5dd8580](https://github.com/szpaczyna/rpi-k3s/commits/5dd8580d5c226762bf081dbb9fba20811d72e3a3))
+* removed classical LB from metallb ([b2fe57b](https://github.com/szpaczyna/rpi-k3s/commits/b2fe57b00813cbebbf6cbee5aedbf18b2a847117))
+* some order with grafana dashboards ([bff9c71](https://github.com/szpaczyna/rpi-k3s/commits/bff9c716ac2034a3d116894859921dd2e2cd4ae8))
+* unifi dashboards and updated config for postgre and ubooquity, grafana version bump plus some additional plugins added ([5c4139e](https://github.com/szpaczyna/rpi-k3s/commits/5c4139efef3e3f085a2992407c2d59519ea48a13))
+* unifi version bump and move poller to the same container ([d4927d9](https://github.com/szpaczyna/rpi-k3s/commits/d4927d9977c3ec43fbcc8d62e8d8a77cae326100))
+* xbrowsersync setup ([848cfea](https://github.com/szpaczyna/rpi-k3s/commits/848cfea09fcb4e1ac29946fb27caf666ac20499a))
+
+
+### Bug Fixes
+
+* adjust postgres replicas and prometheus retention ([d9af3e6](https://github.com/szpaczyna/rpi-k3s/commits/d9af3e6da42dd820be12793fe716c208781dd4b5))
+* calibre-web image tag ([370d451](https://github.com/szpaczyna/rpi-k3s/commits/370d451ad40368e19be424f5d723d962a70fb9c5))
+* dependabot alert ([d1a150c](https://github.com/szpaczyna/rpi-k3s/commits/d1a150ceeaf8d095b0efa687c1187355ea3585a3))
+* dependabot alert v2 ([9fe60e8](https://github.com/szpaczyna/rpi-k3s/commits/9fe60e84709c73795481b2bdb492261e48c07873))
+* github security advisor ([8363b73](https://github.com/szpaczyna/rpi-k3s/commits/8363b735e3c6bd74141982333c85d28bbb49248b))
+* pre-commit-hooks and some additional encryption ([7ec70b7](https://github.com/szpaczyna/rpi-k3s/commits/7ec70b725808184a224ff184327b0ecd4d7d06fe))
+* readme update ([e423945](https://github.com/szpaczyna/rpi-k3s/commits/e4239456a07688ab33ae122c909b40c945091263))
+* removed nextcloud pure yamls, move gitlab values to different tree ([8419378](https://github.com/szpaczyna/rpi-k3s/commits/84193785a950d188ef0a9c163c34bdbe490c71c4))
+
 ### [0.0.9](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.7...v0.0.9) (2021-06-12)
 
 
