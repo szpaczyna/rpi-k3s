@@ -1,0 +1,9 @@
+#!/bin/bash
+sops -d \
+    --output  values.yaml \
+    ../../secrets/keycloak-values.yaml
+
+kubectl apply -f secret.yaml -n apps
+helm upgrade --install keycloak codecentric/keycloak -n apps -f values.yaml
+
+rm -rf values.yaml secret.yaml

@@ -1,0 +1,7 @@
+#!/bin/bash
+sops -d \
+    --output  values.yaml \
+    ../../secrets/keycloak-values.yaml
+sops -d \
+    --output secret.yaml \
+    ../../secrets/keycloak-secret.yaml
