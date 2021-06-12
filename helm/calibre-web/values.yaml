@@ -5,7 +5,7 @@ fullnameOverride: ""
 
 image:
   repository: szpaczyn/calibe-web-arm64
-  tag: version-0.6.12
+  tag: v0.6.12
   pullPolicy: IfNotPresent
 
 strategyType: Recreate
