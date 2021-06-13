@@ -3,6 +3,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: shpaq-org
+  labels:
+    app: shpaq-org
 data:
   robots.txt: |
     User-Agent: *

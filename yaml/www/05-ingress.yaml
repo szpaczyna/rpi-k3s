@@ -9,6 +9,10 @@ metadata:
     traefik.frontend.redirect.permanent: 'true'
     traefik.ingress.kubernetes.io/frontend-entry-points: http, https
     traefik.ingress.kubernetes.io/redirect-entry-point: https
+  labels:
+    app: shpaq-org
+    app.kubernetes.io/instance: shpaq-org
+    app.kubernetes.io/name: shpaq-org
 spec:
   ingressClassName: traefik-lb
   rules:
