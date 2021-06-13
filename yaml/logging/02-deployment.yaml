@@ -78,7 +78,7 @@ spec:
           - --es.all
           - --es.indices
           - --es.shards
-          image: szpaczyn/elasticsearch_exporter-arm64:v1.1.1
+          image: registry.shpaq.org/elasticsearch_exporter:1.1.1
           imagePullPolicy: Always
           ports:
           - name: metrics
