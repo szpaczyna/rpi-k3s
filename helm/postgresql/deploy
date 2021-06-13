@@ -3,6 +3,13 @@ sops -d \
     --output  values.yaml \
     ../../secrets/postgresql-values.yaml
 
+sops -d \
+    --output pgpass.yaml \
+    ../../secrets/postgresql-pgpass.yaml
+
 helm upgrade --install morphine bitnami/postgresql -n apps -f values.yaml
 
-rm -rf values.yaml
+kubectl apply -f pgpass.yaml
+kubectl apply -f backup-job.yaml
+
+rm -rf values.yaml pgpass.yaml
