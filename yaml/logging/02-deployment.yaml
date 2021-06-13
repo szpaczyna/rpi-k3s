@@ -78,8 +78,9 @@ spec:
           - --es.all
           - --es.indices
           - --es.shards
-          image: registry.shpaq.org/elasticsearch_exporter:1.1.1
-          imagePullPolicy: Always
+          # image: quay.io/prometheuscommunity/elasticsearch_exporter:1.2.0
+          image: szpaczyn/elasticsearch_exporter-arm64:v1.2.0
+          imagePullPolicy: IfNotPresent
           ports:
           - name: metrics
             containerPort: 9114
