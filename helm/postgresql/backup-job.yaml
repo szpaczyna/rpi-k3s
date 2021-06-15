@@ -13,7 +13,7 @@ spec:
           - name: postgres-backup
             image: postgres:13
             command: ["/bin/sh"]
-            args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && for DB in bitwarden gitea kanboard nextcloud keycloak;do pg_dump -U postgres -h morphine-postgresql "$DB" > /var/backups/"$DB"/"$DB"-$(date +"%Y%m%d-%H%M").sql; done']
+            args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && for DB in bitwarden gitea kanboard nextcloud keycloak; do pg_dump -U postgres -h morphine-postgresql "$DB" |gzip > /var/backups/"$DB"/"$DB"-$(date +"%Y%m%d-%H%M").sql.gz; done']
             env:
             - name: PGPASS
               valueFrom:
@@ -27,6 +27,5 @@ spec:
           volumes:
           - name: postgres-storage
             hostPath:
-            # Ensure the file directory is created.
               path: /data/nfs/postgres-backups
               type: DirectoryOrCreate

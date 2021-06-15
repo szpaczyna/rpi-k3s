@@ -1,0 +1,140 @@
+---
+## This chart inherits from our common library chart. You can check the default values/options here:
+## https://github.com/k8s-at-home/library-charts/tree/main/charts/stable/common/values.yaml
+
+initContainers:
+- name: "config-directory-permissions"
+  image: busybox:1.32.0
+  command: ["/bin/sh"]
+  args: ["-c", "chown -R 568:568 /config"]
+  volumeMounts:
+  - name: config
+    mountPath: /config
+
+- name: "downloads-directory-permissions"
+  image: busybox:1.32.0
+  command: ["/bin/sh"]
+  args: ["-c", "chown -R 568:568 /downloads"]
+  volumeMounts:
+  - name: downloads
+    mountPath: /downloads
+
+- name: flood
+  image: curlimages/curl:7.77.0
+  command:
+  - "/bin/sh"
+  - "-c"
+  - "curl -o- -sL https://github.com/johman10/flood-for-transmission/releases/download/latest/flood-for-transmission.tar.gz | tar xzf - -C /config"
+  volumeMounts:
+  - name: config
+    mountPath: /config
+  securityContext:
+    runAsUser: 568
+    runAsGroup: 568
+
+image:
+  repository: ghcr.io/k8s-at-home/transmission
+  pullPolicy: IfNotPresent
+  tag: v3.00
+
+strategy:
+  type: Recreate
+
+## https://github.com/k8s-at-home/container-images/tree/main/apps/transmission/settings.json.tmpl
+env:
+  # -- Container timezone
+  TZ: Europe/Warsaw
+  # -- Torrent download directory
+  TRANSMISSION_DOWNLOAD_DIR: /downloads/complete
+  # -- Enable incomplete download directory
+  TRANSMISSION_INCOMPLETE_DIR_ENABLED: false
+  # -- Incomplete download directory
+  TRANSMISSION_INCOMPLETE_DIR: /downloads/incomplete
+  # -- Enable watch directory
+  TRANSMISSION_WATCH_DIR_ENABLED: true
+  # -- Watch directory
+  TRANSMISSION_WATCH_DIR: /config/watch
+  # -- Web home for flood
+  TRANSMISSION_WEB_HOME: /config/flood-for-transmission
+
+service:
+  port:
+    port: 9091
+    name: http
+  additionalServices:
+  - enabled: true
+    nameSuffix: utptcp
+    type: LoadBalancer
+    loadBalancerIP: 10.1.0.20
+    annotations:
+      metallb.universe.tf/allow-shared-ip: "true"
+    port:
+      port: 51413
+      name: utptcp
+      protocol: TCP
+      targetport: 51413
+  - enabled: true
+    nameSuffix: utpudp
+    type: LoadBalancer
+    loadBalancerIP: 10.1.0.20
+    annotations:
+      metallb.universe.tf/allow-shared-ip: "true"
+    port:
+      port: 51413
+      name: utpudp
+      protocol: UDP
+      targetport: 51413
+
+## transmission runs the gui and io on the same thread - heavy bandwith usage
+## may stall the UI and result in restarts.
+probes:
+  liveness:
+    spec:
+      timeoutSeconds: 30
+  readiness:
+    spec:
+      timeoutSeconds: 30
+
+ingress:
+  main:
+    enabled: true
+    ingressClassName: traefik-lb
+    hosts:
+      - host: transmission.morphine
+        paths:
+        - path: /transmission/web
+          pathType: Prefix
+          service:
+            name: http
+            port: 9091
+
+persistence:
+  config:
+    enabled: true
+    mountPath: /config
+    storageClass: "longhorn"
+    accessMode: ReadWriteOnce
+    size: 100Mi
+    ## Do not delete the pvc upon helm uninstall
+    skipuninstall: false
+
+  downloads:
+    enabled: true
+    mountPath: /downloads
+    storageClass: "longhorn"
+    accessMode: ReadWriteMany
+    size: 200Gi
+
+  watch:
+    enabled: false
+
+resources:
+  #limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  requests:
+    cpu: 20m
+    memory: 128Mi
+
+nodeSelector:
+  disktype: external
