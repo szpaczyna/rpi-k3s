@@ -4,18 +4,18 @@ kind: StatefulSet
 metadata:
   name: prometheus
   namespace: monitoring
+  labels:
+    app.kubernetes.io/name: prometheus
 spec:
   replicas: 2
   serviceName: prometheus
   selector:
     matchLabels:
-      name: prometheus
+      app.kubernetes.io/name: prometheus
   template:
     metadata:
       labels:
-        name: prometheus
-        app: prometheus
-        k8s-app: prometheus
+        app.kubernetes.io/name: prometheus
     spec:
       affinity:
         podAntiAffinity:
@@ -43,7 +43,7 @@ spec:
             - --config.file=/etc/prometheus/prometheus.yaml
             - --storage.tsdb.path=/var/lib/prometheus
             - --storage.tsdb.retention.time=35d
-            - --storage.tsdb.retention.size=10GB
+            - --storage.tsdb.retention.size=20GB
             - --storage.tsdb.min-block-duration=1h
             - --storage.tsdb.max-block-duration=2h
           ports:
@@ -90,4 +90,4 @@ spec:
         storageClassName: longhorn
         resources:
           requests:
-            storage: 12Gi
+            storage: 24Gi
