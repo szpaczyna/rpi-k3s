@@ -1,2 +1,3 @@
 #!/bin/bash
-kubectl apply -f .
+kubectl create ns storage
+kubectl apply -n storage -f .

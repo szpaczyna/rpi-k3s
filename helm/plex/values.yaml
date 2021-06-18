@@ -1,0 +1,145 @@
+---
+
+image:
+  repository: ghcr.io/k8s-at-home/plex
+  tag: v1.23.2.4656-85f0adf5b
+  pullPolicy: IfNotPresent
+
+# -- environment variables. See [plex docs](https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/) for more details.
+env:
+  # -- Set the container timezone
+  TZ: Europe/Warsaw
+  # ADVERTISE_IP: 10.1.0.21
+  # ALLOWED_NETWORKS:
+  # PLEX_CLAIM:
+  PLEX_PREFERENCE_1: "FriendlyName=rpi-k3s-plex"
+  PLEX_PREFERENCE_2: "EnableIPv6=0"
+  PLEX_PREFERENCE_3: "DlnaEnabled=1"
+  # PLEX_PREFERENCE_3: "logDebug=0"
+  # PLEX_PREFERENCE_4: "DisableTLSv1_0=1"
+  # PLEX_PREFERENCE_5: "LanNetworksBandwidth=xxx.xxx.xxx.0/18\,xxx.xxx.xxx.0/24\,xxx.xxx.xxx.0/24"
+  # PLEX_PREFERENCE_6: "TranscoderQuality=2"
+  # PLEX_PREFERENCE_7: "TreatWanIpAsLocal=0"
+  # PLEX_PREFERENCE_8: "TranscoderH264BackgroundPreset=fast"
+
+initContainers:
+- name: "config-directory-permissions"
+  image: busybox:1.32.0
+  command: ["/bin/sh"]
+  args: ["-c", "chown 568:568 /config"]
+  volumeMounts:
+  - name: config
+    mountPath: /config
+
+- name: "media-directory-permissions"
+  image: busybox:1.32.0
+  command: ["/bin/sh"]
+  args: ["-c", "chown 568:568 /media"]
+  volumeMounts:
+  - name: media
+    mountPath: /media
+
+service:
+  main:
+    primary: true
+    ports:
+      http:
+        port: 32400
+  dnla-tcp:
+    enabled: true
+    type: LoadBalancer
+    loadBalancerIP: 10.1.0.21
+    annotations:
+      metallb.universe.tf/allow-shared-ip: "true"
+    ports:
+      dnla-tcp:
+        enabled: true
+        port: 32469
+        protocol: TCP
+        targetPort: 32469
+    externalTrafficPolicy: Local
+  dnla-udp:
+    enabled: true
+    type: LoadBalancer
+    loadBalancerIP: 10.1.0.21
+    annotations:
+      metallb.universe.tf/allow-shared-ip: "true"
+    ports:
+      dnla-udp:
+        enabled: true
+        port: 1900
+        protocol: TCP
+        targetPort: 1900
+    externalTrafficPolicy: Local
+
+ingress:
+  main:
+    enabled: true
+    ingressClassName: traefik-lb
+    hosts:
+      - host: plex.morphine
+        paths:
+        - path: /web
+          pathType: Prefix
+          service:
+            name: http
+            port: 32400
+
+# -- Enable devices to be discoverable
+hostNetwork: true
+
+# -- Configure persistence settings for the chart under this key.
+# @default -- See values.yaml
+persistence:
+  config:
+    enabled: true
+    mountPath: /config
+    storageClass: "longhorn"
+    accessMode: ReadWriteOnce
+    size: 100Mi
+    ## Do not delete the pvc upon helm uninstall
+    skipuninstall: true
+
+  transcode:
+    enabled: false
+    mountPath: /transcode
+
+  media:
+    enabled: true
+    mountPath: /media
+    storageClass: "longhorn"
+    accessMode: ReadWriteMany
+    size: 200Gi
+    skipuninstall: true
+
+# -- Configure the Security Context for the Pod
+podSecurityContext: {}
+  #runAsUser: 568
+  #runAsGroup: 568
+  #fsGroup: 568
+  # # Hardware acceleration using an Intel iGPU w/ QuickSync
+  # # These IDs below should be matched to your `video` and `render` group on the host
+  # # To obtain those IDs run the following grep statement on the host:
+  # # $ cat /etc/group | grep "video\|render"
+  # # video:x:44:
+  # # render:x:109:
+  # supplementalGroups:
+  # - 44
+  # - 109
+
+# -- Configure the resource requests and/or limits for the Pod
+resources: {}
+  # requests:
+  #   # Hardware acceleration using an Intel iGPU w/ QuickSync and
+  #   # using intel-gpu-plugin (https://github.com/intel/intel-device-plugins-for-kubernetes)
+  #   gpu.intel.com/i915: 1
+  #   cpu: 200m
+  #   memory: 256Mi
+  # limits:
+  #   # Hardware acceleration using an Intel iGPU w/ QuickSync and
+  #   # using intel-gpu-plugin (https://github.com/intel/intel-device-plugins-for-kubernetes)
+  #   gpu.intel.com/i915: 1
+  #   memory: 4096Mi
+
+nodeSelector:
+  disktype: external

@@ -56,6 +56,8 @@ env:
   TRANSMISSION_WATCH_DIR: /config/watch
   # -- Web home for flood
   TRANSMISSION_WEB_HOME: /config/flood-for-transmission
+  # -- Queue
+  TRANSMISSION_DOWNLOAD_QUEUE_SIZE: 12
 
 service:
   port:
@@ -96,17 +98,16 @@ probes:
       timeoutSeconds: 30
 
 ingress:
-  main:
-    enabled: true
-    ingressClassName: traefik-lb
-    hosts:
-      - host: transmission.morphine
-        paths:
-        - path: /transmission/web
-          pathType: Prefix
-          service:
-            name: http
-            port: 9091
+  enabled: true
+  ingressClassName: traefik-lb
+  hosts:
+    - host: transmission.morphine
+      paths:
+      - path: /
+        pathType: Prefix
+        service:
+          name: http
+          port: 9091
 
 persistence:
   config:
@@ -116,7 +117,7 @@ persistence:
     accessMode: ReadWriteOnce
     size: 100Mi
     ## Do not delete the pvc upon helm uninstall
-    skipuninstall: false
+    skipuninstall: true
 
   downloads:
     enabled: true
@@ -124,6 +125,7 @@ persistence:
     storageClass: "longhorn"
     accessMode: ReadWriteMany
     size: 200Gi
+    skipuninstall: true
 
   watch:
     enabled: false

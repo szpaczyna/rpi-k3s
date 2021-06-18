@@ -4,7 +4,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 image:
-  repository: szpaczyn/calibe-web-arm64
+  repository: szpaczyn/calibre-web-arm64
   tag: v0.6.12
   pullPolicy: IfNotPresent
 
@@ -52,7 +52,7 @@ persistence:
     storageClass: "longhorn"
     accessMode: ReadWriteOnce
     size: 256Mi
-    skipuninstall: false
+    skipuninstall: true
   books:
     enabled: true
     storageClass: "longhorn"
