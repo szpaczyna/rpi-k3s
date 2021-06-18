@@ -1,5 +1,7 @@
 #!/bin/bash
-kubens logging
-./decrypt
-kubectl apply -f .
-rm -rf 04-kibana-auth.yaml
+sops -d ../../secrets/kibana-secret.yaml > \
+    01-kibana-auth.yaml
+
+kubectl -n logging apply -f .
+
+rm -rf 01-kibana-auth.yaml

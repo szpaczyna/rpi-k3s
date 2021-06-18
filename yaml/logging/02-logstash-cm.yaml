@@ -3,6 +3,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: logstash-config
+  labels:
+    app.kubernetes.io/name: logstash
 data:
   logstash.yml: |
      http.host: "0.0.0.0"

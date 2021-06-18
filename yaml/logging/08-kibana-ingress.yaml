@@ -19,7 +19,7 @@ spec:
       paths:
       - backend:
           service:
-            name: elk-svc-kibana
+            name: kibana
             port:
               number: 5601
         path: /

@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: elasticsearch-config
   labels:
-    name: elk
+    app.kubernetes.io/name: elasticsearch
 data:
   elasticsearch.yml: |
     ---
@@ -18,8 +18,8 @@ data:
     http.cors.enabled: true
     http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
   jvm.options: |
-    -Xms256M
-    -Xmx256M
+    -Xms512M
+    -Xmx512M
     -XX:CMSInitiatingOccupancyFraction=75
     -XX:+UseCMSInitiatingOccupancyOnly
     -Djava.io.tmpdir=/tmp

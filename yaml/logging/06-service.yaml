@@ -2,33 +2,33 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: elk-svc-kibana
+  name: kibana
   labels:
-    name: elk
+    app.kubernetes.io/name: kibana
 spec:
   selector:
-    app: elk
+    app.kubernetes.io/name: kibana
   ports:
     - port: 5601
       targetPort: 5601
       protocol: TCP
-      name: kibana
+      name: http
   type: ClusterIP
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: elk-svc-logstash
+  name: logstash
   labels:
-    name: elk
+    app.kubernetes.io/name: logstash
 spec:
   selector:
-    app: elk
+    app.kubernetes.io/name: logstash
   ports:
     - port: 9600
       targetPort: 9600
       protocol: TCP
-      name: logstash
+      name: http
     - port: 5044
       targetPort: 5044
       protocol: TCP
@@ -43,16 +43,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: elk-svc-elasticsearch
+  name: elasticsearch
   labels:
-    name: elk
+    app.kubernetes.io/name: elasticsearch
 spec:
   selector:
-    app: elk
+    app.kubernetes.io/name: elasticsearch
   ports:
     - port: 9200
       targetPort: 9200
       protocol: TCP
       name: elasticsearch
+    - port: 9300
+      targetPort: 9300
+      protocol: TCP
+      name: cluster
   type: LoadBalancer
   loadBalancerIP: 10.1.0.11

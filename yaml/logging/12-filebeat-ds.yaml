@@ -1,86 +1,21 @@
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: filebeat
-  annotations:
-  labels:
-    app: "filebeat"
-  namespace: logging
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: filebeat-config
-  labels:
-    app: "filebeat"
-data:
-  filebeat.yml: |
-    filebeat.inputs:
-    - type: container
-      paths:
-        - /var/log/containers/*.log
-      processors:
-      - add_kubernetes_metadata:
-          host: ${NODE_NAME}
-          matchers:
-          - logs_path:
-              logs_path: "/var/log/containers/"
-
-    output.elasticsearch:
-      host: '${NODE_NAME}'
-      hosts: [ "elk-svc-elasticsearch:9200" ]
-      index: "k3s-%{+yyyy.MM.dd}"
-
-    setup.template.name: "k3s"
-    setup.template.pattern: "k3s-*"
-
-    xpack.monitoring:
-      enabled: "true"
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: filebeat-cluster-role
-  labels:
-    app: "filebeat"
-rules:
-- apiGroups: [""]
-  resources: ["namespaces", "nodes", "pods"]
-  verbs: ["get", "list", "watch"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: filebeat-cluster-role-binding
-  labels:
-    app: "filebeat"
-roleRef:
-  kind: ClusterRole
-  name: filebeat-cluster-role
-  apiGroup: rbac.authorization.k8s.io
-subjects:
-- kind: ServiceAccount
-  name: filebeat
-  namespace: logging
----
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: filebeat
   labels:
-    app: "filebeat"
+    app.kubernetes.io/name: filebeat
 spec:
   selector:
     matchLabels:
-      app: "filebeat"
+      app.kubernetes.io/name: filebeat
   updateStrategy:
     type: RollingUpdate
   template:
     metadata:
-      name: "filebeat"
+      name: filebeat
       labels:
-        app: "filebeat"
+        app.kubernetes.io/name: filebeat
     spec:
       serviceAccountName: filebeat
       terminationGracePeriodSeconds: 5

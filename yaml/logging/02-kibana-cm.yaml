@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: kibana-config
   labels:
-    name: elk
+    app.kubernetes.io/name: kibana
 data:
   kibana.yml: |
     ---
