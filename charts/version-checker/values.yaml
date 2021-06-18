@@ -1,9 +1,6 @@
-# Default values for version-checker.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+## version-checker values
 
 replicaCount: 1
-
 image:
   repository: registry.shpaq.org/version-checker
   tag: 0.2.2
@@ -45,25 +42,18 @@ selfhosted:
   #  username:
   #  password:
   #  token:
-  #- name: EXAMPLE
-  #  host: https://artifactory.example.com
-  #  username: foo
-  #  password: bar
-  #  token:
 
 resources:
   limits:
-    cpu: 500m
+    cpu: 200m
     memory: 256Mi
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 50m
+    memory: 64Mi
 
 ## Prometheus Operator
 prometheus:
   enabled: false
-  replicas: 1
-  serviceAccountName: prometheus
 
 serviceMonitor:
   enabled: true

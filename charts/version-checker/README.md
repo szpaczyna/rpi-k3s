@@ -4,4 +4,6 @@ Installs Version Checker.
 
 # Installing chart
 
-    helm install -n <my-namespace> vchecker -f values.yaml .
+```sh
+helm install -n <my-namespace> version-checker -f values.yaml .
+```
