@@ -3,21 +3,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: grafana
+    app.kubernetes.io/name: grafana
   name: grafana
   namespace: monitoring
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: grafana
+      app.kubernetes.io/name: grafana
   template:
     metadata:
       labels:
-        app: grafana
+        app.kubernetes.io/name: grafana
     spec:
       initContainers:
-        - name: "create-directory"
+        - name: create-directory
           image: busybox:1.32.0
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh"]
@@ -31,26 +31,12 @@ spec:
           value: btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel,novatec-sdg-panel,grafana-singlestat-panel,farski-blendstat-panel,grafana-polystat-panel
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/provisioning"
-        image: grafana/grafana:8.0.1
+        image: grafana/grafana:8.0.3
         imagePullPolicy: IfNotPresent
         name: grafana
         ports:
         - containerPort: 3000
           name: http
-        readinessProbe:
-          httpGet:
-            path: /api/health
-            port: http
-          timeoutSeconds: 20
-          initialDelaySeconds: 120
-          periodSeconds: 120
-        livenessProbe:
-          httpGet:
-            path: /api/health
-            port: http
-          timeoutSeconds: 20
-          initialDelaySeconds: 120
-          periodSeconds: 120
         resources:
           limits:
             cpu: 250m
@@ -89,9 +75,6 @@ spec:
         - mountPath: /etc/grafana
           name: grafana-config
           readOnly: false
-      nodeSelector:
-        kubernetes.io/role: worker
-        disktype: internal
       securityContext:
         fsGroup: 472
         runAsNonRoot: true
@@ -128,3 +111,5 @@ spec:
       - name: grafana-config
         secret:
           secretName: grafana-config
+      nodeSelector:
+        kubernetes.io/role: worker

@@ -9,7 +9,7 @@ data:
   elasticsearch.yml: |
     ---
     cluster.name: "morphine-cluster"
-    node.name: "elasticsearch"
+    #node.name: "elasticsearch"
     node.master: true
     node.data: true
     network.host: 0.0.0.0
