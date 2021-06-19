@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.8...v0.0.9) (2021-06-19)
+
+
+### Features
+
+* jsonlint in makefile, labels in grafana and speedtest, services fix in elastic shards config ([7f6de4e](https://github.com/szpaczyna/rpi-k3s/commits/7f6de4edefd6ba9b4698bc8cbcc4180e205767f2))
+* media center ([160442a](https://github.com/szpaczyna/rpi-k3s/commits/160442ae01e43da4fb06a802c5af67eda2ad525f))
+* metallb version bump, www labels added ([4a8a680](https://github.com/szpaczyna/rpi-k3s/commits/4a8a680cb5dd2905f78c2c5232d0c3935f4d6a85))
+* postgres backups ([328a3ff](https://github.com/szpaczyna/rpi-k3s/commits/328a3ff888264ab247e40f6f31b307ae5c5a2b42))
+* samba changes with new pvc ([ebe592b](https://github.com/szpaczyna/rpi-k3s/commits/ebe592b52abba9d9f3b482407a59027910238845))
+* some order with elk stack; divide single deployment to many; change elasticsearch to statefulset ([aaac403](https://github.com/szpaczyna/rpi-k3s/commits/aaac40341fc53b032b3b2ad8bee8c973dd292547))
+* transmission with flood, fixed postgres backup jobs ([018ff5a](https://github.com/szpaczyna/rpi-k3s/commits/018ff5a7d1a95db7db791e4c2eaf4877af816f52))
+
+
+### Bug Fixes
+
+* calibre-web image tag ([370d451](https://github.com/szpaczyna/rpi-k3s/commits/370d451ad40368e19be424f5d723d962a70fb9c5))
+* change pull policy ([7965161](https://github.com/szpaczyna/rpi-k3s/commits/7965161360624edc414990c751cfc657cb23462b))
+* image typo ([b695577](https://github.com/szpaczyna/rpi-k3s/commits/b6955778ef26c512c2e00aaf60bdc064b72f4906))
+* prometheus labels ([822ae42](https://github.com/szpaczyna/rpi-k3s/commits/822ae42ff06efafdecaaa9bb74a13aa2029b52b5))
+* readme update ([2df43cd](https://github.com/szpaczyna/rpi-k3s/commits/2df43cd1b69d778211f46da20ba939cdc962b6a5))
+* revert to local image ([26278d8](https://github.com/szpaczyna/rpi-k3s/commits/26278d8f8f5080538ff4a618f0abf98f04234045))
+* syntax typo ([a9809f3](https://github.com/szpaczyna/rpi-k3s/commits/a9809f38d683ae8b20b8810260400bca35ccafa6))
+* version-checker values polished; namespace file for nfs ([72bed9e](https://github.com/szpaczyna/rpi-k3s/commits/72bed9e9a802541d02545a0091a6c00e95155ff3))
+
 ### [0.0.8](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.7...v0.0.8) (2021-06-12)
 
 
