@@ -1,0 +1,9 @@
+#!/bin/bash
+#helm upgrade --install transmission k8s-at-home/transmission -n media -f transmission.values.yaml
+
+kubectl -n media apply -f .
+
+#helm upgrade --install jackett k8s-at-home/jackett -n media -f jackett.values.yaml
+#helm upgrade --install sonarr bananaspliff/sonarr -n media -f sonarr.values.yaml
+#helm upgrade --install radarr bananaspliff/radarr -n media --values radarr.values.yaml
+#helm upgrade --install plex k8s-at-home/plex -n media --values plex.values.yaml

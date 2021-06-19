@@ -1,0 +1,65 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: "media"
+  name: "media"
+  labels:
+    app.kubernetes.io/name: media
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.frontend.redirect.permanent: "true"
+    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+spec:
+  ingressClassName: traefik-lb
+  tls:
+    - hosts:
+        - "media.shpaq.org"
+      secretName: media-shpaq-org-tls
+  rules:
+  - host: "media.shpaq.org"
+    http:
+      paths:
+        - path: "/transmission"
+          pathType: Prefix
+          backend:
+            service:
+              name: "transmission-http"
+              port:
+                number: 9091
+        - path: "/sonarr"
+          pathType: Prefix
+          backend:
+            service:
+              name: "sonarr"
+              port:
+                number: 8989
+        - path: "/jackett"
+          pathType: Prefix
+          backend:
+            service:
+              name: "jackett"
+              port:
+                number: 9117
+        - path: "/bazarr"
+          pathType: Prefix
+          backend:
+            service:
+              name: "bazarr"
+              port:
+                number: 6767
+        - path: "/radarr"
+          pathType: Prefix
+          backend:
+            service:
+              name: "radarr"
+              port:
+                number: 7878
+        - path: "/plex"
+          pathType: Prefix
+          backend:
+            service:
+              name: "plex-http"
+              port:
+                number: 80

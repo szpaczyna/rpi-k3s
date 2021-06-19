@@ -1,0 +1,185 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-http
+  labels:
+    app.kubernetes.io/name: transmission
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9091
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: transmission
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-utptcp
+  labels:
+    app.kubernetes.io/name: transmission
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.1.0.20
+  ports:
+    - port: 51413
+      targetPort: utptcp
+      protocol: TCP
+      name: utptcp
+  selector:
+    app.kubernetes.io/name: transmission
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-utpudp
+  labels:
+    app.kubernetes.io/name: transmission
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.1.0.20
+  ports:
+    - port: 51413
+      targetPort: utpudp
+      protocol: UDP
+      name: utpudp
+  selector:
+    app.kubernetes.io/name: transmission
+---
+## jackett
+apiVersion: v1
+kind: Service
+metadata:
+  name: jackett
+  labels:
+    app.kubernetes.io/name: jackett
+spec:
+  type: ClusterIP
+  ports:
+  - port: 9117
+    targetPort: jackett
+    protocol: TCP
+    name: jackett
+  selector:
+    app.kubernetes.io/name: jackett
+
+---
+## sonarr
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  labels:
+    app.kubernetes.io/name: sonarr
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8989
+      targetPort: sonarr
+      protocol: TCP
+      name: sonarr
+  selector:
+    app.kubernetes.io/name: sonarr
+
+---
+## bazarr
+apiVersion: v1
+kind: Service
+metadata:
+  name: bazarr
+  labels:
+    app.kubernetes.io/name: bazarr
+spec:
+  type: ClusterIP
+  ports:
+  - port: 6767
+    targetPort: bazarr
+    protocol: TCP
+    name: bazarr
+  selector:
+    app.kubernetes.io/name: bazarr
+---
+## radarr
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  labels:
+    app.kubernetes.io/name: radarr
+spec:
+  type: ClusterIP
+  ports:
+    - port: 7878
+      targetPort: radarr
+      protocol: TCP
+      name: radarr
+  selector:
+    app.kubernetes.io/name: radarr
+---
+## plex
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-tcp
+  labels:
+    app.kubernetes.io/name: plex
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.1.0.20
+  ports:
+  - port: 32469
+    targetPort: 32469
+    protocol: TCP
+    name: dnla-tcp
+  selector:
+    app.kubernetes.io/name: plex
+---
+## plex
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-udp
+  labels:
+    app.kubernetes.io/name: plex
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.1.0.20
+  ports:
+  - port: 1900
+    targetPort: 1900
+    protocol: UDP
+    name: dnla-udp
+  selector:
+    app.kubernetes.io/name: plex
+---
+## plex
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-http
+  labels:
+    app.kubernetes.io/name: plex
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.1.0.20
+  ports:
+  - port: 80
+    targetPort: plex-http
+    protocol: TCP
+    name: plex-http
+  selector:
+    app.kubernetes.io/name: plex

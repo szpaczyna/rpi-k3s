@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "media"
+  labels:
+    app.kubernetes.io/name: media
+spec:
+  storageClassName: "longhorn"
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "400Gi"
