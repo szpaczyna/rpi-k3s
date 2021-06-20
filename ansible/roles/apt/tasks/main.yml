@@ -1,0 +1,60 @@
+---
+
+- name: Upgrade system
+  apt:
+    upgrade: dist
+    force_apt_get: true
+  register: apt_upgrade
+  retries: 5
+  until: apt_upgrade is success
+
+- name: Upgrade all packages to the latest version
+  apt:
+    name: "*"
+    force_apt_get: true
+  register: apt_update
+  retries: 5
+  until: apt_update is success
+
+- name: Install Common Packages
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - dnsutils
+      - git
+      - gnupg2
+      - htop
+      - iputils-ping
+      - libnss-mdns
+      - neofetch
+      - net-tools
+      - nfs-common
+      - nmap
+      - psmisc
+      - python3
+      - python3-pip
+      - rsync
+      - software-properties-common
+      - mtr
+      - unattended-upgrades
+      - wget
+      - chrony
+      - rsyslog-elasticsearch
+      - pigz
+      - pv
+      - zsh
+      - smartmontools
+      - iotop
+    install_recommends: false
+    update_cache: true
+    force_apt_get: true
+  register: apt_install_common
+  retries: 5
+  until: apt_install_common is success
+
+- name: Clean up apt
+  apt:
+    autoremove: true
+    force_apt_get: true
