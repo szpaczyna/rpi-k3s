@@ -2,5 +2,6 @@
 sops -d \
     --output 01-secret.yaml \
     ../../secrets/unifi-secret.yaml
+
 kubectl apply -f .
 rm -rf 01-secret.yaml

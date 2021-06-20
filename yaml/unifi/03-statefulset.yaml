@@ -2,31 +2,32 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  labels:
-    app: unifi
   name: unifi
+  labels:
+    app.kubernetes.io/name: unifi
 spec:
   replicas: 1
   serviceName: unifi
   selector:
     matchLabels:
-      app: unifi
+      app.kubernetes.io/name: unifi
   template:
     metadata:
       labels:
-        app: unifi
+        app.kubernetes.io/name: unifi
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9130"
         seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
     spec:
       serviceAccountName: unifi
+      hostNetwork: true
       containers:
         - name: controller
           image: "linuxserver/unifi-controller:version-6.2.25"
           env:
             - name: MEM_LIMIT
-              value: 256M
+              value: 368M
             - name: PGID
               value: "1000"
             - name: PUID
@@ -83,20 +84,6 @@ spec:
             containerPort: 9130
             protocol: TCP
           volumeMounts:
-          livenessProbe:
-            tcpSocket:
-              port: metrics
-            initialDelaySeconds: 120
-            failureThreshold: 5
-            timeoutSeconds: 10
-            periodSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: metrics
-            initialDelaySeconds: 120
-            failureThreshold: 5
-            timeoutSeconds: 10
-            periodSeconds: 10
       terminationGracePeriodSeconds: 10
       restartPolicy: Always
       tolerations:
@@ -105,7 +92,6 @@ spec:
       nodeSelector:
         kubernetes.io/role: worker
         kubernetes.io/hostname: rpi-k3s-worker1
-        disktype: external
   volumeClaimTemplates:
     - metadata:
         name: data
