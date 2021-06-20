@@ -3,7 +3,7 @@ certManagerDeployment:
   deployment:
     replicaCount: 1
     image:
-      repository: registry.shpaq.org/cert-exporter
+      repository: szpaczyn/cert-exporter-arm64
       pullPolicy: Always
       command: ["./app"]
       args:
@@ -24,7 +24,6 @@ certManagerDeployment:
         memory: 128Mi
     nodeSelector:
       kubernetes.io/role: worker
-      disktype: internal
     tolerations: []
     affinity: {}
   service:
