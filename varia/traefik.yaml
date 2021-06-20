@@ -4,6 +4,8 @@ kind: HelmChart
 metadata:
   name: traefik
   namespace: kube-system
+  labels:
+    app.kubernetes.io/name: traefik
 spec:
   chart: https://%{KUBERNETES_API}%/static/charts/traefik-1.81.0.tgz
   valuesContent: |-
@@ -25,10 +27,9 @@ spec:
       domain: traefik.k3s.shpaq.org
     deployment:
       labels:
-        k8s-app: traefik
-        app: traefik
+        app.kubernetes.io/name: traefik
       podLabels:
-        k8s-app: traefik
+        app.kubernetes.io/name: traefik
       podAnnotations:
         prometheus.io/path: /metrics
         prometheus.io/port: 9100

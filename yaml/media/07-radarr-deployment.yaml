@@ -21,9 +21,9 @@ spec:
       serviceAccountName: media
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
-        #securityContext:
-        #runAsGroup: 568
-        #runAsUser: 568
+      securityContext:
+        runAsGroup: 568
+        runAsUser: 568
       containers:
         - name: radarr
           image: "linuxserver/radarr:latest"
@@ -60,3 +60,6 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: media
+      nodeSelector:
+        disktype: external
+        kubernetes.io/role: worker

@@ -4,9 +4,16 @@ kind: ConfigMap
 metadata:
   namespace: metallb-system
   name: config
+  labels:
+    app.kubernetes.io/name: metallb
 data:
   config: |
     address-pools:
+    - name: morphine
+      protocol: layer2
+      addresses:
+      - 10.0.0.31-10.0.0.34
+      avoid-buggy-ips: true
     - name: bgp
       protocol: bgp
       addresses:

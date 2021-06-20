@@ -1,5 +1,5 @@
 ---
-## Default values for calibre-web.
+## calibre-web.
 nameOverride: ""
 fullnameOverride: ""
 

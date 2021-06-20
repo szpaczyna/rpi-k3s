@@ -125,7 +125,7 @@ data:
     => \"Europe/Warsaw\"\t\t\t\t \n  }\n\n  }\n  \n   if \"%\" in [source_host] {\n    mutate
     {\n        gsub => [\n          \"source_host\", \"%.*$\",\"\"\n        ]\n    }\n
     \ }\n  \n}\n\n\noutput {\n  if \"pihole\" in [tags]{\n    elasticsearch {\n      hosts
-    => [\"elk-svc-elasticsearch:9200\"]\n      manage_template => false\n      index
+    => [\"elasticsearch:9200\"]\n      manage_template => false\n      index
     => \"pihole-dns-%{+yyyy.MM.dd}\"\n    }\n  }\n}\n"
   20-auth.conf: "input {\n       beats {\n       port => 5045\n       type => \"logs\"\n
     \      tags => [\"auth\"]\n  }\n}\n\n\nfilter {\n  grok {\n    match => [\n      \"message\",
@@ -143,5 +143,5 @@ data:
     ]\n  }\n  \n\n  date {\n    match => [ \"syslog_date\", \"MMM  d HH:mm:ss\", \"MMM
     dd HH:mm:ss\" ]\n    timezone => \"Europe/Warsaw\"\n  }\n\n  geoip {\n    source
     => \"ip\"\n  }\n}\n\n\noutput {\n  if \"auth\" in [tags]{\n    elasticsearch {\n
-    \       hosts => [\"elk-svc-elasticsearch:9200\"]\n        manage_template => false\n
+    \       hosts => [\"elasticsearch:9200\"]\n        manage_template => false\n
     \       index => \"auth-%{+yyyy.MM.dd}\"\n    }\n  }\n}\n"

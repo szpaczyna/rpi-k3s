@@ -4,4 +4,4 @@ kind: Namespace
 metadata:
   name: metallb-system
   labels:
-    app: metallb
+    app.kubernetes.io/name: metallb

@@ -37,14 +37,16 @@ spec:
             value: "logDebug=0"
           - name: "PLEX_PREFERENCE_4"
             value: "DisableTLSv1_0=1"
-          - name: "PLEX_PREFERENCE_8"
-            value: "TranscoderH264BackgroundPreset=fast"
           - name: "PLEX_PREFERENCE_5"
             value: "allowedNetworks=10.0.0.0/8"
           - name: "PLEX_PREFERENCE_6"
             value: "DlnaEnabled=1"
+          - name: "PLEX_PREFERENCE_7"
+            value: "TranscoderH264BackgroundPreset=fast"
           - name: "TZ"
             value: "Europe/Warsaw"
+          - name: "ALLOWED_NETWORKS"
+            value: "10.0.0.0/8"
         ports:
         - name: dnla-tcp
           containerPort: 32469
