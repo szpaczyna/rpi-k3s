@@ -1,14 +1,9 @@
 #!/bin/bash
 sops -d \
-    --output values.yaml \
-    ../../secrets/nextcloud-values.yaml
-
-sops -d \
     --output secret.yaml \
     ../../secrets/nextcloud-secret.yaml
-
 
 kubectl apply -f secret.yaml -n apps
 helm upgrade --install cloud nextcloud/nextcloud -n apps -f values.yaml
 
-rm -rf values.yaml secret.yaml
+rm -rf secret.yaml

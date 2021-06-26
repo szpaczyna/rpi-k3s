@@ -3,7 +3,7 @@ ignore: |
   .github/
   ansible/
   ignore/
-  charts/
+  helm/
   secrets/
   *-crds.yaml
   *.asc.yaml
