@@ -1,8 +1,7 @@
 ---
 image:
   repository: nextcloud
-  #tag: 21.0-apache
-  tag: fpm-alpine
+  tag: 21.0.2
   pullPolicy: IfNotPresent
 
 nameOverride: cloud
@@ -140,7 +139,6 @@ redis:
 
 cronjob:
   enabled: false
-    # Nexcloud image is used as default but only curl is needed
   image:
     repository: curlimages/curl
     tag: 7.77.0
