@@ -17,7 +17,7 @@ spec:
         app: mysql
     spec:
       containers:
-      - image: szpaczyn/mariadb-arm64:v10.5.8
+      - image: szpaczyn/mariadb-arm64:v10.5.11
         name: mysql
         imagePullPolicy: IfNotPresent
         env:
