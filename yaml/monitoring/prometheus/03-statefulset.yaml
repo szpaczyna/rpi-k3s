@@ -37,13 +37,13 @@ spec:
               mountPath: /var/lib/prometheus
       containers:
         - name: prometheus
-          image: prom/prometheus:v2.28.0
+          image: prom/prometheus:v2.28.1
           args:
             - --web.listen-address=0.0.0.0:9090
             - --config.file=/etc/prometheus/prometheus.yaml
             - --storage.tsdb.path=/var/lib/prometheus
             - --storage.tsdb.retention.time=35d
-            - --storage.tsdb.retention.size=20GB
+            - --storage.tsdb.retention.size=40GB
             - --storage.tsdb.min-block-duration=1h
             - --storage.tsdb.max-block-duration=2h
           ports:
@@ -90,4 +90,4 @@ spec:
         storageClassName: longhorn
         resources:
           requests:
-            storage: 24Gi
+            storage: 64Gi

@@ -17,7 +17,7 @@ spec:
         app: mysql
     spec:
       containers:
-      - image: registry.shpaq.org/mariadb:v10.5.8
+      - image: szpaczyn/mariadb-arm64:v10.5.8
         name: mysql
         imagePullPolicy: IfNotPresent
         env:
@@ -26,12 +26,13 @@ spec:
             secretKeyRef:
               name: mysql-root-secret
               key: password
+        ## please adjust the following
         - name: MYSQL_DATABASE
-          value: gogs
+          value: test
         - name: MYSQL_USER
-          value: gogs
+          value: test
         - name: MYSQL_PASSWORD
-          value: 123gogs321
+          value: test
         ports:
           - containerPort: 3306
             name: mysql

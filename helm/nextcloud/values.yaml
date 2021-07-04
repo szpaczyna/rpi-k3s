@@ -15,6 +15,10 @@ ingress:
     traefik.frontend.redirect.permanent: "true"
     traefik.ingress.kubernetes.io/frontend-entry-points: http, https
     traefik.ingress.kubernetes.io/redirect-entry-point: https
+    traefik.ingress.kubernetes.io/force-hsts: "true"
+    traefik.ingress.kubernetes.io/hsts-max-age: "315360000"
+    traefik.frontend.redirect.regex: https://(.*)/.well-known/(card|cal)dav
+    traefik.frontend.redirect.replacement: https://$1/remote.php/dav/
   tls:
   - secretName: cloud-shpaq-org-tls
     hosts:
@@ -138,7 +142,7 @@ redis:
   enabled: false
 
 cronjob:
-  enabled: false
+  enabled: true
   image:
     repository: curlimages/curl
     tag: 7.77.0
@@ -147,8 +151,8 @@ cronjob:
   annotations: {}
   # Set curl's insecure option if you use e.g. self-signed certificates
   curlInsecure: false
-  failedJobsHistoryLimit: 5
-  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 1
 
 service:
   type: ClusterIP
@@ -194,7 +198,7 @@ startupProbe:
   successThreshold: 1
 
 hpa:
-  enabled: true
+  enabled: false
   cputhreshold: 80
   minPods: 1
   maxPods: 2
