@@ -17,7 +17,6 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9500"
-
     spec:
       containers:
       - name: longhorn-manager
