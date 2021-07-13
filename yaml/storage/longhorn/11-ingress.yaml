@@ -1,0 +1,32 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: longhorn
+  namespace: longhorn-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.frontend.redirect.permanent: 'true'
+    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+    ingress.kubernetes.io/auth-type: basic
+    ingress.kubernetes.io/auth-secret: longhorn-auth
+  labels:
+    app.kubernetes.io/name: longhorn
+spec:
+  ingressClassName: traefik-lb
+  rules:
+  - host: longhorn.shpaq.org
+    http:
+      paths:
+      - backend:
+          service:
+            name: longhorn-frontend
+            port:
+              number: 8000
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - longhorn.shpaq.org
+    secretName: longhorn-shpaq-org-tls

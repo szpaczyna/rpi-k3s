@@ -7,13 +7,14 @@ metadata:
   name: longhorn-frontend
   namespace: longhorn-system
 spec:
-  type: LoadBalancer
-  loadBalancerIP: 10.1.0.13
+#  type: LoadBalancer
+#  loadBalancerIP: 10.1.0.13
+  type: ClusterIP
   selector:
     app: longhorn-ui
   ports:
   - name: http
-    port: 80
+    port: 8000
     targetPort: http
 ---
 apiVersion: v1
