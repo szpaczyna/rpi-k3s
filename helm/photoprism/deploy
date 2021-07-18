@@ -1,0 +1,10 @@
+#!/bin/bash
+
+sops -d \
+  --output secret.yaml \
+  ../../secrets/photoprism-secret.yaml \
+
+kubectl apply -f secret.yaml -n media
+
+helm upgrade --install photoprism --namespace media -f values.yaml .
+rm -rf secret.yaml
