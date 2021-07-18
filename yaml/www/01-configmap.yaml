@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: shpaq-org
   labels:
-    app: shpaq-org
+    app.kubernetes.io/name: shpaq-org
 data:
   robots.txt: |
     User-Agent: *

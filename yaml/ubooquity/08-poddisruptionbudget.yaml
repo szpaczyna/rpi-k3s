@@ -5,9 +5,8 @@ metadata:
   name: ubooquity
   labels:
     app.kubernetes.io/name: ubooquity
-    app.kubernetes.io/instance: ubooquity
 spec:
   selector:
     matchLabels:
-      app: ubooquity
+      app.kubernetes.io/name: ubooquity
   minAvailable: 1

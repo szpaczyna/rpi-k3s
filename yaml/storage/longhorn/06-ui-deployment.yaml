@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.1.1
+        image: longhornio/longhorn-ui:v1.1.2
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 0

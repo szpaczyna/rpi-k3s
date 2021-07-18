@@ -4,9 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: ubooquity-config
   labels:
-    app: ubooquity
     app.kubernetes.io/name: ubooquity
-    app.kubernetes.io/instance: ubooquity
 spec:
   accessModes:
     - "ReadWriteOnce"

@@ -5,20 +5,18 @@ metadata:
   name: shpaq-org
   namespace: apps
   labels:
-    name: shpaq-org
-    app: shpaq-org
+    app.kubernetes.io/name: shpaq-org
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: shpaq-org
+      app.kubernetes.io/name: shpaq-org
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        name: shpaq-org
-        app: shpaq-org
+        app.kubernetes.io/name: shpaq-org
     spec:
       containers:
       - name: nginx

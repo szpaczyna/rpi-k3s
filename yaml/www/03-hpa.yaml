@@ -4,6 +4,8 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: shpaq-org-mem-scale
   namespace: apps
+  labels:
+    app.kubernetes.io/name: shpaq-org
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -24,6 +26,8 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: shpaq-org-cpu-scale
   namespace: apps
+  labels:
+    app.kubernetes.io/name: shpaq-org
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

@@ -5,8 +5,6 @@ metadata:
   name: ubooquity
   labels:
     app.kubernetes.io/name: ubooquity
-    app.kubernetes.io/instance: ubooquity
-    app: ubooquity
 spec:
   type: ClusterIP
   ports:
@@ -19,4 +17,4 @@ spec:
       protocol: TCP
       name: http-admin
   selector:
-    app: ubooquity
+    app.kubernetes.io/name: ubooquity

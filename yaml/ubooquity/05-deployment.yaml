@@ -4,20 +4,18 @@ kind: Deployment
 metadata:
   name: ubooquity
   labels:
-    app: ubooquity
     app.kubernetes.io/name: ubooquity
-    app.kubernetes.io/instance: ubooquity
   annotations:
     backup.velero.io/backup-volumes: ubooquity-config
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ubooquity
+      app.kubernetes.io/name: ubooquity
   template:
     metadata:
       labels:
-        app: ubooquity
+        app.kubernetes.io/name: ubooquity
     spec:
       serviceAccountName: ubooquity
       containers:

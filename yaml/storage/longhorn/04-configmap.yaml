@@ -13,10 +13,10 @@ data:
     default-data-path: /data/longhorn
     replica-soft-anti-affinity:
     storage-over-provisioning-percentage: 200
-    storage-minimal-available-percentage: 15
+    storage-minimal-available-percentage: 10
     upgrade-checker: true
     default-replica-count: 2
-    default-data-locality: best-effort
+    default-data-locality: disabled
     guaranteed-engine-cpu:
     default-longhorn-static-storage-class: longhorn-static
     backupstore-poll-interval: 0
@@ -27,7 +27,7 @@ data:
     disable-scheduling-on-cordoned-node:
     replica-zone-soft-anti-affinity:
     volume-attachment-recovery-policy:
-    node-down-pod-deletion-policy: delete-deployment-pod
+    node-down-pod-deletion-policy: delete-both-statefulset-and-deployment-pod
     allow-node-drain-with-last-healthy-replica:
     mkfs-ext4-parameters: -b 4096 -m 0
     disable-replica-rebuild:
@@ -36,7 +36,7 @@ data:
     system-managed-pods-image-pull-policy: if-not-present
     allow-volume-creation-with-degraded-availability: false
     auto-cleanup-system-generated-snapshot:
-    concurrent-automatic-engine-upgrade-per-node-limit:
-    backing-image-cleanup-wait-interval:
+    concurrent-automatic-engine-upgrade-per-node-limit: 0
+    backing-image-cleanup-wait-interval: 60
     guaranteed-engine-manager-cpu:
     guaranteed-replica-manager-cpu:
