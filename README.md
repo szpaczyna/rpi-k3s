@@ -18,19 +18,23 @@ height="144px"/>
 
 -   Apps/Helm Charts:
 
-    -   [bitwarden](https://bitwarden.com/) - Passwords Management and Storage
-    -   [gitea](https://github.com/jfelten/gitea-helm-chart) - Git with a cup of tea
-    -   [kanboard](https://kanboard.org/) - Kanban project management software
-    -   [pihole](https://pi-hole.net/) - Network-wide AD Blocking
-    -   [registry](https://hub.docker.com/_/registry/) - Docker registry
-    -   [version-checker](charts/version-checker) - Checker for newest version of deployed apps
-    -   [locust](charts/locust) - template for performance testing
-    -   [cert-exporter](charts/cert-exporter) - certificates monitoring
+    -   [bitwarden](helm/bitwarden) - Passwords Management
+    -   [gitea](helm/gitea) - Git with a cup of tea
+    -   [kanboard](helm/kanboard) - Kanban project management software
+    -   [pihole](helm/pihole) - Network-wide AD Blocking
+    -   [registry](helm/registry) - Docker registry
+    -   [version-checker](helm/version-checker) - Checker for newest version of deployed apps
+    -   [locust](helm/locust) - template for performance testing
+    -   [cert-exporter](helm/cert-exporter) - certificates monitoring
     -   [postgresql](helm/postgresql) - self explanatory
     -   [drone](helm/drone) - CI/CD
     -   [keycloak](helm/keycloak) - identity provider
     -   [nextcloud](helm/nextcloud) - personal cloud service
     -   [calibre-web](helm/calibre-web) - replacement for [ubooquity](yaml/ubooquity)
+    -   [photoprism](helm/photoprism) - photos management
+    -   [plex](helm/plex) - media center
+    -   [torrent](helm/torrent) - tranmission
+
 
 -   Apps/YAML
 
@@ -42,6 +46,7 @@ height="144px"/>
     -   [prometheus stack](yaml/metrics) - Prometheus/Grafana stack with some additional exporters
     -   [elk stack](yaml/elk) - Elasticsearch/Kibana/Logstash/Filebeat
     -   [registry-ui](yaml/registry-ui) - GUI for managaning docker registry
+    -   [media downloads](yaml/media) - jackett, bazarr, radarr and sonarr
 
 
 -   System
@@ -54,6 +59,7 @@ height="144px"/>
 -   Backup
 
     -   [velero](backup/velero) - Velero backup with minio/s3
+    -   [velero-pvc-watcher](helm/velero-pvc-watcher) - watcher service for unbackuped pvcs
 
 
 -   Varia
