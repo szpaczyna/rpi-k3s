@@ -123,6 +123,24 @@ spec:
       name: radarr
   selector:
     app.kubernetes.io/name: radarr
+
+---
+## lidarr
+apiVersion: v1
+kind: Service
+metadata:
+  name: lidarr
+  labels:
+    app.kubernetes.io/name: lidarr
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8686
+    targetPort: lidarr
+    protocol: TCP
+    name: lidarr
+  selector:
+    app.kubernetes.io/name: lidarr
 ---
 ## plex
 apiVersion: v1

@@ -11,6 +11,8 @@ metadata:
     traefik.frontend.redirect.permanent: "true"
     traefik.ingress.kubernetes.io/frontend-entry-points: http, https
     traefik.ingress.kubernetes.io/redirect-entry-point: https
+    ingress.kubernetes.io/auth-type: basic
+    ingress.kubernetes.io/auth-secret: media-auth
 spec:
   ingressClassName: traefik-lb
   tls:
@@ -56,10 +58,10 @@ spec:
               name: "radarr"
               port:
                 number: 7878
-        - path: "/plex"
+        - path: "/lidarr"
           pathType: Prefix
           backend:
             service:
-              name: "plex-http"
+              name: "lidarr"
               port:
-                number: 80
+                number: 8686
