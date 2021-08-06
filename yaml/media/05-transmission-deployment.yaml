@@ -47,7 +47,7 @@ spec:
         - name: TRANSMISSION_DOWNLOAD_DIR
           value: "/downloads/complete"
         - name: TRANSMISSION_DOWNLOAD_QUEUE_SIZE
-          value: "16"
+          value: "24"
         - name: TRANSMISSION_INCOMPLETE_DIR
           value: "/downloads/incomplete"
         - name: TRANSMISSION_INCOMPLETE_DIR_ENABLED

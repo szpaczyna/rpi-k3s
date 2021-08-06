@@ -65,7 +65,7 @@ spec:
       volumes:
         - name: books
           hostPath:
-            path: /data/nfs/books
+            path: /data/nfs/calibre
         - name: config
           persistentVolumeClaim:
             claimName: ubooquity-config

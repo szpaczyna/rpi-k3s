@@ -46,8 +46,7 @@ height="144px"/>
     -   [prometheus stack](yaml/metrics) - Prometheus/Grafana stack with some additional exporters
     -   [elk stack](yaml/elk) - Elasticsearch/Kibana/Logstash/Filebeat
     -   [registry-ui](yaml/registry-ui) - GUI for managaning docker registry
-    -   [media downloads](yaml/media) - jackett, bazarr, radarr and sonarr
-
+    -   [media downloads](yaml/media) - jackett, bazarr, radarr, lidarr and sonarr
 
 -   System
 
