@@ -1,3 +1,4 @@
+---
 apiVersion: v2
 name: gitea
 description: Gitea Helm chart for Kubernetes

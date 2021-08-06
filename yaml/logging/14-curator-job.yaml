@@ -14,7 +14,7 @@ spec:
         spec:
           containers:
           - name: curator
-            image: szpaczyn/elasticsearch-curator-arm64:v5.8.3
+            image: szpaczyn/elasticsearch-curator-arm64:v5.8.4
             imagePullPolicy: IfNotPresent
             args:
             - --config

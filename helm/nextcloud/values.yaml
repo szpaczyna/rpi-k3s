@@ -1,7 +1,7 @@
 ---
 image:
   repository: nextcloud
-  tag: 22.0.0
+  tag: 22.1.0
   pullPolicy: IfNotPresent
 
 nameOverride: cloud
@@ -145,7 +145,7 @@ cronjob:
   enabled: true
   image:
     repository: curlimages/curl
-    tag: 7.77.0
+    tag: 7.78.0
     pullPolicy: IfNotPresent
   schedule: '*/5 * * * *'
   annotations: {}
@@ -175,7 +175,7 @@ resources:
 
 livenessProbe:
   enabled: true
-  initialDelaySeconds: 10
+  initialDelaySeconds: 60
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 10
@@ -183,7 +183,7 @@ livenessProbe:
 
 readinessProbe:
   enabled: true
-  initialDelaySeconds: 10
+  initialDelaySeconds: 60
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 10
@@ -191,7 +191,7 @@ readinessProbe:
 
 startupProbe:
   enabled: true
-  initialDelaySeconds: 30
+  initialDelaySeconds: 180
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 30

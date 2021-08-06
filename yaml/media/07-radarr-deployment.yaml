@@ -21,12 +21,12 @@ spec:
       serviceAccountName: media
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
-      securityContext:
-        runAsGroup: 568
-        runAsUser: 568
+      securityContext: {}
+        #runAsGroup: 568
+        #runAsUser: 568
       containers:
         - name: radarr
-          image: "linuxserver/radarr:latest"
+          image: "ghcr.io/linuxserver/radarr:latest"
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
@@ -35,6 +35,8 @@ spec:
               value: "568"
             - name: PGID
               value: "568"
+            - name: UMASK
+              value: "022"
           ports:
             - name: radarr
               containerPort: 7878

@@ -3,7 +3,7 @@
 
 image:
   repository: szpaczyn/photoprism-arm64
-  tag: "20210717"
+  tag: "20210731"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
