@@ -65,3 +65,17 @@ spec:
               name: "lidarr"
               port:
                 number: 8686
+        - path: "/prowlarr"
+          pathType: Prefix
+          backend:
+            service:
+              name: "prowlarr"
+              port:
+                number: 9696
+        - path: "/readarr"
+          pathType: Prefix
+          backend:
+            service:
+              name: "readarr"
+              port:
+                number: 8787

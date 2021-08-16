@@ -142,62 +142,36 @@ spec:
   selector:
     app.kubernetes.io/name: lidarr
 ---
-## plex
+## prowlarr
 apiVersion: v1
 kind: Service
 metadata:
-  name: plex-tcp
+  name: prowlarr
   labels:
-    app.kubernetes.io/name: plex
-  annotations:
-    metallb.universe.tf/allow-shared-ip: "true"
+    app.kubernetes.io/name: prowlarr
 spec:
-  type: LoadBalancer
-  loadBalancerIP: 10.1.0.20
+  type: ClusterIP
   ports:
-  - port: 32469
-    targetPort: 32469
+  - port: 9696
+    targetPort: prowlarr
     protocol: TCP
-    name: dnla-tcp
+    name: prowlarr
   selector:
-    app.kubernetes.io/name: plex
+    app.kubernetes.io/name: prowlarr
 ---
-## plex
+## readarr
 apiVersion: v1
 kind: Service
 metadata:
-  name: plex-udp
+  name: readarr
   labels:
-    app.kubernetes.io/name: plex
-  annotations:
-    metallb.universe.tf/allow-shared-ip: "true"
+    app.kubernetes.io/name: readarr
 spec:
-  type: LoadBalancer
-  loadBalancerIP: 10.1.0.20
+  type: ClusterIP
   ports:
-  - port: 1900
-    targetPort: 1900
-    protocol: UDP
-    name: dnla-udp
-  selector:
-    app.kubernetes.io/name: plex
----
-## plex
-apiVersion: v1
-kind: Service
-metadata:
-  name: plex-http
-  labels:
-    app.kubernetes.io/name: plex
-  annotations:
-    metallb.universe.tf/allow-shared-ip: "true"
-spec:
-  type: LoadBalancer
-  loadBalancerIP: 10.1.0.20
-  ports:
-  - port: 80
-    targetPort: plex-http
+  - port: 8787
+    targetPort: readarr
     protocol: TCP
-    name: plex-http
+    name: readarr
   selector:
-    app.kubernetes.io/name: plex
+    app.kubernetes.io/name: readarr
