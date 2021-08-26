@@ -19,6 +19,11 @@ data:
       scrape_interval: 29m
       scrape_timeout: 90s
 
+    - job_name: 'greypi'
+      static_configs:
+        - targets:
+          - 10.0.0.20:9100
+
     - job_name: 'pihole'
       static_configs:
         - targets:

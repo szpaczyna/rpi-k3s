@@ -1,0 +1,19 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: fix-unassigned-job
+spec:
+  schedule: "* 2 * * *"
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: fix-unassigned
+            image: curlimages/curl:7.78.0
+            command: ['sh', '-c', 'curl -X GET "http://elasticsearch:9200/_cat/shards" | grep UNASSIGNED | awk {"print $1"} | xargs -i curl -XDELETE "http://elasticsearch:9200/{}"']
+          restartPolicy: OnFailure
