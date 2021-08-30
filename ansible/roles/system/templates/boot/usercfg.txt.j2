@@ -1,11 +1,16 @@
 {{ ansible_managed | comment }}
 
-dtparam=audio=off
 dtparam=i2c_arm=off
 dtparam=spi=off
+dtparam=sd_poll_once
+dtparam=audio=off
+
+hdmi_blanking=2
 enable_uart=0
 
 [all]
+dtoverlay=disable-wifi
+dtoverlay=disable-bt
 gpu_mem=16
 arm_freq=1900
 over_voltage=4

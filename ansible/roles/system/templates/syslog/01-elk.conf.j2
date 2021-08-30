@@ -1,20 +1,12 @@
-module(load="omelasticsearch") # Elasticsearch output module
+{{ ansible_managed | comment }}
+## Elasticsearch output module
+module(load="omelasticsearch")
 
-# this is for index names to be like: logstash-YYYY.MM.DD
-template(name="syslog-index"
-  type="list") {
-    constant(value="syslog-")
-    property(name="timereported" dateFormat="rfc3339" position.from="1" position.to="4")
-    constant(value=".")
-    property(name="timereported" dateFormat="rfc3339" position.from="6" position.to="7")
-    constant(value=".")
-    property(name="timereported" dateFormat="rfc3339" position.from="9" position.to="10")
-}
+## this is for index names to be like: logstash-YYYY.MM.DD
+template(name="syslog-index" type="string" string="rsyslog-%$YEAR%.%$MONTH%.%$DAY%")
 
-
-# template to generate JSON documents for Elasticsearch in Logstash format
-template(name="plain-syslog"
-  type="list") {
+## template to generate JSON documents for Elasticsearch in Logstash format
+template(name="plain-syslog" type="list") {
     constant(value="{")
     constant(value="\"@timestamp\":\"")         property(name="timereported" dateFormat="rfc3339")
     constant(value="\",\"host\":\"")            property(name="hostname")
@@ -29,6 +21,7 @@ template(name="plain-syslog"
     constant(value="\"}")
   }
 
+## output configuration
 action(type="omelasticsearch"
   server="10.1.0.11"
   serverport="9200"

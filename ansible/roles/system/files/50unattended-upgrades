@@ -1,3 +1,4 @@
+{{ ansible_managed | comment }}
 Unattended-Upgrade::Automatic-Reboot "false";
 Unattended-Upgrade::Remove-Unused-Dependencies "true";
 Unattended-Upgrade::Allowed-Origins {

@@ -51,6 +51,7 @@
       - pigz
       - pv
       - zsh
+      - util-linux
     install_recommends: false
     update_cache: true
     # Need the force_apt_get until
@@ -77,6 +78,16 @@
   with_items:
     - 10periodic
     - 50unattended-upgrades
+
+- name: Copy decompress rpi kernel script in place
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/apt/apt.conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - 999_decompress_rpi_kernel
 
 # See: https://github.com/kubernetes/kubernetes/issues/71305
 - name: Use iptables-legacy instead of nftables.
@@ -220,8 +231,31 @@
     - /boot/firmware/nobtcmd.txt
     - /boot/firmware/syscfg.txt
 
+- name: Custom system config
+  copy:
+    src: auditd/{{ item }}
+    dest: "/etc/audit/rules.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - 90-shpaq.rules
+    - 99-finalize.rules
+
 - name: Deploy custom system config
   template:
-    src: usercfg.txt.j2
+    src: boot/usercfg.txt.j2
     dest: /boot/firmware/usercfg.txt
     mode: 0644
+
+- name: Deploy cmdline.txt
+  template:
+    src: boot/cmdline.txt.j2
+    dest: /boot/firmware/cmdline.txt
+    mode: 0644
+
+- name: Deploy kernel decompression script
+  template:
+    src: boot/auto_decompress_kernel
+    dest: /boot/firmware/auto_decompress_kernel
+    mode: 0755

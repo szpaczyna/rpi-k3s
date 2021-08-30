@@ -15,5 +15,5 @@ spec:
           containers:
           - name: fix-unassigned
             image: curlimages/curl:7.78.0
-            command: ['sh', '-c', 'curl -X GET "http://elasticsearch:9200/_cat/shards" | grep UNASSIGNED | awk {"print $1"} | xargs -i curl -XDELETE "http://elasticsearch:9200/{}"']
+            command: ['sh', '-c', 'curl -vv "http://elasticsearch:9200/_cat/shards" | awk "/UNASSIGNED/ {print $1}" | xargs -i curl -vv -XDELETE "http://elasticsearch:9200/{}"']
           restartPolicy: OnFailure
