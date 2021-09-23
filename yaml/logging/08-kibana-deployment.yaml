@@ -19,11 +19,15 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: kibana
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5601"
+        prometheus.io/path: "_prometheus/metrics"
     spec:
       containers:
         - name: kibana
           image: szpaczyn/kibana-arm64:v7.9.3
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 5601
               protocol: TCP
