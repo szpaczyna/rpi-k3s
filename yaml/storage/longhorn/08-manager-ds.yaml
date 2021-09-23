@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.1.2
+        image: longhornio/longhorn-manager:v1.2.0
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -29,15 +29,15 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v1.1.2
+        - longhornio/longhorn-engine:v1.2.0
         - --instance-manager-image
-        - longhornio/longhorn-instance-manager:v1_20210621
+        - longhornio/longhorn-instance-manager:v1_20210731
         - --share-manager-image
-        - longhornio/longhorn-share-manager:v1_20210416
+        - longhornio/longhorn-share-manager:v1_20210820
         - --backing-image-manager-image
-        - longhornio/backing-image-manager:v1_20210422
+        - longhornio/backing-image-manager:v2_20210820
         - --manager-image
-        - longhornio/longhorn-manager:v1.1.2
+        - longhornio/longhorn-manager:v1.2.0
         - --service-account
         - longhorn-sa
         ports:
