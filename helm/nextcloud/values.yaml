@@ -165,7 +165,7 @@ persistence:
   annotations:
     helm.sh/resource-policy: keep
   storageClass: longhorn
-  accessMode: ReadWriteMany
+  accessMode: ReadWriteOnce
   size: 200Gi
 
 resources:
@@ -204,7 +204,7 @@ hpa:
   maxPods: 2
 
 nodeSelector:
-  disktype: external
+  kubernetes.io/role: worker
 
 tolerations: []
 affinity: {}
