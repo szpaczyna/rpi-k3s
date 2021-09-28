@@ -1,0 +1,3 @@
+#!/bin/bash
+#sops -d ../../../secrets/longhorn-s3-secret.yaml > 00-secret.yaml
+sops -d ../../../secrets/longhorn-auth.yaml > 00-auth.yaml
