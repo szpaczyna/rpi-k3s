@@ -45,14 +45,20 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+        {{- if .Values.livenessProbe }}
           livenessProbe:
             httpGet:
               path: /
               port: http
+            {{- .Values.livenessProbe | toYaml | nindent 12 }}
+        {{- end }}
+        {{- if .Values.readinessProbe }}
           readinessProbe:
             httpGet:
               path: /
               port: http
+            {{- .Values.readinessProbe | toYaml | nindent 12 }}
+        {{- end }}
           volumeMounts:
           - name: data
             mountPath: /data

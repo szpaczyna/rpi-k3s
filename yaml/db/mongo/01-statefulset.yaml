@@ -45,7 +45,7 @@ spec:
         - name: MONGODB_DATABASE
           value: "xbrowsersync"
         - name: MONGODB_USERNAME
-          value: "xbrowsersync"
+          value: "xbrowsersync@admin"
         - name: MONGODB_PASSWORD
           value: "Ef8OnoK3xOIoTAYHo8S9btyllKpdoRYO"
         - name: MONGODB_VERBOSE
@@ -64,7 +64,7 @@ spec:
         - name: data
           mountPath: /var/lib/mongodb
       - name: exporter
-        image: szpaczyn/mongodb_exporter-arm-64:v0.20.5
+        image: "szpaczyn/mongodb_exporter-arm64:v0.20.5"
         imagePullPolicy: IfNotPresent
         command:
         - /bin/mongodb_exporter

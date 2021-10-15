@@ -8,7 +8,8 @@ fullNameOverride: pgadmin4
 image:
   registry: docker.io
   repository: dpage/pgadmin4
-  tag: "2021-09-06-2"
+  tag: "2021-10-06-2"
+  #tag: "2021-09-06-2"
   pullPolicy: IfNotPresent
 
 annotations: {}
@@ -37,7 +38,7 @@ strategy:
 ## Ref: https://www.pgadmin.org/docs/pgadmin4/latest/import_export_servers.html
 ##
 serverDefinitions:
-  enabled: true
+  enabled: false
   servers: |-
     "1": {
       "Name": "morphine Postgres",
@@ -101,7 +102,7 @@ extraContainers: |
 
 ## Provide the name for an existing secret.
 ## Useful to avoid specifying password and server config in YAML files
-existingSecret: "postgresql-pgpass"
+#existingSecret: "postgresql-pgpass"
 
 ## pgAdmin4 startup configuration
 ## Values in here get injected as environment variables
@@ -109,8 +110,8 @@ existingSecret: "postgresql-pgpass"
 env:
   # can be email or nickname
   email: shpaq@shpaq.org
-  password:
-  pgpassfile:
+  #password: KciV2jqf1C0nM81HImLHP06cpzBAqk05
+  pgpassfile: /var/lib/pgadmin/storage/pgadmin/file.pgpass
 
   # set context path for application (e.g. /pgadmin4/*)
   #contextPath: /pgadmin4
@@ -130,14 +131,14 @@ persistentVolume:
   annotations: {}
   accessModes:
     - ReadWriteOnce
-  size: 4Gi
+  size: 1Gi
   storageClass: "longhorn"
 
 ## Security context to be added to pgAdmin4 pods
-securityContext: {}
-  #runAsUser: 5050
-  #runAsGroup: 5050
-  #fsGroup: 5050
+securityContext:
+  runAsUser: 5050
+  runAsGroup: 5050
+  fsGroup: 5050
 
 ## pgAdmin4 readiness and liveness probe initial delay and timeout
 livenessProbe:

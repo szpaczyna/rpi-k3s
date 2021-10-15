@@ -26,7 +26,7 @@ spec:
         runAsUser: 568
       containers:
       - name: jackett
-        image: "ghcr.io/k8s-at-home/jackett:v0.18.303"
+        image: "ghcr.io/k8s-at-home/jackett:v0.18.992"
         imagePullPolicy: IfNotPresent
         env:
           - name: "TZ"
