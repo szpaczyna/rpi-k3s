@@ -14,7 +14,7 @@
   },
   "scripts": {
     "jsonlint": "jsonlint json/*/*.json",
-    "yammllint": "yamllint yaml/*",
+    "yamllint": "yamllint yaml/*",
     "shellint": "shellcheck scripts/*.sh",
     "test": "npm run jsonlint && npm run yammlint && npm run shellint",
     "release": "standard-version -i CHANGELOG.md ",
