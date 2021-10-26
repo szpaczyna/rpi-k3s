@@ -35,7 +35,7 @@ spec:
       http:
         paths:
         {{- range .paths }}
-          - path: {{ .path }}
+          - path: {{ . }}
           {{- if and .pathType (semverCompare ">=1.18-0" $kubeVersion) }}
             pathType: {{ .pathType }}
           {{- end }}

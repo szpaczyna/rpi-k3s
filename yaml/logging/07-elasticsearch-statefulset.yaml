@@ -75,7 +75,6 @@ spec:
           name: elasticsearch-config
       nodeSelector:
         kubernetes.io/role: worker
-        disktype: external
       tolerations:
         - effect: NoSchedule
           operator: Exists

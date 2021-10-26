@@ -16,10 +16,12 @@
   },
   "description": "Dashboard for viewing the current, and latest upstream, image versions in use on a Kubernetes cluster. To be used with the version-checker project.\n\nhttps://github.com/jetstack/version-checker",
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": 12833,
   "graphTooltip": 0,
-  "id": 35,
+  "id": 8,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "datasource": "prometheus",
@@ -28,6 +30,7 @@
         "defaults": {
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -56,20 +59,22 @@
                 "id": "mappings",
                 "value": [
                   {
-                    "from": "",
-                    "id": 0,
-                    "text": "No",
-                    "to": "",
-                    "type": 1,
-                    "value": "0"
+                    "options": {
+                      "0": {
+                        "text": "No"
+                      }
+                    },
+                    "type": "value"
                   },
                   {
-                    "from": "1",
-                    "id": 1,
-                    "text": "Yes",
-                    "to": "999999999",
-                    "type": 2,
-                    "value": "1"
+                    "options": {
+                      "from": 1,
+                      "result": {
+                        "text": "Yes"
+                      },
+                      "to": 999999999
+                    },
+                    "type": "range"
                   }
                 ]
               },
@@ -133,7 +138,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 628
+                "value": 526
               }
             ]
           },
@@ -167,7 +172,7 @@
           }
         ]
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "8.2.0",
       "targets": [
         {
           "exemplar": true,
@@ -219,7 +224,7 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 27,
+  "schemaVersion": 31,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -243,7 +248,7 @@
     ]
   },
   "timezone": "",
-  "title": "version-checker",
+  "title": "Version Checker",
   "uid": "Awr5zZ4Gk",
-  "version": 2
+  "version": 3
 }

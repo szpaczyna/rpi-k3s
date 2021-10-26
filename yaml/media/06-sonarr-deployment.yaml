@@ -62,5 +62,4 @@ spec:
         persistentVolumeClaim:
           claimName: media
       nodeSelector:
-        disktype: external
         kubernetes.io/role: worker

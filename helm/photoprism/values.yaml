@@ -44,7 +44,6 @@ database:
   existingSecret: photoprism-secret
 
 nodeSelector:
-  disktype: external
   kubernetes.io/role: worker
 
 persistence:

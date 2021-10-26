@@ -2,8 +2,8 @@
 
 replicaCount: 1
 image:
-  repository: registry.shpaq.org/version-checker
-  tag: 0.2.2
+  repository: szpaczyn/version-checker-arm64
+  tag: 0.2.1
   pullPolicy: IfNotPresent
 
 service:
@@ -56,5 +56,5 @@ prometheus:
   enabled: false
 
 serviceMonitor:
-  enabled: true
+  enabled: false
   additionalLabels: {}

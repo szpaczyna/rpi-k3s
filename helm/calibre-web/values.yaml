@@ -20,8 +20,8 @@ probes:
     timeoutSeconds: 10
 
 timezone: Europe/Warsaw
-puid: 1001
-pgid: 1001
+  puid: 1001
+  pgid: 1001
 umask: 22
 
 service:

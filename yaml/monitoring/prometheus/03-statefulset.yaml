@@ -22,7 +22,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-                - key: app.kubernetes.io/name
+                - key: "app.kubernetes.io/name"
                   operator: In
                   values:
                   - prometheus
@@ -37,7 +37,7 @@ spec:
               mountPath: /var/lib/prometheus
       containers:
         - name: prometheus
-          image: prom/prometheus:v2.30.0
+          image: prom/prometheus:v2.30.3
           args:
             - --web.listen-address=0.0.0.0:9090
             - --config.file=/etc/prometheus/prometheus.yaml
@@ -79,7 +79,6 @@ spec:
           configMap:
             name: prometheus-config
       nodeSelector:
-        disktype: external
         kubernetes.io/role: worker
   volumeClaimTemplates:
     - metadata:

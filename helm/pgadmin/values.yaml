@@ -127,7 +127,7 @@ env:
       value: "8080"
 
 persistentVolume:
-  enabled: true
+  enabled: false
   annotations: {}
   accessModes:
     - ReadWriteOnce

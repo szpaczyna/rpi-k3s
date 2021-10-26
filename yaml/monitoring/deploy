@@ -1,6 +1,9 @@
 #!/bin/bash
 ./decrypt
 
+echo 'Creating namespace'
+kubectl create namespace monitoring
+
 echo 'Installing prometheus and node_exporter'
 kubectl apply -f prometheus
 

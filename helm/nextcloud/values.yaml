@@ -175,7 +175,7 @@ resources:
 
 livenessProbe:
   enabled: false
-  initialDelaySeconds: 60
+  initialDelaySeconds: 360
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 10
@@ -183,7 +183,7 @@ livenessProbe:
 
 readinessProbe:
   enabled: false
-  initialDelaySeconds: 60
+  initialDelaySeconds: 360
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 10
@@ -191,7 +191,7 @@ readinessProbe:
 
 startupProbe:
   enabled: false
-  initialDelaySeconds: 180
+  initialDelaySeconds: 360
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 30
