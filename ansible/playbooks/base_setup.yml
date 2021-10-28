@@ -1,11 +1,11 @@
 ---
 
-- hosts: gentoo
+- hosts: k3s_master
   become: true
   gather_facts: true
 
   vars_files:
-    - vars.yml
+    - ../vars.yml
 
   tasks:
     - include_role:
