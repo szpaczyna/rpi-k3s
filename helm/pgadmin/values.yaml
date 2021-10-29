@@ -8,7 +8,7 @@ fullNameOverride: pgadmin4
 image:
   registry: docker.io
   repository: dpage/pgadmin4
-  tag: "2021-10-06-2"
+  tag: "latest"
   #tag: "2021-09-06-2"
   pullPolicy: IfNotPresent
 
@@ -125,13 +125,15 @@ env:
   #   value: "0.0.0.0"
     - name: PGADMIN_LISTEN_PORT
       value: "8080"
+    - name: PGADMIN_DEFAULT_PASSWORD
+      value: testestest
 
 persistentVolume:
-  enabled: false
+  enabled: true
   annotations: {}
   accessModes:
     - ReadWriteOnce
-  size: 1Gi
+  size: 256Mi
   storageClass: "longhorn"
 
 ## Security context to be added to pgAdmin4 pods
@@ -163,14 +165,14 @@ VolumePermissions:
 
 ## Additional InitContainers to initialize the pod
 extraInitContainers: |
-#   - name: add-folder-for-pgpass
-#     image: "dpage/pgadmin4:latest"
-#     command: ["/bin/mkdir", "-p", "/var/lib/pgadmin/storage/pgadmin"]
-#     volumeMounts:
-#       - name: pgadmin-data
-#         mountPath: /var/lib/pgadmin
-#     securityContext:
-#       runAsUser: 5050
+   - name: add-folder-for-pgpass
+     image: "dpage/pgadmin4:latest"
+     command: ["/bin/mkdir", "-p", "/var/lib/pgadmin/storage/pgadmin"]
+     volumeMounts:
+       - name: pgadmin-data
+         mountPath: /var/lib/pgadmin
+     securityContext:
+       runAsUser: 5050
 
 containerPorts:
   http: 8080
@@ -188,7 +190,7 @@ autoscaling:
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
 tolerations: []

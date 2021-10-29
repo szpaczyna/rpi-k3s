@@ -57,3 +57,43 @@
     group: "root"
     owner: "{{ ansible_user }}"
     mode: 0775
+- name: tmux configuration
+  copy:
+    src: tmux.conf
+    dest: "/{{ ansible_user}}/.tmux.conf"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: 0644
+
+- name: Zshrc
+  copy:
+    src: zsh/zshrc
+    dest: "/{{ ansible_user }}/.zshrc"
+    group: root
+    owner: "{{ ansible_user }}"
+    mode: 0644
+
+- name: Create zsh plugins dir if it does not exist
+  file:
+    path: "/{{ ansible_user }}/.zsh/plugins"
+    state: directory
+    mode: '0755'
+
+- name: Zsh plugins
+  copy:
+    src: zsh/{{ item }}
+    dest: "/{{ ansible_user }}/.zsh/plugins{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - colorize.zsh
+    - fzf-completion.zsh
+    - fzf-key-bindings.zsh
+    - fzf-tab.zsh
+    - grc.zsh
+    - helm.zsh
+    - kubectl.zsh
+    - kubeps1.zsh
+    - nmap.zsh
+    - zsh_reload.zsh

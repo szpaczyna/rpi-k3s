@@ -68,26 +68,27 @@
     # https://github.com/ansible/ansible/issues/56832
     force_apt_get: true
 
-- name: Copy unattended-upgrades configuration files in place
-  copy:
-    src: "{{ item }}"
-    dest: "/etc/apt/apt.conf.d/{{ item }}"
+- name: Apt configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dst }}"
     owner: root
     group: root
     mode: 0644
-  with_items:
-    - 10periodic
-    - 50unattended-upgrades
+  loop:
+    - { src: 'templates/apt/10periodic.j2', dest: '/etc/apt/apt.conf.d/10.periodic' }
+    - { src: 'templates/apt/50unattended-upgrades.j2', dest: '/etc/apt/apt.conf.d/40unattended-upgrades' }
+    - { src: 'templates/apt/999_decompress_rpi_kernel.j2', dest: '/etc/apt/apt.conf.d/999_decompress_rpi_kernel' }
 
 - name: Copy decompress rpi kernel script in place
-  copy:
-    src: "{{ item }}"
-    dest: "/etc/apt/apt.conf.d/{{ item }}"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dst }}"
     owner: root
     group: root
     mode: 0755
-  with_items:
-    - 999_decompress_rpi_kernel
+  loop:
+    - { src: 'templates/apt/999_decompress_rpi_kernel.j2', dest: '/etc/apt/apt.conf.d/999_decompress_rpi_kernel' }
 
 # See: https://github.com/kubernetes/kubernetes/issues/71305
 - name: Use iptables-legacy instead of nftables.
