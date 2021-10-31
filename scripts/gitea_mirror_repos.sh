@@ -1,9 +1,12 @@
 #!/bin/bash
-GITEA_USERNAME=
-GITEA_TOKEN=
-GITEA_DOMAIN=
-GITEA_REPO_OWNER=
 
+## variables
+GITEA_USERNAME=""
+GITEA_TOKEN=""
+GITEA_DOMAIN=""
+GITEA_REPO_OWNER=""
+
+## repositories
 REPOS=(https://github.com/QNapi/qnapi-docker.git
   https://github.com/necrose99/gentoo-on-rpi-64bit.git
   https://github.com/linuxserver/docker-calibre.git
