@@ -1,0 +1,2 @@
+#!/bin/bash
+sops -d --output  prometheus/15-auth.yaml ../../secrets/prometheus-secret.yaml

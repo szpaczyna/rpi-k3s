@@ -1,0 +1,30 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus
+  namespace: monitoring
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.frontend.redirect.permanent: 'true'
+    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+    ingress.kubernetes.io/auth-type: basic
+    ingress.kubernetes.io/auth-secret: prometheus-auth
+spec:
+  ingressClassName: traefik-lb
+  rules:
+  - host: prometheus.shpaq.org
+    http:
+      paths:
+      - backend:
+          service:
+            name: prometheus
+            port:
+              number: 9090
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - prometheus.shpaq.org
+    secretName: prometheus-shpaq-org-ssl

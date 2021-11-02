@@ -1,0 +1,82 @@
+{{- if .Values.prometheus.enabled  }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "name" . }}-exporter
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  selector:
+    matchLabels:
+      k8s-app: {{ template "name" . }}-exporter
+  template:
+    metadata:
+      labels:
+        k8s-app: {{ template "name" . }}-exporter
+      annotations:
+         prometheus.io/scrape: "true"
+         prometheus.io/port: "9617"
+         seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/os
+                  operator: In
+                  values:
+                  - linux
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65536
+      {{- if .Values.serviceaccount }}
+      serviceAccountName: {{ .Values.serviceaccount }}
+      {{- end }}
+      containers:
+        - env:
+          - name: PIHOLE_HOSTNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "name" . }}-exporter-secret
+                key: PIHOLE_HOSTNAME
+          - name: PIHOLE_PROTOCOL
+            value: https
+          - name: PIHOLE_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "name" . }}-exporter-secret
+                key: PIHOLE_API_TOKEN
+          - name: PIHOLE_PORT
+            value: "443"
+          - name: INTERVAL
+            value: 15s
+          name: {{ template "name" . }}-exporter
+          image: {{ .Values.image.exporter }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          stdin: true
+          tty: true
+          ports:
+            - name: metrics
+              containerPort: 9617
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 10m
+              memory: 24Mi
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+{{- end -}}

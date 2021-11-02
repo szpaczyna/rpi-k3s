@@ -1,0 +1,3 @@
+#!/bin/bash
+./decrypt
+kubectl apply -f .

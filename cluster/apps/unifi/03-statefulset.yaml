@@ -1,0 +1,105 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: unifi
+  labels:
+    app.kubernetes.io/name: unifi
+spec:
+  replicas: 1
+  serviceName: unifi
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: unifi
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: unifi
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9130"
+        seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
+    spec:
+      serviceAccountName: unifi
+      hostNetwork: true
+      containers:
+        - name: controller
+          image: "linuxserver/unifi-controller:version-6.4.54"
+          env:
+            - name: MEM_LIMIT
+              value: 368M
+            - name: PGID
+              value: "1000"
+            - name: PUID
+              value: "1000"
+          ports:
+            - containerPort: 3478
+              protocol: UDP
+              name: stun
+            - containerPort: 10001
+              protocol: UDP
+              name: discovery
+            - containerPort: 8080
+              name: http
+            - containerPort: 8443
+              name: https
+            - containerPort: 6789
+          volumeMounts:
+            - mountPath: /config
+              name: data
+          resources:
+            requests:
+              cpu: 200m
+              memory: 500Mi
+            limits:
+              cpu: 500m
+              memory: 700Mi
+        - name: poller
+          image: "golift/unifi-poller:2.1.3"
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: TZ
+            value: "Europe/Warsaw"
+          - name: UP_INFLUXDB_DISABLE
+            value: "true"
+          - name: UP_PROMETHEUS_DISABLE
+            value: "false"
+          - name: UP_UNIFI_DEFAULT_PASS
+            valueFrom:
+              secretKeyRef:
+                name: unifi-poller
+                key: UP_UNIFI_DEFAULT_PASS
+          - name: UP_UNIFI_DEFAULT_URL
+            valueFrom:
+              secretKeyRef:
+                name: unifi-poller
+                key: UP_UNIFI_DEFAULT_URL
+          - name: UP_UNIFI_DEFAULT_USER
+            valueFrom:
+              secretKeyRef:
+                name: unifi-poller
+                key: UP_UNIFI_DEFAULT_USER
+          ports:
+          - name: metrics
+            containerPort: 9130
+            protocol: TCP
+          volumeMounts:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      nodeSelector:
+        kubernetes.io/role: worker
+        kubernetes.io/hostname: rpi-k3s-worker1
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: longhorn
+        resources:
+          requests:
+            storage: 2Gi

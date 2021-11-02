@@ -1,0 +1,3 @@
+#!/bin/bash
+kubens apps
+kubectl apply -f .

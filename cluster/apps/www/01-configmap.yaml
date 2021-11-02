@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shpaq-org
+  labels:
+    app.kubernetes.io/name: shpaq-org
+data:
+  robots.txt: |
+    User-Agent: *
+    Allow: /index.html
+  index.html: |+
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+    <html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>shpaq [dot] org</title>
+    <meta name="Generator" content="Vim/8.0">
+    <meta name="plugin-version" content="vim8.1_v1">
+    <meta name="syntax" content="none">
+    <meta name="settings" content="number_lines,use_css,pre_wrap,no_foldcolumn,expand_tabs,line_ids,prevent_copy=">
+    <meta name="colorscheme" content="jellybeans">
+    <style type="text/css">
+    <!--
+    pre { white-space: pre-wrap; font-family: monospace; color: #d7d7d7; background-color: #121212; }
+    body { font-family: monospace; color: #d7d7d7; background-color: #121212; }
+    * { font-size: 1.4em; }
+    .LineNr { color: #5f5f5f; background-color: #121212; padding-bottom: 1px; }
+    -->
+    </style>
+
+    <script type='text/javascript'>
+    <!--
+
+    function JumpToLine()
+    {
+      var lineNum;
+      lineNum = window.location.hash;
+      lineNum = lineNum.substr(1); /* strip off '#' */
+
+    if (lineNum.indexOf('L') == -1) {
+      lineNum = 'L'+lineNum;
+    }
+    var lineElem = document.getElementById(lineNum);
+    if (lineElem) {
+      lineElem.scrollIntoView(true);
+    }
+    return true;
+    }
+    if ('onhashchange' in window) {
+      window.onhashchange = JumpToLine;
+    }
+
+    -->
+    </script>
+    </head>
+    <body onload='JumpToLine();'>
+    <center>
+    <pre id='vimCodeElement'>
+    ________________________
+    /     All your base      \
+     are belong to us!
+    \ _______________________/
+
+    \   ^__^
+             \  (oo)\_______
+                    (__)\       )\/\
+                    ||----w |
+                    ||     ||
+    </pre>
+    <pre>
+
+    _______________________________
+    </pre>
+    <p>
+    shpaq [at] shpaq [dot] org
+    </p>
+    </center>
+    </body>
+    </html>
+    <!-- vim: set foldmethod=manual : -->

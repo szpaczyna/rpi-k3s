@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-ui
+  labels:
+    app: registry-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry-ui
+  template:
+    metadata:
+      labels:
+        app: registry-ui
+    spec:
+      serviceAccountName: registry-ui
+      securityContext: {}
+      containers:
+        - name: registry-ui
+          image: szpaczyn/registry-ui:v0.9.3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              protocol: TCP
+              containerPort: 8000
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 1000m
+              memory: 128Mi
+          volumeMounts:
+            - mountPath: /opt/config.yml
+              subPath: config.yml
+              name: config
+      volumes:
+        - name: config
+          configMap:
+            name: registry-ui-config
+      nodeSelector:
+        kubernetes.io/role: "worker"

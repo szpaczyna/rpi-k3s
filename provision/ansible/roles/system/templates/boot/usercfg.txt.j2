@@ -1,0 +1,17 @@
+{{ ansible_managed | comment }}
+
+dtparam=i2c_arm=off
+dtparam=spi=off
+dtparam=sd_poll_once
+dtparam=audio=off
+
+hdmi_blanking=2
+enable_uart=0
+
+[all]
+dtoverlay=disable-wifi
+dtoverlay=disable-bt
+gpu_mem=16
+arm_freq=1900
+over_voltage=4
+dtoverlay=gpio-fan,gpiopin=18,temp=60000

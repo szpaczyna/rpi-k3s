@@ -1,0 +1,28 @@
+{
+  "_comment": "PUT _template/auth",
+  "index_patterns": ["auth-*"],
+  "mappings": {
+    "properties": {
+      "geoip": {
+        "dynamic": true,
+        "properties": {
+          "address": {
+            "type": "keyword"
+          },
+          "ip": {
+            "type": "ip"
+          },
+          "location": {
+            "type": "geo_point"
+          },
+          "latitude": {
+            "type": "half_float"
+          },
+          "longitude": {
+            "type": "half_float"
+          }
+        }
+      }
+    }
+  }
+}

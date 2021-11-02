@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sops -d \
+  --output secret.yaml \
+  ../../secrets/photoprism-secret.yaml \

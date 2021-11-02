@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-config
+  labels:
+    app.kubernetes.io/name: elasticsearch
+data:
+  elasticsearch.yml: |
+    ---
+    cluster.name: "morphine-cluster"
+    #node.name: "elasticsearch"
+    node.master: true
+    node.data: true
+    network.host: 0.0.0.0
+    discovery.type: single-node
+    #discovery.seed_hosts: ["127.0.0.1"]
+    #cluster.initial_master_nodes: ["elasticsearch-0"]
+    http.cors.allow-origin: '*'
+    http.cors.enabled: true
+    http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+  jvm.options: |
+    -Xms512M
+    -Xmx512M
+    -XX:CMSInitiatingOccupancyFraction=75
+    -XX:+UseCMSInitiatingOccupancyOnly
+    -XX:+UseG1GC
+    -Djava.io.tmpdir=/tmp
+    -XX:+HeapDumpOnOutOfMemoryError
+    -XX:HeapDumpPath=data
+    -XX:ErrorFile=logs/hs_err_pid%p.log

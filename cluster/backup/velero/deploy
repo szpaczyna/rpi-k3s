@@ -1,0 +1,63 @@
+#!/bin/bash
+#REGION=eu-central-1
+#$BUCKET=rpi-k3s-shpaq-backup
+
+sops -d ../../secrets/aws-credentials > credentials
+
+kubectl apply -f minio/
+
+velero install \
+    --plugins szpaczyn/velero-plugin-for-aws:v1.2.0 \
+    --provider aws \
+    --bucket velero \
+    --secret-file ./credentials \
+    --use-volume-snapshots=false \
+    --velero-pod-cpu-limit=1000m \
+    --velero-pod-cpu-request=200m \
+    --velero-pod-mem-limit=128Mi \
+    --velero-pod-mem-request=32Mi \
+    --use-restic \
+    --restic-pod-cpu-request=200m \
+    --restic-pod-cpu-limit=200m \
+    --restic-pod-mem-request=32Mi \
+    --restic-pod-mem-limit=128Mi \
+    --default-volumes-to-restic \
+    --backup-location-config \
+    region=minio,s3ForcePathStyle=true,s3Url=http://minio.velero.svc:9000
+
+velero create schedule daily --schedule="28 4 * * *" --ttl 2160h0m0s
+
+kubectl apply -f restic-cm.yaml
+kubectl apply -f restic-podsecuritypolicy.yaml
+rm -rf credentials
+
+## restic stuff
+#   --use-restic \
+#    --restic-pod-cpu-request=200m \
+#    --restic-pod-cpu-limit=200m \
+#    --restic-pod-mem-request=32Mi \
+#    --restic-pod-mem-limit=128Mi \
+#   --default-volumes-to-restic \
+#    --snapshot-location-config region="minio" \
+#velero install \
+#    --provider aws \
+#    --plugins registry.shpaq.org/velero-plugin-for-aws:v1.1.0 \
+#    --bucket $BUCKET \
+#    --backup-location-config region=$REGION \
+#    --snapshot-location-config region=$REGION \
+#    --secret-file ./credentials \
+#    --use-volume-snapshots=true \
+#    --use-restic \
+#    --restic-pod-cpu-request=200m \
+#    --restic-pod-cpu-limit=200m \
+#    --restic-pod-mem-request=32Mi \
+#    --restic-pod-mem-limit=128Mi \
+#    --default-volumes-to-restic \
+#    --velero-pod-cpu-limit=1000m \
+#    --velero-pod-cpu-request=200m \
+#    --velero-pod-mem-limit=256Mi \
+#    --velero-pod-mem-request=32Mi
+
+#kubectl apply -f minio/
+#kubectl apply -f restic-cm.yaml
+#kubectl apply -f slave-storage-location.yaml

@@ -1,0 +1,20 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cluster-init
+  labels:
+    app: cockroachdb
+spec:
+  template:
+    spec:
+      containers:
+      - name: cluster-init
+        image: registry.shpaq.org/cockroachdb:v20.2.8
+        imagePullPolicy: IfNotPresent
+        command:
+          - "/cockroach/cockroach"
+          - "init"
+          - "--insecure"
+          - "--host=cockroachdb-0.cockroachdb"
+      restartPolicy: OnFailure

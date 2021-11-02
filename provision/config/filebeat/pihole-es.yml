@@ -1,0 +1,16 @@
+---
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/pihole.log
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch.morphine:9200"]
+  index: "pihole-%{+yyyy.MM.dd}"
+
+setup.template.name: "pihole"
+setup.template.pattern: "pihole-*"
+
+xpack.monitoring:
+  enabled: "true"

@@ -1,0 +1,12 @@
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: ubooquity
+  labels:
+    app.kubernetes.io/name: ubooquity
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ubooquity
+  minAvailable: 1

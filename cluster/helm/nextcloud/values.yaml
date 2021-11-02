@@ -1,0 +1,238 @@
+---
+image:
+  repository: nextcloud
+  tag: 22
+  pullPolicy: IfNotPresent
+
+nameOverride: cloud
+fullnameOverride: cloud
+replicaCount: 1
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.frontend.redirect.permanent: "true"
+    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+    traefik.ingress.kubernetes.io/force-hsts: "true"
+    traefik.ingress.kubernetes.io/hsts-max-age: "315360000"
+    traefik.frontend.redirect.regex: https://(.*)/.well-known/(card|cal)dav
+    traefik.frontend.redirect.replacement: https://$1/remote.php/dav/
+  tls:
+  - secretName: cloud-shpaq-org-tls
+    hosts:
+    - cloud.shpaq.org
+  labels:
+    app.kubernetes.io/name: cloud
+
+lifecycle: {}
+# postStartCommand: []
+# preStopCommand: []
+
+nextcloud:
+  host: cloud.shpaq.org
+  existingSecret:
+    enabled: true
+    secretName: cloud-admin-secret
+    usernameKey: username
+    passwordKey: password
+    # smtpUsernameKey: smtp_username
+    # smtpPasswordKey: smtp_password
+  update: 1
+  containerPort: 80
+  datadir: /var/www/html/data
+  persistence:
+    subPath: null
+  mail:
+    enabled: false
+    fromAddress: user
+    domain: domain.com
+    smtp:
+      host: domain.com
+      secure: ssl
+      port: 465
+      authtype: LOGIN
+      name: user
+      password: pass
+            # PHP Configuration files
+            # Will be injected in /usr/local/etc/php/conf.d for apache image and in /usr/local/etc/php-fpm.d when nginx.enabled: true
+  phpConfigs: {}
+
+  defaultConfigs:
+    .htaccess: true
+    redis.config.php: true
+    apache-pretty-urls.config.php: true
+    apcu.config.php: true
+    apps.config.php: true
+    autoconfig.php: true
+    smtp.config.php: true
+
+  configs: {}
+    # For example, to use S3 as primary storage
+    # ref: https://docs.nextcloud.com/server/13/admin_manual/configuration_files/primary_storage.html#simple-storage-service-s3
+    #
+    #  configs:
+    #    s3.config.php: |-
+    #      <?php
+    #      $CONFIG = array (
+    #        'objectstore' => array(
+    #          'class' => '\\OC\\Files\\ObjectStore\\S3',
+    #          'arguments' => array(
+    #            'bucket'     => 'my-bucket',
+    #            'autocreate' => true,
+    #            'key'        => 'xxx',
+    #            'secret'     => 'xxx',
+    #            'region'     => 'us-east-1',
+    #            'use_ssl'    => true
+    #          )
+    #        )
+    #      );
+    #type: Recreate
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  extraEnv: null
+    #  - name: nfs
+    #    nfs:
+    #      server: "10.0.0.1"
+    #      path: "/nextcloud_data"
+    #      readOnly: false
+  extraVolumes: null
+    #  - name: nfs
+    #    mountPath: "/legacy_data"
+    # Extra secuurityContext parameters. For example you may need to define runAsNonRoot directive
+
+  extraVolumeMounts: null
+  extraSecurityContext:
+    runAsUser: "33"
+    runAsGroup: "33"
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+
+nginx:
+    enabled: false
+
+## External database configuration
+externalDatabase:
+  enabled: true
+  type: postgresql
+  host: morphine-postgresql
+  existingSecret:
+    enabled: true
+    secretName: cloud-db-creds
+    usernameKey: username
+    passwordKey: password
+    databaseKey: database
+
+internalDatabase:
+  enabled: false
+
+mariadb:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+redis:
+  enabled: false
+
+cronjob:
+  enabled: true
+  image:
+    repository: curlimages/curl
+    tag: 7.79.1
+    pullPolicy: IfNotPresent
+  schedule: '*/5 * * * *'
+  annotations: {}
+  # Set curl's insecure option if you use e.g. self-signed certificates
+  curlInsecure: false
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 1
+
+service:
+  type: ClusterIP
+  port: 8080
+  loadBalancerIP: nil
+  nodePort: nil
+
+persistence:
+  enabled: true
+  annotations:
+    helm.sh/resource-policy: keep
+  storageClass: longhorn
+  accessMode: ReadWriteOnce
+  size: 200Gi
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+livenessProbe:
+  enabled: false
+  initialDelaySeconds: 360
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 10
+  successThreshold: 1
+
+readinessProbe:
+  enabled: false
+  initialDelaySeconds: 360
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 10
+  successThreshold: 1
+
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 360
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 30
+  successThreshold: 1
+
+hpa:
+  enabled: false
+  cputhreshold: 80
+  minPods: 1
+  maxPods: 2
+
+nodeSelector:
+  kubernetes.io/role: worker
+
+tolerations: []
+affinity: {}
+
+## Prometheus Exporter / Metrics
+metrics:
+  enabled: false
+  replicaCount: 1
+  https: true
+  timeout: 5s
+  image:
+    repository: szpaczyn/nextcloud_exporter-arm64
+    tag: v0.4.0
+    pullPolicy: IfNotPresent
+        # resources: {}
+        # podAnnotations: {}
+    podLabels:
+      app.kubernetes.io/name: cloud
+    service:
+      type: ClusterIP
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9205"
+      labels:
+        app.kubernetes.io/name: cloud
+
+rbac:
+  enabled: true
+  serviceaccount:
+    create: true
+    name: cloud

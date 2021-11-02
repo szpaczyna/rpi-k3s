@@ -1,0 +1,5 @@
+#!/bin/bash
+kubens apps
+./decrypt
+kubectl apply -f .
+rm -rf 02-configmap.yaml

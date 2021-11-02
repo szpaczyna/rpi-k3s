@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: samba
+  name: samba
+  namespace: storage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: samba
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: samba
+    spec:
+      containers:
+      - image: registry.shpaq.org/samba:4.11.0
+        name: samba-server
+        resources:
+          limits:
+            cpu: 200m
+            memory: 500Mi
+        env:
+          - name: USERID
+            value: "1012"
+          - name: GROUPID
+            value: "1111"
+        args:
+          - -p
+          - -r
+          - -n
+          - -w
+          - "MORPHINE"
+          - -s
+          - "media;/data/smb;yes;no;yes"
+        ports:
+          - name: one
+            containerPort: 139
+          - name: two
+            containerPort: 445
+        volumeMounts:
+          - name: samba
+            mountPath: /data/smb
+      volumes:
+        - name: samba
+          hostPath:
+            path: /data/smb
+            type: Directory
+      nodeSelector:
+        disktype: external
+        kubernetes.io/hostname: rpi-k3s-worker1

@@ -1,0 +1,18 @@
+---
+filebeat.modules:
+- module: logstash
+
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/pihole.log
+
+name: pihole
+
+output.logstash:
+  enabled: true
+  hosts: ["logstash.morphine:9600"]
+
+xpack.monitoring:
+  enabled: "true"

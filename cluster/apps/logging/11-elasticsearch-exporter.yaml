@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elasticsearch-exporter
+  labels:
+    app.kubernetes.io/name: elasticsearch-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: elasticsearch-exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: elasticsearch-exporter
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9114"
+    spec:
+      containers:
+        - name: elasticsearch-exporter
+          command:
+          - /bin/elasticsearch_exporter
+          - --es.uri=http://elasticsearch:9200
+          - --es.timeout=60s
+          - --es.all
+          - --es.indices
+          - --es.shards
+          image: szpaczyn/elasticsearch_exporter-arm64:v1.2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+          - name: metrics
+            containerPort: 9114
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 25m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 20Mi
+      terminationGracePeriodSeconds: 1
+      nodeSelector:
+        kubernetes.io/role: worker
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists

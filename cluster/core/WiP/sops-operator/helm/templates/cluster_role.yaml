@@ -1,0 +1,70 @@
+{{- if .Values.rbac.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "sops-secrets-operator.fullname" . }}
+  labels:
+{{ include "sops-secrets-operator.labels" . | indent 4 }}
+rules:
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - secrets
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - secrets/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - events.k8s.io
+  - ""
+  resources:
+  - events
+  verbs:
+  - '*'
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - servicemonitors
+  verbs:
+  - get
+  - create
+- apiGroups:
+  - isindir.github.com
+  resources:
+  - sopssecrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - isindir.github.com
+  resources:
+  - sopssecrets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - isindir.github.com
+  resources:
+  - sopssecrets/status
+  verbs:
+  - get
+  - patch
+  - update
+{{- end }}

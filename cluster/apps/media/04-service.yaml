@@ -1,0 +1,177 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-http
+  labels:
+    app.kubernetes.io/name: transmission
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9091
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: transmission
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-utptcp
+  labels:
+    app.kubernetes.io/name: transmission
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.1.0.20
+  ports:
+    - port: 51413
+      targetPort: utptcp
+      protocol: TCP
+      name: utptcp
+  selector:
+    app.kubernetes.io/name: transmission
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-utpudp
+  labels:
+    app.kubernetes.io/name: transmission
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.1.0.20
+  ports:
+    - port: 51413
+      targetPort: utpudp
+      protocol: UDP
+      name: utpudp
+  selector:
+    app.kubernetes.io/name: transmission
+---
+## jackett
+apiVersion: v1
+kind: Service
+metadata:
+  name: jackett
+  labels:
+    app.kubernetes.io/name: jackett
+spec:
+  type: ClusterIP
+  ports:
+  - port: 9117
+    targetPort: jackett
+    protocol: TCP
+    name: jackett
+  selector:
+    app.kubernetes.io/name: jackett
+
+---
+## sonarr
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  labels:
+    app.kubernetes.io/name: sonarr
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8989
+      targetPort: sonarr
+      protocol: TCP
+      name: sonarr
+  selector:
+    app.kubernetes.io/name: sonarr
+
+---
+## bazarr
+apiVersion: v1
+kind: Service
+metadata:
+  name: bazarr
+  labels:
+    app.kubernetes.io/name: bazarr
+spec:
+  type: ClusterIP
+  ports:
+  - port: 6767
+    targetPort: bazarr
+    protocol: TCP
+    name: bazarr
+  selector:
+    app.kubernetes.io/name: bazarr
+---
+## radarr
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  labels:
+    app.kubernetes.io/name: radarr
+spec:
+  type: ClusterIP
+  ports:
+    - port: 7878
+      targetPort: radarr
+      protocol: TCP
+      name: radarr
+  selector:
+    app.kubernetes.io/name: radarr
+
+---
+## lidarr
+apiVersion: v1
+kind: Service
+metadata:
+  name: lidarr
+  labels:
+    app.kubernetes.io/name: lidarr
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8686
+    targetPort: lidarr
+    protocol: TCP
+    name: lidarr
+  selector:
+    app.kubernetes.io/name: lidarr
+---
+## prowlarr
+apiVersion: v1
+kind: Service
+metadata:
+  name: prowlarr
+  labels:
+    app.kubernetes.io/name: prowlarr
+spec:
+  type: ClusterIP
+  ports:
+  - port: 9696
+    targetPort: prowlarr
+    protocol: TCP
+    name: prowlarr
+  selector:
+    app.kubernetes.io/name: prowlarr
+---
+## readarr
+apiVersion: v1
+kind: Service
+metadata:
+  name: readarr
+  labels:
+    app.kubernetes.io/name: readarr
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8787
+    targetPort: readarr
+    protocol: TCP
+    name: readarr
+  selector:
+    app.kubernetes.io/name: readarr

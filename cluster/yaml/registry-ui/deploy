@@ -1,0 +1,5 @@
+#!/bin/bash
+./decrypt
+kubectl apply -f .
+rm -rf 01-secret.yaml
+rm -rf 02-configmap.yaml

@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: restic-restore-action-config
+  namespace: velero
+  labels:
+    velero.io/plugin-config: "true"
+    velero.io/restic: RestoreItemAction
+data:
+  image: velero/velero-restic-restore-helper:v1.5.3
+  cpuRequest: 200m
+  memRequest: 32Mi
+  cpuLimit: 200m
+  memLimit: 64Mi

@@ -1,0 +1,79 @@
+---
+## calibre-web.
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: szpaczyn/calibre-web-arm64
+  tag: v0.6.12
+  pullPolicy: IfNotPresent
+
+strategyType: Recreate
+probes:
+  liveness:
+    initialDelaySeconds: 60
+    failureThreshold: 5
+    timeoutSeconds: 10
+  readiness:
+    initialDelaySeconds: 60
+    failureThreshold: 5
+    timeoutSeconds: 10
+
+timezone: Europe/Warsaw
+  puid: 1001
+  pgid: 1001
+umask: 22
+
+service:
+  type: ClusterIP
+  port: 8083
+  annotations: {}
+  labels: {}
+  loadBalancerIP:
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.frontend.redirect.permanent: 'true'
+    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+  path: /
+  hosts:
+    - calibre.shpaq.org
+  tls:
+    - secretName: calibre-shpaq-org-tls
+      hosts:
+        - calibre.shpaq.org
+
+persistence:
+  config:
+    enabled: true
+    storageClass: "longhorn"
+    accessMode: ReadWriteOnce
+    size: 256Mi
+    skipuninstall: true
+  books:
+    enabled: true
+    storageClass: "longhorn"
+    mountPath: /books
+    accessMode: ReadWriteOnce
+    size: 3Gi
+    skipuninstall: true
+  extraExistingClaimMounts: []
+
+resources:
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+nodeSelector:
+  kubernetes.io/role: worker
+
+tolerations: []
+affinity: {}
+podAnnotations: {}
+deploymentAnnotations: {}
