@@ -1,2 +1,0 @@
-#!/bin/bash
-helm upgrade --install version-checker -n apps -f values.yaml .

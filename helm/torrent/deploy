@@ -1,3 +1,0 @@
-#!/bin/bash
-
-helm upgrade --install transmission k8s-at-home/transmission -n apps -f values.yaml

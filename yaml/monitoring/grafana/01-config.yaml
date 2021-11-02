@@ -1,9 +1,0 @@
----
-apiVersion: v1
-data:
-  grafana.ini: W2F1dGguYW5vbnltb3VzXQplbmFibGVkID0gZmFsc2UKW2F1dGguYmFzaWNdCmVuYWJsZWQgPSBmYWxzZQpbc2Vzc2lvbl0KcHJvdmlkZXIgPSBtZW1vcnkKW3NtdHBdCmVuYWJsZWQgPSBmYWxzZQpbc2VjdXJpdHldCmFkbWluX3Bhc3N3b3JkID0gUVBYcU1HNGRDSFJGUzRvUDEwbXE3Q0p0UkpJSTRLT0E=
-kind: Secret
-metadata:
-  name: grafana-config
-  namespace: monitoring
-type: Opaque

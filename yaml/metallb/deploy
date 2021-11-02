@@ -1,4 +1,0 @@
-#!/bin/bash
-sops -d --output  01-secret.yaml ../../secrets/metallb.yaml
-kubectl apply -n metallb-system -f .
-rm -rf 01-secret.yaml

@@ -1,8 +1,0 @@
-#!/bin/bash
-sops -d \
-    --output  values.yaml \
-    ../../secrets/bitwarden-values.yaml
-
-helm upgrade --install bitwarden --namespace apps . --values values.yaml
-
-rm -rf values.yaml

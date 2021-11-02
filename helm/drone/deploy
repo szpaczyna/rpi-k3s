@@ -1,3 +1,0 @@
-#!/bin/bash
-helm upgrade --install drone drone/drone --namespace $1 --values drone-values.yaml
-helm upgrade --install drone-runner drone/drone-runner-kube --namespace $1 --values drone-runner-kube-values.yaml

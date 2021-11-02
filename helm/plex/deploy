@@ -1,3 +1,0 @@
-#!/bin/bash
-
-helm upgrade --install plex k8s-at-home/plex -n dev -f values.yaml

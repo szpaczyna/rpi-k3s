@@ -1,2 +1,0 @@
-#!/bin/bash
-helm upgrade --install cert-exporter --namespace monitoring . --values values.yaml

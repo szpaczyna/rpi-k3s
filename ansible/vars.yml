@@ -1,6 +1,0 @@
----
-
-ansible_user: root
-
-log2ram_version: 1.6.0
-log2ram_size: 128M

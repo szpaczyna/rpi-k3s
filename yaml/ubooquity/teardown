@@ -1,3 +1,0 @@
-#!/bin/bash
-kubens apps
-kubectl delete -f .
