@@ -58,10 +58,10 @@ spec:
               mountPath: /config/preferences.json
               subPath: preferences.json
       terminationGracePeriodSeconds: 15
-      securityContext: {}
-        #fsGroup: 1000
-        #runAsNonRoot: true
-        #runAsUser: 911
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 911
       volumes:
         - name: books
           hostPath:

@@ -21,9 +21,9 @@ spec:
       serviceAccountName: media
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
-      securityContext: {}
-        #runAsGroup: 568
-        #runAsUser: 568
+      securityContext:
+        runAsGroup: 568
+        runAsUser: 568
       containers:
         - name: radarr
           image: "ghcr.io/linuxserver/radarr:latest"
