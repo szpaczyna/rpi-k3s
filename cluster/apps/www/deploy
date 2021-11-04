@@ -1,4 +1,0 @@
-#!/bin/bash
-#kubectl create ns apps
-kubens apps
-kubectl apply -f .

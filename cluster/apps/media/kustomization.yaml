@@ -1,0 +1,16 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - local-storage.yaml
+  - ingress.yaml
+  - serviceaccount.yaml
+  - service.yaml
+  - transmission-deployment.yaml
+  - sonarr-deployment.yaml
+  - radarr-deployment.yaml
+  - jackett-deployment.yaml
+  - bazarr-deployment.yaml
+  - lidarr-deployment.yaml
+  - prowlarr-deployment.yaml
+  - readarr-deployment.yaml

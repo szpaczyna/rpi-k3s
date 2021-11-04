@@ -29,8 +29,8 @@ metadata:
   labels:
     k3s-upgrade: agent
 spec:
-  concurrency: 4 # in general, this should be the number of workers - 1
-  version: v1.20.5+k3s1
+  concurrency: 2 # in general, this should be the number of workers - 1
+  version: v1.21.5+k3s2
   nodeSelector:
     matchExpressions:
       - {key: k3s-upgrade, operator: Exists}

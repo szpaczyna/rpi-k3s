@@ -18,67 +18,40 @@ height="144px"/>
 
 -   Apps/Helm Charts:
 
-    -   [bitwarden](helm/bitwarden) - Passwords Management
-    -   [gitea](helm/gitea) - Git with a cup of tea
-    -   [kanboard](helm/kanboard) - Kanban project management software
-    -   [pihole](helm/pihole) - Network-wide AD Blocking
-    -   [registry](helm/registry) - Docker registry
-    -   [version-checker](helm/version-checker) - Checker for newest version of deployed apps
-    -   [locust](helm/locust) - template for performance testing
-    -   [cert-exporter](helm/cert-exporter) - certificates monitoring
-    -   [postgresql](helm/postgresql) - self explanatory
-    -   [drone](helm/drone) - CI/CD
-    -   [keycloak](helm/keycloak) - identity provider
-    -   [nextcloud](helm/nextcloud) - personal cloud service
-    -   [calibre-web](helm/calibre-web) - replacement for [ubooquity](yaml/ubooquity)
-    -   [photoprism](helm/photoprism) - photos management
-    -   [plex](helm/plex) - media center
-    -   [torrent](helm/torrent) - tranmission
+    -   [bitwarden](cluster/cluster/helm/bitwarden) - Passwords Management
+    -   [gitea](cluster/helm/gitea) - Git with a cup of tea
+    -   [kanboard](cluster/helm/kanboard) - Kanban project management software
+    -   [pihole](cluster/helm/pihole) - Network-wide AD Blocking
+    -   [registry](cluster/helm/registry) - Docker registry
+    -   [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
+    -   [locust](cluster/helm/locust) - template for performance testing
+    -   [cert-exporter](cluster/helm/cert-exporter) - certificates monitoring
+    -   [postgresql](cluster/helm/postgresql) - self explanatory
+    -   [keycloak](cluster/helm/keycloak) - identity provider
+    -   [nextcloud](cluster/helm/nextcloud) - personal cloud service
+    -   [calibre-web](cluster/helm/calibre-web) - replacement for [ubooquity](cluster/yaml/ubooquity)
+    -   [pgadmin4](cluster/helm/pgadmin) - postgresql managemenet tool
+    -   [photoprism](cluster/helm/photoprism) - photos management
 
 
 -   Apps/YAML
 
-    -   [databases](yaml/db) - Mongo, Mysql, CockroachDB
-    -   [squid](yaml/squid) - Squid Proxy Service
-    -   [ubooquity](yaml/ubooquity) - Books Management
-    -   [unifi](yaml/unifi) - Unifi controller/prometheus poller
-    -   [www](yaml/www) - Personal website
-    -   [prometheus stack](yaml/metrics) - Prometheus/Grafana stack with some additional exporters
-    -   [elk stack](yaml/elk) - Elasticsearch/Kibana/Logstash/Filebeat
-    -   [registry-ui](yaml/registry-ui) - GUI for managaning docker registry
-    -   [media downloads](yaml/media) - jackett, bazarr, radarr, lidarr and sonarr
+    -   [databases](cluster/apps/db) - Mongo, Mysql, CockroachDB
+    -   [unifi](cluster/apps/unifi) - Unifi controller/prometheus poller
+    -   [www](cluster/apps/www) - Personal website
+    -   [prometheus stack](cluster/apps/monitoring) - Prometheus/Grafana stack with some additional exporters
+    -   [elk stack](cluster/apps/logging) - Elasticsearch/Kibana/Logstash/Filebeat
+    -   [media downloads](cluster/apps/media) - jackett, bazarr, radarr, lidarr and sonarr
 
 -   System
 
     -   [cert-manager](https://github.com/jetstack/cert-manager) - Automated letsencrypt broker
-    -   [metallb](yaml/metallb) - Load-balancer for bare-metal with BGP
-    -   [longhorn](yaml/storage/longhorn) - longhorn storage
-
-
--   Backup
-
-    -   [velero](backup/velero) - Velero backup with minio/s3
-    -   [velero-pvc-watcher](helm/velero-pvc-watcher) - watcher service for unbackuped pvcs
-
-
--   Varia
-    -   [scripts](scripts) - some custom stuff, quite simple
-    -   [config](config) - performance and some hardening
-
+    -   [metallb](cluster/core/networking) - Load-balancer for bare-metal with BGP
+    -   [longhorn](cluster/helm/longhorn) - longhorn storage
 
 <!--START_SECTION_LINES_OF_CODE:readme-info-->
+
 <!--END_SECTION_LINES_OF_CODE:readme-info-->
-
-* * *
-
-## TODO
-
--   [ ]  Automation
--   [x]  Logging
--   [ ]  Sealed secrets
--   [ ]  Wazuh (security stuff)
--   [x]  Database for apps
--   [ ]  Rewrite helm charts with init containers for database creation
 
 * * *
 
