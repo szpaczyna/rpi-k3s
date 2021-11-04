@@ -1,10 +1,10 @@
 ignore: |
   .yamllint.yml
   .github/
-  ansible/
+  provisioning/
   ignore/
-  helm/
-  secrets/
+  cluster/helm/
+  cluster/secrets/
   *-crds.yaml
   *.asc.yaml
 
