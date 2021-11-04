@@ -16,4 +16,3 @@ resources:
   - kube-state-metrics-svc.yaml
   - speedtest.yaml
   - ingress.yaml
-  - 15-auth.yaml
