@@ -22,8 +22,8 @@ data:
   jvm.options: |
     -Xms512M
     -Xmx512M
-    -XX:CMSInitiatingOccupancyFraction=75
-    -XX:+UseCMSInitiatingOccupancyOnly
+    #    -XX:CMSInitiatingOccupancyFraction=75
+    #    -XX:+UseCMSInitiatingOccupancyOnly
     -XX:+UseG1GC
     -Djava.io.tmpdir=/tmp
     -XX:+HeapDumpOnOutOfMemoryError

@@ -26,8 +26,9 @@ spec:
     spec:
       containers:
         - name: kibana
-          image: szpaczyn/kibana-arm64:v7.9.3
-          imagePullPolicy: Always
+          #image: szpaczyn/kibana-arm64:v7.9.3
+          image: docker.elastic.co/kibana/kibana:7.15.1
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5601
               protocol: TCP
@@ -35,7 +36,7 @@ spec:
           resources:
             limits:
               cpu: 1
-              memory: 512Mi
+              memory: 1024Mi
             requests:
               cpu: 0.1
               memory: 256Mi

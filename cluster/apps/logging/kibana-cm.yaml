@@ -15,3 +15,4 @@ data:
     elasticsearch.ssl.verificationMode: none
     status.allowAnonymous: true
     logging.dest: stdout
+    server.publicBaseUrl: "https://kibana.shpaq.org"

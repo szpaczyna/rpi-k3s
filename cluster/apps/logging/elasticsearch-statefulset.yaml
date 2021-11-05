@@ -42,7 +42,8 @@ spec:
               mountPath: /usr/share/elasticsearch/data
       containers:
         - name: elasticsearch
-          image: szpaczyn/elasticsearch-arm64:v7.9.3
+          #image: szpaczyn/elasticsearch-arm64:v7.9.3
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: elasticsearch-config
