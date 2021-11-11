@@ -16,6 +16,8 @@ data:
     discovery.type: single-node
     #discovery.seed_hosts: ["127.0.0.1"]
     #cluster.initial_master_nodes: ["elasticsearch-0"]
+    #xpack.security.enabled: true
+    #xpack.monitoring.collection.enabled: true
     http.cors.allow-origin: '*'
     http.cors.enabled: true
     http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization

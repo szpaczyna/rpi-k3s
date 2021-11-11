@@ -175,3 +175,20 @@ spec:
     name: readarr
   selector:
     app.kubernetes.io/name: readarr
+---
+## calibre-web
+apiVersion: v1
+kind: Service
+metadata:
+  name: calibre-web
+  labels:
+    app.kubernetes.io/name: calibre-web
+spec:
+  type: ClusterIP
+  ports:
+    - name: calibre-web
+      port: 8083
+      protocol: TCP
+      targetPort: calibre-web
+  selector:
+    app.kubernetes.io/name: calibre-web

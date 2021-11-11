@@ -1,0 +1,4 @@
+#!/bin/bash
+VERSION = 'v0.11.0'
+
+wget -q -O http://https://raw.githubusercontent.com/metallb/metallb/{VERSION}/manifests/metallb.yaml

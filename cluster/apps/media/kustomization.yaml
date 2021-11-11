@@ -14,3 +14,4 @@ resources:
   - lidarr-deployment.yaml
   - prowlarr-deployment.yaml
   - readarr-deployment.yaml
+  - calibre-deployment.yaml

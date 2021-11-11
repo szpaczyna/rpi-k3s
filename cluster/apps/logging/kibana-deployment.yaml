@@ -24,9 +24,15 @@ spec:
         prometheus.io/port: "5601"
         prometheus.io/path: "_prometheus/metrics"
     spec:
+      initContainers:
+        - name: permissions
+          image: docker.io/alpine:latest
+          command: ["chown", "-R", "1000:1000", "/usr/share/kibana"]
+          volumeMounts:
+            - name: kibana-data
+              mountPath: /usr/share/kibana
       containers:
         - name: kibana
-          #image: szpaczyn/kibana-arm64:v7.9.3
           image: docker.elastic.co/kibana/kibana:7.15.1
           imagePullPolicy: IfNotPresent
           ports:

@@ -5,7 +5,7 @@ ignore: |
   ignore/
   cluster/helm/
   cluster/secrets/
-  cluster/WiP/
+  cluster/unused/
   *-crds.yaml
   *.asc.yaml
 

@@ -1,3 +1,0 @@
-#!/bin/bash
-
-helm upgrade --install calibre-web -n apps billimek/calibre-web -f values.yaml

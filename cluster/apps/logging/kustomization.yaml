@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - kibana-pvc.yaml
   - curator-cm.yaml
-  - elastic-cm.yaml
+  - elasticsearch-cm.yaml
   - filebeat-cm.yaml
   - kibana-cm.yaml
   - serviceaccount.yaml

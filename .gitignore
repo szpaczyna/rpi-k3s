@@ -3,9 +3,9 @@
 
 .NOTES.md
 .Makefile
-./charts/bitwarden/values.yaml
 RELEASE.md
 test
+WiP
 ### Node
 # Logs
 logs

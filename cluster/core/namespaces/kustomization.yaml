@@ -7,4 +7,4 @@ resources:
   - media.yaml
   - metallb.yaml
   - monitoring.yaml
-  - sops.yaml
+  - system-upgrade.yaml

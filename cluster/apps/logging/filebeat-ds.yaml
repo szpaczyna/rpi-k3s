@@ -36,7 +36,6 @@ spec:
           path: /var/log
       containers:
       - name: "filebeat"
-        #image: "mrnr91/filebeat-alpine:v7.12.0"
         image: docker.elastic.co/beats/filebeat:7.15.1
         imagePullPolicy: "IfNotPresent"
         args:

@@ -1,5 +1,5 @@
 ---
-apiVersion: policy/v1beta1
+apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: elasticsearch
@@ -11,7 +11,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: elasticsearch
 ---
-apiVersion: policy/v1beta1
+apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: kibana

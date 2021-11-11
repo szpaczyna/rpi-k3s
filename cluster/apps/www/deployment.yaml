@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.21.3
+        image: nginx:1.21.4
         ports:
         - containerPort: 80
           name: http
@@ -43,5 +43,4 @@ spec:
           configMap:
             name: shpaq-org
       nodeSelector:
-        kubernetes.io/os: linux
         kubernetes.io/role: worker

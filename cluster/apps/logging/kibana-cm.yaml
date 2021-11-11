@@ -13,6 +13,8 @@ data:
     server.port: 5601
     elasticsearch.hosts: [ "http://elasticsearch:9200" ]
     elasticsearch.ssl.verificationMode: none
+      #    elasticsearch.username: "kibana_system"
+      #    elasticsearch.password: "HcNB9JH7XPid6l3wpnCd"
     status.allowAnonymous: true
     logging.dest: stdout
     server.publicBaseUrl: "https://kibana.shpaq.org"

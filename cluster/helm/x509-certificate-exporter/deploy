@@ -1,0 +1,2 @@
+#!/bin/bash
+helm upgrade --install x509-certificate-exporter . -n monitoring -f values.yaml
