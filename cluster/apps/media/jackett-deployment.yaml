@@ -48,8 +48,11 @@ spec:
             subPath: config/jackett
         resources:
           requests:
-            cpu: 20m
-            memory: 120Mi
+            cpu: 0.02
+            memory: 100Mi
+          limits:
+            cpu: 0.1
+            memory: 200Mi
       volumes:
       - name: media
         persistentVolumeClaim:

@@ -2,20 +2,21 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - kibana-pvc.yaml
-  - curator-cm.yaml
-  - elasticsearch-cm.yaml
-  - filebeat-cm.yaml
-  - kibana-cm.yaml
   - serviceaccount.yaml
   - clusterrole.yaml
-  - service.yaml
+  - curator-cm.yaml
+  - elasticsearch-cm.yaml
+  - elasticsearch-exporter.yaml
   - elasticsearch-statefulset.yaml
+  - elasticsearch-svc.yaml
+  - filebeat-cm.yaml
+  - filebeat-ds.yaml
+  - kibana-cm.yaml
+  - kibana-pvc.yaml
   - kibana-deployment.yaml
+  - kibana-svc.yaml
   - kibana-ingress.yaml
   - poddisruptionbudget.yaml
-  - elasticsearch-exporter.yaml
-  - filebeat-ds.yaml
-  - curator-job.yaml
-  - shards-config-job.yaml
-  - fix-unassigned-job.yaml
+  - job-curator.yaml
+  - job-fix-unnasigned.yaml
+  - job-shards-config.yaml

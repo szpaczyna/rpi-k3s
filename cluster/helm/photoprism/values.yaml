@@ -92,11 +92,11 @@ securityContext:
 
 resources:
   requests:
-    memory: 2Gi
-    cpu: 300m
+    memory: 1Gi
+    cpu: 0.3
   limits:
-    cpu: 3000m
-    memory: 3Gi
+    cpu: 2
+    memory: 2Gi
 
 # tolerations: []
 # affinity: {}

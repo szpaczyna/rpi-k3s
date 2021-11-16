@@ -21,9 +21,9 @@ spec:
       serviceAccountName: media
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
-      securityContext:
-        runAsGroup: 568
-        runAsUser: 568
+      securityContext: {}
+        #  runAsGroup: 568
+        #  runAsUser: 568
       containers:
         - name: radarr
           image: "ghcr.io/linuxserver/radarr:latest"
@@ -53,7 +53,7 @@ spec:
               subPath: library/movies
           resources:
             limits:
-              cpu: 0.5
+              cpu: 0.3
               memory: 256Mi
             requests:
               cpu: 0.1

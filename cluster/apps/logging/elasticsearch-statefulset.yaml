@@ -63,10 +63,10 @@ spec:
               name: cluster
           resources:
             limits:
-              cpu: 1
-              memory: 1536Mi
+              cpu: 0.7
+              memory: 1152Mi
             requests:
-              cpu: 0.1
+              cpu: 0.2
               memory: 512Mi
       terminationGracePeriodSeconds: 30
       volumes:

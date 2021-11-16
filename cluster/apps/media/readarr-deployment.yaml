@@ -51,10 +51,10 @@ spec:
             subPath: library/books
         resources:
           limits:
-            cpu: 0.5
+            cpu: 0.6
             memory: 400Mi
           requests:
-            cpu: 0.1
+            cpu: 0.2
             memory: 200Mi
       volumes:
       - name: media
