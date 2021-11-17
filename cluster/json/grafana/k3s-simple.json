@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 12869,
   "graphTooltip": 1,
-  "id": 27,
+  "id": 11,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -91,7 +91,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(kube_node_status_allocatable_cpu_cores)",
+          "expr": "sum(kube_node_status_allocatable{resource=\"cpu\",unit=\"core\"})",
           "format": "table",
           "instant": false,
           "interval": "",
@@ -440,7 +440,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.0",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "exemplar": true,
@@ -515,7 +515,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.2.0",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "exemplar": true,
@@ -584,7 +584,7 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "s"
         },
         "overrides": [
           {
@@ -699,7 +699,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.2.0",
+      "pluginVersion": "8.2.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
