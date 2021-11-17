@@ -22,10 +22,24 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 34,
+  "id": 8,
   "links": [],
   "liveNow": false,
   "panels": [
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 14,
+      "panels": [],
+      "title": "Overall",
+      "type": "row"
+    },
     {
       "datasource": "prometheus",
       "fieldConfig": {
@@ -181,7 +195,7 @@
         "h": 14,
         "w": 6,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 4,
       "options": {
@@ -197,7 +211,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.2.0",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "exemplar": true,
@@ -400,7 +414,7 @@
         "h": 14,
         "w": 18,
         "x": 6,
-        "y": 0
+        "y": 1
       },
       "id": 3,
       "options": {
@@ -431,6 +445,20 @@
       "title": "Temperature over time",
       "transformations": [],
       "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 12,
+      "panels": [],
+      "title": "K3S",
+      "type": "row"
     },
     {
       "datasource": "prometheus",
@@ -584,9 +612,9 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 14
+        "y": 16
       },
-      "id": 8,
+      "id": 7,
       "options": {
         "displayMode": "gradient",
         "orientation": "auto",
@@ -600,11 +628,11 @@
         "showUnfilled": false,
         "text": {}
       },
-      "pluginVersion": "8.2.0",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (instance)(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"gen2\"})",
+          "expr": "avg by (instance)(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"kubernetes-pods\"})",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
@@ -612,9 +640,213 @@
           "refId": "A"
         }
       ],
-      "title": "Average temp gen2",
+      "title": "Average temp k3s",
       "transformations": [],
       "type": "bargauge"
+    },
+    {
+      "datasource": "prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "fillOpacity": 70,
+            "lineWidth": 0
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "10.0.0.9:9100"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "rpi-k3s-master"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "10.0.0.11:9100"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "rpi-k3s-worker1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "10.0.0.12:9100"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "rpi-k3s-worker2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "10.0.0.13:9100"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "rpi-k3s-worker3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "10.0.10.11:9100"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "gen2-whitepi"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "10.0.10.12:9100"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "gen2-bluepi"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "10.0.10.13:9100"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "gen2-redpi"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "10.0.10.14:9100"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "gen2-greenpi"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "10.0.0.10:9100"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "blueberry"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "10.0.0.20:9100"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "greypi"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "id": 5,
+      "options": {
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "mergeValues": true,
+        "rowHeight": 0.9,
+        "showValue": "auto",
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.2.0",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "avg_over_time(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"kubernetes-pods\"}[5m])",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "K3s",
+      "transformations": [],
+      "type": "state-timeline"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 10,
+      "panels": [],
+      "title": "Gentoo",
+      "type": "row"
     },
     {
       "datasource": "prometheus",
@@ -767,10 +999,10 @@
       "gridPos": {
         "h": 6,
         "w": 12,
-        "x": 12,
-        "y": 14
+        "x": 0,
+        "y": 23
       },
-      "id": 7,
+      "id": 8,
       "options": {
         "displayMode": "gradient",
         "orientation": "auto",
@@ -784,11 +1016,11 @@
         "showUnfilled": false,
         "text": {}
       },
-      "pluginVersion": "8.2.0",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (instance)(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"kubernetes-pods\"})",
+          "expr": "avg by (instance)(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"gen2\"})",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
@@ -796,7 +1028,7 @@
           "refId": "A"
         }
       ],
-      "title": "Average temp k3s",
+      "title": "Average temp gen2",
       "transformations": [],
       "type": "bargauge"
     },
@@ -958,8 +1190,8 @@
       "gridPos": {
         "h": 6,
         "w": 12,
-        "x": 0,
-        "y": 20
+        "x": 12,
+        "y": 23
       },
       "id": 6,
       "options": {
@@ -990,196 +1222,6 @@
       "title": "Gentoo",
       "transformations": [],
       "type": "state-timeline"
-    },
-    {
-      "datasource": "prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "fillOpacity": 70,
-            "lineWidth": 0
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 70
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "celsius"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "10.0.0.9:9100"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "rpi-k3s-master"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "10.0.0.11:9100"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "rpi-k3s-worker1"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "10.0.0.12:9100"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "rpi-k3s-worker2"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "10.0.0.13:9100"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "rpi-k3s-worker3"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "10.0.10.11:9100"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "gen2-whitepi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "10.0.10.12:9100"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "gen2-bluepi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "10.0.10.13:9100"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "gen2-redpi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "10.0.10.14:9100"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "gen2-greenpi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "10.0.0.10:9100"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "blueberry"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "10.0.0.20:9100"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "greypi"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 20
-      },
-      "id": 5,
-      "options": {
-        "alignValue": "left",
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "mergeValues": true,
-        "rowHeight": 0.9,
-        "showValue": "auto",
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "8.2.0",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "avg_over_time(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"kubernetes-pods\"}[5m])",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "title": "K3s",
-      "transformations": [],
-      "type": "state-timeline"
     }
   ],
   "schemaVersion": 31,
@@ -1196,5 +1238,5 @@
   "timezone": "",
   "title": "Temperature",
   "uid": "3762JRF7k",
-  "version": 6
+  "version": 2
 }
