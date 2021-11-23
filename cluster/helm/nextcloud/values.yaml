@@ -1,7 +1,7 @@
 ---
 image:
   repository: nextcloud
-  tag: 22.2.1
+  tag: 22.2.3
   pullPolicy: IfNotPresent
 
 nameOverride: cloud
@@ -170,11 +170,8 @@ persistence:
 
 resources:
   requests:
-    cpu: 0.1
-    memory: 100Mi
-  limits:
-    cpu: 0.5
-    memory: 512Mi
+    cpu: 200m
+    memory: 256Mi
 
 livenessProbe:
   enabled: false
