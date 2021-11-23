@@ -29,6 +29,7 @@ spec:
             topologyKey: "kubernetes.io/hostname"
       containers:
       - image: szpaczyn/mongodb-arm64:v4.0.5
+        #- image: mongo:4.4.10
         name: database
         imagePullPolicy: IfNotPresent
         env:
@@ -45,7 +46,7 @@ spec:
         - name: MONGODB_DATABASE
           value: "xbrowsersync"
         - name: MONGODB_USERNAME
-          value: "xbrowsersync@admin"
+          value: "xbrowsersync"
         - name: MONGODB_PASSWORD
           value: "Ef8OnoK3xOIoTAYHo8S9btyllKpdoRYO"
         - name: MONGODB_VERBOSE
@@ -55,10 +56,10 @@ spec:
             name: mongodb
         resources:
           limits:
-            cpu: 1000m
-            memory: 750Mi
+            cpu: 0.5
+            memory: 500Mi
           requests:
-            cpu: 100m
+            cpu: 0.1
             memory: 100Mi
         volumeMounts:
         - name: data
@@ -82,9 +83,8 @@ spec:
           requests:
             cpu: 25m
             memory: 32Mi
-      nodeSelector:
-        disktype: external
-        kubernetes.io/role: worker
+      nodeSelector: {}
+        #        kubernetes.io/role: worker
       tolerations:
         - effect: NoSchedule
           operator: Exists
@@ -97,4 +97,4 @@ spec:
         storageClassName: longhorn
         resources:
           requests:
-            storage: 12Gi
+            storage: 5Gi

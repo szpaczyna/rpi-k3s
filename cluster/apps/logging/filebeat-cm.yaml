@@ -23,6 +23,9 @@ data:
       hosts: [ "elasticsearch:9200" ]
       index: "k3s-%{+yyyy.MM.dd}"
 
+    setup.ilm.enabled: false
+    ilm.enabled: false
+    setup.template.overwrite: true
     setup.template.name: "k3s"
     setup.template.pattern: "k3s-*"
 
