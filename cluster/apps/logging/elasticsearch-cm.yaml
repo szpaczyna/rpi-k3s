@@ -18,6 +18,7 @@ data:
     #cluster.initial_master_nodes: ["elasticsearch-0"]
     #xpack.security.enabled: true
     #xpack.monitoring.collection.enabled: true
+    xpack.security.enabled: false
     http.cors.allow-origin: '*'
     http.cors.enabled: true
     http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization

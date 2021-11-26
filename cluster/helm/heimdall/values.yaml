@@ -1,0 +1,58 @@
+## values for heimdall
+
+image:
+  repository: linuxserver/heimdall
+  tag: 2.2.2
+  pullPolicy: IfNotPresent
+
+env:
+  TZ: Europe/Warsaw
+  PUID: "1000"
+  PGID: "1000"
+
+service:
+  main:
+    ports:
+      http:
+        port: 80
+
+ingress:
+  main:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      traefik.frontend.redirect.permanent: 'true'
+      traefik.ingress.kubernetes.io/frontend-entry-points: http, https
+      traefik.ingress.kubernetes.io/redirect-entry-point: https
+    ingressClassName:  traefik-lb
+    hosts:
+      - host: dash.shpaq.org
+        paths:
+          - path: /
+            pathType: Prefix
+
+    tls:
+      - secretName: dash-shpaq-org-tls
+        hosts:
+          - dash.shpaq.org
+
+persistence:
+  config:
+    enabled: true
+    type: pvc
+    storageClass: longhorn
+    mountPath: /config
+    accessMode: ReadWriteOnce
+    size: 256Mi
+
+resources: {}
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi

@@ -1,0 +1,2 @@
+#!/bin/bash
+helm upgrade --install heimdall k8s-at-home/heimdall -n apps --values values.yaml
