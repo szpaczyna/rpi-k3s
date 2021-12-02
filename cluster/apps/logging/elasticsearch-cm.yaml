@@ -24,7 +24,7 @@ data:
     http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
   jvm.options: |
     -Xms512M
-    -Xmx512M
+    -Xmx1450M
     #    -XX:CMSInitiatingOccupancyFraction=75
     #    -XX:+UseCMSInitiatingOccupancyOnly
     -XX:+UseG1GC

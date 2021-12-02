@@ -64,10 +64,10 @@ spec:
           resources:
             limits:
               cpu: 0.7
-              memory: 1152Mi
+              memory: 1536Mi
             requests:
               cpu: 0.2
-              memory: 512Mi
+              memory: 768Mi
       terminationGracePeriodSeconds: 30
       volumes:
       - name: elasticsearch-config
