@@ -64,6 +64,11 @@ data:
       - replacement: apiserver
         action: replace
         target_label: job
+      - action: replace
+        regex: (.*)
+        replacement: $1
+        source_labels: [__meta_kubernetes_pod_node_name ]
+        target_label: kubernetes_node
 
     - job_name: 'kubelet'
       kubernetes_sd_configs:
@@ -84,6 +89,10 @@ data:
         action: replace
         regex: (.+)
         target_label: kubernetes_namespace
+      - source_labels:
+        - node
+        action: replace
+        target_label: instance
 
     - job_name: 'kubernetes-cadvisor'
       kubernetes_sd_configs:

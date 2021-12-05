@@ -30,7 +30,7 @@ spec:
       serviceAccountName: prometheus
       initContainers:
         - name: chown
-          image: docker.io/alpine:latest
+          image: docker.io/alpine:3.15.0
           command: ["chown", "-R", "65534:65534", "/var/lib/prometheus"]
           volumeMounts:
             - name: data
