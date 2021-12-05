@@ -6,7 +6,6 @@ resources:
   - clusterrole.yaml
   - curator-cm.yaml
   - elasticsearch-cm.yaml
-  - elasticsearch-exporter.yaml
   - elasticsearch-statefulset.yaml
   - elasticsearch-svc.yaml
   - filebeat-cm.yaml

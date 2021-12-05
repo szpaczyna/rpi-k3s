@@ -10,23 +10,23 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: kibana
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-    type: RollingUpdate
+#  strategy:
+#    rollingUpdate:
+#      maxSurge: 1
+#      maxUnavailable: 0
+#    type: RollingUpdate
   template:
     metadata:
       labels:
         app.kubernetes.io/name: kibana
       annotations:
-        prometheus.io/scrape: "true"
+        prometheus.io/scrape: "false"
         prometheus.io/port: "5601"
         prometheus.io/path: "_prometheus/metrics"
     spec:
       initContainers:
         - name: permissions
-          image: docker.io/alpine:latest
+          image: docker.io/alpine:3.15.0
           command: ["chown", "-R", "1000:1000", "/usr/share/kibana"]
           volumeMounts:
             - name: kibana-data
@@ -34,6 +34,7 @@ spec:
       containers:
         - name: kibana
           image: docker.elastic.co/kibana/kibana:7.15.1
+          #image: szpaczyn/kibana-arm64:v7.15.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5601

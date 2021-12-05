@@ -15,6 +15,9 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: elasticsearch
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9114"
     spec:
       affinity:
         podAntiAffinity:
@@ -29,13 +32,13 @@ spec:
       serviceAccountName: elasticsearch
       initContainers:
         - name: create-directory
-          image: docker.io/alpine:latest
+          image: docker.io/alpine:3:15:0
           command: ["mkdir", "-p", "/usr/share/elasticsearch/data/nodes"]
           volumeMounts:
             - name: data
               mountPath: /usr/share/elasticsearch/data
         - name: permissions
-          image: docker.io/alpine:latest
+          image: docker.io/alpine:3.15.0
           command: ["chown", "-R", "1000:1000", "/usr/share/elasticsearch"]
           volumeMounts:
             - name: data
@@ -68,6 +71,27 @@ spec:
             requests:
               cpu: 0.2
               memory: 768Mi
+        - name: exporter
+          image: szpaczyn/elasticsearch_exporter-arm64:v1.2.0
+          imagePullPolicy: IfNotPresent
+          command:
+          - /bin/elasticsearch_exporter
+          - --es.uri=http://127.0.0.1:9200
+          - --es.timeout=60s
+          - --es.all
+          - --es.indices
+          - --es.shards
+          ports:
+          - name: metrics
+            containerPort: 9114
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 25m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 20Mi
       terminationGracePeriodSeconds: 30
       volumes:
       - name: elasticsearch-config
