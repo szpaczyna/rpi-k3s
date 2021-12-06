@@ -20,7 +20,7 @@ spec:
       labels:
         app.kubernetes.io/name: kibana
       annotations:
-        prometheus.io/scrape: "false"
+        prometheus.io/scrape: "true"
         prometheus.io/port: "5601"
         prometheus.io/path: "_prometheus/metrics"
     spec:
@@ -33,8 +33,8 @@ spec:
               mountPath: /usr/share/kibana
       containers:
         - name: kibana
-          image: docker.elastic.co/kibana/kibana:7.15.1
-          #image: szpaczyn/kibana-arm64:v7.15.1
+          #image: docker.elastic.co/kibana/kibana:7.15.1
+          image: szpaczyn/kibana-arm64:v7.15.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5601
