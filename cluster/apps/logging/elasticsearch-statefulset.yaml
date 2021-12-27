@@ -32,7 +32,7 @@ spec:
       serviceAccountName: elasticsearch
       initContainers:
         - name: create-directory
-          image: docker.io/alpine:3:15:0
+          image: docker.io/alpine:3.15.0
           command: ["mkdir", "-p", "/usr/share/elasticsearch/data/nodes"]
           volumeMounts:
             - name: data
@@ -45,7 +45,7 @@ spec:
               mountPath: /usr/share/elasticsearch/data
       containers:
         - name: elasticsearch
-          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: elasticsearch-config
@@ -111,4 +111,4 @@ spec:
         storageClassName: longhorn
         resources:
           requests:
-            storage: 48Gi
+            storage: 60Gi
