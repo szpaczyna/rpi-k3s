@@ -16,7 +16,6 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9469"
-        seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
     spec:
       affinity:
         nodeAffinity:
@@ -51,4 +50,4 @@ spec:
         - effect: NoSchedule
           operator: Exists
       nodeSelector:
-        kubernetes.io/hostname: rpi-k3s-worker2
+        kubernetes.io/hostname: rpi-k3s-worker-01

@@ -30,4 +30,4 @@ data:
     setup.template.pattern: "k3s-*"
 
     xpack.monitoring:
-      enabled: "true"
+      enabled: "false"

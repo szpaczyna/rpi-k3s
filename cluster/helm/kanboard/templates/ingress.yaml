@@ -16,7 +16,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: traefik-lb
+  ingressClassName: nginx
   rules:
     - host: {{ .name | quote }}
       http:

@@ -6,13 +6,12 @@ metadata:
   namespace: monitoring
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.frontend.redirect.permanent: 'true'
-    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
-    traefik.ingress.kubernetes.io/redirect-entry-point: https
-    ingress.kubernetes.io/auth-type: basic
-    ingress.kubernetes.io/auth-secret: prometheus-auth
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: prometheus-auth
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
 spec:
-  ingressClassName: traefik-lb
+  ingressClassName: nginx
   rules:
   - host: prometheus.shpaq.org
     http:

@@ -64,11 +64,6 @@ data:
       - replacement: apiserver
         action: replace
         target_label: job
-      - action: replace
-        regex: (.*)
-        replacement: $1
-        source_labels: [__meta_kubernetes_pod_node_name ]
-        target_label: kubernetes_node
 
     - job_name: 'kubelet'
       kubernetes_sd_configs:
@@ -89,10 +84,6 @@ data:
         action: replace
         regex: (.+)
         target_label: kubernetes_namespace
-      - source_labels:
-        - node
-        action: replace
-        target_label: instance
 
     - job_name: 'kubernetes-cadvisor'
       kubernetes_sd_configs:
@@ -124,6 +115,20 @@ data:
         replacement: $1
         action: replace
         target_label: container_name
+
+    - job_name: 'etcd'
+      kubernetes_sd_configs:
+      - role: pod
+      scheme: http
+      relabel_configs:
+        - source_labels: [__meta_kubernetes_namespace]
+          action: keep
+          regex: 'kube-system'
+        - source_labels: [__meta_kubernetes_pod_label_component]
+          action: keep
+          regex: 'etcd-scraper-proxy'
+        - action: labelmap
+          regex: __meta_kubernetes_pod_label_(.+)
 
     - job_name: 'kubernetes-service-endpoints'
       kubernetes_sd_configs:

@@ -27,14 +27,14 @@ spec:
           args: ["-c", "for f in datasources plugins notifiers dashboards; do mkdir -p /var/lib/grafana/provisioning/$f; done"]
           volumeMounts:
             - mountPath: /var/lib/grafana
-              name: grafana-data
+              name: data-grafana
       containers:
       - env:
         - name: GF_INSTALL_PLUGINS
           value: yesoreyeram-infinity-datasource,btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel,novatec-sdg-panel,grafana-singlestat-panel,farski-blendstat-panel,grafana-polystat-panel
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/provisioning"
-        image: grafana/grafana:8.3.0
+        image: grafana/grafana:8.3.3
         imagePullPolicy: IfNotPresent
         name: grafana
         ports:
@@ -49,7 +49,7 @@ spec:
             memory: 100Mi
         volumeMounts:
         - mountPath: /var/lib/grafana
-          name: grafana-data
+          name: data-grafana
           readOnly: false
         - mountPath: /var/lib/grafana/provisioning/datasources
           name: grafana-datasources
@@ -84,9 +84,9 @@ spec:
         runAsUser: 472
       serviceAccountName: grafana
       volumes:
-      - name: grafana-data
+      - name: data-grafana
         persistentVolumeClaim:
-          claimName: grafana-data
+          claimName: data-grafana
       - name: grafana-datasources
         secret:
           secretName: grafana-datasources
@@ -112,7 +112,7 @@ spec:
           name: grafana-dashboard-pod-total
         name: grafana-dashboard-pod-total
       - name: grafana-config
-        secret:
-          secretName: grafana-config
+        configMap:
+          name: grafana-config
       nodeSelector:
-        kubernetes.io/role: worker
+        kubernetes.io/disktype: ssd

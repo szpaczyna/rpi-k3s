@@ -1,7 +1,7 @@
 #!/bin/bash
 sops -d \
-    --output 01-secret.yaml \
+    --output secret.yaml \
     ../../secrets/unifi-secret.yaml
 
-kubectl apply -f .
-rm -rf 01-secret.yaml
+kubectl apply -k .
+rm -rf secret.yaml

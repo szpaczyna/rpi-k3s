@@ -1,0 +1,680 @@
+## nginx configuration
+
+# nameOverride:
+# fullnameOverride:
+
+controller:
+  name: controller
+  image:
+    registry: k8s.gcr.io
+    image: ingress-nginx/controller
+    tag: "v1.1.0"
+    digest: sha256:f766669fdcf3dc26347ed273a55e754b427eb4411ee075a53f30718b4499076a
+    pullPolicy: IfNotPresent
+    # www-data -> uid 101
+    runAsUser: 101
+    allowPrivilegeEscalation: true
+  existingPsp: ""
+  containerName: controller
+  containerPort:
+    http: 80
+    https: 443
+
+  # Will add custom configuration options to Nginx https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
+  config:
+    enable-brotli: true
+    proxy-add-original-uri-header: true
+    client-header-buffer-size: "256k"
+    server-name-hash-max-size: 65536
+    use-geoip2: true
+
+  configAnnotations: {}
+  proxySetHeaders: {}
+  addHeaders: {}
+  dnsConfig: {}
+  hostname: {}
+  dnsPolicy: ClusterFirst
+  reportNodeInternalIp: false
+
+  watchIngressWithoutClass: true
+  ingressClassByName: true
+  allowSnippetAnnotations: true
+
+  hostNetwork: false
+  hostPort:
+    enabled: false
+    ports:
+      http: 80
+      https: 443
+
+  electionID: ingress-controller-leader
+
+  ingressClassResource:
+    name: nginx
+    enabled: true
+    default: true
+    controllerValue: "k8s.io/ingress-nginx"
+    parameters: {}
+
+  podLabels: {}
+  podSecurityContext: {}
+  sysctls: {}
+  # sysctls:
+  #   "net.core.somaxconn": "8192"
+
+  publishService:
+    enabled: true
+    pathOverride: ""
+
+  scope:
+    enabled: false
+    namespace: ""   # defaults to $(POD_NAMESPACE)
+    namespaceSelector: ""
+
+  configMapNamespace: ""   # defaults to $(POD_NAMESPACE)
+  tcp:
+    configMapNamespace: ""   # defaults to $(POD_NAMESPACE)
+    annotations: {}
+
+  udp:
+    configMapNamespace: ""   # defaults to $(POD_NAMESPACE)
+    annotations: {}
+  maxmindLicenseKey: ""
+  extraArgs: {}
+
+  ## Additional environment variables to set
+  extraEnvs: []
+  # extraEnvs:
+  #   - name: FOO
+  #     valueFrom:
+  #       secretKeyRef:
+  #         key: FOO
+  #         name: secret-resource
+
+  ## DaemonSet or Deployment
+  kind: DaemonSet
+  annotations: {}
+  #  keel.sh/pollSchedule: "@every 60m"
+
+  ## Labels to be added to the controller Deployment or DaemonSet and other resources that do not have option to specify labels
+  ##
+  labels: {}
+  #  keel.sh/policy: patch
+  #  keel.sh/trigger: poll
+
+  updateStrategy: {}
+  #  rollingUpdate:
+  #    maxUnavailable: 1
+  #  type: RollingUpdate
+
+  # minReadySeconds to avoid killing pods before we are ready
+  ##
+  minReadySeconds: 0
+
+
+  ## Node tolerations for server scheduling to nodes with taints
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  ##
+  tolerations: []
+  #  - key: "key"
+  #    operator: "Equal|Exists"
+  #    value: "value"
+  #    effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+
+  ## Affinity and anti-affinity
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ##
+  affinity: {}
+    # # An example of preferred pod anti-affinity, weight is in the range 1-100
+    # podAntiAffinity:
+    #   preferredDuringSchedulingIgnoredDuringExecution:
+    #   - weight: 100
+    #     podAffinityTerm:
+    #       labelSelector:
+    #         matchExpressions:
+    #         - key: app.kubernetes.io/name
+    #           operator: In
+    #           values:
+    #           - ingress-nginx
+    #         - key: app.kubernetes.io/instance
+    #           operator: In
+    #           values:
+    #           - ingress-nginx
+    #         - key: app.kubernetes.io/component
+    #           operator: In
+    #           values:
+    #           - controller
+    #       topologyKey: kubernetes.io/hostname
+
+    # # An example of required pod anti-affinity
+    # podAntiAffinity:
+    #   requiredDuringSchedulingIgnoredDuringExecution:
+    #   - labelSelector:
+    #       matchExpressions:
+    #       - key: app.kubernetes.io/name
+    #         operator: In
+    #         values:
+    #         - ingress-nginx
+    #       - key: app.kubernetes.io/instance
+    #         operator: In
+    #         values:
+    #         - ingress-nginx
+    #       - key: app.kubernetes.io/component
+    #         operator: In
+    #         values:
+    #         - controller
+    #     topologyKey: "kubernetes.io/hostname"
+
+  ## Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in.
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ##
+  topologySpreadConstraints: []
+    # - maxSkew: 1
+    #   topologyKey: failure-domain.beta.kubernetes.io/zone
+    #   whenUnsatisfiable: DoNotSchedule
+    #   labelSelector:
+    #     matchLabels:
+    #       app.kubernetes.io/instance: ingress-nginx-internal
+
+  ## terminationGracePeriodSeconds
+  ## wait up to five minutes for the drain of connections
+  ##
+  terminationGracePeriodSeconds: 10
+  nodeSelector: {}
+  #  kubernetes.io/os: linux
+
+  ## Liveness and readiness probe values
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  # startupProbe:
+  #   httpGet:
+  #     # should match container.healthCheckPath
+  #     path: "/healthz"
+  #     port: 10254
+  #     scheme: HTTP
+  #   initialDelaySeconds: 5
+  #   periodSeconds: 5
+  #   timeoutSeconds: 2
+  #   successThreshold: 1
+  #   failureThreshold: 5
+  livenessProbe:
+    httpGet:
+      # should match container.healthCheckPath
+      path: "/healthz"
+      port: 10254
+      scheme: HTTP
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 5
+  readinessProbe:
+    httpGet:
+      # should match container.healthCheckPath
+      path: "/healthz"
+      port: 10254
+      scheme: HTTP
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+
+
+  # Path of the health check endpoint. All requests received on the port defined by
+  # the healthz-port parameter are forwarded internally to this path.
+  healthCheckPath: "/healthz"
+
+  # Address to bind the health check endpoint.
+  # It is better to set this option to the internal node address
+  # if the ingress nginx controller is running in the hostNetwork: true mode.
+  healthCheckHost: ""
+
+  ## Annotations to be added to controller pods
+  ##
+  podAnnotations: {}
+  replicaCount: 1
+  minAvailable: 1
+  resources:
+  #  limits:
+  #    cpu: 100m
+  #    memory: 90Mi
+    requests:
+      cpu: 100m
+      memory: 90Mi
+
+  # Mutually exclusive with keda autoscaling
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 11
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 50
+    behavior: {}
+      # scaleDown:
+      #   stabilizationWindowSeconds: 300
+      #  policies:
+      #   - type: Pods
+      #     value: 1
+      #     periodSeconds: 180
+      # scaleUp:
+      #   stabilizationWindowSeconds: 300
+      #   policies:
+      #   - type: Pods
+      #     value: 2
+      #     periodSeconds: 60
+
+  autoscalingTemplate: []
+  # Custom or additional autoscaling metrics
+  # ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-custom-metrics
+  # - type: Pods
+  #   pods:
+  #     metric:
+  #       name: nginx_ingress_controller_nginx_process_requests_total
+  #     target:
+  #       type: AverageValue
+  #       averageValue: 10000m
+
+  # Mutually exclusive with hpa autoscaling
+  keda:
+    apiVersion: "keda.sh/v1alpha1"
+  # apiVersion changes with keda 1.x vs 2.x
+  # 2.x = keda.sh/v1alpha1
+  # 1.x = keda.k8s.io/v1alpha1
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 11
+    pollingInterval: 30
+    cooldownPeriod: 300
+    restoreToOriginalReplicaCount: false
+    scaledObject:
+      annotations: {}
+      # Custom annotations for ScaledObject resource
+      #  annotations:
+      # key: value
+    triggers: []
+ #     - type: prometheus
+ #       metadata:
+ #         serverAddress: http://<prometheus-host>:9090
+ #         metricName: http_requests_total
+ #         threshold: '100'
+ #         query: sum(rate(http_requests_total{deployment="my-deployment"}[2m]))
+
+    behavior: {}
+ #     scaleDown:
+ #       stabilizationWindowSeconds: 300
+ #       policies:
+ #       - type: Pods
+ #         value: 1
+ #         periodSeconds: 180
+ #     scaleUp:
+ #       stabilizationWindowSeconds: 300
+ #       policies:
+ #       - type: Pods
+ #         value: 2
+ #         periodSeconds: 60
+
+  ## Enable mimalloc as a drop-in replacement for malloc.
+  ## ref: https://github.com/microsoft/mimalloc
+  ##
+  enableMimalloc: true
+
+  ## Override NGINX template
+  customTemplate:
+    configMapName: ""
+    configMapKey: ""
+
+  service:
+    enabled: true
+    appProtocol: true
+
+    annotations: {}
+    labels: {}
+    # clusterIP: ""
+
+    externalIPs: []
+    loadBalancerIP: "10.1.0.30"
+    loadBalancerSourceRanges: []
+
+    enableHttp: true
+    enableHttps: true
+
+    ## Set external traffic policy to: "Local" to preserve source IP on providers supporting it.
+    ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
+    # externalTrafficPolicy: ""
+
+    ## Must be either "None" or "ClientIP" if set. Kubernetes will default to "None".
+    ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    # sessionAffinity: ""
+
+    ## Specifies the health check node port (numeric port number) for the service. If healthCheckNodePort isn't specified,
+    ## the service controller allocates a port from your cluster's NodePort range.
+    ## Ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    # healthCheckNodePort: 0
+
+    ## Represents the dual-stack-ness requested or required by this Service. Possible values are
+    ## SingleStack, PreferDualStack or RequireDualStack.
+    ## The ipFamilies and clusterIPs fields depend on the value of this field.
+    ## Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/
+    ipFamilyPolicy: "SingleStack"
+
+    ## List of IP families (e.g. IPv4, IPv6) assigned to the service. This field is usually assigned automatically
+    ## based on cluster configuration and the ipFamilyPolicy field.
+    ## Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/
+    ipFamilies:
+      - IPv4
+
+    ports:
+      http: 80
+      https: 443
+
+    targetPorts:
+      http: http
+      https: https
+
+    type: LoadBalancer
+
+    # type: NodePort
+    # nodePorts:
+    #   http: 32080
+    #   https: 32443
+    #   tcp:
+    #     8080: 32808
+    nodePorts:
+      http: ""
+      https: ""
+      tcp: {}
+      udp: {}
+
+    external:
+      enabled: true
+
+    internal:
+      enabled: false
+      annotations: {}
+
+      # loadBalancerIP: ""
+
+      ## Restrict access For LoadBalancer service. Defaults to 0.0.0.0/0.
+      loadBalancerSourceRanges: []
+
+      ## Set external traffic policy to: "Local" to preserve source IP on
+      ## providers supporting it
+      ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
+      # externalTrafficPolicy: ""
+
+  extraContainers: []
+  ## Additional containers to be added to the controller pod.
+  ## See https://github.com/lemonldap-ng-controller/lemonldap-ng-controller as example.
+  #  - name: my-sidecar
+  #    image: nginx:latest
+  #  - name: lemonldap-ng-controller
+  #    image: lemonldapng/lemonldap-ng-controller:0.2.0
+  #    args:
+  #      - /lemonldap-ng-controller
+  #      - --alsologtostderr
+  #      - --configmap=$(POD_NAMESPACE)/lemonldap-ng-configuration
+  #    env:
+  #      - name: POD_NAME
+  #        valueFrom:
+  #          fieldRef:
+  #            fieldPath: metadata.name
+  #      - name: POD_NAMESPACE
+  #        valueFrom:
+  #          fieldRef:
+  #            fieldPath: metadata.namespace
+  #    volumeMounts:
+  #    - name: copy-portal-skins
+  #      mountPath: /srv/var/lib/lemonldap-ng/portal/skins
+
+  extraVolumeMounts: []
+  ## Additional volumeMounts to the controller main container.
+  #  - name: copy-portal-skins
+  #   mountPath: /var/lib/lemonldap-ng/portal/skins
+
+  extraVolumes: []
+  ## Additional volumes to the controller pod.
+  #  - name: copy-portal-skins
+  #    emptyDir: {}
+
+  extraInitContainers: []
+  ## Containers, which are run before the app containers are started.
+  # - name: init-myservice
+  #   image: busybox
+  #   command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+
+  admissionWebhooks:
+    annotations: {}
+    # ignore-check.kube-linter.io/no-read-only-rootfs: "This deployment needs write access to root filesystem".
+
+    ## Additional annotations to the admission webhooks.
+    ## These annotations will be added to the ValidatingWebhookConfiguration and
+    ## the Jobs Spec of the admission webhooks.
+    enabled: true
+    failurePolicy: Fail
+    # timeoutSeconds: 10
+    port: 8443
+    certificate: "/usr/local/certificates/cert"
+    key: "/usr/local/certificates/key"
+    namespaceSelector: {}
+    objectSelector: {}
+    ## Labels to be added to admission webhooks
+    labels: {}
+
+    # Use an existing PSP instead of creating one
+    existingPsp: ""
+
+    service:
+      annotations: {}
+      # clusterIP: ""
+      externalIPs: []
+      # loadBalancerIP: ""
+      loadBalancerSourceRanges: []
+      servicePort: 443
+      type: ClusterIP
+
+    createSecretJob:
+      resources: {}
+        # limits:
+        #   cpu: 10m
+        #   memory: 20Mi
+        # requests:
+        #   cpu: 10m
+        #   memory: 20Mi
+
+    patchWebhookJob:
+      resources: {}
+
+    patch:
+      enabled: true
+      image:
+        registry: k8s.gcr.io
+        image: ingress-nginx/kube-webhook-certgen
+        # for backwards compatibility consider setting the full image url via the repository value below
+        # use *either* current default registry/image or repository format or installing chart by providing the values.yaml will fail
+        # repository:
+        tag: v1.1.1
+        digest: sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+        pullPolicy: IfNotPresent
+      ## Provide a priority class name to the webhook patching job
+      ##
+      priorityClassName: ""
+      podAnnotations: {}
+      nodeSelector:
+        kubernetes.io/os: linux
+      tolerations: []
+      ## Labels to be added to patch job resources
+      labels: {}
+      runAsUser: 2000
+
+  metrics:
+    port: 10254
+    enabled: true
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "10254"
+
+      # clusterIP: ""
+
+      ## List of IP addresses at which the stats-exporter service is available
+      ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+      ##
+      externalIPs: []
+
+      # loadBalancerIP: ""
+      loadBalancerSourceRanges: []
+      servicePort: 10254
+      type: ClusterIP
+      # externalTrafficPolicy: ""
+      # nodePort: ""
+
+    serviceMonitor:
+      enabled: false
+      additionalLabels: {}
+      # The label to use to retrieve the job name from.
+      # jobLabel: "app.kubernetes.io/name"
+      namespace: ""
+      namespaceSelector: {}
+      # Default: scrape .Release.Namespace only
+      # To scrape all, use the following:
+      # namespaceSelector:
+      #   any: true
+      scrapeInterval: 30s
+      # honorLabels: true
+      targetLabels: []
+      relabelings: []
+      metricRelabelings: []
+
+    prometheusRule:
+      enabled: false
+
+  ## Improve connection draining when ingress controller pod is deleted using a lifecycle hook:
+  ## With this new hook, we increased the default terminationGracePeriodSeconds from 30 seconds
+  ## to 300, allowing the draining of connections up to five minutes.
+  ## If the active connections end before that, the pod will terminate gracefully at that time.
+  ## To effectively take advantage of this feature, the Configmap feature
+  ## worker-shutdown-timeout new value is 240s instead of 10s.
+  ##
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - /wait-shutdown
+
+  priorityClassName: ""
+
+
+revisionHistoryLimit: 10
+
+## Default 404 backend
+defaultBackend:
+  enabled: false
+  name: defaultbackend
+  image:
+    registry: szpaczyn
+    image: defaultbackend-arm64
+    tag: "1.5.1"
+    pullPolicy: IfNotPresent
+    # nobody user -> uid 65534
+    runAsUser: 65534
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+  existingPsp: ""
+  extraArgs: {}
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: true
+  extraEnvs: []
+  port: 8080
+
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  readinessProbe:
+    failureThreshold: 6
+    initialDelaySeconds: 0
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 5
+
+  tolerations: []
+  #  - key: "key"
+  #    operator: "Equal|Exists"
+  #    value: "value"
+  #    effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+
+  affinity: {}
+  podSecurityContext: {}
+  containerSecurityContext: {}
+  podLabels: {}
+  nodeSelector: {}
+  podAnnotations: {}
+  replicaCount: 1
+  minAvailable: 1
+
+  resources:
+    limits:
+      cpu: 10m
+      memory: 20Mi
+    requests:
+      cpu: 10m
+      memory: 20Mi
+
+  extraVolumeMounts: []
+  ## Additional volumeMounts to the default backend container.
+  #  - name: copy-portal-skins
+  #   mountPath: /var/lib/lemonldap-ng/portal/skins
+
+  extraVolumes: []
+  ## Additional volumes to the default backend pod.
+  #  - name: copy-portal-skins
+  #    emptyDir: {}
+
+  autoscaling:
+    annotations: {}
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 50
+
+  service:
+    annotations: {}
+    # clusterIP: ""
+    externalIPs: []
+    # loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    servicePort: 80
+    type: ClusterIP
+
+  priorityClassName: ""
+  labels: {}
+
+rbac:
+  create: true
+  scope: false
+
+podSecurityPolicy:
+  enabled: false
+
+serviceAccount:
+  create: true
+  name: ""
+  automountServiceAccountToken: true
+
+imagePullSecrets: []
+tcp: {}
+#  8080: "default/example-tcp-svc:9000"
+
+# UDP service key:value pairs
+# Ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md
+##
+udp: {}
+#  53: "kube-system/kube-dns:53"
+dhParam:
