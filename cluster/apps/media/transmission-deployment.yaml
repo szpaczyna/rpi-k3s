@@ -29,7 +29,7 @@ spec:
         runAsUser: 568
       initContainers:
       - name: flood
-        image: curlimages/curl:7.80.0
+        image: curlimages/curl:7.81.0
         command:
         - /bin/sh
         - -c

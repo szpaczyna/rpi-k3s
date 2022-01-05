@@ -14,6 +14,6 @@ spec:
         spec:
           containers:
           - name: fix-unassigned
-            image: "curlimages/curl:7.80.0"
+            image: "curlimages/curl:7.81.0"
             command: ['sh', '-c', 'curl -vv "http://elasticsearch:9200/_cat/shards" | awk "/UNASSIGNED/ {print $1}" | xargs -i curl -vv -XDELETE "http://elasticsearch:9200/{}"']
           restartPolicy: OnFailure
