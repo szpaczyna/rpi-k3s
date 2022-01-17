@@ -146,7 +146,7 @@ cronjob:
   enabled: true
   image:
     repository: curlimages/curl
-    tag: 7.80.0
+    tag: 7.81.0
     pullPolicy: IfNotPresent
   schedule: '*/5 * * * *'
   annotations: {}
@@ -157,7 +157,7 @@ cronjob:
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 80
   loadBalancerIP: nil
   nodePort: nil
 
@@ -200,7 +200,7 @@ startupProbe:
 
 hpa:
   enabled: false
-  cputhreshold: 80
+  cputhreshold: 81
   minPods: 1
   maxPods: 2
 
