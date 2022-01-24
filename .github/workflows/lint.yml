@@ -60,5 +60,5 @@ jobs:
     - name: Lint Ansible
       uses: ansible/ansible-lint-action@master
       with:
-        targets: "./ansible/*.yml"
+        targets: ".provision/ansible/*.yml"
         args: ""
