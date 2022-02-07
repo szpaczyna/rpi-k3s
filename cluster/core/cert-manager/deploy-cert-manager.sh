@@ -2,13 +2,13 @@
 #kubectl create namespace cert-manager
 #kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true
 #kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.6.0/cert-manager.yaml
-#helm repo update
+helm repo update
 
 helm upgrade --install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --version v1.7.0 \
+  --version v1.7.1 \
   --set installCRDs=true \
   --set prometheus.enabled=true
 
