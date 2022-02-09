@@ -11,7 +11,7 @@ service:
 
 versionChecker:
   imageCacheTimeout: 30m
-  logLevel: info # debug, info, warn, error, fatal, panic
+  logLevel: error # debug, info, warn, error, fatal, panic
   metricsServingAddress: 0.0.0.0:8080
   testAllContainers: true # don't require the enable.version-checker.io annotation
 
@@ -48,8 +48,8 @@ resources:
     cpu: 200m
     memory: 256Mi
   requests:
-    cpu: 50m
-    memory: 64Mi
+    cpu: 200m
+    memory: 200Mi
 
 ## Prometheus Operator
 prometheus:
