@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: postgres-backup
-        image: postgres:13.4
+        image: postgres:14.1
         command: ["/bin/sh"]
         args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && for DB in bitwarden gitea kanboard nextcloud keycloak; do pg_dump -U postgres -h morphine-postgresql "$DB" | gzip > /var/backups/"$DB"/"$DB"-$(date +"%Y%m%d-%H%M").sql.gz; done']
         env:
