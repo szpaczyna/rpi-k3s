@@ -49,16 +49,16 @@ jobs:
         with:
           pattern: "\\.json$"
 
-  ansible-lint:
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci-skip]')"
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 1
+#  ansible-lint:
+#    runs-on: ubuntu-latest
+#    if: "!contains(github.event.head_commit.message, '[ci-skip]')"
+#    steps:
+#    - uses: actions/checkout@v2
+#      with:
+#        fetch-depth: 1
 
-    - name: Lint Ansible
-      uses: ansible/ansible-lint-action@master
-      with:
-        targets: ".provision/ansible/*.yml"
-        args: ""
+#    - name: Lint Ansible
+#      uses: ansible/ansible-lint-action@master
+#      with:
+#        targets: "./provision/ansible/*.yml"
+#        args: ""
