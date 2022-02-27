@@ -14,7 +14,7 @@ jobs:
     - name: Lint Helm
       uses: desaintmartin/helm-kubeval-action@master
       with:
-        path: ./cluster/helm/*/
+        path: ./cluster/helm/
         config: ./docs
         strict: false
         ignore_missing_schemas: true
