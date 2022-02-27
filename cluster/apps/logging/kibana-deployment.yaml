@@ -33,7 +33,7 @@ spec:
               mountPath: /usr/share/kibana
       containers:
         - name: kibana
-          image: docker.elastic.co/kibana/kibana:7.16.1-arm64
+          image: docker.elastic.co/kibana/kibana:7.17.0-arm64
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5601
