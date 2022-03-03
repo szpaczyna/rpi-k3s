@@ -23,7 +23,8 @@ spec:
       hostNetwork: true
       containers:
         - name: controller
-          image: "linuxserver/unifi-controller:6.5.55"
+          image: "linuxserver/unifi-controller:version-7.0.23"
+            #image: "linuxserver/unifi-controller:version-6.5.53"
           env:
             - name: MEM_LIMIT
               value: 512M
@@ -89,8 +90,7 @@ spec:
         - effect: NoSchedule
           operator: Exists
       nodeSelector:
-        kubernetes.io/hostname: rpi-k3s-worker-00
-        kubernetes.io/disktype: ssd
+        kubernetes.io/hostname: 'rpi-k3s-worker-00'
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -98,7 +98,7 @@ spec:
       spec:
         accessModes:
         - ReadWriteOnce
-        storageClassName: longhorn-ssd
+        storageClassName: longhorn
         resources:
           requests:
-            storage: 4Gi
+            storage: 2Gi
