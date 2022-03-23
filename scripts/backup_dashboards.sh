@@ -1,5 +1,6 @@
 #!/bin/bash
 GRAFANA_HOST=grafana.shpaq.org
+TOKEN=$1
 
 for i in $(curl -X GET --insecure -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" "https://${GRAFANA_HOST}/api/search?folderIds=0&query=&starred=false" | jq '.[].uri' | sed 's/"//g')
   do
