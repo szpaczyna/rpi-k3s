@@ -26,7 +26,8 @@ spec:
         runAsUser: 568
       containers:
       - name: sonarr
-        image: "ghcr.io/k8s-at-home/sonarr:v3.0.6.1342"
+        image: "ghcr.io/k8s-at-home/sonarr:v3.0.7.1477"
+          #image: "ghcr.io/k8s-at-home/sonarr:v3.0.6.1342"
         imagePullPolicy: IfNotPresent
         env:
           - name: "TZ"

@@ -76,6 +76,8 @@ ingress:
     annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
         nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/modsecurity-snippet: |
+          SecRuleEngine On
     hosts:
     - photos.shpaq.org
     tls:

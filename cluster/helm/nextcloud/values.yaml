@@ -1,7 +1,7 @@
 ---
 image:
   repository: nextcloud
-  tag: 23.0.0
+  tag: 23.0.2
     #tag: 22.2.3
   pullPolicy: IfNotPresent
 
@@ -13,13 +13,32 @@ ingress:
   enabled: true
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.frontend.redirect.permanent: "true"
-    traefik.ingress.kubernetes.io/frontend-entry-points: http, https
-    traefik.ingress.kubernetes.io/redirect-entry-point: https
-    traefik.ingress.kubernetes.io/force-hsts: "true"
-    traefik.ingress.kubernetes.io/hsts-max-age: "315360000"
-    traefik.frontend.redirect.regex: https://(.*)/.well-known/(card|cal)dav
-    traefik.frontend.redirect.replacement: https://$1/remote.php/dav/
+    nginx.ingress.kubernetes.io/server-snippet: |-
+      server_tokens off;
+      proxy_hide_header X-Powered-By;
+      rewrite ^/.well-known/webfinger /public.php?service=webfinger last;
+      rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
+      rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json;
+      location = /.well-known/carddav {
+        return 301 $scheme://$host/remote.php/dav;
+      }
+      location = /.well-known/caldav {
+        return 301 $scheme://$host/remote.php/dav;
+      }
+      location = /robots.txt {
+        allow all;
+        log_not_found off;
+        access_log off;
+      }
+      location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/ {
+        deny all;
+      }
+      location ~ ^/(?:autotest|occ|issue|indie|db_|console) {
+        deny all;
+      }
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      SecRuleEngine On
   tls:
   - secretName: cloud-shpaq-org-tls
     hosts:

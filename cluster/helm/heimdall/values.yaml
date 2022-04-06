@@ -2,7 +2,7 @@
 
 image:
   repository: linuxserver/heimdall
-  tag: 2.2.2
+  tag: 2.4.9
   pullPolicy: IfNotPresent
 
 env:
@@ -22,7 +22,9 @@ ingress:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    ingressClassName:  nginx
+      nginx.ingress.kubernetes.io/modsecurity-snippet: |
+        SecRuleEngine On
+    ingressClassName: nginx
     hosts:
       - host: dash.shpaq.org
         paths:

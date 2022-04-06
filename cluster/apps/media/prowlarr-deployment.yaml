@@ -26,7 +26,8 @@ spec:
         runAsUser: 568
       containers:
       - name: prowlarr
-        image: "ghcr.io/k8s-at-home/prowlarr:v0.1.0.816"
+        #image: "ghcr.io/k8s-at-home/prowlarr:v0.1.0.816"
+        image: "ghcr.io/k8s-at-home/prowlarr:v0.2.0.1632"
         imagePullPolicy: IfNotPresent
         env:
           - name: "TZ"

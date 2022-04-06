@@ -9,6 +9,8 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     ingress.kubernetes.io/auth-type: basic
     ingress.kubernetes.io/auth-secret: kibana-auth
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      SecRuleEngine On
 spec:
   ingressClassName: nginx
   rules:
