@@ -19,24 +19,20 @@ height="144px"/>
 -   Apps/Helm Charts:
 
     -   [bitwarden](cluster/cluster/helm/bitwarden) - Passwords Management
-    -   [gitea](cluster/helm/gitea) - Git with a cup of tea
-    -   [kanboard](cluster/helm/kanboard) - Kanban project management software
-    -   [pihole](cluster/helm/pihole) - Network-wide AD Blocking
-    -   [registry](cluster/helm/registry) - Docker registry
-    -   [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
-    -   [locust](cluster/helm/locust) - template for performance testing
     -   [cert-exporter](cluster/helm/cert-exporter) - certificates monitoring
-    -   [postgresql](cluster/helm/postgresql) - self explanatory
+    -   [gitea](cluster/helm/gitea) - Git with a cup of tea
+    -   [heimdall](cluster/helm/heimdall) - Dashboard with internal links
+    -   [kanboard](cluster/helm/kanboard) - Kanban project management software
     -   [keycloak](cluster/helm/keycloak) - identity provider
     -   [nextcloud](cluster/helm/nextcloud) - personal cloud service
-    -   [calibre-web](cluster/helm/calibre-web) - replacement for [ubooquity](cluster/yaml/ubooquity)
     -   [pgadmin4](cluster/helm/pgadmin) - postgresql managemenet tool
     -   [photoprism](cluster/helm/photoprism) - photos management
-
+    -   [postgresql](cluster/helm/postgresql) - self explanatory
+    -   [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
 
 -   Apps/YAML
 
-    -   [databases](cluster/apps/db) - Mongo, Mysql, CockroachDB
+    -   [databases](cluster/apps/db) - Mongo
     -   [unifi](cluster/apps/unifi) - Unifi controller/prometheus poller
     -   [www](cluster/apps/www) - Personal website
     -   [prometheus stack](cluster/apps/monitoring) - Prometheus/Grafana stack with some additional exporters
@@ -48,7 +44,8 @@ height="144px"/>
     -   [cert-manager](https://github.com/jetstack/cert-manager) - Automated letsencrypt broker
     -   [metallb](cluster/core/networking) - Load-balancer for bare-metal with BGP
     -   [longhorn](cluster/helm/longhorn) - longhorn storage
-
+    -   [ingress-nginx](cluster/helm/ingress-nginx) - ingress operator
+    -   [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) - Certs monitoring
 <!--START_SECTION_LINES_OF_CODE:readme-info-->
 
 <!--END_SECTION_LINES_OF_CODE:readme-info-->
