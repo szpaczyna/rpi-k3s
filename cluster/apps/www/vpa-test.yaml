@@ -1,0 +1,15 @@
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: shpaq-org
+  namespace: apps
+  labels:
+    app.kubernetes.io/name: shpaq-org
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: shpaq-org
+  updatePolicy:
+    updateMode: "Auto"

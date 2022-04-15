@@ -1,1 +1,1286 @@
-null
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": true,
+    "slug": "temperature",
+    "url": "/d/3762JRF7k/temperature",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2021-11-10T18:27:00Z",
+    "updated": "2022-01-07T09:55:09Z",
+    "updatedBy": "admin",
+    "createdBy": "admin",
+    "version": 7,
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": ""
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 8,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 14,
+        "panels": [],
+        "title": "Overall",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 70
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.9:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-master-00"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-00"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-01"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-02"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-whitepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-bluepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-redpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.14:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-greenpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.10:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "blueberry"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.20:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "greypi"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 14,
+          "w": 6,
+          "x": 0,
+          "y": 1
+        },
+        "id": 4,
+        "options": {
+          "displayMode": "basic",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true,
+          "text": {}
+        },
+        "pluginVersion": "8.3.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "exemplar": false,
+            "expr": "node_hwmon_temp_celsius{sensor=\"temp0\"}",
+            "instant": true,
+            "interval": "",
+            "intervalFactor": 2,
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Now",
+        "transformations": [],
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 20,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "smooth",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 2,
+              "pointSize": 2,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "line"
+              }
+            },
+            "decimals": 2,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 70
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.9:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-master-00"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-00"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-01"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-02"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-whitepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-bluepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-redpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.14:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-greenpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.10:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "blueberry"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.20:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "greypi"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 14,
+          "w": 18,
+          "x": 6,
+          "y": 1
+        },
+        "id": 3,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "right"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "node_hwmon_temp_celsius{sensor=\"temp0\"}",
+            "instant": false,
+            "interval": "",
+            "intervalFactor": 2,
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Temperature over time",
+        "transformations": [],
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 15
+        },
+        "id": 12,
+        "panels": [],
+        "title": "K3S",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.9:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-master-00"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-00"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-01"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-02"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-whitepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-bluepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-redpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.14:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-greenpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.10:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "blueberry"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.20:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "greypi"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 0,
+          "y": 16
+        },
+        "id": 7,
+        "options": {
+          "displayMode": "gradient",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": false,
+          "text": {}
+        },
+        "pluginVersion": "8.3.3",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "avg by (instance)(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"kubernetes-pods\"})",
+            "instant": false,
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Average temp k3s",
+        "transformations": [],
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "fillOpacity": 70,
+              "lineWidth": 0
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 65
+                },
+                {
+                  "color": "red",
+                  "value": 75
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.9:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-master-00"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-00"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-01"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker-02"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-whitepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-bluepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-redpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.14:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-greenpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.10:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "blueberry"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.20:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "greypi"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 12,
+          "y": 16
+        },
+        "id": 5,
+        "options": {
+          "alignValue": "left",
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "mergeValues": true,
+          "rowHeight": 0.9,
+          "showValue": "auto",
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "pluginVersion": "8.2.0",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "avg_over_time(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"kubernetes-pods\"}[5m])",
+            "instant": false,
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "K3s",
+        "transformations": [],
+        "type": "state-timeline"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 22
+        },
+        "id": 10,
+        "panels": [],
+        "title": "Gentoo",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.9:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-master"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker1"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker2"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker3"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-whitepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-bluepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-redpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.14:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "gen2-greenpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.10:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "blueberry"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.20:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "greypi"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 0,
+          "y": 23
+        },
+        "id": 8,
+        "options": {
+          "displayMode": "gradient",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": false,
+          "text": {}
+        },
+        "pluginVersion": "8.3.3",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "avg by (instance)(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"gen2\"})",
+            "instant": false,
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Average temp gen2",
+        "transformations": [],
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "fillOpacity": 70,
+              "lineWidth": 0
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 65
+                },
+                {
+                  "color": "red",
+                  "value": 75
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.9:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-master"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker1"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker2"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "rpi-k3s-worker3"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.11:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "whitepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.12:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "bluepi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.13:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "redpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.10.14:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "greenpi"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.10:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "blueberry"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "10.0.0.20:9100"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "greypi"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 12,
+          "y": 23
+        },
+        "id": 6,
+        "options": {
+          "alignValue": "left",
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "mergeValues": true,
+          "rowHeight": 0.9,
+          "showValue": "auto",
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "pluginVersion": "8.2.0",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "avg_over_time(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"gen2\"}[1d])",
+            "instant": false,
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Gentoo",
+        "transformations": [],
+        "type": "state-timeline"
+      }
+    ],
+    "schemaVersion": 34,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-2d",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Temperature",
+    "uid": "3762JRF7k",
+    "version": 7,
+    "weekStart": ""
+  }
+}

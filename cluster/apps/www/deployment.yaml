@@ -33,11 +33,11 @@ spec:
             subPath: robots.txt
         resources:
           requests:
-            cpu: 24m
-            memory: 24Mi
+            cpu: 8m
+            memory: 8Mi
           limits:
-            cpu: 64m
-            memory: 128Mi
+            cpu: 24m
+            memory: 64Mi
       volumes:
         - name: nginx-conf
           configMap:

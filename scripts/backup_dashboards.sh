@@ -1,8 +1,10 @@
 #!/bin/bash
-GRAFANA_HOST=grafana.shpaq.org
+GRAFANA_HOST=https://grafana.shpaq.org/api
 TOKEN=$1
 
-for i in $(curl -X GET --insecure -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" "https://${GRAFANA_HOST}/api/search?folderIds=0&query=&starred=false" | jq '.[].uri' | sed 's/"//g')
-  do
-    curl -X GET --insecure -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" "https://${GRAFANA_HOST}/api/dashboards/${i//\"}" | jq '.dashboard' > "${i//db\/}.json"
+out=$(curl -s -H "Authorization: Bearer ${TOKEN}" -X GET ${GRAFANA_HOST}/search?query=&starred=false)
+  for uid in $(echo $out | jq -r '.[] | .uid'); do
+    title=$(curl -s -H "Authorization: Bearer ${TOKEN}" ${GRAFANA_HOST}/dashboards/uid/$uid | jq '.meta.slug' | sed -e 's/\"//g')
+    curl -s -H "Authorization: Bearer ${TOKEN}" ${GRAFANA_HOST}/dashboards/uid/$uid | jq > $title.json
+    echo "Dashboard $title exported"
   done

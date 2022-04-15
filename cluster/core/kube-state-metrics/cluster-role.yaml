@@ -35,9 +35,10 @@ rules:
   - cronjobs
   - jobs
   verbs: ["list", "watch"]
-- apiGroups: ["autoscaling"]
+- apiGroups: ["autoscaling", "autoscaling.k8s.io"]
   resources:
   - horizontalpodautoscalers
+  - verticalpodautoscalers
   verbs: ["list", "watch"]
 - apiGroups: ["authentication.k8s.io"]
   resources:
