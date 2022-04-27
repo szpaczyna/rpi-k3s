@@ -1,0 +1,15 @@
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: prowlarr
+  namespace: media
+  labels:
+    app.kubernetes.io/name: prowlarr
+spec:
+  targetRef:
+    apiVersion: media/v1
+    kind: Deployment
+    name: prowlarr
+  updatePolicy:
+    updateMode: "Auto"

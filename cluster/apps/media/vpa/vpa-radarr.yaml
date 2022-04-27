@@ -1,0 +1,15 @@
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: radarr
+  namespace: media
+  labels:
+    app.kubernetes.io/name: radarr
+spec:
+  targetRef:
+    apiVersion: media/v1
+    kind: Deployment
+    name: radarr
+  updatePolicy:
+    updateMode: "Auto"

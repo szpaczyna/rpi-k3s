@@ -1,0 +1,37 @@
+loki:
+  enabled: true
+  isDefault: true
+
+  persistence:
+    enabled: true
+    accessModes:
+    - ReadWriteOnce
+    size: 20Gi
+    annotations: {}
+
+  service:
+    type: LoadBalancer
+    port: 3100
+    targetPort: http-metrics
+    loadBalancerIP: 10.1.0.11
+
+promtail:
+  enabled: true
+  config:
+    lokiAddress: http://{{ .Release.Name }}:3100/loki/api/v1/push
+
+fluent-bit:
+  enabled: false
+
+grafana:
+  enabled: false
+
+prometheus:
+  enabled: false
+  isDefault: false
+
+filebeat:
+  enabled: false
+
+logstash:
+  enabled: false

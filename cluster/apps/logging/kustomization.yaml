@@ -11,7 +11,7 @@ resources:
   - filebeat-cm.yaml
   - filebeat-ds.yaml
   - kibana-cm.yaml
-  - kibana-pvc.yaml
+    #  - kibana-pvc.yaml
   - kibana-deployment.yaml
   - kibana-svc.yaml
   - kibana-ingress.yaml

@@ -2,7 +2,7 @@
 
 image:
   repository: linuxserver/heimdall
-  tag: 2.4.9
+  tag: 2.4.12
   pullPolicy: IfNotPresent
 
 env:
@@ -47,8 +47,8 @@ persistence:
 
 resources:
   limits:
-    cpu: 0.2
-    memory: 128Mi
+    cpu: 0.3
+    memory: 256Mi
   requests:
     cpu: 0.1
     memory: 64Mi

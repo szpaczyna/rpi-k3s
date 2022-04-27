@@ -48,6 +48,13 @@ spec:
           name: http-metrics
         - containerPort: 8081
           name: telemetry
+        resources:
+          requests:
+            cpu: 0.1
+            memory: 26Mi
+          limits:
+            cpu: 0.2
+            memory: 128Mi
         readinessProbe:
           httpGet:
             path: /

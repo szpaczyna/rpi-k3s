@@ -3,7 +3,9 @@
 
 image:
   repository: szpaczyn/photoprism-arm64
+  #repository: photoprism/photoprism
   tag: "20210731"
+  #tag: "20211203"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
@@ -44,7 +46,7 @@ database:
   existingSecret: photoprism-secret
 
 nodeSelector:
-  kubernetes.io/role: worker
+  #  kubernetes.io/role: worker
 
 persistence:
   enabled: true

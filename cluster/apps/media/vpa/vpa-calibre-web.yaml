@@ -1,0 +1,15 @@
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: calibre-web
+  namespace: media
+  labels:
+    app.kubernetes.io/name: calibre-web
+spec:
+  targetRef:
+    apiVersion: media/v1
+    kind: Deployment
+    name: calibre-web
+  updatePolicy:
+    updateMode: "Auto"
