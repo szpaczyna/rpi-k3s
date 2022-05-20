@@ -1,8 +1,8 @@
 ---
 image:
   repository: nextcloud
-  tag: 23.0.2
-    #tag: 22.2.3
+  tag: 24.0.0
+    #tag: 23.0.2
   pullPolicy: IfNotPresent
 
 nameOverride: cloud
@@ -165,7 +165,7 @@ cronjob:
   enabled: true
   image:
     repository: curlimages/curl
-    tag: 7.81.0
+    tag: 7.83.0
     pullPolicy: IfNotPresent
   schedule: '*/5 * * * *'
   annotations: {}
