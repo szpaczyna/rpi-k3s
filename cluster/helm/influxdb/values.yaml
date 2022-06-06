@@ -1,0 +1,231 @@
+## influxdb values
+
+## ref: https://hub.docker.com/r/library/influxdb/tags/
+image:
+  repository: "influxdb"
+  tag: "1.8"
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  name:
+  annotations: {}
+
+## Customize liveness, readiness and startup probes
+## ref: https://docs.influxdata.com/influxdb/v1.8/tools/api/#ping-http-endpoint
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+##
+livenessProbe: {}
+  # path: "/ping"
+  # initialDelaySeconds: 30
+  # timeoutSeconds: 5
+  # scheme: HTTP
+
+readinessProbe: {}
+  # path: "/ping"
+  # initialDelaySeconds: 5
+  # timeoutSeconds: 1
+  # scheme: HTTP
+
+securityContext: {}
+  # runAsUser: 999
+  # runAsGroup: 999
+
+startupProbe:
+  enabled: false
+  # path: "/ping"
+  # failureThreshold: 6
+  # periodSeconds: 5
+  # scheme: HTTP
+
+## Specify a service type and optional port
+## NodePort is default
+## ref: http://kubernetes.io/docs/user-guide/services/
+##
+service:
+  ## Add annotations to service
+  # annotations: {}
+  type: LoadBalancer
+  loadBalancerIP: 10.1.0.4
+  # externalIPs: []
+  # externalTrafficPolicy: ""
+  # nodePort(s) value for the LoadBalancer and NodePort service types
+  nodePorts:
+    http: ""
+
+## Persist data to a persistent volume
+##
+persistence:
+  enabled: true
+  ## A manually managed Persistent Volume and Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  # existingClaim:
+  ## influxdb data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: "longhorn"
+  annotations:
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+
+## Set default user
+##
+setDefaultUser:
+  enabled: true
+  user:
+    #username:
+    #password:
+    ## User password
+    ## single quotes must be escaped (\')
+    ## Default: (Randomly generated 10 characters of AlphaNum)
+    # password:
+
+    ## keys are `influxdb-user` and `influxdb-password`.
+    ## If set, the username and password values above are ignored.
+    existingSecret: influxdb-auth
+
+resources: {}
+#  requests:
+#    memory: 256Mi
+#    cpu: 0.1
+#  limits:
+#    memory: 16Gi
+#    cpu: 8
+
+podAnnotations: {}
+podLabels: {}
+
+ingress:
+  enabled: false
+  tls: false
+  # secretName: my-tls-cert # only needed if tls above is true
+  hostname: influxdb.foobar.com
+  className: null
+  annotations: {}
+    # kubernetes.io/ingress.class: "nginx"
+    # kubernetes.io/tls-acme: "true"
+  path: /
+
+
+## Add custom volume and volumeMounts
+# volumes:
+#   - name: ssl-cert-volume
+#     secret:
+#       secretName: secret-name
+# mountPoints:
+#   - name: ssl-cert-volume
+#     mountPath: /etc/ssl/certs/selfsigned/
+#     readOnly: true
+
+## Additional containers to be added to the pod.
+extraContainers: {}
+#  - name: my-sidecar
+#    image: nginx:latest
+
+nodeSelector: {}
+affinity: {}
+tolerations: []
+# - key: "key"
+#   operator: "Equal|Exists"
+#   value: "value"
+#   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+
+## The InfluxDB image uses several environment variables to automatically
+## configure certain parts of the server.
+## Ref: https://hub.docker.com/_/influxdb/
+env: {}
+  # - name: INFLUXDB_DB
+  #   value: "demo"
+
+## The name of a secret in the same kubernetes namespace which contain values
+## to be added to the environment.
+## This can be used, for example, to set the INFLUXDB_HTTP_SHARED_SECRET
+## environment variable.
+envFromSecret: {}
+
+## InfluxDB configuration
+## ref: https://docs.influxdata.com/influxdb/v1.8/administration/config
+config:
+  reporting_disabled: false
+  rpc: {}
+  meta: {}
+  data: {}
+  coordinator: {}
+  retention: {}
+  shard_precreation: {}
+  monitor: {}
+  http: {}
+  logging: {}
+  subscriber: {}
+  graphite: {}
+  collectd: {}
+  opentsdb: {}
+  udp: {}
+  continuous_queries: {}
+  tls: {}
+
+# Allow executing custom init scripts
+#
+# If the container finds any files with the extensions .sh or .iql inside of the
+# /docker-entrypoint-initdb.d folder, it will execute them. The order they are
+# executed in is determined by the shell. This is usually alphabetical order.
+initScripts:
+  enabled: true
+  scripts:
+    init.iql: |+
+      CREATE DATABASE "health
+
+  # WITH DURATION 30d REPLICATION 1 NAME "rp_30d"
+
+backup:
+  enabled: false
+  ## By default emptyDir is used as a transitory volume before uploading to object store.
+  ## As such, ensure that a sufficient ephemeral storage request is set to prevent node disk filling completely.
+  resources:
+    requests:
+      # memory: 512Mi
+      # cpu: 2
+      ephemeral-storage: "8Gi"
+    # limits:
+      # memory: 1Gi
+      # cpu: 4
+      # ephemeral-storage: "16Gi"
+  ## If backup destination is PVC, or want to use intermediate PVC before uploading to object store.
+  persistence:
+    enabled: false
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    annotations:
+    accessMode: ReadWriteOnce
+    size: 8Gi
+  schedule: "0 0 * * *"
+  startingDeadlineSeconds: ""
+  annotations: {}
+  podAnnotations: {}
+  nodeSelector: {}
+
+backupRetention:
+  enabled: false
+  resources:
+    requests:
+      # memory: 512Mi
+      # cpu: 2
+    # limits:
+      # memory: 1Gi
+      # cpu: 4
+  schedule: "0 0 * * *"
+  startingDeadlineSeconds:
+  annotations: {}
+  podAnnotations: {}
+  daysToRetain: 7
