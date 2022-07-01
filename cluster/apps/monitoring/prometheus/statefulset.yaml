@@ -7,7 +7,7 @@ metadata:
   labels:
     app.kubernetes.io/name: prometheus
 spec:
-  replicas: 2
+  replicas: 1
   serviceName: prometheus
   selector:
     matchLabels:
@@ -37,12 +37,12 @@ spec:
               mountPath: /var/lib/prometheus
       containers:
         - name: prometheus
-          image: prom/prometheus:v2.34.0
+          image: prom/prometheus:v2.36.2
           args:
             - --web.listen-address=0.0.0.0:9090
             - --config.file=/etc/prometheus/prometheus.yaml
             - --storage.tsdb.path=/var/lib/prometheus
-            - --storage.tsdb.retention.time=35d
+            - --storage.tsdb.retention.time=14d
             - --storage.tsdb.retention.size=40GB
             - --storage.tsdb.min-block-duration=1h
             - --storage.tsdb.max-block-duration=2h
@@ -69,10 +69,10 @@ spec:
           resources:
             requests:
               cpu: 200m
-              memory: 512Mi
+              memory: 1Gi
             limits:
-              cpu: 1000m
-              memory: 2Gi
+              cpu: 1400m
+              memory: 3Gi
       terminationGracePeriodSeconds: 30
       volumes:
         - name: config

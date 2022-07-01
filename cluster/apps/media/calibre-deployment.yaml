@@ -1,0 +1,66 @@
+---
+## calibre
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calibre
+  labels:
+    app.kubernetes.io/name: calibre
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: calibre
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: calibre
+    spec:
+      serviceAccountName: media
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      securityContext: {}
+        #runAsGroup: 1001
+        #runAsUser: 1001
+      containers:
+        - name: calibre
+          #image: "szpaczyn/calibre-arm64:v0.6.12"
+          image: "linuxserver/calibre:arm64v8-arch"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TZ
+              value: "Europe/Warsaw"
+            - name: PUID
+              value: "1001"
+            - name: PGID
+              value: "1001"
+            - name: UMASK
+              value: "22"
+          ports:
+            - name: calibre-desktop
+              containerPort: 8080
+              protocol: TCP
+            - name: calibre-webs
+              containerPort: 8081
+          volumeMounts:
+            - mountPath: /config
+              name: media
+              subPath: library/books
+            - mountPath: /books
+              name: media
+              subPath: library/books
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 100Mi
+            limits:
+              cpu: 0.3
+              memory: 256Mi
+      volumes:
+      - name: media
+        persistentVolumeClaim:
+          claimName: media
+      nodeSelector:
+        kubernetes.io/role: worker
