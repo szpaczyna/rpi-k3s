@@ -2,5 +2,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - metallb.yaml
+  - github.com/metallb/metallb/config/native?ref=0.13.3
+    #  - metallb.yaml
   - configmap.yaml
