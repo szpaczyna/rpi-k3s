@@ -2,7 +2,7 @@
 sops -d ../../secrets/longhorn-auth.yaml > 00-auth.yaml
 sops -d ../../secrets/longhorn-values.yaml > values.yaml
 
-helm upgrade --install longhorn -n longhorn-system longhorn/longhorn -f values.yaml --create-namespace
+helm upgrade --install longhorn -n longhorn-system longhorn/longhorn -f values.yaml --create-namespace --version 1.2.4
 kubectl apply -f ./00-auth.yaml
 
 rm -rf 00-auth.yaml
