@@ -20,6 +20,9 @@ ingress:
   main:
     enabled: true
     annotations:
+      nginx.ingress.kubernetes.io/auth-realm: Authentication Required
+      nginx.ingress.kubernetes.io/auth-secret: dash-auth
+      nginx.ingress.kubernetes.io/auth-type: basic
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/modsecurity-snippet: |
@@ -52,3 +55,6 @@ resources:
   requests:
     cpu: 0.1
     memory: 64Mi
+
+nodeSelector:
+  kubernetes.io/disktype: hdd

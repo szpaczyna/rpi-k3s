@@ -8,7 +8,8 @@ controller:
   image:
     registry: k8s.gcr.io
     image: ingress-nginx/controller
-    tag: "v1.2.1"
+    tag: "v1.3.0"
+      #tag: "v1.2.1"
       #digest: sha256:0bc88eb15f9e7f84e8e56c14fa5735aaa488b840983f87bd79b1054190e660de
     pullPolicy: IfNotPresent
     # www-data -> uid 101
@@ -495,8 +496,8 @@ controller:
         # for backwards compatibility consider setting the full image url via the repository value below
         # use *either* current default registry/image or repository format or installing chart by providing the values.yaml will fail
         # repository:
-        tag: v1.1.1
-        digest: sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+        tag: v1.2.0
+          #digest: sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
         pullPolicy: IfNotPresent
       ## Provide a priority class name to the webhook patching job
       ##

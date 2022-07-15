@@ -5,7 +5,7 @@ metadata:
   name: coredns
   namespace: kube-system
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
@@ -23,13 +23,14 @@ rules:
   - list
   - watch
 - apiGroups:
-  - ""
+  - discovery.k8s.io
   resources:
-  - nodes
+  - endpointslices
   verbs:
-  - get
+  - list
+  - watch
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   annotations:
@@ -56,7 +57,7 @@ data:
     .:53 {
         errors
         health {
-            lameduck 5s
+          lameduck 5s
         }
         ready
         kubernetes cluster.local in-addr.arpa ip6.arpa {
@@ -70,11 +71,12 @@ data:
         }
         prometheus :9153
         forward . /etc/resolv.conf
-        cache 300
+        cache 30
         loop
         reload
         loadbalance
     }
+    import /etc/coredns/custom/*.server
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -85,7 +87,7 @@ metadata:
     k8s-app: kube-dns
     kubernetes.io/name: "CoreDNS"
 spec:
-  replicas: 4
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -98,19 +100,29 @@ spec:
       labels:
         k8s-app: kube-dns
     spec:
+      priorityClassName: "system-cluster-critical"
       serviceAccountName: coredns
       tolerations:
         - key: "CriticalAddonsOnly"
           operator: "Exists"
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
         - key: "node-role.kubernetes.io/master"
           operator: "Exists"
           effect: "NoSchedule"
       nodeSelector:
-        kubernetes.io/role: worker
-        beta.kubernetes.io/os: linux
+        kubernetes.io/os: linux
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              k8s-app: kube-dns
       containers:
       - name: coredns
-        image: rancher/coredns-coredns:1.8.0
+        image: rancher/mirrored-coredns-coredns:1.9.1
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -122,6 +134,9 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /etc/coredns
+          readOnly: true
+        - name: custom-config-volume
+          mountPath: /etc/coredns/custom
           readOnly: true
         ports:
         - containerPort: 53
@@ -147,18 +162,20 @@ spec:
             port: 8080
             scheme: HTTP
           initialDelaySeconds: 60
-          timeoutSeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
+          failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /ready
             port: 8181
             scheme: HTTP
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
+          initialDelaySeconds: 0
+          periodSeconds: 2
+          timeoutSeconds: 1
           successThreshold: 1
-          failureThreshold: 5
+          failureThreshold: 3
       dnsPolicy: Default
       volumes:
         - name: config-volume
@@ -167,8 +184,10 @@ spec:
             items:
             - key: Corefile
               path: Corefile
-            - key: NodeHosts
-              path: NodeHosts
+        - name: custom-config-volume
+          configMap:
+            name: coredns-custom
+            optional: true
 ---
 apiVersion: v1
 kind: Service
