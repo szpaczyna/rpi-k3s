@@ -1,6 +1,7 @@
 ### sops
 .sops.yaml
-
+### ansible
+*inventory*
 .NOTES.md
 .Makefile
 RELEASE.md
