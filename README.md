@@ -16,36 +16,36 @@ height="144px"/>
 
 ## Workloads
 
--   Apps/Helm Charts:
+- Apps/Helm Charts:
 
-    -   [bitwarden](cluster/cluster/helm/bitwarden) - Passwords Management
-    -   [cert-exporter](cluster/helm/cert-exporter) - certificates monitoring
-    -   [gitea](cluster/helm/gitea) - Git with a cup of tea
-    -   [heimdall](cluster/helm/heimdall) - Dashboard with internal links
-    -   [kanboard](cluster/helm/kanboard) - Kanban project management software
-    -   [keycloak](cluster/helm/keycloak) - identity provider
-    -   [nextcloud](cluster/helm/nextcloud) - personal cloud service
-    -   [pgadmin4](cluster/helm/pgadmin) - postgresql managemenet tool
-    -   [photoprism](cluster/helm/photoprism) - photos management
-    -   [postgresql](cluster/helm/postgresql) - self explanatory
-    -   [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
+  - [bitwarden](cluster/cluster/helm/bitwarden) - Passwords Management
+  - [cert-exporter](cluster/helm/cert-exporter) - certificates monitoring
+  - [gitea](cluster/helm/gitea) - Git with a cup of tea
+  - [heimdall](cluster/helm/heimdall) - Dashboard with internal links
+  - [kanboard](cluster/helm/kanboard) - Kanban project management software
+  - [keycloak](cluster/helm/keycloak) - identity provider
+  - [nextcloud](cluster/helm/nextcloud) - personal cloud service
+  - [pgadmin4](cluster/helm/pgadmin) - postgresql managemenet tool
+  - [photoprism](cluster/helm/photoprism) - photos management
+  - [postgresql](cluster/helm/postgresql) - self explanatory
+  - [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
 
--   Apps/YAML
+- Apps/YAML
 
-    -   [databases](cluster/apps/db) - Mongo
-    -   [unifi](cluster/apps/unifi) - Unifi controller/prometheus poller
-    -   [www](cluster/apps/www) - Personal website
-    -   [prometheus stack](cluster/apps/monitoring) - Prometheus/Grafana stack with some additional exporters
-    -   [elk stack](cluster/apps/logging) - Elasticsearch/Kibana/Logstash/Filebeat
-    -   [media downloads](cluster/apps/media) - jackett, bazarr, radarr, lidarr and sonarr
+  - [databases](cluster/apps/db) - Mongo
+  - [unifi](cluster/apps/unifi) - Unifi controller/prometheus poller
+  - [www](cluster/apps/www) - Personal website
+  - [prometheus stack](cluster/apps/monitoring) - Prometheus/Grafana stack with some additional exporters
+  - [elk stack](cluster/apps/logging) - Elasticsearch/Kibana/Logstash/Filebeat
+  - [media downloads](cluster/apps/media) - jackett, bazarr, radarr, lidarr and sonarr
 
--   System
+- System
 
-    -   [cert-manager](https://github.com/jetstack/cert-manager) - Automated letsencrypt broker
-    -   [metallb](cluster/core/networking) - Load-balancer for bare-metal with BGP
-    -   [longhorn](cluster/helm/longhorn) - longhorn storage
-    -   [ingress-nginx](cluster/helm/ingress-nginx) - ingress operator
-    -   [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) - Certs monitoring
+  - [cert-manager](https://github.com/jetstack/cert-manager) - Automated letsencrypt broker
+  - [metallb](cluster/core/networking) - Load-balancer for bare-metal with BGP
+  - [longhorn](cluster/helm/longhorn) - longhorn storage
+  - [ingress-nginx](cluster/helm/ingress-nginx) - ingress operator
+  - [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) - Certs monitoring
 <!--START_SECTION_LINES_OF_CODE:readme-info-->
 
 <!--END_SECTION_LINES_OF_CODE:readme-info-->
