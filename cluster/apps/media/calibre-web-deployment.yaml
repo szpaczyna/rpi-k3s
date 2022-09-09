@@ -27,7 +27,7 @@ spec:
       containers:
         - name: calibre-web
           #image: "szpaczyn/calibre-web-arm64:v0.6.12"
-          image: "linuxserver/calibre-web:0.6.18"
+          image: "linuxserver/calibre-web:0.6.19"
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
