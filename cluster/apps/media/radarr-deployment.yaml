@@ -17,6 +17,9 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: radarr
+      annotations:
+        prometheus.io/port: "9707"
+        prometheus.io/scrape: "true"
     spec:
       serviceAccountName: media
       dnsPolicy: ClusterFirst
@@ -25,40 +28,71 @@ spec:
         #  runAsGroup: 568
         #  runAsUser: 568
       containers:
-        - name: radarr
-          image: "ghcr.io/k8s-at-home/radarr:v4.1.0.6175"
-            #image: "ghcr.io/k8s-at-home/radarr:v4.0.5.5981"
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: TZ
-              value: Europe/Warsaw
-            - name: PUID
-              value: "568"
-            - name: PGID
-              value: "568"
-            - name: UMASK
-              value: "022"
-          ports:
-            - name: radarr
-              containerPort: 7878
-              protocol: TCP
-          volumeMounts:
-            - mountPath: /config
-              name: media
-              subPath: config/radarr
-            - mountPath: /downloads
-              name: media
-              subPath: downloads/transmission
-            - mountPath: /movies
-              name: media
-              subPath: library/movies
-          resources:
-            limits:
-              cpu: 0.3
-              memory: 256Mi
-            requests:
-              cpu: 0.1
-              memory: 128Mi
+      - name: exporter
+        image: ghcr.io/onedr0p/exportarr:v1.0.0
+        imagePullPolicy: IfNotPresent
+        args:
+          - radarr
+        env:
+          - name: PORT
+            value: "9707"
+          - name: URL
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: RADAR_URL
+          - name: BASIC_AUTH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: BASIC_AUTH_PASSWORD
+          - name: BASIC_AUTH_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: BASIC_AUTH_USERNAME
+          - name: APIKEY
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: RADAR_APIKEY
+        ports:
+          - name: monitoring
+            containerPort: 9707
+      - name: radarr
+        image: "ghcr.io/k8s-at-home/radarr:v4.1.0.6175"
+          #image: "ghcr.io/k8s-at-home/radarr:v4.0.5.5981"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: TZ
+            value: Europe/Warsaw
+          - name: PUID
+            value: "568"
+          - name: PGID
+            value: "568"
+          - name: UMASK
+            value: "022"
+        ports:
+          - name: radarr
+            containerPort: 7878
+            protocol: TCP
+        volumeMounts:
+          - mountPath: /config
+            name: media
+            subPath: config/radarr
+          - mountPath: /downloads
+            name: media
+            subPath: downloads/transmission
+          - mountPath: /movies
+            name: media
+            subPath: library/movies
+        resources:
+          limits:
+            cpu: 0.3
+            memory: 256Mi
+          requests:
+            cpu: 0.1
+            memory: 128Mi
       volumes:
       - name: media
         persistentVolumeClaim:

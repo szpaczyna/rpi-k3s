@@ -17,6 +17,9 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: sonarr
+      annotations:
+        prometheus.io/port: "9707"
+        prometheus.io/scrape: "true"
     spec:
       serviceAccountName: media
       dnsPolicy: ClusterFirst
@@ -25,6 +28,37 @@ spec:
         runAsGroup: 568
         runAsUser: 568
       containers:
+      - name: exporter
+        image: ghcr.io/onedr0p/exportarr:v1.0.0
+        imagePullPolicy: IfNotPresent
+        args:
+          - sonarr
+        env:
+          - name: PORT
+            value: "9707"
+          - name: URL
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: SONAR_URL
+          - name: BASIC_AUTH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: BASIC_AUTH_PASSWORD
+          - name: BASIC_AUTH_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: BASIC_AUTH_USERNAME
+          - name: APIKEY
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: SONAR_APIKEY
+        ports:
+          - name: monitoring
+            containerPort: 9707
       - name: sonarr
         image: "ghcr.io/k8s-at-home/sonarr:v3.0.8.1507"
           #image: "ghcr.io/k8s-at-home/sonarr:v3.0.7.1477"
