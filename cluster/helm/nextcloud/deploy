@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# helm repo add nextcloud https://nextcloud.github.io/helm/
 sops -d \
     --output secret.yaml \
     ../../secrets/nextcloud-secret.yaml
