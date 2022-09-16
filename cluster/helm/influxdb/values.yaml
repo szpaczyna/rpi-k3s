@@ -90,15 +90,17 @@ setDefaultUser:
     ## If set, the username and password values above are ignored.
     existingSecret: influxdb-auth
 
-resources: {}
-#  requests:
-#    memory: 256Mi
-#    cpu: 0.1
-#  limits:
-#    memory: 16Gi
-#    cpu: 8
+resources:
+  requests:
+    memory: 300Mi
+    cpu: 0.1
+  limits:
+    memory: 500Mi
+    cpu: 0.5
 
-podAnnotations: {}
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9122"
 podLabels: {}
 
 ingress:
@@ -124,9 +126,9 @@ ingress:
 #     readOnly: true
 
 ## Additional containers to be added to the pod.
-extraContainers: {}
-#  - name: my-sidecar
-#    image: nginx:latest
+extraContainers:
+  - name: exporter
+    image: prom/influxdb-exporter
 
 nodeSelector: {}
 affinity: {}
