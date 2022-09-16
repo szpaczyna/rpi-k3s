@@ -2,6 +2,14 @@ loki:
   enabled: true
   isDefault: true
 
+  resources:
+    requests:
+      cpu: 0.1
+      memory: 256Mi
+    limits:
+      cpu: 0.5
+      memory: 1024Mi
+
   persistence:
     enabled: true
     accessModes:
@@ -19,6 +27,14 @@ promtail:
   enabled: true
   config:
     lokiAddress: http://{{ .Release.Name }}:3100/loki/api/v1/push
+
+  resources:
+    requests:
+      cpu: 0.1
+      memory: 100Mi
+    limits:
+      cpu: 0.2
+      memory: 256Mi
 
 fluent-bit:
   enabled: false

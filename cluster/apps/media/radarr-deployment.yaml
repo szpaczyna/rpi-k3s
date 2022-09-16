@@ -59,6 +59,13 @@ spec:
         ports:
           - name: monitoring
             containerPort: 9707
+        resources:
+          limits:
+            cpu: 0.1
+            memory: 100Mi
+          requests:
+            cpu: 0.05
+            memory: 50Mi
       - name: radarr
         image: "ghcr.io/k8s-at-home/radarr:v4.1.0.6175"
           #image: "ghcr.io/k8s-at-home/radarr:v4.0.5.5981"
