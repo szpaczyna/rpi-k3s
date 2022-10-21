@@ -1,8 +1,8 @@
 ---
 image:
   repository: nextcloud
-  tag: 24.0.5
-    #tag: 23.0.2
+  tag: 25.0.0
+    #tag: 24.0.5
   pullPolicy: IfNotPresent
 
 nameOverride: cloud

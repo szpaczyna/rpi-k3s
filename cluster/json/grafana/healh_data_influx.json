@@ -24,14 +24,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 72,
+  "id": 63,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "R8HLM7rnk"
+        "uid": "sO3d66IVk"
       },
       "fieldConfig": {
         "defaults": {
@@ -121,15 +121,14 @@
       "pluginVersion": "9.1.6",
       "targets": [
         {
-          "$$hashKey": "object:172",
           "datasource": {
             "type": "influxdb",
-            "uid": "R8HLM7rnk"
+            "uid": "sO3d66IVk"
           },
           "groupBy": [
             {
               "params": [
-                "24h"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -168,7 +167,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "R8HLM7rnk"
+        "uid": "sO3d66IVk"
       },
       "fieldConfig": {
         "defaults": {
@@ -237,6 +236,21 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "HKQuantityTypeIdentifierLeanBodyMass.mean"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -263,15 +277,14 @@
       "pluginVersion": "9.1.6",
       "targets": [
         {
-          "$$hashKey": "object:172",
           "datasource": {
             "type": "influxdb",
-            "uid": "R8HLM7rnk"
+            "uid": "sO3d66IVk"
           },
           "groupBy": [
             {
               "params": [
-                "24h"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -285,9 +298,48 @@
           "measurement": "HKQuantityTypeIdentifierBodyMass",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT (\"value\") FROM \"HKQuantityTypeIdentifierBodyMass\" WHERE $timeFilter GROUP BY time(24h) fill(null)",
-          "rawQuery": false,
           "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "sO3d66IVk"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "HKQuantityTypeIdentifierLeanBodyMass",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
           "resultFormat": "time_series",
           "select": [
             [
@@ -312,7 +364,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "R8HLM7rnk"
+        "uid": "sO3d66IVk"
       },
       "fieldConfig": {
         "defaults": {
@@ -346,7 +398,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "decimals": 2,
@@ -360,7 +412,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 0.2
               }
             ]
           },
@@ -376,7 +428,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "yellow",
+                  "fixedColor": "orange",
                   "mode": "fixed"
                 }
               }
@@ -407,15 +459,14 @@
       "pluginVersion": "9.1.6",
       "targets": [
         {
-          "$$hashKey": "object:172",
           "datasource": {
             "type": "influxdb",
-            "uid": "R8HLM7rnk"
+            "uid": "sO3d66IVk"
           },
           "groupBy": [
             {
               "params": [
-                "24h"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -454,7 +505,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "R8HLM7rnk"
+        "uid": "sO3d66IVk"
       },
       "fieldConfig": {
         "defaults": {
@@ -545,15 +596,14 @@
       "pluginVersion": "9.1.6",
       "targets": [
         {
-          "$$hashKey": "object:172",
           "datasource": {
             "type": "influxdb",
-            "uid": "R8HLM7rnk"
+            "uid": "sO3d66IVk"
           },
           "groupBy": [
             {
               "params": [
-                "24h"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -592,7 +642,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "R8HLM7rnk"
+        "uid": "sO3d66IVk"
       },
       "fieldConfig": {
         "defaults": {
@@ -606,8 +656,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 60,
-            "gradientMode": "opacity",
+            "fillOpacity": 0,
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -620,13 +670,13 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "mappings": [],
@@ -638,30 +688,18 @@
                 "value": null
               },
               {
-                "color": "red",
+                "color": "blue",
                 "value": 80
+              },
+              {
+                "color": "blue",
+                "value": 120
               }
             ]
           },
-          "unit": "masskg"
+          "unit": "short"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "HKQuantityTypeIdentifierLeanBodyMass.mean"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 6,
@@ -669,7 +707,7 @@
         "x": 10,
         "y": 12
       },
-      "id": 5,
+      "id": 8,
       "links": [],
       "options": {
         "legend": {
@@ -686,15 +724,14 @@
       "pluginVersion": "9.1.6",
       "targets": [
         {
-          "$$hashKey": "object:172",
           "datasource": {
             "type": "influxdb",
-            "uid": "R8HLM7rnk"
+            "uid": "sO3d66IVk"
           },
           "groupBy": [
             {
               "params": [
-                "24h"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -705,7 +742,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "HKQuantityTypeIdentifierLeanBodyMass",
+          "measurement": "HKQuantityTypeIdentifierBloodPressureSystolic",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -725,15 +762,56 @@
             ]
           ],
           "tags": []
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "sO3d66IVk"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "HKQuantityTypeIdentifierBloodPressureDiastolic",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
         }
       ],
-      "title": "Lean Body Mass",
+      "title": "Blood Pressure",
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "R8HLM7rnk"
+        "uid": "sO3d66IVk"
       },
       "fieldConfig": {
         "defaults": {
@@ -805,8 +883,8 @@
         ]
       },
       "gridPos": {
-        "h": 10,
-        "w": 12,
+        "h": 11,
+        "w": 6,
         "x": 0,
         "y": 18
       },
@@ -827,15 +905,14 @@
       "pluginVersion": "9.1.6",
       "targets": [
         {
-          "$$hashKey": "object:172",
           "datasource": {
             "type": "influxdb",
-            "uid": "R8HLM7rnk"
+            "uid": "sO3d66IVk"
           },
           "groupBy": [
             {
               "params": [
-                "24h"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -874,7 +951,147 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "R8HLM7rnk"
+        "uid": "sO3d66IVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "kcal",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 60,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "HKQuantityTypeIdentifierBasalEnergyBurned.sum"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 6,
+        "x": 6,
+        "y": 18
+      },
+      "id": 7,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.1.6",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "sO3d66IVk"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "HKQuantityTypeIdentifierBasalEnergyBurned",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Basal energy burned",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "sO3d66IVk"
       },
       "fieldConfig": {
         "defaults": {
@@ -957,7 +1174,7 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 11,
         "w": 12,
         "x": 12,
         "y": 18
@@ -979,15 +1196,14 @@
       "pluginVersion": "9.1.6",
       "targets": [
         {
-          "$$hashKey": "object:172",
           "datasource": {
             "type": "influxdb",
-            "uid": "R8HLM7rnk"
+            "uid": "sO3d66IVk"
           },
           "groupBy": [
             {
               "params": [
-                "24h"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -1001,10 +1217,8 @@
           "measurement": "HKQuantityTypeIdentifierHeartRate",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT (\"value\") FROM \"HKQuantityTypeIdentifierBodyMass\" WHERE $timeFilter GROUP BY time(24h) fill(null)",
-          "rawQuery": false,
           "refId": "A",
-          "resultFormat": "table",
+          "resultFormat": "time_series",
           "select": [
             [
               {
@@ -1022,369 +1236,9 @@
           "tags": []
         },
         {
-          "$$hashKey": "object:172",
           "datasource": {
             "type": "influxdb",
-            "uid": "R8HLM7rnk"
-          },
-          "groupBy": [
-            {
-              "params": [
-                "24h"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": false,
-          "measurement": "HKQuantityTypeIdentifierHeartRate",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT (\"value\") FROM \"HKQuantityTypeIdentifierBodyMass\" WHERE $timeFilter GROUP BY time(24h) fill(null)",
-          "rawQuery": false,
-          "refId": "B",
-          "resultFormat": "table",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "min"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "$$hashKey": "object:172",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "R8HLM7rnk"
-          },
-          "groupBy": [
-            {
-              "params": [
-                "24h"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": false,
-          "measurement": "HKQuantityTypeIdentifierHeartRate",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT (\"value\") FROM \"HKQuantityTypeIdentifierBodyMass\" WHERE $timeFilter GROUP BY time(24h) fill(null)",
-          "rawQuery": false,
-          "refId": "C",
-          "resultFormat": "table",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "title": "Heart Rate",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "R8HLM7rnk"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "kcal",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 60,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "HKQuantityTypeIdentifierBasalEnergyBurned.sum"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "purple",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 28
-      },
-      "id": 7,
-      "links": [],
-      "maxDataPoints": 100,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.1.6",
-      "targets": [
-        {
-          "$$hashKey": "object:172",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "R8HLM7rnk"
-          },
-          "groupBy": [
-            {
-              "params": [
-                "24h"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "HKQuantityTypeIdentifierBasalEnergyBurned",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "sum"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "title": "Basal energy burned",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "R8HLM7rnk"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "line"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "blue",
-                "value": 80
-              },
-              {
-                "color": "blue",
-                "value": 120
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 28
-      },
-      "id": 8,
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.1.6",
-      "targets": [
-        {
-          "$$hashKey": "object:172",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "R8HLM7rnk"
-          },
-          "groupBy": [
-            {
-              "params": [
-                "24h"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "HKQuantityTypeIdentifierBloodPressureSystolic",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT (\"value\") FROM \"HKQuantityTypeIdentifierBodyMass\" WHERE $timeFilter GROUP BY time(24h) fill(null)",
-          "rawQuery": false,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "R8HLM7rnk"
+            "uid": "sO3d66IVk"
           },
           "groupBy": [
             {
@@ -1401,7 +1255,7 @@
             }
           ],
           "hide": false,
-          "measurement": "HKQuantityTypeIdentifierBloodPressureDiastolic",
+          "measurement": "HKQuantityTypeIdentifierHeartRate",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "B",
@@ -1421,9 +1275,50 @@
             ]
           ],
           "tags": []
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "sO3d66IVk"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "HKQuantityTypeIdentifierHeartRate",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "min"
+              }
+            ]
+          ],
+          "tags": []
         }
       ],
-      "title": "Blood Pressure",
+      "title": "Heart Rate",
       "type": "timeseries"
     }
   ],
@@ -1466,6 +1361,6 @@
   "timezone": "",
   "title": "Health Data Influx",
   "uid": "health_data_influx",
-  "version": 4,
+  "version": 2,
   "weekStart": ""
 }
