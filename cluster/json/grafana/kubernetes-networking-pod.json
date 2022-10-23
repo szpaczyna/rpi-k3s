@@ -5,6 +5,7 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "kubernetes-networking-pod",
     "url": "/d/7a18067ce943a40ae25454675c19ff5c/kubernetes-networking-pod",
     "expires": "0001-01-01T00:00:00Z",
@@ -20,7 +21,21 @@
     "folderTitle": "Default",
     "folderUrl": "/dashboards/f/FqOjHH5nz/default",
     "provisioned": true,
-    "provisionedExternalId": "pod-total/pod-total.json"
+    "provisionedExternalId": "pod-total/pod-total.json",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "__inputs": [],

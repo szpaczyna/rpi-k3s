@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": true,
+    "canDelete": true,
+    "slug": "network",
+    "url": "/dashboards/f/4gFicQ57z/network",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2021-11-17T09:31:54Z",
+    "updated": "2021-11-17T09:31:54Z",
+    "updatedBy": "admin",
+    "createdBy": "admin",
+    "version": 1,
+    "hasAcl": false,
+    "isFolder": true,
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
+  },
+  "dashboard": {
+    "id": 34,
+    "schemaVersion": 17,
+    "title": "Network",
+    "uid": "4gFicQ57z",
+    "version": 1
+  }
+}

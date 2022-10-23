@@ -5,14 +5,15 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "internet-speed",
     "url": "/d/MBmaYd9Wk/internet-speed",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-11-10T18:35:36Z",
-    "updated": "2022-01-17T08:49:27Z",
+    "updated": "2021-11-17T09:32:32Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 6,
+    "version": 3,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 34,
@@ -20,7 +21,21 @@
     "folderTitle": "Network",
     "folderUrl": "/dashboards/f/4gFicQ57z/network",
     "provisioned": false,
-    "provisionedExternalId": ""
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "annotations": {
@@ -44,16 +59,14 @@
     },
     "editable": true,
     "fiscalYearStartMonth": 0,
+    "gnetId": null,
     "graphTooltip": 0,
     "id": 12,
     "links": [],
     "liveNow": false,
     "panels": [
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -158,14 +171,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Downstream",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -265,14 +277,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Upstream",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "",
         "fieldConfig": {
           "defaults": {
@@ -376,14 +387,14 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Jitter",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "cacheTimeout": null,
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -484,14 +495,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Latency",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -549,22 +559,20 @@
         "type": "histogram"
       }
     ],
-    "refresh": "2h",
-    "schemaVersion": 34,
+    "schemaVersion": 31,
     "style": "dark",
     "tags": [],
     "templating": {
       "list": []
     },
     "time": {
-      "from": "now-7d",
+      "from": "now-6h",
       "to": "now"
     },
     "timepicker": {},
     "timezone": "",
     "title": "Internet Speed",
     "uid": "MBmaYd9Wk",
-    "version": 6,
-    "weekStart": ""
+    "version": 3
   }
 }

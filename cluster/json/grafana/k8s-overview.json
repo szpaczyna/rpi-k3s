@@ -5,6 +5,7 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "k8s-overview",
     "url": "/d/N9uZBy8Wz/k8s-overview",
     "expires": "0001-01-01T00:00:00Z",
@@ -20,7 +21,21 @@
     "folderTitle": "TBV",
     "folderUrl": "/dashboards/f/QzMplUt7z/tbv",
     "provisioned": false,
-    "provisionedExternalId": ""
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "annotations": {

@@ -5,6 +5,7 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "kubernetes-networking-cluster",
     "url": "/d/ff635a025bcfea7bc3dd4f508990a3e9/kubernetes-networking-cluster",
     "expires": "0001-01-01T00:00:00Z",
@@ -20,7 +21,21 @@
     "folderTitle": "Default",
     "folderUrl": "/dashboards/f/FqOjHH5nz/default",
     "provisioned": true,
-    "provisionedExternalId": "cluster-total/cluster-total.json"
+    "provisionedExternalId": "cluster-total/cluster-total.json",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "__inputs": [],

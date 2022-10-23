@@ -5,6 +5,7 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "kubernetes-compute-resources-namespace-pods",
     "url": "/d/85a562078cdf77779eaa1add43ccec1e/kubernetes-compute-resources-namespace-pods",
     "expires": "0001-01-01T00:00:00Z",
@@ -20,7 +21,21 @@
     "folderTitle": "Default",
     "folderUrl": "/dashboards/f/FqOjHH5nz/default",
     "provisioned": true,
-    "provisionedExternalId": "k8s-resources-namespace/k8s-resources-namespace.json"
+    "provisionedExternalId": "k8s-resources-namespace/k8s-resources-namespace.json",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "annotations": {

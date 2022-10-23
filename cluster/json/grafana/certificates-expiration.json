@@ -5,14 +5,15 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "certificates-expiration",
     "url": "/d/lHnsYlPGk/certificates-expiration",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-11-10T18:39:36Z",
-    "updated": "2022-01-13T10:34:17Z",
+    "updated": "2021-11-30T17:32:44Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 10,
+    "version": 8,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 0,
@@ -20,7 +21,21 @@
     "folderTitle": "General",
     "folderUrl": "",
     "provisioned": false,
-    "provisionedExternalId": ""
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "annotations": {
@@ -48,12 +63,13 @@
     "gnetId": 13922,
     "graphTooltip": 0,
     "id": 27,
-    "iteration": 1642069463786,
+    "iteration": 1638293526550,
     "links": [],
     "liveNow": false,
     "panels": [
       {
         "collapsed": false,
+        "datasource": null,
         "gridPos": {
           "h": 1,
           "w": 24,
@@ -66,9 +82,7 @@
         "type": "row"
       },
       {
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -110,7 +124,7 @@
           "text": {},
           "textMode": "value"
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
             "exemplar": true,
@@ -121,13 +135,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Total Certificates",
         "type": "stat"
       },
       {
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -169,7 +183,7 @@
           "text": {},
           "textMode": "value"
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
             "expr": "count(x509_read_errors)",
@@ -180,13 +194,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Exporters",
         "type": "stat"
       },
       {
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -232,7 +246,7 @@
           "text": {},
           "textMode": "value"
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
             "expr": "sum(((x509_cert_not_after - time()) / 86400) < bool 0)",
@@ -242,13 +256,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Expired",
         "type": "stat"
       },
       {
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -294,7 +308,7 @@
           "text": {},
           "textMode": "value"
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
             "expr": "sum(0 < ((x509_cert_not_after - time()) / 86400) < bool $warning_threshold)",
@@ -305,47 +319,48 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Expiring within $warning_threshold days",
         "type": "stat"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "cacheTimeout": null,
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
+            "color": {
+              "mode": "palette-classic"
             },
-            "unit": "short"
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": []
           },
           "overrides": []
         },
         "gridPos": {
-          "h": 3,
-          "w": 10,
+          "h": 7,
+          "w": 4,
           "x": 14,
           "y": 1
         },
         "id": 8,
+        "interval": null,
         "links": [],
         "options": {
-          "colorMode": "background",
-          "graphMode": "none",
-          "justifyMode": "auto",
-          "orientation": "auto",
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "values": [
+              "value"
+            ]
+          },
+          "pieType": "pie",
           "reduceOptions": {
             "calcs": [
               "lastNotNull"
@@ -353,16 +368,13 @@
             "fields": "",
             "values": false
           },
-          "textMode": "auto"
+          "tooltip": {
+            "mode": "single"
+          }
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "7.4.1",
         "targets": [
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
-            "exemplar": false,
             "expr": "count(x509_cert_not_after{secret_name!=\"\"})",
             "instant": true,
             "interval": "",
@@ -371,11 +383,6 @@
             "refId": "A"
           },
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
-            "exemplar": false,
             "expr": "count(x509_cert_not_after{filepath!=\"\",embedded_key!=\"\"})",
             "hide": false,
             "instant": true,
@@ -384,11 +391,6 @@
             "refId": "B"
           },
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
-            "exemplar": false,
             "expr": "count(x509_cert_not_after{filepath!=\"\",embedded_key=\"\"})",
             "hide": false,
             "instant": true,
@@ -397,13 +399,13 @@
             "refId": "C"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Media",
-        "type": "stat"
+        "type": "piechart"
       },
       {
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -449,7 +451,7 @@
           "text": {},
           "textMode": "value"
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
             "expr": "sum(x509_read_errors)",
@@ -460,13 +462,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Exporter Errors",
         "type": "stat"
       },
       {
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -512,7 +514,7 @@
           "text": {},
           "textMode": "value"
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
             "expr": "sum(0 < ((x509_cert_not_after - time()) / 86400) < bool $critical_threshold)",
@@ -522,16 +524,19 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Expiring within $critical_threshold days",
         "type": "stat"
       },
       {
         "collapsed": false,
+        "datasource": null,
         "gridPos": {
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 7
+          "y": 8
         },
         "id": 26,
         "panels": [],
@@ -539,10 +544,7 @@
         "type": "row"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "description": "Because of a missing feature in Grafana, critical and warning thresholds from dashboard variables will not affect coloration of the Time Left column in this table.\n\nThresholds are to be set manually in the Overrides settings for this widget.\n\nPlease vote or contribute to issue : https://github.com/grafana/grafana/issues/922",
         "fieldConfig": {
           "defaults": {
@@ -550,7 +552,7 @@
               "mode": "thresholds"
             },
             "custom": {
-              "align": "auto",
+              "align": null,
               "displayMode": "auto",
               "filterable": true
             },
@@ -624,26 +626,15 @@
           "h": 15,
           "w": 12,
           "x": 0,
-          "y": 8
+          "y": 9
         },
         "id": 46,
         "options": {
-          "footer": {
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
             "exemplar": false,
             "expr": "sort(((x509_cert_not_after{secret_name!=\"\"} - time()) / 86400) < $list_threshold)",
             "format": "table",
@@ -654,18 +645,14 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Kubernetes Secrets (time left < $list_threshold days)",
         "transformations": [
           {
             "id": "filterFieldsByName",
             "options": {
               "include": {
-                "names": [
-                  "secret_name",
-                  "secret_namespace",
-                  "subject_CN",
-                  "Value #A"
-                ],
                 "pattern": "^(subject_CN|secret_namespace|secret_name|Value)$"
               }
             }
@@ -682,7 +669,6 @@
               },
               "renameByName": {
                 "Value": "Time Left",
-                "Value #A": "Time Left",
                 "secret_name": "Secret Name",
                 "secret_namespace": "Secret Namespace",
                 "subject_CN": "Subject CN"
@@ -693,17 +679,14 @@
         "type": "table"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
               "mode": "thresholds"
             },
             "custom": {
-              "align": "auto",
+              "align": null,
               "displayMode": "auto",
               "filterable": false
             },
@@ -736,36 +719,6 @@
                 {
                   "id": "custom.width",
                   "value": 100
-                },
-                {
-                  "id": "custom.displayMode",
-                  "value": "color-background"
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "mode": "continuous-GrYlRd"
-                  }
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": null
-                      },
-                      {
-                        "color": "red",
-                        "value": 7
-                      },
-                      {
-                        "color": "#EAB839",
-                        "value": 14
-                      }
-                    ]
-                  }
                 }
               ]
             },
@@ -787,28 +740,16 @@
           "h": 15,
           "w": 12,
           "x": 12,
-          "y": 8
+          "y": 9
         },
         "id": 31,
         "options": {
-          "footer": {
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true,
           "sortBy": []
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
-            "exemplar": false,
             "expr": "bottomk(10, (x509_cert_not_after{secret_name!=\"\"} - x509_cert_not_before) / 86400)",
             "format": "table",
             "instant": true,
@@ -824,11 +765,6 @@
             "id": "filterFieldsByName",
             "options": {
               "include": {
-                "names": [
-                  "secret_name",
-                  "secret_namespace",
-                  "Value #A"
-                ],
                 "pattern": "^(subject_CN|secret_namespace|secret_name|Value)$"
               }
             }
@@ -836,9 +772,7 @@
           {
             "id": "organize",
             "options": {
-              "excludeByName": {
-                "Value #A": true
-              },
+              "excludeByName": {},
               "indexByName": {
                 "Value": 3,
                 "secret_name": 2,
@@ -847,7 +781,6 @@
               },
               "renameByName": {
                 "Value": "Days",
-                "Value #A": "Days",
                 "secret_name": "Secret Name",
                 "secret_namespace": "Secret Namespace",
                 "subject_CN": "Subject CN"
@@ -858,16 +791,14 @@
         "type": "table"
       },
       {
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
               "mode": "thresholds"
             },
             "custom": {
-              "align": "auto",
+              "align": null,
               "displayMode": "auto",
               "filterable": false
             },
@@ -909,20 +840,13 @@
           "h": 12,
           "w": 6,
           "x": 0,
-          "y": 23
+          "y": 24
         },
         "id": 14,
         "options": {
-          "footer": {
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
             "expr": "topk(10, sort_desc(count by (issuer_CN) (x509_cert_not_after)))",
@@ -963,16 +887,14 @@
         "type": "table"
       },
       {
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
               "mode": "thresholds"
             },
             "custom": {
-              "align": "auto",
+              "align": null,
               "displayMode": "auto",
               "filterable": false
             },
@@ -1014,20 +936,13 @@
           "h": 12,
           "w": 6,
           "x": 6,
-          "y": 23
+          "y": 24
         },
         "id": 15,
         "options": {
-          "footer": {
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
             "expr": "topk(10, sort_desc(count by (secret_namespace) (x509_cert_not_after{secret_namespace!=\"\"})))",
@@ -1068,16 +983,14 @@
         "type": "table"
       },
       {
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
               "mode": "thresholds"
             },
             "custom": {
-              "align": "auto",
+              "align": null,
               "displayMode": "auto",
               "filterable": false
             },
@@ -1119,20 +1032,13 @@
           "h": 12,
           "w": 12,
           "x": 12,
-          "y": 23
+          "y": 24
         },
         "id": 28,
         "options": {
-          "footer": {
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
             "expr": "topk(10, (x509_cert_not_after{secret_name!=\"\"} - x509_cert_not_before) / 86400)",
@@ -1177,18 +1083,17 @@
       },
       {
         "collapsed": true,
+        "datasource": null,
         "gridPos": {
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 35
+          "y": 36
         },
         "id": 49,
         "panels": [
           {
-            "datasource": {
-              "uid": "${DS_PROMETHEUS}"
-            },
+            "datasource": "${DS_PROMETHEUS}",
             "description": "Because of a missing feature in Grafana, critical and warning thresholds from dashboard variables will not affect coloration of the Time Left column in this table.\n\nThresholds are to be set manually in the Overrides settings for this widget.\n\nPlease vote or contribute to issue : https://github.com/grafana/grafana/issues/922",
             "fieldConfig": {
               "defaults": {
@@ -1196,7 +1101,7 @@
                   "mode": "thresholds"
                 },
                 "custom": {
-                  "align": "auto",
+                  "align": null,
                   "displayMode": "auto",
                   "filterable": true
                 },
@@ -1270,20 +1175,13 @@
               "h": 15,
               "w": 12,
               "x": 0,
-              "y": 36
+              "y": 30
             },
             "id": 47,
             "options": {
-              "footer": {
-                "fields": "",
-                "reducer": [
-                  "sum"
-                ],
-                "show": false
-              },
               "showHeader": true
             },
-            "pluginVersion": "8.3.3",
+            "pluginVersion": "8.2.3",
             "targets": [
               {
                 "exemplar": false,
@@ -1296,6 +1194,8 @@
                 "refId": "A"
               }
             ],
+            "timeFrom": null,
+            "timeShift": null,
             "title": "Host Files (time left < $list_threshold days)",
             "transformations": [
               {
@@ -1328,16 +1228,14 @@
             "type": "table"
           },
           {
-            "datasource": {
-              "uid": "${DS_PROMETHEUS}"
-            },
+            "datasource": "${DS_PROMETHEUS}",
             "fieldConfig": {
               "defaults": {
                 "color": {
                   "mode": "thresholds"
                 },
                 "custom": {
-                  "align": "auto",
+                  "align": null,
                   "displayMode": "auto",
                   "filterable": false
                 },
@@ -1379,20 +1277,13 @@
               "h": 15,
               "w": 12,
               "x": 12,
-              "y": 36
+              "y": 30
             },
             "id": 16,
             "options": {
-              "footer": {
-                "fields": "",
-                "reducer": [
-                  "sum"
-                ],
-                "show": false
-              },
               "showHeader": true
             },
-            "pluginVersion": "8.3.3",
+            "pluginVersion": "8.2.3",
             "targets": [
               {
                 "expr": "topk(10, sort_desc(count by (instance) (x509_cert_not_after{filepath!=\"\"})))",
@@ -1433,16 +1324,14 @@
             "type": "table"
           },
           {
-            "datasource": {
-              "uid": "${DS_PROMETHEUS}"
-            },
+            "datasource": "${DS_PROMETHEUS}",
             "fieldConfig": {
               "defaults": {
                 "color": {
                   "mode": "thresholds"
                 },
                 "custom": {
-                  "align": "auto",
+                  "align": null,
                   "displayMode": "auto",
                   "filterable": false
                 },
@@ -1484,20 +1373,13 @@
               "h": 12,
               "w": 12,
               "x": 0,
-              "y": 51
+              "y": 45
             },
             "id": 33,
             "options": {
-              "footer": {
-                "fields": "",
-                "reducer": [
-                  "sum"
-                ],
-                "show": false
-              },
               "showHeader": true
             },
-            "pluginVersion": "8.3.3",
+            "pluginVersion": "8.2.3",
             "targets": [
               {
                 "expr": "bottomk(10, (x509_cert_not_after{filepath!=\"\"} - x509_cert_not_before) / 86400)",
@@ -1541,16 +1423,14 @@
             "type": "table"
           },
           {
-            "datasource": {
-              "uid": "${DS_PROMETHEUS}"
-            },
+            "datasource": "${DS_PROMETHEUS}",
             "fieldConfig": {
               "defaults": {
                 "color": {
                   "mode": "thresholds"
                 },
                 "custom": {
-                  "align": "auto",
+                  "align": null,
                   "displayMode": "auto",
                   "filterable": false
                 },
@@ -1592,20 +1472,13 @@
               "h": 12,
               "w": 12,
               "x": 12,
-              "y": 51
+              "y": 45
             },
             "id": 32,
             "options": {
-              "footer": {
-                "fields": "",
-                "reducer": [
-                  "sum"
-                ],
-                "show": false
-              },
               "showHeader": true
             },
-            "pluginVersion": "8.3.3",
+            "pluginVersion": "8.2.3",
             "targets": [
               {
                 "expr": "topk(10, (x509_cert_not_after{filepath!=\"\"} - x509_cert_not_before) / 86400)",
@@ -1654,11 +1527,12 @@
       },
       {
         "collapsed": false,
+        "datasource": null,
         "gridPos": {
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 36
+          "y": 37
         },
         "id": 35,
         "panels": [],
@@ -1670,16 +1544,14 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fill": 1,
         "fillGradient": 0,
         "gridPos": {
           "h": 8,
           "w": 12,
           "x": 0,
-          "y": 37
+          "y": 38
         },
         "hiddenSeries": false,
         "id": 38,
@@ -1701,7 +1573,7 @@
           "alertThreshold": true
         },
         "percentage": false,
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "pointradius": 2,
         "points": false,
         "renderer": "flot",
@@ -1719,7 +1591,9 @@
           }
         ],
         "thresholds": [],
+        "timeFrom": null,
         "timeRegions": [],
+        "timeShift": null,
         "title": "Reporting Exporters",
         "tooltip": {
           "shared": true,
@@ -1728,7 +1602,9 @@
         },
         "type": "graph",
         "xaxis": {
+          "buckets": null,
           "mode": "time",
+          "name": null,
           "show": true,
           "values": []
         },
@@ -1736,18 +1612,25 @@
           {
             "$$hashKey": "object:237",
             "format": "short",
+            "label": null,
             "logBase": 1,
+            "max": null,
+            "min": null,
             "show": true
           },
           {
             "$$hashKey": "object:238",
             "format": "short",
+            "label": null,
             "logBase": 1,
+            "max": null,
+            "min": null,
             "show": true
           }
         ],
         "yaxis": {
-          "align": false
+          "align": false,
+          "alignLevel": null
         }
       },
       {
@@ -1757,16 +1640,14 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fill": 1,
         "fillGradient": 0,
         "gridPos": {
           "h": 8,
           "w": 12,
           "x": 12,
-          "y": 37
+          "y": 38
         },
         "hiddenSeries": false,
         "id": 40,
@@ -1788,7 +1669,7 @@
           "alertThreshold": true
         },
         "percentage": false,
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "pointradius": 2,
         "points": false,
         "renderer": "flot",
@@ -1806,7 +1687,9 @@
           }
         ],
         "thresholds": [],
+        "timeFrom": null,
         "timeRegions": [],
+        "timeShift": null,
         "title": "Cumulative Errors",
         "tooltip": {
           "shared": true,
@@ -1815,7 +1698,9 @@
         },
         "type": "graph",
         "xaxis": {
+          "buckets": null,
           "mode": "time",
+          "name": null,
           "show": true,
           "values": []
         },
@@ -1823,18 +1708,25 @@
           {
             "$$hashKey": "object:237",
             "format": "short",
+            "label": null,
             "logBase": 1,
+            "max": null,
+            "min": null,
             "show": true
           },
           {
             "$$hashKey": "object:238",
             "format": "short",
+            "label": null,
             "logBase": 1,
+            "max": null,
+            "min": null,
             "show": true
           }
         ],
         "yaxis": {
-          "align": false
+          "align": false,
+          "alignLevel": null
         }
       },
       {
@@ -1845,16 +1737,14 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fill": 1,
         "fillGradient": 0,
         "gridPos": {
           "h": 8,
           "w": 12,
           "x": 0,
-          "y": 45
+          "y": 46
         },
         "hiddenSeries": false,
         "id": 41,
@@ -1876,7 +1766,7 @@
           "alertThreshold": true
         },
         "percentage": false,
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "pointradius": 2,
         "points": false,
         "renderer": "flot",
@@ -1894,7 +1784,9 @@
           }
         ],
         "thresholds": [],
+        "timeFrom": null,
         "timeRegions": [],
+        "timeShift": null,
         "title": "Error Rate",
         "tooltip": {
           "shared": true,
@@ -1903,7 +1795,9 @@
         },
         "type": "graph",
         "xaxis": {
+          "buckets": null,
           "mode": "time",
+          "name": null,
           "show": true,
           "values": []
         },
@@ -1911,18 +1805,25 @@
           {
             "$$hashKey": "object:237",
             "format": "cps",
+            "label": null,
             "logBase": 1,
+            "max": null,
+            "min": null,
             "show": true
           },
           {
             "$$hashKey": "object:238",
             "format": "short",
+            "label": null,
             "logBase": 1,
+            "max": null,
+            "min": null,
             "show": true
           }
         ],
         "yaxis": {
-          "align": false
+          "align": false,
+          "alignLevel": null
         }
       },
       {
@@ -1932,16 +1833,14 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fill": 1,
         "fillGradient": 0,
         "gridPos": {
           "h": 8,
           "w": 12,
           "x": 12,
-          "y": 45
+          "y": 46
         },
         "hiddenSeries": false,
         "id": 39,
@@ -1963,7 +1862,7 @@
           "alertThreshold": true
         },
         "percentage": false,
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "pointradius": 2,
         "points": false,
         "renderer": "flot",
@@ -1981,7 +1880,9 @@
           }
         ],
         "thresholds": [],
+        "timeFrom": null,
         "timeRegions": [],
+        "timeShift": null,
         "title": "Exporters with Errors",
         "tooltip": {
           "shared": true,
@@ -1990,7 +1891,9 @@
         },
         "type": "graph",
         "xaxis": {
+          "buckets": null,
           "mode": "time",
+          "name": null,
           "show": true,
           "values": []
         },
@@ -1998,31 +1901,36 @@
           {
             "$$hashKey": "object:237",
             "format": "short",
+            "label": null,
             "logBase": 1,
+            "max": null,
+            "min": null,
             "show": true
           },
           {
             "$$hashKey": "object:238",
             "format": "short",
+            "label": null,
             "logBase": 1,
+            "max": null,
+            "min": null,
             "show": true
           }
         ],
         "yaxis": {
-          "align": false
+          "align": false,
+          "alignLevel": null
         }
       },
       {
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
               "mode": "thresholds"
             },
             "custom": {
-              "align": "auto",
+              "align": null,
               "displayMode": "auto",
               "filterable": false
             },
@@ -2064,20 +1972,13 @@
           "h": 5,
           "w": 12,
           "x": 0,
-          "y": 53
+          "y": 54
         },
         "id": 43,
         "options": {
-          "footer": {
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
             "expr": "topk(10, rate(x509_read_errors[6h]))",
@@ -2114,16 +2015,14 @@
         "type": "table"
       },
       {
-        "datasource": {
-          "uid": "${DS_PROMETHEUS}"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "fieldConfig": {
           "defaults": {
             "color": {
               "mode": "thresholds"
             },
             "custom": {
-              "align": "auto",
+              "align": null,
               "displayMode": "auto",
               "filterable": false
             },
@@ -2165,20 +2064,13 @@
           "h": 5,
           "w": 12,
           "x": 12,
-          "y": 53
+          "y": 54
         },
         "id": 44,
         "options": {
-          "footer": {
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.5",
         "targets": [
           {
             "expr": "topk(10, x509_read_errors)",
@@ -2216,7 +2108,7 @@
       }
     ],
     "refresh": false,
-    "schemaVersion": 34,
+    "schemaVersion": 32,
     "style": "dark",
     "tags": [],
     "templating": {
@@ -2227,6 +2119,8 @@
             "text": "Prometheus",
             "value": "Prometheus"
           },
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": false,
           "label": "Datasource",
@@ -2241,11 +2135,14 @@
           "type": "datasource"
         },
         {
+          "allValue": null,
           "current": {
             "selected": true,
             "text": "7",
             "value": "7"
           },
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": false,
           "label": "Critical Threshold (days)",
@@ -2309,11 +2206,14 @@
           "type": "custom"
         },
         {
+          "allValue": null,
           "current": {
             "selected": true,
             "text": "28",
             "value": "28"
           },
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": false,
           "label": "Warning Threshold (days)",
@@ -2377,11 +2277,14 @@
           "type": "custom"
         },
         {
+          "allValue": null,
           "current": {
             "selected": true,
             "text": "180",
             "value": "180"
           },
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": false,
           "label": "List expiring in less than (days)",
@@ -2474,7 +2377,6 @@
     "timezone": "",
     "title": "Certificates Expiration",
     "uid": "lHnsYlPGk",
-    "version": 10,
-    "weekStart": ""
+    "version": 8
   }
 }

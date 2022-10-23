@@ -5,14 +5,15 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "version-checker",
     "url": "/d/Awr5zZ4Gk/version-checker",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-11-10T18:36:40Z",
-    "updated": "2022-01-27T09:04:07Z",
+    "updated": "2021-12-05T20:11:07Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 5,
+    "version": 3,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 0,
@@ -20,7 +21,21 @@
     "folderTitle": "General",
     "folderUrl": "",
     "provisioned": false,
-    "provisionedExternalId": ""
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "annotations": {
@@ -56,7 +71,6 @@
         "fieldConfig": {
           "defaults": {
             "custom": {
-              "align": "auto",
               "displayMode": "auto",
               "filterable": false
             },
@@ -206,7 +220,7 @@
             }
           ]
         },
-        "pluginVersion": "8.3.4",
+        "pluginVersion": "8.3.0",
         "targets": [
           {
             "datasource": {
@@ -232,7 +246,7 @@
                   "current_version",
                   "image",
                   "latest_version",
-                  "Value"
+                  "Value #A"
                 ]
               }
             }
@@ -260,15 +274,15 @@
         "type": "table"
       }
     ],
-    "refresh": "1d",
-    "schemaVersion": 34,
+    "refresh": false,
+    "schemaVersion": 33,
     "style": "dark",
     "tags": [],
     "templating": {
       "list": []
     },
     "time": {
-      "from": "now",
+      "from": "now-5m",
       "to": "now"
     },
     "timepicker": {
@@ -287,7 +301,7 @@
     "timezone": "",
     "title": "Version Checker",
     "uid": "Awr5zZ4Gk",
-    "version": 5,
+    "version": 3,
     "weekStart": ""
   }
 }

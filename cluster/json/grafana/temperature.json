@@ -5,14 +5,15 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "temperature",
     "url": "/d/3762JRF7k/temperature",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-11-10T18:27:00Z",
-    "updated": "2022-01-07T09:55:09Z",
+    "updated": "2021-12-13T15:37:36Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 7,
+    "version": 6,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 0,
@@ -20,7 +21,21 @@
     "folderTitle": "General",
     "folderUrl": "",
     "provisioned": false,
-    "provisionedExternalId": ""
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "annotations": {
@@ -236,7 +251,7 @@
           "showUnfilled": true,
           "text": {}
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "datasource": {
@@ -662,7 +677,7 @@
           "showUnfilled": false,
           "text": {}
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "exemplar": true,
@@ -1055,7 +1070,7 @@
           "showUnfilled": false,
           "text": {}
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "exemplar": true,
@@ -1266,21 +1281,21 @@
         "type": "state-timeline"
       }
     ],
-    "schemaVersion": 34,
+    "schemaVersion": 33,
     "style": "dark",
     "tags": [],
     "templating": {
       "list": []
     },
     "time": {
-      "from": "now-2d",
+      "from": "now-6h",
       "to": "now"
     },
     "timepicker": {},
     "timezone": "",
     "title": "Temperature",
     "uid": "3762JRF7k",
-    "version": 7,
+    "version": 6,
     "weekStart": ""
   }
 }

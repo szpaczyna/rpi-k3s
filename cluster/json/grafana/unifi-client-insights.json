@@ -5,14 +5,15 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "unifi-client-insights",
     "url": "/d/jMfvAjxWz/unifi-client-insights",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-11-10T18:38:39Z",
-    "updated": "2021-12-15T11:17:20Z",
+    "updated": "2021-11-17T09:32:33Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 5,
+    "version": 3,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 34,
@@ -20,7 +21,21 @@
     "folderTitle": "Network",
     "folderUrl": "/dashboards/f/4gFicQ57z/network",
     "provisioned": false,
-    "provisionedExternalId": ""
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "annotations": {
@@ -48,12 +63,13 @@
     "gnetId": 11315,
     "graphTooltip": 1,
     "id": 25,
-    "iteration": 1639566652602,
+    "iteration": 1637140193586,
     "links": [],
     "liveNow": false,
     "panels": [
       {
         "collapsed": false,
+        "datasource": null,
         "gridPos": {
           "h": 1,
           "w": 24,
@@ -66,10 +82,7 @@
         "type": "row"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "This table represents current (latest) data.\nBytes columns are lifetime totals.",
         "fieldConfig": {
           "defaults": {
@@ -99,7 +112,7 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Bytes Rx"
+                "options": "Value #A"
               },
               "properties": [
                 {
@@ -111,31 +124,421 @@
                   "value": "decbytes"
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
             {
               "matcher": {
                 "id": "byName",
-                "options": "Bytes Tx"
+                "options": "name"
               },
               "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Name"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "channel"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Chan"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "mac"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Device MAC"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "radio_desc"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "AP / Radio / Proto"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "radio_proto"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "job"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "ap_mac"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Time"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "wired"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "sw_mac"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "instance"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "network"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Network"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "oui"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "OUI"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "ip"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Address"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "essid"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "ESSID"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "sw_port"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Sw Port"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "site_name"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Site"
+                },
+                {
+                  "id": "unit",
+                  "value": "short"
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.align",
+                  "value": null
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #B"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Bytes Tx"
+                },
                 {
                   "id": "unit",
                   "value": "decbytes"
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
             {
               "matcher": {
                 "id": "byName",
-                "options": "Uptime"
+                "options": "Value #C"
               },
               "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Uptime"
+                },
                 {
                   "id": "unit",
                   "value": "s"
@@ -145,7 +548,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             }
@@ -160,23 +564,11 @@
         "id": 21,
         "links": [],
         "options": {
-          "footer": {
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true
         },
-        "pluginVersion": "8.3.3",
+        "pluginVersion": "8.2.3",
         "targets": [
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
-            "exemplar": false,
             "expr": "sum by (channel,essid,ip,mac,name,network,oui,radio_desc,site_name,source) (\n unifipoller_client_receive_bytes_total{wired!=\"true\", site_name=~\"$Site\", name=~\"$Wireless\"})",
             "format": "table",
             "instant": true,
@@ -185,11 +577,6 @@
             "refId": "A"
           },
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
-            "exemplar": false,
             "expr": "sum by (channel,essid,ip,mac,name,network,oui,radio_desc,site_name,source) (\n unifipoller_client_transmit_bytes_total{wired!=\"true\",site_name=~\"$Site\", name=~\"$Wireless\"})",
             "format": "table",
             "instant": true,
@@ -198,11 +585,6 @@
             "refId": "B"
           },
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
-            "exemplar": false,
             "expr": "sum by (channel,essid,ip,mac,name,network,oui,radio_desc,site_name,source) (\n unifipoller_client_uptime_seconds{wired!=\"true\",site_name=~\"$Site\", name=~\"$Wireless\"})",
             "format": "table",
             "instant": true,
@@ -211,6 +593,7 @@
             "refId": "C"
           }
         ],
+        "timeFrom": null,
         "title": "Wireless Devices",
         "transformations": [
           {
@@ -224,34 +607,18 @@
             "options": {
               "excludeByName": {
                 "Time": true,
-                "radio_desc": true,
-                "site_name": true,
                 "source": true
               },
               "indexByName": {},
-              "renameByName": {
-                "Value #A": "Bytes Rx",
-                "Value #B": "Bytes Tx",
-                "Value #C": "Uptime",
-                "channel": "Channel",
-                "essid": "ESSID",
-                "ip": "Address",
-                "mac": "Device MAC",
-                "name": "Device Name",
-                "oui": "OUI",
-                "radio_desc": "Device MAC",
-                "site_name": ""
-              }
+              "renameByName": {}
             }
           }
         ],
         "type": "table"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "cacheTimeout": null,
+        "datasource": "prometheus",
         "description": "Visualize wireless channel usage w/ wired client counts.",
         "fieldConfig": {
           "defaults": {
@@ -277,6 +644,7 @@
         },
         "hideTimeOverride": false,
         "id": 9,
+        "interval": null,
         "links": [],
         "maxDataPoints": 3,
         "options": {
@@ -311,14 +679,13 @@
             "refId": "B"
           }
         ],
+        "timeFrom": null,
         "title": "Clients / Channel",
         "type": "piechart"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "cacheTimeout": null,
+        "datasource": "prometheus",
         "description": "Visualize how many clients are connected to which radios/APs.",
         "fieldConfig": {
           "defaults": {
@@ -344,6 +711,7 @@
         },
         "hideTimeOverride": false,
         "id": 11,
+        "interval": null,
         "links": [],
         "maxDataPoints": 3,
         "options": {
@@ -372,14 +740,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
         "title": "Clients / AP Radio",
         "type": "piechart"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "cacheTimeout": null,
+        "datasource": "prometheus",
         "description": "This shows an OUI breakdown from Unifi's perspective. e = wired, w = wireless",
         "fieldConfig": {
           "defaults": {
@@ -405,6 +772,7 @@
         },
         "hideTimeOverride": false,
         "id": 12,
+        "interval": null,
         "links": [],
         "maxDataPoints": 3,
         "options": {
@@ -442,14 +810,12 @@
             "refId": "B"
           }
         ],
+        "timeFrom": null,
         "title": "Client MAC OUI Breakdown",
         "type": "piechart"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "Bandwidth usage per wireless devices as reported by the UAPs. Rx is on the negative axis. Does not include amazon devices.",
         "fieldConfig": {
           "defaults": {
@@ -544,14 +910,13 @@
             "refId": "C"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "UAP Bandwidth / Wireless Devices",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "Wired TX / RX bytes per second (calculated in 30 second buckets). Rx is on the negative axis. Does not include amazon and camera devices. Unaffected by the AP setting.",
         "fieldConfig": {
           "defaults": {
@@ -646,14 +1011,13 @@
             "refId": "B"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Switch Bandwidth / Wired Devices",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -738,14 +1102,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Received Signal Strength Indicator",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -832,14 +1195,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Wireless Signal",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -925,14 +1287,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "UAP Client Stats / Noise",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "Client reported transmit rate.",
         "fieldConfig": {
           "defaults": {
@@ -1018,14 +1379,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "TX Rate",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -1110,14 +1470,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Client Transmit Retries",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "Client reported receive rate.",
         "fieldConfig": {
           "defaults": {
@@ -1203,14 +1562,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "RX Rate",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -1295,14 +1653,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Client Wifi Tx Attempts",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -1387,14 +1744,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Client Transmit Power",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -1479,14 +1835,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Client Anomalies",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -1573,14 +1928,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Client Satisfaction",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -1665,14 +2019,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Roam Count",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -1758,11 +2111,14 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Client Connection Quality %",
         "type": "timeseries"
       },
       {
         "collapsed": true,
+        "datasource": null,
         "gridPos": {
           "h": 1,
           "w": 24,
@@ -1776,10 +2132,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
+            "datasource": "prometheus",
             "description": "Amazon Devices TX / RX bytes per second. Rx is on the negative axis. My home network has a ton of Amazon devices, so I broke them out separately. If you don't have Amazon devices, or they have different names, you can edit the query to use a different name. e = wired, w = wireless",
             "fieldConfig": {
               "defaults": {
@@ -1793,7 +2146,7 @@
               "h": 11,
               "w": 12,
               "x": 0,
-              "y": 118
+              "y": 42
             },
             "hiddenSeries": false,
             "id": 23,
@@ -1818,7 +2171,7 @@
               "alertThreshold": true
             },
             "percentage": false,
-            "pluginVersion": "8.3.3",
+            "pluginVersion": "8.2.3",
             "pointradius": 5,
             "points": false,
             "renderer": "flot",
@@ -1863,7 +2216,9 @@
               }
             ],
             "thresholds": [],
+            "timeFrom": null,
             "timeRegions": [],
+            "timeShift": null,
             "title": "Client Bandwidth / Echos & FireTVs",
             "tooltip": {
               "shared": true,
@@ -1872,7 +2227,9 @@
             },
             "type": "graph",
             "xaxis": {
+              "buckets": null,
               "mode": "time",
+              "name": null,
               "show": true,
               "values": []
             },
@@ -1881,16 +2238,22 @@
                 "format": "Bps",
                 "label": "bytes / sec",
                 "logBase": 1,
+                "max": null,
+                "min": null,
                 "show": true
               },
               {
                 "format": "short",
+                "label": null,
                 "logBase": 1,
+                "max": null,
+                "min": null,
                 "show": false
               }
             ],
             "yaxis": {
-              "align": false
+              "align": false,
+              "alignLevel": null
             }
           },
           {
@@ -1898,10 +2261,7 @@
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
+            "datasource": "prometheus",
             "description": "Cameras TX / RX bytes per second. Rx is on the negative axis. This graph shows any device with the word \"camera\" in its name and has nothing to do with UniFi Protect/video products. e = wired, w = wireless",
             "fieldConfig": {
               "defaults": {
@@ -1915,7 +2275,7 @@
               "h": 11,
               "w": 12,
               "x": 12,
-              "y": 118
+              "y": 42
             },
             "hiddenSeries": false,
             "id": 15,
@@ -1941,7 +2301,7 @@
               "alertThreshold": true
             },
             "percentage": false,
-            "pluginVersion": "8.3.3",
+            "pluginVersion": "8.2.3",
             "pointradius": 5,
             "points": false,
             "renderer": "flot",
@@ -1987,7 +2347,9 @@
               }
             ],
             "thresholds": [],
+            "timeFrom": null,
             "timeRegions": [],
+            "timeShift": null,
             "title": "Client Bandwidth: Cameras",
             "tooltip": {
               "shared": true,
@@ -1996,7 +2358,9 @@
             },
             "type": "graph",
             "xaxis": {
+              "buckets": null,
               "mode": "time",
+              "name": null,
               "show": true,
               "values": []
             },
@@ -2005,16 +2369,22 @@
                 "format": "Bps",
                 "label": "bytes / sec",
                 "logBase": 1,
+                "max": null,
+                "min": null,
                 "show": true
               },
               {
                 "format": "short",
+                "label": null,
                 "logBase": 1,
+                "max": null,
+                "min": null,
                 "show": false
               }
             ],
             "yaxis": {
-              "align": false
+              "align": false,
+              "alignLevel": null
             }
           }
         ],
@@ -2023,7 +2393,7 @@
       }
     ],
     "refresh": "1m",
-    "schemaVersion": 34,
+    "schemaVersion": 31,
     "style": "dark",
     "tags": [
       "unifi",
@@ -2032,18 +2402,15 @@
     "templating": {
       "list": [
         {
-          "current": {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
+          "allValue": null,
+          "current": {},
+          "datasource": "prometheus",
           "definition": "label_values(unifipoller_client_uptime_seconds,source)",
+          "description": null,
+          "error": null,
           "hide": 2,
           "includeAll": true,
+          "label": null,
           "multi": true,
           "name": "Controller",
           "options": [],
@@ -2062,18 +2429,14 @@
         },
         {
           "allValue": ".*",
-          "current": {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
+          "current": {},
+          "datasource": "prometheus",
           "definition": "label_values(unifipoller_client_uptime_seconds{source=~\"$Controller\"},site_name)",
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": true,
+          "label": null,
           "multi": true,
           "name": "Site",
           "options": [],
@@ -2092,18 +2455,14 @@
         },
         {
           "allValue": "",
-          "current": {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
+          "current": {},
+          "datasource": "prometheus",
           "definition": "label_values(unifipoller_client_uptime_seconds{site_name=~\"$Site\"},ap_name)",
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": true,
+          "label": null,
           "multi": true,
           "name": "AP",
           "options": [],
@@ -2122,18 +2481,14 @@
         },
         {
           "allValue": "",
-          "current": {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
+          "current": {},
+          "datasource": "prometheus",
           "definition": "label_values(unifipoller_client_uptime_seconds{site_name=~\"$Site\"},sw_name)",
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": true,
+          "label": null,
           "multi": true,
           "name": "Switch",
           "options": [],
@@ -2152,18 +2507,14 @@
         },
         {
           "allValue": ".*",
-          "current": {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
+          "current": {},
+          "datasource": "prometheus",
           "definition": "label_values(unifipoller_client_uptime_seconds{site_name=~\"$Site\", ap_name=~\"$AP\", wired=\"false\"},name)",
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": true,
+          "label": null,
           "multi": true,
           "name": "Wireless",
           "options": [],
@@ -2182,18 +2533,14 @@
         },
         {
           "allValue": ".*",
-          "current": {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
+          "current": {},
+          "datasource": "prometheus",
           "definition": "label_values(unifipoller_client_uptime_seconds{site_name=~\"$Site\", sw_name=~\"$Switch\", wired=\"true\"},name)",
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": true,
+          "label": null,
           "multi": true,
           "name": "Wired",
           "options": [],
@@ -2211,13 +2558,17 @@
           "useTags": false
         },
         {
+          "allValue": null,
           "current": {
             "selected": true,
             "text": "2m",
             "value": "2m"
           },
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": false,
+          "label": null,
           "multi": false,
           "name": "Smooth",
           "options": [
@@ -2267,13 +2618,17 @@
           "type": "custom"
         },
         {
+          "allValue": null,
           "current": {
             "selected": true,
             "text": "name",
             "value": "name"
           },
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": false,
+          "label": null,
           "multi": false,
           "name": "Identifier",
           "options": [
@@ -2296,7 +2651,7 @@
       ]
     },
     "time": {
-      "from": "now-2d",
+      "from": "now-3h",
       "to": "now"
     },
     "timepicker": {
@@ -2325,7 +2680,6 @@
     "timezone": "browser",
     "title": "UniFi Client Insights",
     "uid": "jMfvAjxWz",
-    "version": 5,
-    "weekStart": ""
+    "version": 3
   }
 }

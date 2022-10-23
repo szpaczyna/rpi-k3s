@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": true,
+    "canDelete": true,
+    "slug": "tbv",
+    "url": "/dashboards/f/QzMplUt7z/tbv",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2021-11-29T14:38:55Z",
+    "updated": "2021-11-29T14:38:55Z",
+    "updatedBy": "admin",
+    "createdBy": "admin",
+    "version": 1,
+    "hasAcl": false,
+    "isFolder": true,
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
+  },
+  "dashboard": {
+    "id": 52,
+    "schemaVersion": 17,
+    "title": "TBV",
+    "uid": "QzMplUt7z",
+    "version": 1
+  }
+}

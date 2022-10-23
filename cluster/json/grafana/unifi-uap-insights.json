@@ -5,14 +5,15 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "unifi-uap-insights",
     "url": "/d/g5wFWqxZk/unifi-uap-insights",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-11-10T18:38:56Z",
-    "updated": "2022-04-07T15:27:51Z",
+    "updated": "2021-11-17T10:57:10Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 6,
+    "version": 5,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 34,
@@ -20,7 +21,21 @@
     "folderTitle": "Network",
     "folderUrl": "/dashboards/f/4gFicQ57z/network",
     "provisioned": false,
-    "provisionedExternalId": ""
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "annotations": {
@@ -49,11 +64,12 @@
     "gnetId": 11314,
     "graphTooltip": 1,
     "id": 26,
-    "iteration": 1649345175199,
+    "iteration": 1637142889646,
     "links": [],
     "liveNow": false,
     "panels": [
       {
+        "cacheTimeout": null,
         "colorBackground": false,
         "colorValue": false,
         "colors": [
@@ -61,10 +77,7 @@
           "rgba(237, 129, 40, 0.89)",
           "rgba(50, 172, 45, 0.97)"
         ],
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "",
         "editable": true,
         "error": false,
@@ -83,6 +96,7 @@
           "y": 0
         },
         "id": 48,
+        "interval": null,
         "isNew": true,
         "links": [],
         "mappingType": 1,
@@ -98,6 +112,7 @@
         ],
         "maxDataPoints": 100,
         "nullPointMode": "connected",
+        "nullText": null,
         "postfix": "",
         "postfixFontSize": "80%",
         "prefix": "",
@@ -124,6 +139,7 @@
           }
         ],
         "thresholds": "",
+        "timeFrom": null,
         "title": "Users",
         "type": "grafana-singlestat-panel",
         "valueFontSize": "110%",
@@ -131,10 +147,8 @@
         "valueName": "current"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "cacheTimeout": null,
+        "datasource": "prometheus",
         "description": "Visualize wireless channel usage w/ wired client counts.",
         "fieldConfig": {
           "defaults": {
@@ -160,6 +174,7 @@
         },
         "hideTimeOverride": false,
         "id": 52,
+        "interval": null,
         "links": [],
         "maxDataPoints": 3,
         "options": {
@@ -176,8 +191,7 @@
             "values": false
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "targets": [
@@ -189,14 +203,13 @@
             "refId": "B"
           }
         ],
+        "timeFrom": null,
         "title": "Clients / Channel",
         "type": "piechart"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "cacheTimeout": null,
+        "datasource": "prometheus",
         "description": "Visualize how many clients are connected to which radios/APs.",
         "fieldConfig": {
           "defaults": {
@@ -222,6 +235,7 @@
         },
         "hideTimeOverride": false,
         "id": 54,
+        "interval": null,
         "links": [],
         "maxDataPoints": 3,
         "options": {
@@ -238,8 +252,7 @@
             "values": false
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "targets": [
@@ -251,14 +264,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
         "title": "Clients / AP Radio",
         "type": "piechart"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "cacheTimeout": null,
+        "datasource": "prometheus",
         "description": "This shows an OUI breakdown from Unifi's perspective.",
         "fieldConfig": {
           "defaults": {
@@ -284,6 +296,7 @@
         },
         "hideTimeOverride": false,
         "id": 56,
+        "interval": null,
         "links": [],
         "maxDataPoints": 3,
         "options": {
@@ -300,8 +313,7 @@
             "values": false
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "targets": [
@@ -313,10 +325,12 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
         "title": "Client / MAC OUI",
         "type": "piechart"
       },
       {
+        "cacheTimeout": null,
         "colorBackground": false,
         "colorValue": false,
         "colors": [
@@ -324,10 +338,7 @@
           "rgba(237, 129, 40, 0.89)",
           "rgba(50, 172, 45, 0.97)"
         ],
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "",
         "editable": true,
         "error": false,
@@ -346,6 +357,7 @@
           "y": 5
         },
         "id": 60,
+        "interval": null,
         "isNew": true,
         "links": [],
         "mappingType": 1,
@@ -361,6 +373,7 @@
         ],
         "maxDataPoints": 100,
         "nullPointMode": "connected",
+        "nullText": null,
         "postfix": "",
         "postfixFontSize": "80%",
         "prefix": "",
@@ -387,6 +400,7 @@
           }
         ],
         "thresholds": "",
+        "timeFrom": null,
         "title": "Guests",
         "type": "grafana-singlestat-panel",
         "valueFontSize": "110%",
@@ -394,10 +408,7 @@
         "valueName": "current"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -438,7 +449,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -461,7 +473,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -484,7 +497,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -507,7 +521,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -530,7 +545,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -553,7 +569,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -576,7 +593,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -599,7 +617,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -622,7 +641,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -645,7 +665,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -668,7 +689,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -691,7 +713,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -714,7 +737,8 @@
                   "value": 1
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -753,17 +777,10 @@
         "id": 1,
         "links": [],
         "options": {
-          "footer": {
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true,
           "sortBy": []
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.2.3",
         "targets": [
           {
             "expr": "sum by (ip,mac,model,name,serial,site_name,type,version) (unifipoller_device_info{site_name=~\"$Site\", name=~\"$AP\"})",
@@ -792,6 +809,7 @@
             "refId": "C"
           }
         ],
+        "timeFrom": null,
         "title": "Access Point Details",
         "transformations": [
           {
@@ -814,10 +832,7 @@
         "type": "table"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "The counters in this table represent uptime totals and do not change with the time range selector. ",
         "fieldConfig": {
           "defaults": {
@@ -859,7 +874,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -882,7 +898,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -905,7 +922,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -924,7 +942,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -943,7 +962,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -966,7 +986,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -985,7 +1006,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1008,7 +1030,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1031,7 +1054,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1054,7 +1078,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1077,7 +1102,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1100,7 +1126,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1123,7 +1150,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1146,7 +1174,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1165,7 +1194,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1188,7 +1218,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1211,7 +1242,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1234,7 +1266,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1253,7 +1286,8 @@
                   "value": "dBm"
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1272,7 +1306,8 @@
                   "value": "short"
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1295,7 +1330,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1314,7 +1350,8 @@
                   "value": "short"
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1333,7 +1370,8 @@
                   "value": "decbytes"
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1352,7 +1390,8 @@
                   "value": "decbytes"
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1375,7 +1414,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1398,7 +1438,8 @@
                   "value": 2
                 },
                 {
-                  "id": "custom.align"
+                  "id": "custom.align",
+                  "value": null
                 }
               ]
             },
@@ -1569,17 +1610,10 @@
         "id": 49,
         "links": [],
         "options": {
-          "footer": {
-            "fields": "",
-            "reducer": [
-              "sum"
-            ],
-            "show": false
-          },
           "showHeader": true,
           "sortBy": []
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.2.3",
         "targets": [
           {
             "expr": "sum by (bssid,essid,ap_name,name,radio,radio_name,vap_name,site_name,usage,source) (unifipoller_device_vap_ccq_ratio{site_name=~\"$Site\", name=~\"$AP\"})",
@@ -1645,6 +1679,7 @@
             "refId": "I"
           }
         ],
+        "timeFrom": null,
         "title": "Networks / UAP",
         "transformations": [
           {
@@ -1668,10 +1703,8 @@
         "type": "table"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "cacheTimeout": null,
+        "datasource": "prometheus",
         "description": "",
         "fieldConfig": {
           "defaults": {
@@ -1741,8 +1774,7 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -1754,14 +1786,14 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "UAP CPU Usage",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "cacheTimeout": null,
+        "datasource": "prometheus",
         "description": "",
         "fieldConfig": {
           "defaults": {
@@ -1865,8 +1897,7 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -1878,14 +1909,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "UAP Memory Usage",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -2036,8 +2066,7 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -2062,14 +2091,13 @@
             "refId": "C"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "UAP Load Average",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -2141,8 +2169,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -2154,14 +2181,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Clients / UAP",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "Devices TX / RX bytes per second grouped by OUI. RX on negative axis.",
         "fieldConfig": {
           "defaults": {
@@ -2234,8 +2260,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -2253,14 +2278,13 @@
             "refId": "B"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Wireless Traffic / Vendor",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -2332,8 +2356,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -2366,14 +2389,13 @@
             "refId": "D"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Users & Guests / Radio Band",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -2446,8 +2468,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -2459,14 +2480,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Average AP Client Signal",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -2539,8 +2559,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -2552,14 +2571,13 @@
             "refId": "A"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Average AP Client RSSI",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -2631,8 +2649,7 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -2653,14 +2670,13 @@
             "refId": "B"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Client Connection Quality",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -2732,8 +2748,7 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -2769,14 +2784,13 @@
             "refId": "D"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "Channel Utilization",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "RX is on the negative Axis.",
         "fieldConfig": {
           "defaults": {
@@ -2849,8 +2863,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -2868,14 +2881,13 @@
             "refId": "B"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "5 GHz Traffic",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "RX is on the negative Axis.",
         "fieldConfig": {
           "defaults": {
@@ -2947,8 +2959,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -2966,14 +2977,13 @@
             "refId": "B"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "2.4 GHz Traffic",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "PPS on the na band. In is on the negative Axis.",
         "fieldConfig": {
           "defaults": {
@@ -3046,8 +3056,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -3066,14 +3075,13 @@
             "refId": "B"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "5 GHz Packets",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "PPS on the ng band calculated in 30 second buckets. In is on the negative Axis.",
         "fieldConfig": {
           "defaults": {
@@ -3146,8 +3154,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -3165,14 +3172,13 @@
             "refId": "B"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "2.4 GHz Packets",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "Visualize packet errors (several types)  per second in the 5GHz band.",
         "fieldConfig": {
           "defaults": {
@@ -3245,8 +3251,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -3300,14 +3305,13 @@
             "refId": "H"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "5 GHz Drops/Errors",
         "type": "timeseries"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "datasource": "prometheus",
         "description": "In is on the negative axis.",
         "fieldConfig": {
           "defaults": {
@@ -3380,8 +3384,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.2.3",
@@ -3435,12 +3438,14 @@
             "refId": "H"
           }
         ],
+        "timeFrom": null,
+        "timeShift": null,
         "title": "2.4 GHz Drops/Errors",
         "type": "timeseries"
       }
     ],
     "refresh": "1m",
-    "schemaVersion": 35,
+    "schemaVersion": 31,
     "style": "dark",
     "tags": [
       "unifi",
@@ -3452,11 +3457,10 @@
         {
           "allValue": ".*",
           "current": {},
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
+          "datasource": "prometheus",
           "definition": "label_values(unifipoller_device_info{type=\"uap\"},source)",
+          "description": null,
+          "error": null,
           "hide": 2,
           "includeAll": true,
           "label": "",
@@ -3471,17 +3475,18 @@
           "regex": "",
           "skipUrlSync": false,
           "sort": 1,
+          "tagValuesQuery": null,
+          "tagsQuery": null,
           "type": "query",
           "useTags": false
         },
         {
           "allValue": "",
           "current": {},
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
+          "datasource": "prometheus",
           "definition": "label_values(unifipoller_device_info{source=~\"$Controller\", type=\"uap\"},site_name)",
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": true,
           "label": "",
@@ -3496,17 +3501,18 @@
           "regex": "",
           "skipUrlSync": false,
           "sort": 1,
+          "tagValuesQuery": null,
+          "tagsQuery": null,
           "type": "query",
           "useTags": false
         },
         {
           "allValue": "",
           "current": {},
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
+          "datasource": "prometheus",
           "definition": "label_values(unifipoller_device_info{site_name=~\"$Site\", type=~\"uap|udm\",model!=\"UDMPRO\"},name)",
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": true,
           "label": "UniFi AP:",
@@ -3521,18 +3527,24 @@
           "regex": "",
           "skipUrlSync": false,
           "sort": 1,
+          "tagValuesQuery": null,
+          "tagsQuery": null,
           "type": "query",
           "useTags": false
         },
         {
+          "allValue": null,
           "current": {
             "selected": true,
             "tags": [],
             "text": "2m",
             "value": "2m"
           },
+          "description": null,
+          "error": null,
           "hide": 0,
           "includeAll": false,
+          "label": null,
           "multi": false,
           "name": "Smooth",
           "options": [
@@ -3610,10 +3622,9 @@
         "30d"
       ]
     },
-    "timezone": "",
+    "timezone": "browser",
     "title": "UniFi UAP Insights",
     "uid": "g5wFWqxZk",
-    "version": 6,
-    "weekStart": ""
+    "version": 5
   }
 }

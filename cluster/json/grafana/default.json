@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": true,
+    "canDelete": true,
+    "slug": "default",
+    "url": "/dashboards/f/FqOjHH5nz/default",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2021-11-10T18:09:39Z",
+    "updated": "2021-11-10T18:09:39Z",
+    "updatedBy": "Anonymous",
+    "createdBy": "Anonymous",
+    "version": 1,
+    "hasAcl": false,
+    "isFolder": true,
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
+  },
+  "dashboard": {
+    "id": 1,
+    "schemaVersion": 17,
+    "title": "Default",
+    "uid": "FqOjHH5nz",
+    "version": 1
+  }
+}

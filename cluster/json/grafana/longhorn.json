@@ -5,14 +5,15 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "longhorn",
     "url": "/d/2BCgsldGz/longhorn",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-12-14T11:54:54Z",
-    "updated": "2022-03-04T14:23:10Z",
+    "updated": "2021-12-14T16:24:28Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 4,
+    "version": 2,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 0,
@@ -20,7 +21,21 @@
     "folderTitle": "General",
     "folderUrl": "",
     "provisioned": false,
-    "provisionedExternalId": ""
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "annotations": {
@@ -63,7 +78,7 @@
           "content": "<div class=\"dashboard-header text-center\">\n<span>VOLUMES</span>\n</div>",
           "mode": "html"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "transparent": true,
         "type": "text"
       },
@@ -109,7 +124,7 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "expr": "count(longhorn_volume_capacity_bytes) OR on() vector(0)",
@@ -167,7 +182,7 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "expr": "count(longhorn_volume_robustness==1) OR on() vector(0)",
@@ -180,83 +195,51 @@
         "type": "stat"
       },
       {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
         "datasource": {
           "type": "prometheus",
           "uid": "P1809F7CD0C75ACF3"
         },
         "description": "Note that Longhorn volume actual size is not the size of the filesystem inside a Longhorn volume.  See more at : https://longhorn.io/docs/1.0.2/volumes-and-nodes/volume-size/#volume-actual-size",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "drawStyle": "line",
-              "fillOpacity": 40,
-              "gradientMode": "opacity",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineInterpolation": "linear",
-              "lineWidth": 2,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "never",
-              "spanNulls": true,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "line+area"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "transparent",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 90
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": []
-        },
+        "fill": 1,
+        "fillGradient": 0,
         "gridPos": {
           "h": 9,
-          "w": 16,
-          "x": 8,
+          "w": 15,
+          "x": 9,
           "y": 3
         },
+        "hiddenSeries": false,
         "id": 12,
-        "options": {
-          "legend": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "displayMode": "table",
-            "placement": "right"
-          },
-          "tooltip": {
-            "mode": "multi",
-            "sort": "none"
-          }
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": true
         },
-        "pluginVersion": "8.4.0",
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "8.3.1",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
         "targets": [
           {
             "expr": "( (avg by (volume) (longhorn_volume_actual_size_bytes))/ (avg by (volume) (longhorn_volume_capacity_bytes)) ) *100",
@@ -265,8 +248,47 @@
             "refId": "A"
           }
         ],
+        "thresholds": [
+          {
+            "$$hashKey": "object:649",
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 90,
+            "yaxis": "left"
+          }
+        ],
+        "timeRegions": [],
         "title": "Volume Actual Size/Capacity",
-        "type": "timeseries"
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:476",
+            "format": "percent",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:477",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
       },
       {
         "datasource": {
@@ -314,7 +336,7 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "expr": "count(longhorn_volume_robustness==2) OR on() vector(0)",
@@ -372,7 +394,7 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "expr": "count(longhorn_volume_robustness==3) OR on() vector(0)",
@@ -393,7 +415,6 @@
         "fieldConfig": {
           "defaults": {
             "custom": {
-              "align": "auto",
               "displayMode": "auto"
             },
             "decimals": 1,
@@ -448,8 +469,8 @@
         },
         "gridPos": {
           "h": 9,
-          "w": 16,
-          "x": 8,
+          "w": 15,
+          "x": 9,
           "y": 12
         },
         "id": 10,
@@ -470,7 +491,7 @@
             }
           ]
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "datasource": {
@@ -553,7 +574,7 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "expr": "count(longhorn_volume_state==2) OR on() vector(0)",
@@ -611,7 +632,7 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "expr": "count(longhorn_volume_state==3) OR on() vector(0)",
@@ -635,7 +656,7 @@
           "content": "<div class=\"dashboard-header text-center\">\n<span>NODES</span>\n</div>",
           "mode": "html"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "transparent": true,
         "type": "text"
       },
@@ -661,8 +682,8 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 5,
-          "w": 3,
+          "h": 6,
+          "w": 4,
           "x": 0,
           "y": 24
         },
@@ -681,7 +702,7 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "expr": "avg(longhorn_node_count_total) OR on() vector(0)",
@@ -719,9 +740,9 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 5,
-          "w": 3,
-          "x": 3,
+          "h": 6,
+          "w": 4,
+          "x": 4,
           "y": 24
         },
         "id": 21,
@@ -739,7 +760,7 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "expr": "count(longhorn_node_status{condition=\"allowScheduling\"}==0) OR on() vector(0)",
@@ -752,148 +773,51 @@
         "type": "stat"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "decimals": 0,
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "short"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 10,
-          "w": 8,
-          "x": 6,
-          "y": 24
-        },
-        "id": 26,
-        "options": {
-          "displayMode": "gradient",
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showUnfilled": true
-        },
-        "pluginVersion": "8.4.0",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
-            "exemplar": true,
-            "expr": "count by (node) (longhorn_volume_state==2)",
-            "interval": "",
-            "legendFormat": "{{node}}",
-            "refId": "A"
-          }
-        ],
-        "title": "Number of Volumes Per Node",
-        "type": "bargauge"
-      },
-      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
         "datasource": {
           "type": "prometheus",
           "uid": "P1809F7CD0C75ACF3"
         },
         "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "drawStyle": "line",
-              "fillOpacity": 40,
-              "gradientMode": "opacity",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineInterpolation": "linear",
-              "lineWidth": 2,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "never",
-              "spanNulls": true,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": []
-        },
+        "fill": 1,
+        "fillGradient": 0,
         "gridPos": {
-          "h": 16,
-          "w": 10,
-          "x": 14,
+          "h": 10,
+          "w": 15,
+          "x": 9,
           "y": 24
         },
+        "hiddenSeries": false,
         "id": 24,
-        "options": {
-          "legend": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "displayMode": "table",
-            "placement": "bottom"
-          },
-          "tooltip": {
-            "mode": "multi",
-            "sort": "none"
-          }
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": true
         },
-        "pluginVersion": "8.4.0",
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "8.3.1",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
         "targets": [
           {
             "expr": "(longhorn_node_storage_usage_bytes/longhorn_node_storage_capacity_bytes) * 100",
@@ -902,8 +826,37 @@
             "refId": "A"
           }
         ],
+        "thresholds": [],
+        "timeRegions": [],
         "title": "Node Storage Usage/Capacity",
-        "type": "timeseries"
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:530",
+            "format": "percent",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:531",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
       },
       {
         "datasource": {
@@ -931,10 +884,10 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 5,
-          "w": 3,
+          "h": 6,
+          "w": 4,
           "x": 0,
-          "y": 29
+          "y": 30
         },
         "id": 20,
         "options": {
@@ -951,7 +904,7 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "expr": "(count(longhorn_node_status{condition=\"schedulable\"}==1) OR on() vector(0)) - (count(longhorn_node_status{condition=\"allowScheduling\"}==0) OR on() vector(0))",
@@ -989,10 +942,10 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 5,
-          "w": 3,
-          "x": 3,
-          "y": 29
+          "h": 6,
+          "w": 4,
+          "x": 4,
+          "y": 30
         },
         "id": 22,
         "options": {
@@ -1009,7 +962,7 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "expr": "(avg(longhorn_node_count_total) OR on() vector(0)) - (count(longhorn_node_status{condition=\"ready\"}==1) OR on() vector(0))",
@@ -1030,7 +983,6 @@
         "fieldConfig": {
           "defaults": {
             "custom": {
-              "align": "auto",
               "displayMode": "auto"
             },
             "decimals": 1,
@@ -1063,9 +1015,9 @@
           ]
         },
         "gridPos": {
-          "h": 6,
-          "w": 14,
-          "x": 0,
+          "h": 10,
+          "w": 15,
+          "x": 9,
           "y": 34
         },
         "id": 23,
@@ -1079,7 +1031,7 @@
           },
           "showHeader": true
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "datasource": {
@@ -1134,18 +1086,83 @@
         "type": "table"
       },
       {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 0,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 0,
+          "y": 36
+        },
+        "id": 26,
+        "options": {
+          "displayMode": "gradient",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true
+        },
+        "pluginVersion": "8.3.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "exemplar": true,
+            "expr": "count by (node) (longhorn_volume_state==2)",
+            "interval": "",
+            "legendFormat": "{{node}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Number of Volumes Per Node",
+        "type": "bargauge"
+      },
+      {
         "gridPos": {
           "h": 3,
           "w": 24,
           "x": 0,
-          "y": 40
+          "y": 44
         },
         "id": 17,
         "options": {
           "content": "<div class=\"dashboard-header text-center\">\n<span>DISKS</span>\n</div>",
           "mode": "html"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "transparent": true,
         "type": "text"
       },
@@ -1165,15 +1182,15 @@
               "axisPlacement": "auto",
               "barAlignment": 0,
               "drawStyle": "line",
-              "fillOpacity": 40,
-              "gradientMode": "opacity",
+              "fillOpacity": 10,
+              "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
                 "viz": false
               },
               "lineInterpolation": "linear",
-              "lineWidth": 2,
+              "lineWidth": 1,
               "pointSize": 5,
               "scaleDistribution": {
                 "type": "linear"
@@ -1210,7 +1227,7 @@
           "h": 10,
           "w": 12,
           "x": 0,
-          "y": 43
+          "y": 47
         },
         "id": 32,
         "options": {
@@ -1222,8 +1239,7 @@
             "placement": "right"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.3.1",
@@ -1252,7 +1268,6 @@
         "fieldConfig": {
           "defaults": {
             "custom": {
-              "align": "auto",
               "displayMode": "auto"
             },
             "decimals": 1,
@@ -1288,7 +1303,7 @@
           "h": 10,
           "w": 12,
           "x": 12,
-          "y": 43
+          "y": 47
         },
         "id": 33,
         "options": {
@@ -1301,7 +1316,7 @@
           },
           "showHeader": true
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "targets": [
           {
             "datasource": {
@@ -1382,14 +1397,14 @@
           "h": 3,
           "w": 24,
           "x": 0,
-          "y": 53
+          "y": 57
         },
         "id": 5,
         "options": {
           "content": "<div class=\"dashboard-header text-center\">\n<span>CPU & MEMORY</span>\n</div>",
           "mode": "html"
         },
-        "pluginVersion": "8.4.0",
+        "pluginVersion": "8.3.1",
         "transparent": true,
         "type": "text"
       },
@@ -1455,7 +1470,7 @@
           "h": 10,
           "w": 12,
           "x": 0,
-          "y": 56
+          "y": 60
         },
         "id": 36,
         "links": [],
@@ -1466,8 +1481,7 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.3.1",
@@ -1544,7 +1558,7 @@
           "h": 10,
           "w": 12,
           "x": 12,
-          "y": 56
+          "y": 60
         },
         "id": 38,
         "links": [],
@@ -1555,8 +1569,7 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.3.1",
@@ -1587,15 +1600,15 @@
               "axisPlacement": "auto",
               "barAlignment": 0,
               "drawStyle": "line",
-              "fillOpacity": 40,
-              "gradientMode": "opacity",
+              "fillOpacity": 10,
+              "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
                 "viz": false
               },
               "lineInterpolation": "linear",
-              "lineWidth": 2,
+              "lineWidth": 1,
               "pointSize": 5,
               "scaleDistribution": {
                 "type": "linear"
@@ -1631,9 +1644,9 @@
         },
         "gridPos": {
           "h": 10,
-          "w": 12,
+          "w": 8,
           "x": 0,
-          "y": 66
+          "y": 70
         },
         "id": 28,
         "links": [],
@@ -1644,21 +1657,15 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.3.1",
         "targets": [
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
-            "exemplar": true,
             "expr": "longhorn_instance_manager_cpu_usage_millicpu",
             "interval": "",
-            "legendFormat": "{{node}} | {{instance_manager}}",
+            "legendFormat": "{{instance_manager}}",
             "refId": "A"
           }
         ],
@@ -1681,15 +1688,103 @@
               "axisPlacement": "auto",
               "barAlignment": 0,
               "drawStyle": "line",
-              "fillOpacity": 40,
-              "gradientMode": "opacity",
+              "fillOpacity": 10,
+              "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
                 "viz": false
               },
               "lineInterpolation": "linear",
-              "lineWidth": 2,
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "line+area"
+              }
+            },
+            "decimals": 0,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "transparent",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 100
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 8,
+          "x": 8,
+          "y": 70
+        },
+        "id": 30,
+        "links": [],
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "pluginVersion": "8.3.1",
+        "targets": [
+          {
+            "expr": "(longhorn_instance_manager_cpu_usage_millicpu/longhorn_instance_manager_cpu_requests_millicpu)*100",
+            "interval": "",
+            "legendFormat": "{{instance_manager}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Instance Manager CPU Usage/Request",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "description": "Instance managers are pods that contains the engine and replica processes of Longhorn volumes. See more at https://longhorn.io/docs/1.0.2/concepts/#11-the-longhorn-manager-and-the-longhorn-engine ",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
               "pointSize": 5,
               "scaleDistribution": {
                 "type": "linear"
@@ -1724,9 +1819,9 @@
         },
         "gridPos": {
           "h": 10,
-          "w": 12,
-          "x": 12,
-          "y": 66
+          "w": 8,
+          "x": 16,
+          "y": 70
         },
         "id": 29,
         "links": [],
@@ -1737,21 +1832,15 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.3.1",
         "targets": [
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
-            "exemplar": true,
             "expr": "longhorn_instance_manager_memory_usage_bytes",
             "interval": "",
-            "legendFormat": "{{node}} | {{instance_manager}}",
+            "legendFormat": "{{instance_manager}}",
             "refId": "A"
           }
         ],
@@ -1774,15 +1863,15 @@
               "axisPlacement": "auto",
               "barAlignment": 0,
               "drawStyle": "line",
-              "fillOpacity": 40,
-              "gradientMode": "opacity",
+              "fillOpacity": 10,
+              "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
                 "viz": false
               },
               "lineInterpolation": "linear",
-              "lineWidth": 2,
+              "lineWidth": 1,
               "pointSize": 5,
               "scaleDistribution": {
                 "type": "linear"
@@ -1820,7 +1909,7 @@
           "h": 9,
           "w": 12,
           "x": 0,
-          "y": 76
+          "y": 80
         },
         "id": 2,
         "options": {
@@ -1830,8 +1919,7 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.3.1",
@@ -1867,15 +1955,15 @@
               "axisPlacement": "auto",
               "barAlignment": 0,
               "drawStyle": "line",
-              "fillOpacity": 40,
-              "gradientMode": "opacity",
+              "fillOpacity": 10,
+              "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
                 "viz": false
               },
               "lineInterpolation": "linear",
-              "lineWidth": 2,
+              "lineWidth": 1,
               "pointSize": 5,
               "scaleDistribution": {
                 "type": "linear"
@@ -1912,7 +2000,7 @@
           "h": 9,
           "w": 12,
           "x": 12,
-          "y": 76
+          "y": 80
         },
         "id": 31,
         "options": {
@@ -1922,8 +2010,7 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single",
-            "sort": "none"
+            "mode": "single"
           }
         },
         "pluginVersion": "8.3.1",
@@ -1942,104 +2029,10 @@
         ],
         "title": "Longhorn Manager Memory Usage",
         "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
-        "description": "Instance managers are pods that contains the engine and replica processes of Longhorn volumes. See more at https://longhorn.io/docs/1.0.2/concepts/#11-the-longhorn-manager-and-the-longhorn-engine ",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "drawStyle": "line",
-              "fillOpacity": 40,
-              "gradientMode": "opacity",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineInterpolation": "linear",
-              "lineWidth": 2,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "never",
-              "spanNulls": true,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "line+area"
-              }
-            },
-            "decimals": 0,
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "transparent",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 100
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 13,
-          "w": 24,
-          "x": 0,
-          "y": 85
-        },
-        "id": 30,
-        "links": [],
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom"
-          },
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "8.3.1",
-        "targets": [
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "P1809F7CD0C75ACF3"
-            },
-            "exemplar": true,
-            "expr": "(longhorn_instance_manager_cpu_usage_millicpu/longhorn_instance_manager_cpu_requests_millicpu)*100",
-            "interval": "",
-            "legendFormat": "{{node}} | {{instance_manager}}",
-            "refId": "A"
-          }
-        ],
-        "title": "Instance Manager CPU Usage/Request",
-        "type": "timeseries"
       }
     ],
     "refresh": "30s",
-    "schemaVersion": 35,
+    "schemaVersion": 33,
     "style": "dark",
     "tags": [],
     "templating": {
@@ -2066,7 +2059,7 @@
     "timezone": "",
     "title": "Longhorn",
     "uid": "2BCgsldGz",
-    "version": 4,
+    "version": 2,
     "weekStart": ""
   }
 }

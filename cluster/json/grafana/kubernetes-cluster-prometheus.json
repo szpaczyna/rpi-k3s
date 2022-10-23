@@ -5,6 +5,7 @@
     "canEdit": true,
     "canAdmin": true,
     "canStar": true,
+    "canDelete": true,
     "slug": "kubernetes-cluster-prometheus",
     "url": "/d/4XuMd2Iiz/kubernetes-cluster-prometheus",
     "expires": "0001-01-01T00:00:00Z",
@@ -20,7 +21,21 @@
     "folderTitle": "General",
     "folderUrl": "",
     "provisioned": false,
-    "provisionedExternalId": ""
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardEnabled": false
   },
   "dashboard": {
     "annotations": {
@@ -2115,7 +2130,7 @@
             "connectedDashboards": 1,
             "created": "2021-11-29T14:23:30Z",
             "createdBy": {
-              "avatarUrl": "/avatar/f63867219d4bcdfad51fb22767877979",
+              "avatarUrl": "/avatar/46d229b033af06a191ff2267bca9ae56",
               "id": 1,
               "name": "admin"
             },
@@ -2123,7 +2138,7 @@
             "folderUid": "",
             "updated": "2021-11-29T14:23:30Z",
             "updatedBy": {
-              "avatarUrl": "/avatar/f63867219d4bcdfad51fb22767877979",
+              "avatarUrl": "/avatar/46d229b033af06a191ff2267bca9ae56",
               "id": 1,
               "name": "admin"
             }
@@ -2679,7 +2694,7 @@
             "connectedDashboards": 1,
             "created": "2021-11-29T14:23:36Z",
             "createdBy": {
-              "avatarUrl": "/avatar/f63867219d4bcdfad51fb22767877979",
+              "avatarUrl": "/avatar/46d229b033af06a191ff2267bca9ae56",
               "id": 1,
               "name": "admin"
             },
@@ -2687,7 +2702,7 @@
             "folderUid": "",
             "updated": "2021-11-29T14:23:36Z",
             "updatedBy": {
-              "avatarUrl": "/avatar/f63867219d4bcdfad51fb22767877979",
+              "avatarUrl": "/avatar/46d229b033af06a191ff2267bca9ae56",
               "id": 1,
               "name": "admin"
             }
