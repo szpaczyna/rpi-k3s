@@ -19,6 +19,15 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "3000"
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "kubernetes.io/ssd"
+                operator: In
+                values:
+                - "true"
       initContainers:
         - name: create-directory
           image: busybox:1.32.0
@@ -34,7 +43,7 @@ spec:
           value: yesoreyeram-infinity-datasource,btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel,novatec-sdg-panel,grafana-singlestat-panel,farski-blendstat-panel,grafana-polystat-panel
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/provisioning"
-        image: grafana/grafana:9.1.6
+        image: grafana/grafana:9.2.1
         imagePullPolicy: IfNotPresent
         name: grafana
         ports:
@@ -115,4 +124,4 @@ spec:
         configMap:
           name: grafana-config
       nodeSelector:
-        kubernetes.io/disktype: ssd
+        kubernetes.io/role: worker

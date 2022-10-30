@@ -20,10 +20,10 @@ spec:
         prometheus.io/port: "9130"
     spec:
       serviceAccountName: unifi
-      hostNetwork: true
+        #hostNetwork: true
       containers:
         - name: controller
-          image: "linuxserver/unifi-controller:7.2.92"
+          image: "linuxserver/unifi-controller:7.2.94"
           env:
             - name: MEM_LIMIT
               value: 512M

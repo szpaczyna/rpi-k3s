@@ -18,6 +18,14 @@ spec:
         app.kubernetes.io/name: prometheus
     spec:
       affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "kubernetes.io/hdd"
+                operator: In
+                values:
+                  - "true"
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
@@ -37,7 +45,7 @@ spec:
               mountPath: /var/lib/prometheus
       containers:
         - name: prometheus
-          image: prom/prometheus:v2.38.0
+          image: prom/prometheus:v2.39.1
           args:
             - --web.listen-address=0.0.0.0:9090
             - --config.file=/etc/prometheus/prometheus.yaml

@@ -130,7 +130,8 @@ extraContainers:
   - name: exporter
     image: prom/influxdb-exporter
 
-nodeSelector: {}
+nodeSelector:
+  kubernetes.io/role: worker
 affinity: {}
 tolerations: []
 # - key: "key"
