@@ -23,11 +23,19 @@ metadata:
     metallb.universe.tf/allow-shared-ip: 'true'
 spec:
   ports:
-    - name: '8080'
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 8443
+    - name: http-alt
       protocol: TCP
       port: 8080
       targetPort: 8080
-    - name: '8443'
+    - name: https-alt
       protocol: TCP
       port: 8443
       targetPort: 8443
