@@ -110,6 +110,15 @@ spec:
               key: docker.password
         {{- end }}
 
+        # GHCR
+        {{- if .Values.ghcr.token }}
+        - name: VERSION_CHECKER_GHCR_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ $chartname }}
+              key: ghcr.token
+        {{- end }}
+
         # GCR
         {{- if .Values.gcr.token }}
         - name: VERSION_CHECKER_GCR_TOKEN
@@ -168,4 +177,3 @@ spec:
         {{ end }}
       nodeSelector:
         kubernetes.io/role: worker
-        kubernetes.io/os: linux
