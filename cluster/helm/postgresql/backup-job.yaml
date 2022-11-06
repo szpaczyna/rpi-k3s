@@ -13,7 +13,7 @@ spec:
           - name: postgres-backup
             image: postgres:14.5
             command: ["/bin/sh"]
-            args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && for DB in bitwarden gitea kanboard nextcloud keycloak; do pg_dump -U postgres -h morphine-postgresql "$DB" |gzip > /var/backups/"$DB"/"$DB"-$(date +"%Y%m%d-%H%M").sql.gz; done']
+            args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && for DB in bitwarden gitea kanboard nextcloud keycloak; do pg_dump -U postgres -h morphine-postgresql-primary "$DB" |gzip > /var/backups/"$DB"/"$DB"-$(date +"%Y%m%d-%H%M").sql.gz; done']
             env:
             - name: PGPASS
               valueFrom:
