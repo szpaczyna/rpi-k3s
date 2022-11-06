@@ -3,7 +3,7 @@
 replicaCount: 1
 image:
   repository: szpaczyn/version-checker-arm64
-  tag: 0.2.1
+  tag: 0.2.2
   pullPolicy: IfNotPresent
 
 service:
@@ -33,12 +33,15 @@ ecr:
 gcr:
   token:
 
+ghcr:
+  token: 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
+
 quay:
   token:
 
 selfhosted:
-  - name: REGISTRY
-    host: https://registry.shpaq.org
+    - name: REGISTRY
+      host: https://registry.shpaq.org
   #  username:
   #  password:
   #  token:

@@ -22,7 +22,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: "kubernetes.io/hdd"
+              - key: "kubernetes.io/ssd"
                 operator: In
                 values:
                   - "true"

@@ -182,9 +182,7 @@ initScripts:
   enabled: true
   scripts:
     init.iql: |+
-      CREATE DATABASE "health
-
-  # WITH DURATION 30d REPLICATION 1 NAME "rp_30d"
+      CREATE DATABASE "health"
 
 backup:
   enabled: false

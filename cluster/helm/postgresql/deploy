@@ -1,4 +1,6 @@
 #!/bin/bash
+#helm repo add bitnami https://charts.bitnami.com/bitnami
+
 sops -d \
     --output  values.yaml \
     ../../secrets/postgresql-values.yaml

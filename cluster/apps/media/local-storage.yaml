@@ -3,6 +3,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: "media"
+  namespace: media
   labels:
     app.kubernetes.io/name: media
     type: "hostpath"
@@ -19,6 +20,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: "media"
+  namespace: media
   labels:
     app.kubernetes.io/name: media
     type: "hostpath"
