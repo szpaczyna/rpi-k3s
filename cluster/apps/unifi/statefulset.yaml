@@ -23,7 +23,7 @@ spec:
         #hostNetwork: true
       containers:
         - name: controller
-          image: "linuxserver/unifi-controller:7.2.94"
+          image: "linuxserver/unifi-controller:7.2.95"
           env:
             - name: MEM_LIMIT
               value: 512M
@@ -88,8 +88,8 @@ spec:
       tolerations:
         - effect: NoSchedule
           operator: Exists
-      nodeSelector:
-        kubernetes.io/hostname: 'rpi-k3s-worker-00'
+            #nodeSelector:
+            #kubernetes.io/hostname: 'rpi-k3s-worker-00'
       volumes:
   volumeClaimTemplates:
     - metadata:

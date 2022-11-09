@@ -30,6 +30,11 @@ data:
           - 10.0.0.10:9617
           - 10.0.0.10:9100
 
+    - job_name: sht31
+      static_configs:
+        - targets:
+          - 10.0.0.61:9892
+
     - job_name: 'gen2'
       static_configs:
         - targets:

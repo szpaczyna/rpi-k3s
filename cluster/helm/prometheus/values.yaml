@@ -1,0 +1,689 @@
+## values for prometheus
+---
+rbac:
+  create: true
+
+podSecurityPolicy:
+  enabled: false
+
+serviceAccounts:
+  nodeExporter:
+    create: true
+  server:
+    create: true
+
+alertmanager:
+  enabled: false
+
+configmapReload:
+  prometheus:
+    enabled: true
+    name: configmap-reload
+    image:
+      repository: jimmidyson/configmap-reload
+      tag: v0.5.0
+      pullPolicy: IfNotPresent
+
+  alertmanager:
+    enabled: false
+
+  # containerPort: 9533
+
+kubeStateMetrics:
+  enabled: true
+
+kube-state-metrics:
+  autosharding:
+    enabled: true
+  replicas: 1
+  collectors:
+  - certificatesigningrequests
+  - configmaps
+  - cronjobs
+  - daemonsets
+  - deployments
+  - endpoints
+  - horizontalpodautoscalers
+  - ingresses
+  - jobs
+  - leases
+  - limitranges
+  - mutatingwebhookconfigurations
+  - namespaces
+  - networkpolicies
+  - nodes
+  - persistentvolumeclaims
+  - persistentvolumes
+  - poddisruptionbudgets
+  - pods
+  - replicasets
+  - replicationcontrollers
+  - resourcequotas
+  - secrets
+  - services
+  - statefulsets
+  - storageclasses
+  - validatingwebhookconfigurations
+  - volumeattachments
+  - verticalpodautoscalers
+
+  resources:
+    requests:
+      cpu: 0.1
+      memory: 26Mi
+    limits:
+      cpu: 0.2
+      memory: 128Mi
+  customLabels:
+    app.kubernetes.io/name: kube-state-metrics
+
+  selfMonitor:
+    enabled: true
+    telemetryPort: 8081
+
+  verticalPodAutoscaler:
+    enabled: true
+    maxAllowed:
+      cpu: 350m
+      memory: 200Mi
+
+nodeExporter:
+  enabled: true
+  hostNetwork: true
+  hostPID: true
+  hostRootfs: true
+  name: node-exporter
+
+  image:
+    repository: quay.io/prometheus/node-exporter
+    tag: v1.4.0
+    pullPolicy: IfNotPresent
+
+  updateStrategy:
+    type: RollingUpdate
+
+  extraArgs:
+    collector.filesystem.ignored-fs-types: ^(autofs|binfmt_misc|cgroup|squashfs|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
+    collector.filesystem.ignored-mount-points: ^/(dev|proc|sys|snap|var/lib/docker|var/lib/containers/.+)($|/)
+
+  podDisruptionBudget:
+    enabled: false
+    maxUnavailable: 1
+
+  resources:
+    limits:
+      cpu: 200m
+      memory: 100Mi
+    requests:
+      cpu: 30m
+      memory: 24Mi
+  container:
+    securityContext:
+      allowPrivilegeEscalation: false
+  securityContext:
+    fsGroup: 65534
+    runAsGroup: 65534
+    runAsNonRoot: true
+    runAsUser: 65534
+
+  service:
+    annotations:
+      prometheus.io/scrape: "true"
+    clusterIP: ""
+    hostPort: 9100
+    servicePort: 9100
+    type: ClusterIP
+
+server:
+  enabled: true
+  name: server
+
+  image:
+    repository: quay.io/prometheus/prometheus
+    tag: v2.39.1
+    pullPolicy: IfNotPresent
+
+  priorityClassName: ""
+  enableServiceLinks: true
+  prefixURL: ""
+  baseURL: ""
+  env: []
+
+  defaultFlagsOverride: []
+
+  extraFlags:
+    - web.enable-lifecycle
+    - storage.tsdb.wal-compression
+
+  configPath: /etc/config/prometheus.yml
+  storagePath: ""
+
+  global:
+    scrape_interval: 1m
+    scrape_timeout: 10s
+    evaluation_interval: 1m
+  remoteWrite: []
+  remoteRead: []
+
+  probeHeaders: []
+    # - name: "Authorization"
+    #   value: "Bearer ABCDEabcde12345"
+
+  extraArgs: {}
+  extraInitContainers: []
+  extraVolumeMounts: []
+  extraVolumes: []
+  extraHostPathMounts: []
+  extraConfigmapMounts: []
+  configMapOverrideName: ""
+  extraConfigmapLabels: {}
+
+  extraSecretMounts:
+    - name: etcd-certs
+      mountPath: /etc/etcd-certs
+      secretName: etcd-certs
+      readOnly: true
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: prometheus-auth
+      nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
+    hosts:
+      - prometheus.shpaq.org
+    path: /
+    pathType: Prefix
+    tls:
+      - secretName: prometheus-shpaq-org-tls
+        hosts:
+          - prometheus.shpaq.org
+
+  nodeSelector:
+    kubernetes.io/role: worker
+  affinity: {}
+
+  podDisruptionBudget:
+    enabled: false
+    maxUnavailable: 1
+
+  persistentVolume:
+    enabled: true
+    accessModes:
+    - ReadWriteOnce
+
+    labels: {}
+    annotations: {}
+    existingClaim: ""
+    mountPath: /data
+    size: 48Gi
+    storageClass: "longhorn"
+    subPath: ""
+
+  emptyDir:
+    sizeLimit: ""
+
+  podAnnotations:
+    # iam.amazonaws.com/role: prometheus
+
+  podLabels:
+    app.kubernetes.io/name: prometheus
+  podSecurityPolicy:
+    annotations: {}
+      ## Specify pod annotations
+      ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
+      ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
+      ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
+      ##
+      # seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+      # seccomp.security.alpha.kubernetes.io/defaultProfileName: 'docker/default'
+      # apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
+
+  replicaCount: 1
+  deploymentAnnotations: {}
+
+  statefulSet:
+    enabled: true
+
+    annotations: {}
+    labels:
+      app.kubernetes.io/name: prometheus
+    podManagementPolicy: OrderedReady
+
+    headless:
+      servicePort: 9090
+      type: ClusterIP
+      gRPC:
+        enabled: false
+
+  tcpSocketProbeEnabled: false
+  probeScheme: HTTP
+  readinessProbeInitialDelay: 30
+  readinessProbePeriodSeconds: 5
+  readinessProbeTimeout: 4
+  readinessProbeFailureThreshold: 3
+  readinessProbeSuccessThreshold: 1
+  livenessProbeInitialDelay: 30
+  livenessProbePeriodSeconds: 15
+  livenessProbeTimeout: 10
+  livenessProbeFailureThreshold: 3
+  livenessProbeSuccessThreshold: 1
+  startupProbe:
+    enabled: true
+    periodSeconds: 5
+    failureThreshold: 30
+    timeoutSeconds: 10
+
+  ## Prometheus server resource requests and limits
+  ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    limits:
+      cpu: 1500m
+      memory: 2Gi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+
+  hostNetwork: false
+  dnsPolicy: ClusterFirst
+
+  ## Vertical Pod Autoscaler config
+  ## Ref: https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
+  verticalAutoscaler:
+    enabled: true
+    updateMode: "Auto"
+    containerPolicies:
+    - containerName: 'prometheus-server'
+
+  dnsConfig: {}
+    # nameservers:
+    #   - 1.2.3.4
+    # searches:
+    #   - ns1.svc.cluster-domain.example
+    #   - my.dns.search.suffix
+    # options:
+    #   - name: ndots
+    #     value: "2"
+  #   - name: edns0
+
+  ## Security context to be added to server pods
+  ##
+  securityContext:
+    runAsUser: 65534
+    runAsNonRoot: true
+    runAsGroup: 65534
+    fsGroup: 65534
+
+  containerSecurityContext: {}
+
+  service:
+    enabled: true
+    annotations: {}
+    labels: {}
+    clusterIP: ""
+    externalIPs: []
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    servicePort: 9090
+    sessionAffinity: None
+    type: ClusterIP
+
+    gRPC:
+      enabled: false
+
+    statefulsetReplica:
+      enabled: true
+      replica: 0
+
+  terminationGracePeriodSeconds: 30
+  retention: "21d"
+
+  ## Array of extra Kubernetes manifests, in form of YAML object,
+  ## if you want to deploy
+  extraObjects: []
+  # - apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: '{{ template "prometheus.name" . }}-extra-config'
+
+  ## Array of extra Kubernetes manifest, in form of template string,
+  ## if you want to deploy
+  extraTemplates: []
+  # - |
+  #   apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: extra-config
+  #     labels:
+  #   {{- include "prometheus.server.labels" . | nindent 4 }}
+
+pushgateway:
+  enabled: false
+
+ruleFiles: {}
+
+serverFiles:
+  alerting_rules.yml: {}
+  recording_rules.yml: {}
+
+  prometheus.yml:
+    rule_files:
+      - /etc/config/recording_rules.yml
+      - /etc/config/alerting_rules.yml
+
+    scrape_configs:
+      - job_name: prometheus
+        static_configs:
+          - targets:
+            - localhost:9090
+
+      - job_name: 'etcd'
+        static_configs:
+          - targets:
+            - 10.0.0.9:2379
+        scheme: https
+        tls_config:
+          insecure_skip_verify: true
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          cert_file: /etc/etcd-certs/tls.crt
+          key_file: /etc/etcd-certs/tls.key
+
+      - job_name: 'kubernetes-apiservers'
+        kubernetes_sd_configs:
+          - role: endpoints
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: default;kubernetes;https
+          - replacement: apiserver
+            action: replace
+            target_label: job
+
+      - job_name: 'kubernetes-nodes'
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        kubernetes_sd_configs:
+          - role: node
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
+          - target_label: __address__
+            replacement: kubernetes.default.svc:443
+          - source_labels: [__meta_kubernetes_node_name]
+            regex: (.+)
+            target_label: __metrics_path__
+            replacement: /api/v1/nodes/$1/proxy/metrics
+
+      - job_name: 'kubelet'
+        kubernetes_sd_configs:
+        - role: node
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_node_label_(.+)
+        - replacement: 'monitoring'
+          target_label: kubernetes_namespace
+        metric_relabel_configs:
+        - source_labels:
+            - namespace
+          action: replace
+          regex: (.+)
+          target_label: kubernetes_namespace
+
+      - job_name: 'kubernetes-cadvisor'
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        kubernetes_sd_configs:
+          - role: node
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
+          - target_label: __address__
+            replacement: kubernetes.default.svc:443
+          - source_labels: [__meta_kubernetes_node_name]
+            regex: (.+)
+            target_label: __metrics_path__
+            replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
+
+      - job_name: 'kubernetes-service-endpoints'
+        honor_labels: true
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape_slow]
+            action: drop
+            regex: true
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+            action: replace
+            target_label: __scheme__
+            regex: (https?)
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+            action: replace
+            target_label: __address__
+            regex: (.+?)(?::\d+)?;(\d+)
+            replacement: $1:$2
+          - action: labelmap
+            regex: __meta_kubernetes_service_annotation_prometheus_io_param_(.+)
+            replacement: __param_$1
+          - action: labelmap
+            regex: __meta_kubernetes_service_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_service_name]
+            action: replace
+            target_label: job
+          - source_labels: [__meta_kubernetes_pod_node_name]
+            action: replace
+            target_label: kubernetes_node
+
+      - job_name: 'kubernetes-service-endpoints-slow'
+        honor_labels: true
+        scrape_interval: 5m
+        scrape_timeout: 30s
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape_slow]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+            action: replace
+            target_label: __scheme__
+            regex: (https?)
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+            action: replace
+            target_label: __address__
+            regex: (.+?)(?::\d+)?;(\d+)
+            replacement: $1:$2
+          - action: labelmap
+            regex: __meta_kubernetes_service_annotation_prometheus_io_param_(.+)
+            replacement: __param_$1
+          - action: labelmap
+            regex: __meta_kubernetes_service_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_service_name]
+            action: replace
+            target_label: job
+          - source_labels: [__meta_kubernetes_pod_node_name]
+            action: replace
+            target_label: kubernetes_node
+
+      # The relabeling allows the actual service scrape endpoint to be configured
+      # via the following annotations:
+      #
+      # * `prometheus.io/probe`: Only probe services that have a value of `true`
+
+      - job_name: 'kubernetes-services'
+        honor_labels: true
+        metrics_path: /probe
+        params:
+          module: [http_2xx]
+        kubernetes_sd_configs:
+          - role: service
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+            action: keep
+            regex: true
+          - source_labels: [__address__]
+            target_label: __param_target
+          - target_label: __address__
+            replacement: blackbox
+          - source_labels: [__param_target]
+            target_label: instance
+          - action: labelmap
+            regex: __meta_kubernetes_service_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_service_name]
+            target_label: job
+
+
+      - job_name: 'kubernetes-pods'
+        honor_labels: true
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape_slow]
+            action: drop
+            regex: true
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scheme]
+            action: replace
+            regex: (https?)
+            target_label: __scheme__
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: (.+?)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_annotation_prometheus_io_param_(.+)
+            replacement: __param_$1
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: kubernetes_pod_name
+          - source_labels: [__meta_kubernetes_pod_phase]
+            regex: Pending|Succeeded|Failed|Completed
+            action: drop
+
+      # * `prometheus.io/scrape-slow`: Only scrape pods that have a value of `true`
+      # * `prometheus.io/scheme`: If the metrics endpoint is secured then you will need
+      # to set this to `https` & most likely set the `tls_config` of the scrape config.
+      # * `prometheus.io/path`: If the metrics path is not `/metrics` override this.
+      # * `prometheus.io/port`: Scrape the pod on the indicated port instead of the default of `9102`.
+      - job_name: 'kubernetes-pods-slow'
+        honor_labels: true
+        scrape_interval: 5m
+        scrape_timeout: 30s
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape_slow]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scheme]
+            action: replace
+            regex: (https?)
+            target_label: __scheme__
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: (.+?)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_annotation_prometheus_io_param_(.+)
+            replacement: __param_$1
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: kubernetes_pod_name
+          - source_labels: [__meta_kubernetes_pod_phase]
+            regex: Pending|Succeeded|Failed|Completed
+            action: drop
+
+extraScrapeConfigs: |
+  - job_name: 'speedtest'
+    scrape_interval: 29m
+    scrape_timeout: 90s
+    metrics_path: /probe
+    params:
+      script: [speedtest]
+    static_configs:
+      - targets:
+        - 10.0.0.12:9469
+
+  - job_name: 'raspberries'
+    static_configs:
+      - targets:
+        - 10.0.0.20:9100 #greypi
+        - 10.0.0.10:9100 #blueberry
+        - 10.0.10.11:9100 #whitepi
+        - 10.0.10.13:9100 #redpi
+
+  - job_name: 'pihole'
+    static_configs:
+      - targets:
+        - 10.0.0.10:9617
+
+  - job_name: 'erx'
+    static_configs:
+      - targets:
+        - 10.0.0.1:9100
+
+alertRelabelConfigs:
+networkPolicy:
+  enabled: false
+forceNamespace: null
+extraManifests: []

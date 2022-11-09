@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sops -d --output auth-secret.yaml ../../secrets/prometheus-secret.yaml
+sops -d --output etcd-secret.yaml ../../secrets/prometheus-etcd-secret.yaml

@@ -10,5 +10,5 @@ resources:
   - clusterrole.yaml
   - clusterrole-binding.yaml
   - node-exporter-ds.yaml
-  - speedtest.yaml
+    #  - speedtest.yaml
   - ingress.yaml

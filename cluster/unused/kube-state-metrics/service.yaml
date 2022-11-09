@@ -9,7 +9,7 @@ metadata:
   annotations:
     prometheus.io/scrape: 'true'
   name: kube-state-metrics
-  namespace: kube-system
+  namespace: monitoring
 spec:
   clusterIP: None
   ports:
