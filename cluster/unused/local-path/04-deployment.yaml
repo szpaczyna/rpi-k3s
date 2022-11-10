@@ -14,13 +14,10 @@ spec:
       labels:
         app: local-path-provisioner
     spec:
-      nodeSelector:
-        kubernetes.io/role: worker
-        kubernetes.io/os: linux
       serviceAccountName: local-path-provisioner-service-account
       containers:
       - name: local-path-provisioner
-        image: rancher/local-path-provisioner:v0.0.22
+        image: rancher/local-path-provisioner:v0.0.23
         imagePullPolicy: IfNotPresent
         command:
         - local-path-provisioner

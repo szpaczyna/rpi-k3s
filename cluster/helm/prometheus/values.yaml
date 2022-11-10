@@ -21,7 +21,7 @@ configmapReload:
     name: configmap-reload
     image:
       repository: jimmidyson/configmap-reload
-      tag: v0.5.0
+      tag: v0.8.0
       pullPolicy: IfNotPresent
 
   alertmanager:
@@ -83,6 +83,7 @@ kube-state-metrics:
 
   verticalPodAutoscaler:
     enabled: true
+    updateMode: "Auto"
     maxAllowed:
       cpu: 350m
       memory: 200Mi
@@ -140,7 +141,7 @@ server:
 
   image:
     repository: quay.io/prometheus/prometheus
-    tag: v2.39.1
+    tag: v2.40.1
     pullPolicy: IfNotPresent
 
   priorityClassName: ""
@@ -670,6 +671,7 @@ extraScrapeConfigs: |
         - 10.0.0.20:9100 #greypi
         - 10.0.0.10:9100 #blueberry
         - 10.0.10.11:9100 #whitepi
+        - 10.0.10.12:9100 #greenpi
         - 10.0.10.13:9100 #redpi
 
   - job_name: 'pihole'
