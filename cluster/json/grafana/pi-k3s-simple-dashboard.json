@@ -1,19 +1,19 @@
 {
   "meta": {
     "type": "db",
-    "canSave": true,
-    "canEdit": true,
-    "canAdmin": true,
+    "canSave": false,
+    "canEdit": false,
+    "canAdmin": false,
     "canStar": true,
-    "canDelete": true,
+    "canDelete": false,
     "slug": "pi-k3s-simple-dashboard",
     "url": "/d/hRPap9IGz/pi-k3s-simple-dashboard",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-11-10T18:35:30Z",
-    "updated": "2021-11-16T19:57:13Z",
+    "updated": "2022-11-09T10:54:53Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 2,
+    "version": 3,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 0,
@@ -29,12 +29,13 @@
         "canDelete": true
       },
       "organization": {
-        "canAdd": true,
-        "canEdit": true,
-        "canDelete": true
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
       }
     },
     "publicDashboardAccessToken": "",
+    "publicDashboardUid": "",
     "publicDashboardEnabled": false
   },
   "dashboard": {
@@ -42,7 +43,10 @@
       "list": [
         {
           "builtIn": 1,
-          "datasource": "-- Grafana --",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
           "enable": true,
           "hide": true,
           "iconColor": "rgba(0, 211, 255, 1)",
@@ -66,7 +70,6 @@
     "liveNow": false,
     "panels": [
       {
-        "cacheTimeout": null,
         "colorBackground": false,
         "colorValue": false,
         "colors": [
@@ -74,7 +77,10 @@
           "rgba(237, 129, 40, 0.89)",
           "#d44a3a"
         ],
-        "datasource": "prometheus",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "format": "none",
         "gauge": {
           "maxValue": 100,
@@ -90,7 +96,6 @@
           "y": 0
         },
         "id": 2,
-        "interval": null,
         "links": [],
         "mappingType": 1,
         "mappingTypes": [
@@ -105,7 +110,6 @@
         ],
         "maxDataPoints": 100,
         "nullPointMode": "connected",
-        "nullText": null,
         "pluginVersion": "8.2.0",
         "postfix": "",
         "postfixFontSize": "50%",
@@ -122,13 +126,15 @@
           "fillColor": "rgba(31, 118, 189, 0.18)",
           "full": false,
           "lineColor": "rgb(31, 120, 193)",
-          "show": false,
-          "ymax": null,
-          "ymin": null
+          "show": false
         },
         "tableColumn": "",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "sum(kube_node_status_allocatable{resource=\"cpu\",unit=\"core\"})",
             "format": "table",
@@ -140,8 +146,6 @@
           }
         ],
         "thresholds": "",
-        "timeFrom": null,
-        "timeShift": null,
         "title": "Total CPU Cores",
         "type": "grafana-singlestat-panel",
         "valueFontSize": "80%",
@@ -155,7 +159,6 @@
         "valueName": "first"
       },
       {
-        "cacheTimeout": null,
         "colorBackground": false,
         "colorValue": false,
         "colors": [
@@ -163,7 +166,10 @@
           "rgba(237, 129, 40, 0.89)",
           "#d44a3a"
         ],
-        "datasource": "prometheus",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "format": "decbytes",
         "gauge": {
           "maxValue": 100,
@@ -179,7 +185,6 @@
           "y": 0
         },
         "id": 3,
-        "interval": null,
         "links": [],
         "mappingType": 1,
         "mappingTypes": [
@@ -196,7 +201,6 @@
         ],
         "maxDataPoints": 100,
         "nullPointMode": "connected",
-        "nullText": null,
         "pluginVersion": "8.2.0",
         "postfix": "",
         "postfixFontSize": "50%",
@@ -213,13 +217,15 @@
           "fillColor": "rgba(31, 118, 189, 0.18)",
           "full": false,
           "lineColor": "rgb(31, 120, 193)",
-          "show": false,
-          "ymax": null,
-          "ymin": null
+          "show": false
         },
         "tableColumn": "",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "sum(node_memory_MemTotal_bytes{job=\"kubernetes-pods\"})",
             "format": "table",
@@ -231,8 +237,6 @@
           }
         ],
         "thresholds": "",
-        "timeFrom": null,
-        "timeShift": null,
         "title": "Total RAM",
         "type": "grafana-singlestat-panel",
         "valueFontSize": "80%",
@@ -247,7 +251,10 @@
         "valueName": "current"
       },
       {
-        "datasource": "prometheus",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "description": "",
         "fieldConfig": {
           "defaults": {
@@ -255,6 +262,8 @@
               "mode": "palette-classic"
             },
             "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
               "axisLabel": "",
               "axisPlacement": "auto",
               "barAlignment": 0,
@@ -313,15 +322,21 @@
               "lastNotNull"
             ],
             "displayMode": "table",
-            "placement": "right"
+            "placement": "right",
+            "showLegend": true
           },
           "tooltip": {
-            "mode": "single"
+            "mode": "single",
+            "sort": "none"
           }
         },
         "pluginVersion": "8.2.0",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "node_load5{job=\"kubernetes-pods\"}",
             "interval": "",
@@ -330,19 +345,22 @@
             "refId": "A"
           }
         ],
-        "timeFrom": null,
-        "timeShift": null,
         "title": "Node Load 5",
         "type": "timeseries"
       },
       {
-        "datasource": "prometheus",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "fieldConfig": {
           "defaults": {
             "color": {
               "mode": "palette-classic"
             },
             "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
               "axisLabel": "",
               "axisPlacement": "auto",
               "barAlignment": 0,
@@ -401,15 +419,21 @@
               "lastNotNull"
             ],
             "displayMode": "table",
-            "placement": "right"
+            "placement": "right",
+            "showLegend": true
           },
           "tooltip": {
-            "mode": "single"
+            "mode": "single",
+            "sort": "none"
           }
         },
         "pluginVersion": "8.2.0",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "node_filesystem_free_bytes{fstype=~'ext4|xfs',job=\"kubernetes-pods\"}",
             "interval": "",
@@ -418,13 +442,14 @@
             "refId": "A"
           }
         ],
-        "timeFrom": null,
-        "timeShift": null,
         "title": "Filesystem Available",
         "type": "timeseries"
       },
       {
-        "datasource": "prometheus",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "fieldConfig": {
           "defaults": {
             "mappings": [
@@ -479,11 +504,16 @@
           "text": {},
           "textMode": "auto"
         },
-        "pluginVersion": "8.2.3",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "editorMode": "code",
             "exemplar": true,
-            "expr": "node_network_up{device='eth0',job=\"kubernetes-pods\"}",
+            "expr": "node_network_up{device='eth0',job=\"prometheus-node-exporter\"}",
             "format": "time_series",
             "instant": false,
             "interval": "",
@@ -493,13 +523,15 @@
           }
         ],
         "timeFrom": "30s",
-        "timeShift": null,
         "title": "Node Status",
         "transformations": [],
         "type": "stat"
       },
       {
-        "datasource": "prometheus",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -554,11 +586,16 @@
           "text": {},
           "textMode": "value_and_name"
         },
-        "pluginVersion": "8.2.3",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "editorMode": "code",
             "exemplar": true,
-            "expr": "node_hwmon_temp_celsius{job=\"kubernetes-pods\",sensor=\"temp0\"}",
+            "expr": "node_hwmon_temp_celsius{job=\"prometheus-node-exporter\",sensor=\"temp0\"}",
             "format": "time_series",
             "instant": true,
             "interval": "",
@@ -567,14 +604,15 @@
             "refId": "A"
           }
         ],
-        "timeFrom": null,
-        "timeShift": null,
         "title": "Node Temp",
         "transformations": [],
         "type": "stat"
       },
       {
-        "datasource": "prometheus",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "description": "",
         "fieldConfig": {
           "defaults": {
@@ -582,6 +620,8 @@
               "mode": "palette-classic"
             },
             "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
               "axisLabel": "",
               "axisPlacement": "auto",
               "barAlignment": 0,
@@ -683,16 +723,22 @@
         "options": {
           "legend": {
             "calcs": [],
-            "displayMode": "hidden",
-            "placement": "bottom"
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
           },
           "tooltip": {
-            "mode": "single"
+            "mode": "single",
+            "sort": "none"
           }
         },
         "pluginVersion": "8.2.0",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "sum(rate(kubelet_http_requests_duration_seconds_sum[5m]))",
             "interval": "",
@@ -701,8 +747,6 @@
             "refId": "A"
           }
         ],
-        "timeFrom": null,
-        "timeShift": null,
         "title": "HTTP Request Duration",
         "type": "timeseries"
       },
@@ -711,7 +755,10 @@
         "bars": true,
         "dashLength": 10,
         "dashes": false,
-        "datasource": "prometheus",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "fill": 1,
         "fillGradient": 0,
         "gridPos": {
@@ -738,7 +785,7 @@
           "alertThreshold": true
         },
         "percentage": false,
-        "pluginVersion": "8.2.3",
+        "pluginVersion": "9.2.1",
         "pointradius": 2,
         "points": false,
         "renderer": "flot",
@@ -748,6 +795,10 @@
         "steppedLine": false,
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "node_netstat_Tcp_CurrEstab{job=\"kubernetes-pods\"}",
             "interval": "",
@@ -757,9 +808,7 @@
           }
         ],
         "thresholds": [],
-        "timeFrom": null,
         "timeRegions": [],
-        "timeShift": null,
         "title": "TCP Established Connections",
         "tooltip": {
           "shared": true,
@@ -768,9 +817,7 @@
         },
         "type": "graph",
         "xaxis": {
-          "buckets": null,
           "mode": "time",
-          "name": null,
           "show": true,
           "values": []
         },
@@ -778,34 +825,33 @@
           {
             "decimals": 0,
             "format": "none",
-            "label": null,
             "logBase": 1,
-            "max": null,
             "min": "0",
             "show": true
           },
           {
             "format": "short",
-            "label": null,
             "logBase": 1,
-            "max": null,
-            "min": null,
             "show": true
           }
         ],
         "yaxis": {
-          "align": false,
-          "alignLevel": null
+          "align": false
         }
       },
       {
-        "datasource": "prometheus",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "fieldConfig": {
           "defaults": {
             "color": {
               "mode": "palette-classic"
             },
             "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
               "axisLabel": "",
               "axisPlacement": "auto",
               "barAlignment": 0,
@@ -937,16 +983,22 @@
         "options": {
           "legend": {
             "calcs": [],
-            "displayMode": "hidden",
-            "placement": "bottom"
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
           },
           "tooltip": {
-            "mode": "single"
+            "mode": "single",
+            "sort": "none"
           }
         },
         "pluginVersion": "8.2.0",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "sum(rate(node_network_receive_bytes_total{job=\"kubernetes-pods\"}[5m]))",
             "format": "time_series",
@@ -958,6 +1010,10 @@
             "refId": "A"
           },
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "-sum(rate(node_network_transmit_bytes_total{job=\"kubernetes-pods\"}[5m]))",
             "format": "time_series",
@@ -968,14 +1024,12 @@
             "refId": "B"
           }
         ],
-        "timeFrom": null,
-        "timeShift": null,
         "title": "Transmit Rate (In/Out)",
         "type": "timeseries"
       }
     ],
     "refresh": "1m",
-    "schemaVersion": 31,
+    "schemaVersion": 37,
     "style": "dark",
     "tags": [],
     "templating": {
@@ -1001,6 +1055,7 @@
     "timezone": "",
     "title": "Pi k3s Simple Dashboard",
     "uid": "hRPap9IGz",
-    "version": 2
+    "version": 3,
+    "weekStart": ""
   }
 }

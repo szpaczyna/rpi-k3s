@@ -1,19 +1,19 @@
 {
   "meta": {
     "type": "db",
-    "canSave": true,
-    "canEdit": true,
-    "canAdmin": true,
+    "canSave": false,
+    "canEdit": false,
+    "canAdmin": false,
     "canStar": true,
-    "canDelete": true,
+    "canDelete": false,
     "slug": "temperature",
     "url": "/d/3762JRF7k/temperature",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-11-10T18:27:00Z",
-    "updated": "2021-12-13T15:37:36Z",
+    "updated": "2022-11-08T14:02:02Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 6,
+    "version": 9,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 0,
@@ -29,12 +29,13 @@
         "canDelete": true
       },
       "organization": {
-        "canAdd": true,
-        "canEdit": true,
-        "canDelete": true
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
       }
     },
     "publicDashboardAccessToken": "",
+    "publicDashboardUid": "",
     "publicDashboardEnabled": false
   },
   "dashboard": {
@@ -42,7 +43,10 @@
       "list": [
         {
           "builtIn": 1,
-          "datasource": "-- Grafana --",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
           "enable": true,
           "hide": true,
           "iconColor": "rgba(0, 211, 255, 1)",
@@ -66,6 +70,10 @@
     "panels": [
       {
         "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "gridPos": {
           "h": 1,
           "w": 24,
@@ -74,6 +82,15 @@
         },
         "id": 14,
         "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "refId": "A"
+          }
+        ],
         "title": "Overall",
         "type": "row"
       },
@@ -240,6 +257,8 @@
         "id": 4,
         "options": {
           "displayMode": "basic",
+          "minVizHeight": 10,
+          "minVizWidth": 0,
           "orientation": "horizontal",
           "reduceOptions": {
             "calcs": [
@@ -251,7 +270,7 @@
           "showUnfilled": true,
           "text": {}
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
             "datasource": {
@@ -283,6 +302,8 @@
               "mode": "palette-classic"
             },
             "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
               "axisLabel": "",
               "axisPlacement": "auto",
               "barAlignment": 0,
@@ -472,19 +493,26 @@
               "min"
             ],
             "displayMode": "table",
-            "placement": "right"
+            "placement": "right",
+            "showLegend": true
           },
           "tooltip": {
-            "mode": "single"
+            "mode": "single",
+            "sort": "none"
           }
         },
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "editorMode": "code",
             "exemplar": true,
             "expr": "node_hwmon_temp_celsius{sensor=\"temp0\"}",
             "instant": false,
             "interval": "",
-            "intervalFactor": 2,
+            "intervalFactor": 5,
             "legendFormat": "{{instance}}",
             "refId": "A"
           }
@@ -495,6 +523,10 @@
       },
       {
         "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "gridPos": {
           "h": 1,
           "w": 24,
@@ -503,6 +535,15 @@
         },
         "id": 12,
         "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "refId": "A"
+          }
+        ],
         "title": "K3S",
         "type": "row"
       },
@@ -666,6 +707,8 @@
         "id": 7,
         "options": {
           "displayMode": "gradient",
+          "minVizHeight": 10,
+          "minVizWidth": 0,
           "orientation": "auto",
           "reduceOptions": {
             "calcs": [
@@ -677,9 +720,13 @@
           "showUnfilled": false,
           "text": {}
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "avg by (instance)(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"kubernetes-pods\"})",
             "instant": false,
@@ -705,7 +752,8 @@
             },
             "custom": {
               "fillOpacity": 70,
-              "lineWidth": 0
+              "lineWidth": 0,
+              "spanNulls": false
             },
             "mappings": [],
             "thresholds": {
@@ -861,18 +909,24 @@
           "alignValue": "left",
           "legend": {
             "displayMode": "list",
-            "placement": "bottom"
+            "placement": "bottom",
+            "showLegend": true
           },
           "mergeValues": true,
           "rowHeight": 0.9,
           "showValue": "auto",
           "tooltip": {
-            "mode": "single"
+            "mode": "single",
+            "sort": "none"
           }
         },
         "pluginVersion": "8.2.0",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "avg_over_time(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"kubernetes-pods\"}[5m])",
             "instant": false,
@@ -888,6 +942,10 @@
       },
       {
         "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "gridPos": {
           "h": 1,
           "w": 24,
@@ -896,6 +954,15 @@
         },
         "id": 10,
         "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "refId": "A"
+          }
+        ],
         "title": "Gentoo",
         "type": "row"
       },
@@ -1059,6 +1126,8 @@
         "id": 8,
         "options": {
           "displayMode": "gradient",
+          "minVizHeight": 10,
+          "minVizWidth": 0,
           "orientation": "auto",
           "reduceOptions": {
             "calcs": [
@@ -1070,9 +1139,13 @@
           "showUnfilled": false,
           "text": {}
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "avg by (instance)(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"gen2\"})",
             "instant": false,
@@ -1099,7 +1172,8 @@
             },
             "custom": {
               "fillOpacity": 70,
-              "lineWidth": 0
+              "lineWidth": 0,
+              "spanNulls": false
             },
             "mappings": [],
             "thresholds": {
@@ -1255,18 +1329,24 @@
           "alignValue": "left",
           "legend": {
             "displayMode": "list",
-            "placement": "bottom"
+            "placement": "bottom",
+            "showLegend": true
           },
           "mergeValues": true,
           "rowHeight": 0.9,
           "showValue": "auto",
           "tooltip": {
-            "mode": "single"
+            "mode": "single",
+            "sort": "none"
           }
         },
         "pluginVersion": "8.2.0",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "exemplar": true,
             "expr": "avg_over_time(node_hwmon_temp_celsius{sensor=\"temp0\",job=\"gen2\"}[1d])",
             "instant": false,
@@ -1281,7 +1361,7 @@
         "type": "state-timeline"
       }
     ],
-    "schemaVersion": 33,
+    "schemaVersion": 37,
     "style": "dark",
     "tags": [],
     "templating": {
@@ -1295,7 +1375,7 @@
     "timezone": "",
     "title": "Temperature",
     "uid": "3762JRF7k",
-    "version": 6,
+    "version": 9,
     "weekStart": ""
   }
 }

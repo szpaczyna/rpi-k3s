@@ -1,19 +1,19 @@
 {
   "meta": {
     "type": "db",
-    "canSave": true,
-    "canEdit": true,
-    "canAdmin": true,
+    "canSave": false,
+    "canEdit": false,
+    "canAdmin": false,
     "canStar": true,
-    "canDelete": true,
+    "canDelete": false,
     "slug": "longhorn",
     "url": "/d/2BCgsldGz/longhorn",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-12-14T11:54:54Z",
-    "updated": "2021-12-14T16:24:28Z",
+    "updated": "2022-11-08T15:51:39Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 2,
+    "version": 3,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 0,
@@ -29,12 +29,13 @@
         "canDelete": true
       },
       "organization": {
-        "canAdd": true,
-        "canEdit": true,
-        "canDelete": true
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
       }
     },
     "publicDashboardAccessToken": "",
+    "publicDashboardUid": "",
     "publicDashboardEnabled": false
   },
   "dashboard": {
@@ -42,7 +43,10 @@
       "list": [
         {
           "builtIn": 1,
-          "datasource": "-- Grafana --",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
           "enable": true,
           "hide": true,
           "iconColor": "rgba(0, 211, 255, 1)",
@@ -67,6 +71,10 @@
     "liveNow": false,
     "panels": [
       {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "gridPos": {
           "h": 3,
           "w": 24,
@@ -75,10 +83,24 @@
         },
         "id": 4,
         "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
           "content": "<div class=\"dashboard-header text-center\">\n<span>VOLUMES</span>\n</div>",
           "mode": "html"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "refId": "A"
+          }
+        ],
         "transparent": true,
         "type": "text"
       },
@@ -124,9 +146,13 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "count(longhorn_volume_capacity_bytes) OR on() vector(0)",
             "interval": "",
             "legendFormat": "",
@@ -182,9 +208,13 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "count(longhorn_volume_robustness==1) OR on() vector(0)",
             "interval": "",
             "legendFormat": "",
@@ -195,100 +225,100 @@
         "type": "stat"
       },
       {
-        "aliasColors": {},
-        "bars": false,
-        "dashLength": 10,
-        "dashes": false,
         "datasource": {
           "type": "prometheus",
           "uid": "P1809F7CD0C75ACF3"
         },
         "description": "Note that Longhorn volume actual size is not the size of the filesystem inside a Longhorn volume.  See more at : https://longhorn.io/docs/1.0.2/volumes-and-nodes/volume-size/#volume-actual-size",
-        "fill": 1,
-        "fillGradient": 0,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "line+area"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "transparent",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 90
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
         "gridPos": {
           "h": 9,
           "w": 15,
           "x": 9,
           "y": 3
         },
-        "hiddenSeries": false,
         "id": 12,
-        "legend": {
-          "alignAsTable": true,
-          "avg": false,
-          "current": true,
-          "max": false,
-          "min": false,
-          "rightSide": true,
-          "show": true,
-          "total": false,
-          "values": true
-        },
-        "lines": true,
-        "linewidth": 1,
-        "nullPointMode": "null",
         "options": {
-          "alertThreshold": true
+          "legend": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
         },
-        "percentage": false,
-        "pluginVersion": "8.3.1",
-        "pointradius": 2,
-        "points": false,
-        "renderer": "flot",
-        "seriesOverrides": [],
-        "spaceLength": 10,
-        "stack": false,
-        "steppedLine": false,
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "( (avg by (volume) (longhorn_volume_actual_size_bytes))/ (avg by (volume) (longhorn_volume_capacity_bytes)) ) *100",
             "interval": "",
             "legendFormat": "{{volume}}",
             "refId": "A"
           }
         ],
-        "thresholds": [
-          {
-            "$$hashKey": "object:649",
-            "colorMode": "critical",
-            "fill": true,
-            "line": true,
-            "op": "gt",
-            "value": 90,
-            "yaxis": "left"
-          }
-        ],
-        "timeRegions": [],
         "title": "Volume Actual Size/Capacity",
-        "tooltip": {
-          "shared": true,
-          "sort": 0,
-          "value_type": "individual"
-        },
-        "type": "graph",
-        "xaxis": {
-          "mode": "time",
-          "show": true,
-          "values": []
-        },
-        "yaxes": [
-          {
-            "$$hashKey": "object:476",
-            "format": "percent",
-            "logBase": 1,
-            "show": true
-          },
-          {
-            "$$hashKey": "object:477",
-            "format": "short",
-            "logBase": 1,
-            "show": true
-          }
-        ],
-        "yaxis": {
-          "align": false
-        }
+        "type": "timeseries"
       },
       {
         "datasource": {
@@ -336,9 +366,13 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "count(longhorn_volume_robustness==2) OR on() vector(0)",
             "interval": "",
             "legendFormat": "",
@@ -394,9 +428,13 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "count(longhorn_volume_robustness==3) OR on() vector(0)",
             "interval": "",
             "legendFormat": "",
@@ -415,7 +453,9 @@
         "fieldConfig": {
           "defaults": {
             "custom": {
-              "displayMode": "auto"
+              "align": "auto",
+              "displayMode": "auto",
+              "inspect": false
             },
             "decimals": 1,
             "mappings": [
@@ -491,7 +531,7 @@
             }
           ]
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
             "datasource": {
@@ -574,9 +614,13 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "count(longhorn_volume_state==2) OR on() vector(0)",
             "interval": "",
             "legendFormat": "",
@@ -632,9 +676,13 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "count(longhorn_volume_state==3) OR on() vector(0)",
             "interval": "",
             "legendFormat": "",
@@ -645,6 +693,10 @@
         "type": "stat"
       },
       {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "gridPos": {
           "h": 3,
           "w": 24,
@@ -653,10 +705,24 @@
         },
         "id": 6,
         "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
           "content": "<div class=\"dashboard-header text-center\">\n<span>NODES</span>\n</div>",
           "mode": "html"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "refId": "A"
+          }
+        ],
         "transparent": true,
         "type": "text"
       },
@@ -702,9 +768,13 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "avg(longhorn_node_count_total) OR on() vector(0)",
             "interval": "",
             "legendFormat": "",
@@ -760,9 +830,13 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "count(longhorn_node_status{condition=\"allowScheduling\"}==0) OR on() vector(0)",
             "interval": "",
             "legendFormat": "",
@@ -773,90 +847,102 @@
         "type": "stat"
       },
       {
-        "aliasColors": {},
-        "bars": false,
-        "dashLength": 10,
-        "dashes": false,
         "datasource": {
           "type": "prometheus",
           "uid": "P1809F7CD0C75ACF3"
         },
         "description": "",
-        "fill": 1,
-        "fillGradient": 0,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
         "gridPos": {
           "h": 10,
           "w": 15,
           "x": 9,
           "y": 24
         },
-        "hiddenSeries": false,
         "id": 24,
-        "legend": {
-          "alignAsTable": true,
-          "avg": false,
-          "current": true,
-          "max": false,
-          "min": false,
-          "rightSide": true,
-          "show": true,
-          "total": false,
-          "values": true
-        },
-        "lines": true,
-        "linewidth": 1,
-        "nullPointMode": "null",
         "options": {
-          "alertThreshold": true
+          "legend": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
         },
-        "percentage": false,
-        "pluginVersion": "8.3.1",
-        "pointradius": 2,
-        "points": false,
-        "renderer": "flot",
-        "seriesOverrides": [],
-        "spaceLength": 10,
-        "stack": false,
-        "steppedLine": false,
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "editorMode": "code",
             "expr": "(longhorn_node_storage_usage_bytes/longhorn_node_storage_capacity_bytes) * 100",
             "interval": "",
             "legendFormat": "{{node}}",
+            "range": true,
             "refId": "A"
           }
         ],
-        "thresholds": [],
-        "timeRegions": [],
         "title": "Node Storage Usage/Capacity",
-        "tooltip": {
-          "shared": true,
-          "sort": 0,
-          "value_type": "individual"
-        },
-        "type": "graph",
-        "xaxis": {
-          "mode": "time",
-          "show": true,
-          "values": []
-        },
-        "yaxes": [
-          {
-            "$$hashKey": "object:530",
-            "format": "percent",
-            "logBase": 1,
-            "show": true
-          },
-          {
-            "$$hashKey": "object:531",
-            "format": "short",
-            "logBase": 1,
-            "show": true
-          }
-        ],
-        "yaxis": {
-          "align": false
-        }
+        "type": "timeseries"
       },
       {
         "datasource": {
@@ -904,9 +990,13 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "(count(longhorn_node_status{condition=\"schedulable\"}==1) OR on() vector(0)) - (count(longhorn_node_status{condition=\"allowScheduling\"}==0) OR on() vector(0))",
             "interval": "",
             "legendFormat": "",
@@ -962,9 +1052,13 @@
           },
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "(avg(longhorn_node_count_total) OR on() vector(0)) - (count(longhorn_node_status{condition=\"ready\"}==1) OR on() vector(0))",
             "interval": "",
             "legendFormat": "",
@@ -983,7 +1077,9 @@
         "fieldConfig": {
           "defaults": {
             "custom": {
-              "displayMode": "auto"
+              "align": "auto",
+              "displayMode": "auto",
+              "inspect": false
             },
             "decimals": 1,
             "mappings": [],
@@ -1031,7 +1127,7 @@
           },
           "showHeader": true
         },
-        "pluginVersion": "8.3.1",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
             "datasource": {
@@ -1101,8 +1197,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "dark-green",
-                  "value": null
+                  "color": "dark-green"
                 },
                 {
                   "color": "red",
@@ -1151,6 +1246,10 @@
         "type": "bargauge"
       },
       {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "gridPos": {
           "h": 3,
           "w": 24,
@@ -1163,6 +1262,15 @@
           "mode": "html"
         },
         "pluginVersion": "8.3.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "refId": "A"
+          }
+        ],
         "transparent": true,
         "type": "text"
       },
@@ -1210,8 +1318,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
-                  "value": null
+                  "color": "green"
                 },
                 {
                   "color": "red",
@@ -1236,7 +1343,8 @@
               "lastNotNull"
             ],
             "displayMode": "table",
-            "placement": "right"
+            "placement": "right",
+            "showLegend": true
           },
           "tooltip": {
             "mode": "single"
@@ -1277,8 +1385,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
-                  "value": null
+                  "color": "green"
                 }
               ]
             },
@@ -1393,6 +1500,10 @@
         "type": "table"
       },
       {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
         "gridPos": {
           "h": 3,
           "w": 24,
@@ -1405,6 +1516,15 @@
           "mode": "html"
         },
         "pluginVersion": "8.3.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "refId": "A"
+          }
+        ],
         "transparent": true,
         "type": "text"
       },
@@ -1453,8 +1573,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "transparent",
-                  "value": null
+                  "color": "transparent"
                 },
                 {
                   "color": "red",
@@ -1478,7 +1597,8 @@
           "legend": {
             "calcs": [],
             "displayMode": "list",
-            "placement": "bottom"
+            "placement": "bottom",
+            "showLegend": true
           },
           "tooltip": {
             "mode": "single"
@@ -1487,6 +1607,10 @@
         "pluginVersion": "8.3.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "(longhorn_node_cpu_usage_millicpu / longhorn_node_cpu_capacity_millicpu) * 100",
             "interval": "",
             "legendFormat": "{{node}}",
@@ -1541,8 +1665,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "transparent",
-                  "value": null
+                  "color": "transparent"
                 },
                 {
                   "color": "red",
@@ -1566,7 +1689,8 @@
           "legend": {
             "calcs": [],
             "displayMode": "list",
-            "placement": "bottom"
+            "placement": "bottom",
+            "showLegend": true
           },
           "tooltip": {
             "mode": "single"
@@ -1575,6 +1699,10 @@
         "pluginVersion": "8.3.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "( longhorn_node_memory_usage_bytes / longhorn_node_memory_capacity_bytes ) * 100",
             "interval": "",
             "legendFormat": "{{node}}",
@@ -1629,8 +1757,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
-                  "value": null
+                  "color": "green"
                 },
                 {
                   "color": "red",
@@ -1654,7 +1781,8 @@
           "legend": {
             "calcs": [],
             "displayMode": "list",
-            "placement": "bottom"
+            "placement": "bottom",
+            "showLegend": true
           },
           "tooltip": {
             "mode": "single"
@@ -1663,6 +1791,10 @@
         "pluginVersion": "8.3.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "longhorn_instance_manager_cpu_usage_millicpu",
             "interval": "",
             "legendFormat": "{{instance_manager}}",
@@ -1717,8 +1849,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "transparent",
-                  "value": null
+                  "color": "transparent"
                 },
                 {
                   "color": "red",
@@ -1742,7 +1873,8 @@
           "legend": {
             "calcs": [],
             "displayMode": "list",
-            "placement": "bottom"
+            "placement": "bottom",
+            "showLegend": true
           },
           "tooltip": {
             "mode": "single"
@@ -1751,6 +1883,10 @@
         "pluginVersion": "8.3.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "(longhorn_instance_manager_cpu_usage_millicpu/longhorn_instance_manager_cpu_requests_millicpu)*100",
             "interval": "",
             "legendFormat": "{{instance_manager}}",
@@ -1804,8 +1940,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
-                  "value": null
+                  "color": "green"
                 },
                 {
                   "color": "red",
@@ -1829,7 +1964,8 @@
           "legend": {
             "calcs": [],
             "displayMode": "list",
-            "placement": "bottom"
+            "placement": "bottom",
+            "showLegend": true
           },
           "tooltip": {
             "mode": "single"
@@ -1838,6 +1974,10 @@
         "pluginVersion": "8.3.1",
         "targets": [
           {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
             "expr": "longhorn_instance_manager_memory_usage_bytes",
             "interval": "",
             "legendFormat": "{{instance_manager}}",
@@ -1892,8 +2032,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
-                  "value": null
+                  "color": "green"
                 },
                 {
                   "color": "red",
@@ -1916,7 +2055,8 @@
           "legend": {
             "calcs": [],
             "displayMode": "list",
-            "placement": "bottom"
+            "placement": "bottom",
+            "showLegend": true
           },
           "tooltip": {
             "mode": "single"
@@ -1983,8 +2123,7 @@
               "mode": "absolute",
               "steps": [
                 {
-                  "color": "green",
-                  "value": null
+                  "color": "green"
                 },
                 {
                   "color": "red",
@@ -2007,7 +2146,8 @@
           "legend": {
             "calcs": [],
             "displayMode": "list",
-            "placement": "bottom"
+            "placement": "bottom",
+            "showLegend": true
           },
           "tooltip": {
             "mode": "single"
@@ -2031,8 +2171,8 @@
         "type": "timeseries"
       }
     ],
-    "refresh": "30s",
-    "schemaVersion": 33,
+    "refresh": "",
+    "schemaVersion": 37,
     "style": "dark",
     "tags": [],
     "templating": {
@@ -2059,7 +2199,7 @@
     "timezone": "",
     "title": "Longhorn",
     "uid": "2BCgsldGz",
-    "version": 2,
+    "version": 3,
     "weekStart": ""
   }
 }

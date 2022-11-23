@@ -1,11 +1,11 @@
 {
   "meta": {
     "type": "db",
-    "canSave": true,
-    "canEdit": true,
-    "canAdmin": true,
+    "canSave": false,
+    "canEdit": false,
+    "canAdmin": false,
     "canStar": true,
-    "canDelete": true,
+    "canDelete": false,
     "slug": "kubernetes-compute-resources-namespace-workloads",
     "url": "/d/a87fb0d919ec0ea5f6543124e16c42a5/kubernetes-compute-resources-namespace-workloads",
     "expires": "0001-01-01T00:00:00Z",
@@ -29,12 +29,13 @@
         "canDelete": true
       },
       "organization": {
-        "canAdd": true,
-        "canEdit": true,
-        "canDelete": true
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
       }
     },
     "publicDashboardAccessToken": "",
+    "publicDashboardUid": "",
     "publicDashboardEnabled": false
   },
   "dashboard": {

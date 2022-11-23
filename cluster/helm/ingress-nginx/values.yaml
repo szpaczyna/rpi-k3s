@@ -244,12 +244,12 @@ controller:
   replicaCount: 1
   minAvailable: 1
   resources:
-  #  limits:
-  #    cpu: 100m
-  #    memory: 90Mi
+    limits:
+      cpu: "1"
+      memory: 1200Mi
     requests:
-      cpu: 100m
-      memory: 90Mi
+      cpu: "0.1"
+      memory: 256Mi
 
   # Mutually exclusive with keda autoscaling
   autoscaling:
@@ -290,8 +290,8 @@ controller:
   # 2.x = keda.sh/v1alpha1
   # 1.x = keda.k8s.io/v1alpha1
     enabled: true
-    minReplicas: 1
-    maxReplicas: 4
+    minReplicas: 2
+    maxReplicas: 8
     pollingInterval: 30
     cooldownPeriod: 300
     restoreToOriginalReplicaCount: false

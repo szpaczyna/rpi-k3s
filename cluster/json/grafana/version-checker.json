@@ -1,19 +1,19 @@
 {
   "meta": {
     "type": "db",
-    "canSave": true,
-    "canEdit": true,
-    "canAdmin": true,
+    "canSave": false,
+    "canEdit": false,
+    "canAdmin": false,
     "canStar": true,
-    "canDelete": true,
+    "canDelete": false,
     "slug": "version-checker",
     "url": "/d/Awr5zZ4Gk/version-checker",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2021-11-10T18:36:40Z",
-    "updated": "2021-12-05T20:11:07Z",
+    "updated": "2022-11-09T10:57:30Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 3,
+    "version": 5,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 0,
@@ -29,12 +29,13 @@
         "canDelete": true
       },
       "organization": {
-        "canAdd": true,
-        "canEdit": true,
-        "canDelete": true
+        "canAdd": false,
+        "canEdit": false,
+        "canDelete": false
       }
     },
     "publicDashboardAccessToken": "",
+    "publicDashboardUid": "",
     "publicDashboardEnabled": false
   },
   "dashboard": {
@@ -42,7 +43,10 @@
       "list": [
         {
           "builtIn": 1,
-          "datasource": "prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
           "enable": true,
           "hide": true,
           "iconColor": "rgba(0, 211, 255, 1)",
@@ -71,8 +75,10 @@
         "fieldConfig": {
           "defaults": {
             "custom": {
+              "align": "auto",
               "displayMode": "auto",
-              "filterable": false
+              "filterable": false,
+              "inspect": false
             },
             "mappings": [],
             "thresholds": {
@@ -179,7 +185,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 526
+                  "value": 283
                 }
               ]
             },
@@ -191,7 +197,7 @@
               "properties": [
                 {
                   "id": "custom.width",
-                  "value": 370
+                  "value": 339
                 }
               ]
             }
@@ -220,7 +226,7 @@
             }
           ]
         },
-        "pluginVersion": "8.3.0",
+        "pluginVersion": "9.2.1",
         "targets": [
           {
             "datasource": {
@@ -246,7 +252,7 @@
                   "current_version",
                   "image",
                   "latest_version",
-                  "Value #A"
+                  "Value"
                 ]
               }
             }
@@ -275,14 +281,14 @@
       }
     ],
     "refresh": false,
-    "schemaVersion": 33,
+    "schemaVersion": 37,
     "style": "dark",
     "tags": [],
     "templating": {
       "list": []
     },
     "time": {
-      "from": "now-5m",
+      "from": "now",
       "to": "now"
     },
     "timepicker": {
@@ -301,7 +307,7 @@
     "timezone": "",
     "title": "Version Checker",
     "uid": "Awr5zZ4Gk",
-    "version": 3,
+    "version": 5,
     "weekStart": ""
   }
 }

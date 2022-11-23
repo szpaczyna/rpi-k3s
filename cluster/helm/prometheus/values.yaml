@@ -23,7 +23,13 @@ configmapReload:
       repository: jimmidyson/configmap-reload
       tag: v0.8.0
       pullPolicy: IfNotPresent
-
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: 100Mi
+      limits:
+        memory: 128Mi
+        cpu: 200Mi
   alertmanager:
     enabled: false
 
@@ -283,10 +289,10 @@ server:
   ##
   resources:
     limits:
-      cpu: 1500m
-      memory: 2Gi
+      cpu: "2"
+      memory: 1024Mi
     requests:
-      cpu: 200m
+      cpu: "1"
       memory: 512Mi
 
   hostNetwork: false
