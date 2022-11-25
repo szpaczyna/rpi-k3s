@@ -49,10 +49,10 @@ spec:
           resources:
             requests:
               cpu: 200m
-              memory: 500Mi
+              memory: 650Mi
             limits:
               cpu: 500m
-              memory: 700Mi
+              memory: 650Mi
         - name: poller
           image: "golift/unifi-poller:2.1.3"
           imagePullPolicy: IfNotPresent
