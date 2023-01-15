@@ -19,7 +19,7 @@ settings:
   heartBeatPeriod: 5m0s
 
 logDir:
-  host: /var/log/
+  host: /run/log/
   pod: ""
 
 image:
