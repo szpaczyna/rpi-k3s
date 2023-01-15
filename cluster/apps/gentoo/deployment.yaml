@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gentoo
+  namespace: apps
+  labels:
+    app.kubernetes.io/name: gentoo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gentoo
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gentoo
+    spec:
+      containers:
+      - name: gentoo
+        image: ksmanis/gentoo-distcc:tcp
+        ports:
+        - containerPort: 3262
+          name: distcc-tcp
+        volumeMounts:
+          - mountPath: /mnt
+            name: data-gentoo
+            readOnly: false
+        resources:
+          requests:
+            cpu: 1
+            memory: 256Mi
+          limits:
+            cpu: 4
+            memory: 3072Mi
+      volumes:
+        - name: data-gentoo
+          persistentVolumeClaim:
+            claimName: data-gentoo
+      nodeSelector:
+        kubernetes.io/role: worker
