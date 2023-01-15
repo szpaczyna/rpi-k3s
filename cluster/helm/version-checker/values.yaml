@@ -23,7 +23,7 @@ acr:
 docker:
   username:
   password:
-  token:
+  token: dckr_pat_jMmQU8EnBbrVuds-QpG1A_1ZjiQ
 
 ecr:
   accessKeyID:
@@ -34,14 +34,15 @@ gcr:
   token:
 
 ghcr:
-  token: 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
+  #token: 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
+  token: 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
 
 quay:
   token:
 
 selfhosted:
-    - name: REGISTRY
-      host: https://registry.shpaq.org
+  #  - name: REGISTRY
+  #    host: https://registry.shpaq.org
   #  username:
   #  password:
   #  token:

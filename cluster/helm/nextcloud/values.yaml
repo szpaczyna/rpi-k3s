@@ -1,7 +1,7 @@
 ---
 image:
   repository: nextcloud
-    #tag: 24.0.5
+  tag: 25.0.2
   pullPolicy: IfNotPresent
 
 nameOverride: cloud
@@ -125,10 +125,11 @@ nextcloud:
     #type: Recreate
 
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+    type: Recreate
+      #type: RollingUpdate
+      #rollingUpdate:
+      #maxSurge: 1
+      #maxUnavailable: 0
 
   extraEnv: null
     #  - name: nfs

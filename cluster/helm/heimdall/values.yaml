@@ -2,7 +2,8 @@
 
 image:
   repository: linuxserver/heimdall
-  tag: 2.4.15
+  tag: 2.5.3
+    #tag: 2.4.15
   pullPolicy: IfNotPresent
 
 env:

@@ -1,27 +1,14 @@
 ---
-# -- Override Kubernetes version detection ; usefull with "helm template"
 kubeVersion: ""
-
-# -- Extra labels to add on chart resources
 extraLabels: {}
-
-# -- Partially override x509-certificate-exporter.fullname template (will prepend the release name)
 nameOverride: ""
-
-# -- Fully override x509-certificate-exporter.fullname template
 fullnameOverride: ""
 
-# -- Specify docker-registry secret names as an array
 imagePullSecrets: []
-
 image:
-  # -- x509-certificate-exporter image registry
   registry: docker.io
-  # -- x509-certificate-exporter image repository
   repository: enix/x509-certificate-exporter
-  # -- x509-certificate-exporter image tag (defaults to Chart appVersion)
-  tag: 3.5.0
-  # -- x509-certificate-exporter image pull policy
+  tag: 3.6.0
   pullPolicy: IfNotPresent
 
 psp:
