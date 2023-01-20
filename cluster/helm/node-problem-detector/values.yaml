@@ -46,6 +46,10 @@ securityContext:
 
 resources: {}
 annotations: {}
+  #  prometheus.io/scrape: "true"
+  #  prometheus.io/path: /metrics
+  #  prometheus.io/port: "20257"
+  #  prometheus.io/scheme: http
 labels: {}
 
 tolerations:

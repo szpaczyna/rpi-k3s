@@ -6,6 +6,7 @@ sops -d \
     ../../secrets/nextcloud-secret.yaml
 
 kubectl apply -f secret.yaml -n apps
+kubectl apply -f local-storage.yaml -n apps
 helm upgrade --install cloud nextcloud/nextcloud -n apps -f values.yaml
 
 rm -rf secret.yaml

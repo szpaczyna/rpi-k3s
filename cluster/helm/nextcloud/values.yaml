@@ -201,7 +201,14 @@ persistence:
     helm.sh/resource-policy: keep
   storageClass: longhorn
   accessMode: ReadWriteOnce
-  size: 200Gi
+  size: 5Gi
+  nextcloudData:
+    enabled: true
+    subpath:
+    annotations: {}
+    existingClaim: cloud
+    accessMode: ReadWriteMany
+    size: 300Gi
 
 resources:
   requests:
