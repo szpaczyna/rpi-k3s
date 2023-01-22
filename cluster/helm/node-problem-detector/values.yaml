@@ -19,13 +19,13 @@ settings:
   heartBeatPeriod: 5m0s
 
 logDir:
-  host: /run/log/
+  host: /run/log/journal
   pod: ""
 
 image:
-  repository: k8s.gcr.io/node-problem-detector/node-problem-detector
+  repository: szpaczyn/node-problem-detector
+    #repository: k8s.gcr.io/node-problem-detector/node-problem-detector
   tag: v0.8.12
-  digest: ""
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []

@@ -23,12 +23,12 @@ height="144px"/>
   - [gitea](cluster/helm/gitea) - Git with a cup of tea
   - [heimdall](cluster/helm/heimdall) - Dashboard with internal links
   - [kanboard](cluster/helm/kanboard) - Kanban project management software
-  - [keycloak](cluster/helm/keycloak) - identity provider
   - [nextcloud](cluster/helm/nextcloud) - personal cloud service
   - [pgadmin4](cluster/helm/pgadmin) - postgresql managemenet tool
   - [photoprism](cluster/helm/photoprism) - photos management
   - [postgresql](cluster/helm/postgresql) - self explanatory
   - [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
+  - [influxdb](cluster/helm/influxdb) - Database for Apple health exports
 
 - Apps/YAML
 
@@ -46,6 +46,9 @@ height="144px"/>
   - [longhorn](cluster/helm/longhorn) - longhorn storage
   - [ingress-nginx](cluster/helm/ingress-nginx) - ingress operator
   - [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) - Certs monitoring
+  - [node-problem-detector](cluster/helm/node-problem-detector) - Certs monitoring
+  - [loki](cluster/helm/loki) - Logs shipper and browser
+
 <!--START_SECTION_LINES_OF_CODE:readme-info-->
 
 <!--END_SECTION_LINES_OF_CODE:readme-info-->
