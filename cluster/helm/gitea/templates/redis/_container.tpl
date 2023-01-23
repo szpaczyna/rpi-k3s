@@ -2,9 +2,7 @@
 - name: redis
   image: {{ .Values.redis.image }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
-  command:
-    - redis-server
-    - '--save "" --appendonly no'
+  command: ["redis-server", "--save", "", "--loglevel", "warning", "--appendonly", "no"]
   ports:
   - name: redis
     containerPort: 6379
