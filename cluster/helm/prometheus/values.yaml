@@ -7,7 +7,7 @@ podSecurityPolicy:
   enabled: false
 
 serviceAccounts:
-  nodeExporter:
+  prometheus-node-exporter:
     create: true
   server:
     create: true
@@ -26,52 +26,52 @@ configmapReload:
     resources:
       requests:
         memory: 64Mi
-        cpu: 100Mi
+        cpu: 100m
       limits:
         memory: 128Mi
-        cpu: 200Mi
+        cpu: 200m
   alertmanager:
     enabled: false
 
   # containerPort: 9533
 
-kubeStateMetrics:
-  enabled: true
-
 kube-state-metrics:
+  enabled: true
+  prometheusScrape: true
+
   autosharding:
     enabled: true
   replicas: 1
   collectors:
-  - certificatesigningrequests
-  - configmaps
-  - cronjobs
-  - daemonsets
-  - deployments
-  - endpoints
-  - horizontalpodautoscalers
-  - ingresses
-  - jobs
-  - leases
-  - limitranges
-  - mutatingwebhookconfigurations
-  - namespaces
-  - networkpolicies
-  - nodes
-  - persistentvolumeclaims
-  - persistentvolumes
-  - poddisruptionbudgets
-  - pods
-  - replicasets
-  - replicationcontrollers
-  - resourcequotas
-  - secrets
-  - services
-  - statefulsets
-  - storageclasses
-  - validatingwebhookconfigurations
-  - volumeattachments
-  - verticalpodautoscalers
+    - certificatesigningrequests
+    - configmaps
+    - cronjobs
+    - daemonsets
+    - deployments
+    - endpoints
+    - horizontalpodautoscalers
+    - ingresses
+    - jobs
+    - leases
+    - limitranges
+    - mutatingwebhookconfigurations
+    - namespaces
+    - networkpolicies
+    - nodes
+    - persistentvolumeclaims
+    - persistentvolumes
+    - poddisruptionbudgets
+    - pods
+    - replicasets
+    - replicationcontrollers
+    - resourcequotas
+    - secrets
+    - services
+    - statefulsets
+    - storageclasses
+    - validatingwebhookconfigurations
+    - volumeattachments
+    - verticalpodautoscalers
 
   resources:
     requests:
@@ -94,28 +94,29 @@ kube-state-metrics:
       cpu: 350m
       memory: 200Mi
 
-nodeExporter:
+prometheus-node-exporter:
   enabled: true
-  hostNetwork: true
-  hostPID: true
-  hostRootfs: true
-  name: node-exporter
+  nameOverride: node-exporter
+  fullNameOverride: node-exporter
 
   image:
     repository: quay.io/prometheus/node-exporter
     tag: v1.5.0
     pullPolicy: IfNotPresent
 
+  hostNetwork: true
+  hostPID: true
+  hostRootFsMount:
+    enabled: true
+    mountPropagation: HostToContainer
+
   updateStrategy:
     type: RollingUpdate
 
-  extraArgs:
-    collector.filesystem.ignored-fs-types: ^(autofs|binfmt_misc|cgroup|squashfs|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
-    collector.filesystem.ignored-mount-points: ^/(dev|proc|sys|snap|var/lib/docker|var/lib/containers/.+)($|/)
 
-  podDisruptionBudget:
-    enabled: false
-    maxUnavailable: 1
+  extraArgs:
+   - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|squashfs|configfs|debugfs|devpts|#devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
+   - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|snap|var/lib/docker|var/lib/containers/.+)#($|/)
 
   resources:
     limits:
@@ -124,9 +125,11 @@ nodeExporter:
     requests:
       cpu: 30m
       memory: 24Mi
+
   container:
     securityContext:
       allowPrivilegeEscalation: false
+
   securityContext:
     fsGroup: 65534
     runAsGroup: 65534
@@ -141,16 +144,26 @@ nodeExporter:
     servicePort: 9100
     type: ClusterIP
 
+  serviceAccount:
+    create: true
+
+  kubeRBACProxy:
+    enabled: false
+    image:
+      repository: quay.io/brancz/kube-rbac-proxy
+      tag: v0.14.0
+      pullPolicy: IfNotPresent
+
 server:
   enabled: true
   name: server
 
   image:
     repository: quay.io/prometheus/prometheus
-    tag: v2.40.5
+    tag: v2.41.0
     pullPolicy: IfNotPresent
 
-  priorityClassName: ""
+  priorityClassName: "system-cluster-critical"
   enableServiceLinks: true
   prefixURL: ""
   baseURL: ""
@@ -289,10 +302,10 @@ server:
   ##
   resources:
     limits:
-      cpu: "2"
-      memory: 1024Mi
+      cpu: 2000m
+      memory: 2048Mi
     requests:
-      cpu: "1"
+      cpu: 1000m
       memory: 512Mi
 
   hostNetwork: false
@@ -368,7 +381,7 @@ server:
   #     labels:
   #   {{- include "prometheus.server.labels" . | nindent 4 }}
 
-pushgateway:
+prometheus-pushgateway:
   enabled: false
 
 ruleFiles: {}
