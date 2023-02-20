@@ -21,6 +21,8 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9190"
     spec:
+      imagePullSecrets:
+        - name: hub-secret
       serviceAccountName: media
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
@@ -29,7 +31,7 @@ spec:
         runAsUser: 568
       initContainers:
       - name: flood
-        image: curlimages/curl:7.83.0
+        image: curlimages/curl:7.87.0
         command:
         - /bin/sh
         - -c

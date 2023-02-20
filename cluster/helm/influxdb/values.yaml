@@ -102,7 +102,7 @@ podAnnotations:
   prometheus.io/scrape: "true"
   prometheus.io/port: "9122"
     #  prometheus.io/path: "/api/v1/prom/write?db=prometheus"
-  prometheus.io/path: "/api/v1/prom/read?db=prometheus"
+  prometheus.io/path: "/metrics"
 
 podLabels: {}
 

@@ -1,0 +1,44 @@
+#!/bin/sh
+
+if [ "$1" = "" ] || [ "$1" == "-h" ]; then
+  echo "Usage: kshell <pod>"
+  echo "       kshell [-e] <pod> [-c <container>] [-- <command>]"
+  echo "       default container is used unless -c is specified"
+  echo "       default command is 'bash', if you specify a different one make sure to use '--'"
+  exit 1
+fi
+
+# Prefer kubectl-multiversion, but only if executable
+KUBECTL=kubectl-multiversion
+if ! command -v kubectl-multiversion >/dev/null 2>&1
+then
+  KUBECTL=kubectl
+fi
+
+if [ "$1" = "-e" ] ; then
+  ENV=true
+  shift
+fi
+
+POD=$1
+shift
+
+if [ "$1" = "-c" ] ; then
+  shift
+  POD="-c $1 $POD"
+  shift
+fi
+
+COLUMNS=`tput cols`
+LINES=`tput lines`
+TERM=xterm
+CMD=$@
+CMD=${CMD:-env COLUMNS=$COLUMNS LINES=$LINES TERM=$TERM -- bash}
+if [ "$ENV" ] ; then
+    ENV="env COLUMNS=$COLUMNS LINES=$LINES TERM=$TERM"
+    echo "    $KUBECTL exec -i -t $POD $ENV $CMD"
+    $KUBECTL exec -i -t $POD $ENV $CMD
+else
+    echo "    $KUBECTL exec -i -t $POD $CMD"
+    $KUBECTL exec -i -t $POD $CMD
+fi
