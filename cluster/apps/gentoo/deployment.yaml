@@ -22,7 +22,7 @@ spec:
       - name: gentoo
         image: ksmanis/gentoo-distcc:tcp
         ports:
-        - containerPort: 3262
+        - containerPort: 3632
           name: distcc-tcp
         volumeMounts:
           - mountPath: /mnt

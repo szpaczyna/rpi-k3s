@@ -9,7 +9,10 @@ metadata:
 spec:
   ports:
   - name: distcc-tcp
-    port: 3262
+    port: 3632
     targetPort: distcc-tcp
+    protocol: TCP
   selector:
     app.kubernetes.io/name: gentoo
+  type: LoadBalancer
+  loadBalancerIP: 10.1.0.5
