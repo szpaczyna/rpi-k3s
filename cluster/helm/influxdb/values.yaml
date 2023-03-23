@@ -95,8 +95,8 @@ resources:
     memory: 300Mi
     cpu: 0.1
   limits:
-    memory: 500Mi
-    cpu: 0.5
+    memory: 7000Mi
+    cpu: 0.6
 
 podAnnotations:
   prometheus.io/scrape: "true"
@@ -129,9 +129,9 @@ ingress:
 #     readOnly: true
 
 ## Additional containers to be added to the pod.
-extraContainers:
-  - name: exporter
-    image: prom/influxdb-exporter
+extraContainers: {}
+  #- name: exporter
+  #  image: prom/influxdb-exporter
 
 nodeSelector:
   kubernetes.io/role: worker
