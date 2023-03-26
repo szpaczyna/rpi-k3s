@@ -1,6 +1,6 @@
 #!/bin/bash
-PVERSION="v0.13.3"
-VERSION="v0.13.5"
+PVERSION="v0.13.5"
+VERSION="v0.13.9"
 
 mv metallb.yaml metallb-${PVERSION}.yaml
 wget -q "https://raw.githubusercontent.com/metallb/metallb/${VERSION}/config/manifests/metallb-native.yaml" -O metallb.yaml
