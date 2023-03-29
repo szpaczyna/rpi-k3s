@@ -122,7 +122,7 @@ spec:
               k8s-app: coredns
       containers:
       - name: coredns
-        image: rancher/mirrored-coredns-coredns:1.9.3
+        image: rancher/mirrored-coredns-coredns:1.9.4
         imagePullPolicy: IfNotPresent
         resources:
           limits:
