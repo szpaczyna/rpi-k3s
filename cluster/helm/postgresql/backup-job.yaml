@@ -5,13 +5,14 @@ metadata:
   name: postgres-backup
 spec:
   schedule: "0 2 * * *"
+  successfulJobsHistoryLimit: 2
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: postgres-backup
-            image: postgres:14.6
+            image: postgres:14.7
             command: ["/bin/sh"]
             args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && for DB in bitwarden gitea kanboard nextcloud keycloak; do pg_dump -U postgres -h morphine-postgresql-primary "$DB" |gzip > /var/backups/"$DB"/"$DB"-$(date +"%Y%m%d-%H%M").sql.gz; done']
             env:
