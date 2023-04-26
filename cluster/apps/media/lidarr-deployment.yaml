@@ -26,8 +26,8 @@ spec:
         runAsUser: 568
       containers:
       - name: lidarr
-        #image: "ghcr.io/k8s-at-home/lidarr:v1.0.0.2504"
-        image: ghcr.io/onedr0p/lidarr:1.0.2.2592
+        image: "ghcr.io/onedr0p/lidarr-develop:1.1.4.3027"
+          #image: "ghcr.io/onedr0p/lidarr:1.0.2.2592"
         imagePullPolicy: IfNotPresent
         env:
           - name: "TZ"
