@@ -8,7 +8,7 @@ controller:
   image:
     registry: k8s.gcr.io
     image: ingress-nginx/controller
-    tag: "v1.6.4"
+    tag: "v1.7.1"
     pullPolicy: IfNotPresent
     # www-data -> uid 101
     runAsUser: 101
