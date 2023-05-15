@@ -1,7 +1,7 @@
 ---
 image:
   repository: nextcloud
-  tag: 26.0.0
+  tag: 26.0.1
     #tag: 25.0.4
   pullPolicy: IfNotPresent
 
