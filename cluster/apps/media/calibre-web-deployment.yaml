@@ -26,8 +26,7 @@ spec:
         #runAsUser: 1001
       containers:
         - name: calibre-web
-          #image: "szpaczyn/calibre-web-arm64:v0.6.12"
-          image: "linuxserver/calibre-web:0.6.19"
+          image: "linuxserver/calibre-web:0.6.20-ls211"
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
