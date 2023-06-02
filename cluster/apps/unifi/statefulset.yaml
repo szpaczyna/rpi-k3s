@@ -23,8 +23,8 @@ spec:
         #hostNetwork: true
       containers:
         - name: controller
-          image: "linuxserver/unifi-controller:7.3.83"
-            #image: "linuxserver/unifi-controller:7.2.95"
+          image: "linuxserver/unifi-controller:7.4.156"
+            #image: "linuxserver/unifi-controller:7.3.76"
           env:
             - name: MEM_LIMIT
               value: "512"

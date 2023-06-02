@@ -6,6 +6,6 @@ metadata:
   namespace: apps
 spec:
   type: ExternalName
-  externalName: blueberry.morphine
+  externalName: blueberry
   ports:
   - port: 80
