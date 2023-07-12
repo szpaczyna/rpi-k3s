@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.11](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.10...v0.0.11) (2023-07-12)
+
+
+### Features
+
+* a few version bumps ([294492c](https://github.com/szpaczyna/rpi-k3s/commits/294492cae8f848447231062cf3b0317a2aa35c4f))
+* added default backend to nginx ([b2802b0](https://github.com/szpaczyna/rpi-k3s/commits/b2802b030a9293b974ce9da243a2fc896c845234))
+* cert-manager version bump ([6093207](https://github.com/szpaczyna/rpi-k3s/commits/60932073280b4e2c6492bd84bb2dbd3291596557))
+* change postgresql image to bitnami, bump gitea ([16d96b3](https://github.com/szpaczyna/rpi-k3s/commits/16d96b35299ebf6f82ee3955f3f26819f76ff2b3))
+* changed piholeproxy name to short one, unifi version bump ([6da039d](https://github.com/szpaczyna/rpi-k3s/commits/6da039d6b6bd50571b9af24a5c9bb0ffb6b6a14c))
+* changed succesful job limit ([066e888](https://github.com/szpaczyna/rpi-k3s/commits/066e8887347fa498a1685528603b43723cae1f2e))
+* cluster upgrade to 1.26.4 ([b4c86d7](https://github.com/szpaczyna/rpi-k3s/commits/b4c86d75534d71268b16556a9a6abb41239e06ce))
+* cluster upgrade to 1.26.4 ([9fb40c1](https://github.com/szpaczyna/rpi-k3s/commits/9fb40c1980cc88906678f2979db8573db2b936bb))
+* event-exporter for loki ([526a421](https://github.com/szpaczyna/rpi-k3s/commits/526a42142b7e53648791398439badf9238aa9b6d))
+* export apple health with workout routes into grafana ([92e349f](https://github.com/szpaczyna/rpi-k3s/commits/92e349f7f0660d35766063b98d8d02938d9b0789))
+* exportarr and calibre-web version bump ([a8001fa](https://github.com/szpaczyna/rpi-k3s/commits/a8001fa02ec0bc6920a4292e9aa49886c155379d))
+* exportarr vbump ([4d4aa64](https://github.com/szpaczyna/rpi-k3s/commits/4d4aa64c520e9cf38e8b19a1316c3dc266716272))
+* gentoo distcc stuff ([7790485](https://github.com/szpaczyna/rpi-k3s/commits/779048584acff79184b7b8dc6d06e75b206f3164))
+* gitea vbump, fix upgrade plan yaml ([9c45abb](https://github.com/szpaczyna/rpi-k3s/commits/9c45abbaec7fc290d63ad7d9fbbd6ac7cac86084))
+* i have no idea ([8566de8](https://github.com/szpaczyna/rpi-k3s/commits/8566de8fabba752dd9a14bcaea551b4e5f7922b3))
+* i have no idea what im commiting ([701d644](https://github.com/szpaczyna/rpi-k3s/commits/701d64411b119917e40b0da6e9a064cf7a4d64c6))
+* ingress controller version bump ([c7a8d2b](https://github.com/szpaczyna/rpi-k3s/commits/c7a8d2bdcf1dd173111ec3a3340038f4b675839e))
+* longhorn  version bump ([05e7754](https://github.com/szpaczyna/rpi-k3s/commits/05e77542070878c16d2614f3cdb9c9998dd82c88))
+* longhorn csi vbumps ([b9d8b8c](https://github.com/szpaczyna/rpi-k3s/commits/b9d8b8c0d28ef69553b514bcf1a780135c24b363))
+* media version bumps ([ed4b6da](https://github.com/szpaczyna/rpi-k3s/commits/ed4b6da4880fa2196588e7481b65c0432323908f))
+* metallb version bump ([ca26538](https://github.com/szpaczyna/rpi-k3s/commits/ca265385e9607f81d139ee3f5077d040b828cd30))
+* metallb version bump and backup ([f3d3931](https://github.com/szpaczyna/rpi-k3s/commits/f3d3931b39437e865dd561ce499a56e77f6e14b5))
+* new helm values for prometheus ([8403bf0](https://github.com/szpaczyna/rpi-k3s/commits/8403bf0e5e07bf5732e783c419415b8809dace0f))
+* nginx vbumps ([9416dd3](https://github.com/szpaczyna/rpi-k3s/commits/9416dd3aaf7f7bcd1ded5d114c62d69af1b2462b))
+* nginx, bitwarden and nextcloud version bump ([c0c32f6](https://github.com/szpaczyna/rpi-k3s/commits/c0c32f6521b894b8db5812e7966d200fc8bde62f))
+* npd and deploys script template ([9137a24](https://github.com/szpaczyna/rpi-k3s/commits/9137a24129b3909301ed0c4d04b0edf5c4f561d0))
+* secret for dockerhub, some version bumps ([f05316d](https://github.com/szpaczyna/rpi-k3s/commits/f05316d45e7e1c81efdaf742a8aebbdac83288be))
+* smth ([e1e36bc](https://github.com/szpaczyna/rpi-k3s/commits/e1e36bc995b8f622ad91bc1e860ddcecee8a6506))
+* unifi version bump ([15e0d9c](https://github.com/szpaczyna/rpi-k3s/commits/15e0d9cd911f67c0fe1dd3e847441ad5fb17621b))
+* upated gitea logging configuration and redis chart update ([4a3dccf](https://github.com/szpaczyna/rpi-k3s/commits/4a3dccfc605157da1401a09398c488e6e10368d3))
+* upscale coredns ([ff0bf05](https://github.com/szpaczyna/rpi-k3s/commits/ff0bf054efa2eba55256e4e527460e91981200da))
+
 ### [0.0.10](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.9...v0.0.10) (2023-01-22)
 
 
