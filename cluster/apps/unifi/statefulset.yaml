@@ -23,11 +23,11 @@ spec:
         #hostNetwork: true
       containers:
         - name: controller
-          image: "linuxserver/unifi-controller:7.4.156"
-            #image: "linuxserver/unifi-controller:7.3.76"
+          image: "linuxserver/unifi-controller:7.4.162"
+            #image: "linuxserver/unifi-controller:7.4.156"
           env:
             - name: MEM_LIMIT
-              value: "512"
+              value: "768"
             - name: PGID
               value: "1000"
             - name: PUID
@@ -50,10 +50,10 @@ spec:
           resources:
             requests:
               cpu: 200m
-              memory: 650Mi
+              memory: 500Mi
             limits:
               cpu: 500m
-              memory: 650Mi
+              memory: 768Mi
         - name: poller
           #image: "ghcr.io/unpoller/unpoller:v2.2.0"
           image: "golift/unifi-poller:2.1.3"

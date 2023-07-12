@@ -85,7 +85,7 @@ tolerations: []
 affinity: {}
 
 config: |
-  logLevel: error
+  logLevel: warn
   logFormat: json
   route:
     routes:
