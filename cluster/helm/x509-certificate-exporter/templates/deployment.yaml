@@ -1,3 +1,5 @@
+{{- $extraVolumes := concat .Values.secretsExporter.extraVolumes .Values.extraVolumes }}
+{{- $extraVolumeMounts := concat .Values.secretsExporter.extraVolumeMounts .Values.extraVolumeMounts }}
 {{- if .Values.secretsExporter.enabled }}
 apiVersion: {{ include "capabilities.deployment.apiVersion" . }}
 kind: Deployment
@@ -26,13 +28,16 @@ spec:
         {{- with .Values.secretsExporter.podExtraLabels }}
         {{- . | toYaml | trim | nindent 8 }}
         {{- end }}
-      {{- if or .Values.podAnnotations .Values.secretsExporter.podAnnotations }}
+      {{- if or (or .Values.podAnnotations .Values.secretsExporter.podAnnotations) .Values.webConfiguration }}
       annotations:
         {{- with .Values.podAnnotations }}
         {{- toYaml . | trim | nindent 8 }}
         {{- end }}
         {{- with .Values.secretsExporter.podAnnotations }}
         {{- toYaml . | trim | nindent 8 }}
+        {{- end }}
+        {{- if .Values.webConfiguration }}
+        checksum/config: {{ include (print .Template.BasePath "/webconfig.secret.yaml") . | sha256sum }}
         {{- end }}
       {{- end }}
     spec:
@@ -58,6 +63,9 @@ spec:
       {{- end }}
       restartPolicy: {{ .Values.secretsExporter.restartPolicy }}
       serviceAccountName: {{ include "x509-certificate-exporter.secretsExporterServiceAccountName" . }}
+      {{- with default .Values.priorityClassName .Values.secretsExporter.priorityClassName }}
+      priorityClassName: {{ . | quote }}
+      {{- end }}
       containers:
       - name: {{ .Chart.Name }}
         {{- with .Values.secretsExporter.securityContext }}
@@ -70,6 +78,17 @@ spec:
         {{- end }}
         image: {{ include "x509-certificate-exporter.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- if or $extraVolumes .Values.webConfiguration .Values.webConfigurationExistingSecret }}
+        volumeMounts:
+        {{- range $extraVolumeMounts }}
+        - {{ tpl (. | toYaml) $ | indent 10 | trim }}
+        {{- end }}
+        {{- if or .Values.webConfiguration .Values.webConfigurationExistingSecret }}
+        - name: web-configuration
+          mountPath: /mnt/
+          readOnly: true
+        {{- end }}
+        {{- end }}
         args:
         {{- if .Values.secretsExporter.debugMode }}
         - --debug
@@ -104,6 +123,9 @@ spec:
         {{- if .Values.exposePerCertificateErrorMetrics }}
         - --expose-per-cert-error-metrics
         {{- end }}
+        {{- if or .Values.webConfiguration .Values.webConfigurationExistingSecret }}
+        - --web.config.file=/mnt/webconfig.yaml
+        {{- end }}
       {{- if not .Values.rbacProxy.enabled }}
         - --listen-address=:{{ .Values.podListenPort }}
         ports:
@@ -135,5 +157,19 @@ spec:
         resources:
         {{- . | toYaml | trim | nindent 10 }}
         {{- end }}
+      {{- end }}
+      {{- if or $extraVolumes .Values.webConfiguration .Values.webConfigurationExistingSecret }}
+      volumes:
+      {{- range $extraVolumes }}
+      - {{ tpl (. | toYaml) $ | indent 8 | trim }}
+      {{- end }}
+      {{- if or .Values.webConfiguration .Values.webConfigurationExistingSecret }}
+      - name: web-configuration
+        secret:
+          secretName: "{{ default (include "x509-certificate-exporter.webConfigurationSecretName" .) .Values.webConfigurationExistingSecret }}"
+          items:
+          - key: webconfig.yaml
+            path: webconfig.yaml
+      {{- end }}
       {{- end }}
 {{- end }}

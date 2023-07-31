@@ -60,7 +60,7 @@ Return the proper x509-certificate-exporter image name
 {{- define "x509-certificate-exporter.image" -}}
 {{- $registryName := .Values.image.registry -}}
 {{- $repositoryName := .Values.image.repository -}}
-{{- $tag := default .Chart.AppVersion .Values.image.tag | toString -}}
+{{- $tag := printf "%s%s" ( default .Chart.AppVersion .Values.image.tag | toString ) ( default "" .Values.image.tagSuffix | toString ) -}}
 {{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
@@ -154,4 +154,11 @@ Secrets exporter Deployment
 */}}
 {{- define "x509-certificate-exporter.secretsExporterName" -}}
 {{ include "x509-certificate-exporter.fullname" . }}
+{{- end -}}
+
+{{/*
+Web configuration Secret name
+*/}}
+{{- define "x509-certificate-exporter.webConfigurationSecretName" -}}
+{{ include "x509-certificate-exporter.fullname" . }}-webconf
 {{- end -}}
