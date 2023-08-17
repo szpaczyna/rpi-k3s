@@ -21,12 +21,13 @@ spec:
       serviceAccountName: media
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
-      securityContext:
-        runAsGroup: 568
-        runAsUser: 568
+      securityContext: {}
+        #  runAsGroup: 568
+        #  runAsUser: 568
       containers:
       - name: jackett
-        image: "ghcr.io/onedr0p/jackett:0.20.2297"
+        image: "linuxserver/jackett:0.21.655"
+        #image: "ghcr.io/onedr0p/jackett:0.20.2297"
         #image: "ghcr.io/k8s-at-home/jackett:v0.20.2182"
         imagePullPolicy: IfNotPresent
         env:
@@ -36,6 +37,8 @@ spec:
             value: "568"
           - name: PGID
             value: "568"
+          - name: UMASK
+            value: "22"
         ports:
         - name: jackett
           containerPort: 9117

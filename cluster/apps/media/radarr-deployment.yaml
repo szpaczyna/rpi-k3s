@@ -29,7 +29,7 @@ spec:
         #  runAsUser: 568
       containers:
       - name: exporter
-        image: "ghcr.io/onedr0p/exportarr:v1.4.0"
+        image: "ghcr.io/onedr0p/exportarr:v1.5.3"
         imagePullPolicy: IfNotPresent
         args:
           - radarr
