@@ -7,8 +7,8 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/modsecurity-snippet: |
-      SecRuleEngine On
+      #nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      #SecRuleEngine On
 spec:
   ingressClassName: nginx
   rules:

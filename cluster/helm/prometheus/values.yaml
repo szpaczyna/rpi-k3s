@@ -71,7 +71,7 @@ kube-state-metrics:
     - storageclasses
     - validatingwebhookconfigurations
     - volumeattachments
-    - verticalpodautoscalers
+      #- verticalpodautoscalers
 
   resources:
     requests:
@@ -88,7 +88,7 @@ kube-state-metrics:
     telemetryPort: 8081
 
   verticalPodAutoscaler:
-    enabled: true
+    enabled: false
     updateMode: "Auto"
     maxAllowed:
       cpu: 350m
@@ -100,8 +100,8 @@ prometheus-node-exporter:
   fullNameOverride: node-exporter
 
   image:
-    repository: quay.io/prometheus/node-exporter
-    tag: v1.5.0
+    repository: prometheus/node-exporter
+    tag: v1.6.1
     pullPolicy: IfNotPresent
 
   hostNetwork: true
@@ -160,7 +160,7 @@ server:
 
   image:
     repository: quay.io/prometheus/prometheus
-    tag: v2.41.0
+    tag: v2.46.0
     pullPolicy: IfNotPresent
 
   priorityClassName: "system-cluster-critical"
@@ -314,7 +314,7 @@ server:
   ## Vertical Pod Autoscaler config
   ## Ref: https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
   verticalAutoscaler:
-    enabled: true
+    enabled: false
     updateMode: "Auto"
     containerPolicies:
     - containerName: 'prometheus-server'
@@ -360,7 +360,7 @@ server:
       replica: 0
 
   terminationGracePeriodSeconds: 30
-  retention: "21d"
+  retention: "14d"
 
   ## Array of extra Kubernetes manifests, in form of YAML object,
   ## if you want to deploy

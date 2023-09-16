@@ -100,7 +100,7 @@ resources:
 
 podAnnotations:
   prometheus.io/scrape: "true"
-  prometheus.io/port: "9122"
+  prometheus.io/port: "8086"
     #  prometheus.io/path: "/api/v1/prom/write?db=prometheus"
   prometheus.io/path: "/metrics"
 
@@ -212,7 +212,7 @@ backup:
     # storageClass: "-"
     annotations:
     accessMode: ReadWriteOnce
-    size: 8Gi
+    size: 10Gi
   schedule: "0 0 * * *"
   startingDeadlineSeconds: ""
   annotations: {}
