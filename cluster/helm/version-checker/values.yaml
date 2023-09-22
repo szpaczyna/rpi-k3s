@@ -2,10 +2,8 @@
 
 replicaCount: 1
 image:
-  #repository: szpaczyn/version-checker-arm64
-  #tag: 0.2.2
-  repository: quay.io/jetstack/version-checker
-  tag:
+  repository: szpaczyn/version-checker-arm64
+  tag: 0.2.2
   pullPolicy: IfNotPresent
 
 service:
@@ -48,22 +46,6 @@ selfhosted:
   #  username:
   #  password:
   #  token:
-
-readinessProbe:
-  enabled: true
-  httpGet:
-    path: /readyz
-    port: 8080
-  initialDelaySeconds: 3
-  periodSeconds: 3
-
-livenessProbe:
-  enabled: true
-  httpGet:
-    path: /readyz
-    port: 8080
-  initialDelaySeconds: 3
-  periodSeconds: 3
 
 resources:
   limits:
