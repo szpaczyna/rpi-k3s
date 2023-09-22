@@ -1,2 +1,9 @@
 #!/bin/bash
+
+sops -d \
+    --output  values.yaml \
+    ../../secrets/version-checker-values.yaml
+
 helm upgrade --install version-checker -n apps -f values.yaml .
+
+rm -rf values.yaml
