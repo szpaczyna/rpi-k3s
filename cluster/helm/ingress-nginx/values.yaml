@@ -10,12 +10,13 @@ controller:
     chroot: false
     registry: registry.k8s.io
     image: ingress-nginx/controller
-    tag: "v1.8.1"
     pullPolicy: IfNotPresent
-    tag: "v1.8.1"
-    digest: sha256:e5c4824e7375fcf2a393e1c03c293b69759af37a9ca6abdb91b13d78a93da8bd
-    digestChroot: sha256:e0d4121e3c5e39de9122e55e331a32d5ebf8d4d257227cb93ab54a1b912a7627
-    pullPolicy: IfNotPresent
+    tag: "v1.9.1"
+    digest: sha256:605a737877de78969493a4b1213b21de4ee425d2926906857b98050f57a95b25
+    digestChroot: sha256:2ac744ef08850ee86ad7162451a6879f47c1a41c6a757f6b6f913c52103b8836
+      #    tag: "v1.8.1"
+      #    digest: sha256:e5c4824e7375fcf2a393e1c03c293b69759af37a9ca6abdb91b13d78a93da8bd
+      #    digestChroot: sha256:e0d4121e3c5e39de9122e55e331a32d5ebf8d4d257227cb93ab54a1b912a7627
     # www-data -> uid 101
     runAsUser: 101
     allowPrivilegeEscalation: true
@@ -95,6 +96,11 @@ controller:
     annotations: {}
   maxmindLicenseKey: ""
   extraArgs: {}
+
+  # NetworkPolicy for controller component.
+  networkPolicy:
+    # -- Enable 'networkPolicy' or not
+    enabled: false
 
   ## Additional environment variables to set
   extraEnvs: []
@@ -710,6 +716,11 @@ defaultBackend:
 
   priorityClassName: ""
   labels: {}
+
+  # NetworkPolicy for default backend component.
+  networkPolicy:
+    # -- Enable 'networkPolicy' or not
+    enabled: false
 
 rbac:
   create: true

@@ -31,7 +31,8 @@ spec:
         runAsUser: 568
       initContainers:
       - name: flood
-        image: curlimages/curl:7.87.0
+        image: curlimages/curl:8.3.0
+          #image: curlimages/curl:7.87.0
         command:
         - /bin/sh
         - -c

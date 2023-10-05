@@ -4,6 +4,7 @@ replicaCount: 1
 
 image:
   repository: rancher/local-path-provisioner
+    #tag: master-head
   tag: master-head
   pullPolicy: IfNotPresent
 
