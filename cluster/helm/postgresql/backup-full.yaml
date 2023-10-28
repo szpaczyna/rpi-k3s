@@ -10,10 +10,10 @@ spec:
       name: postgres-backup-full
     spec:
       containers:
-      - name: postgres-backup
-        image: postgres:14.6
+      - name: postgres-backup-full
+        image: postgres:15.4
         command: ["/bin/sh"]
-        args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && for DB in bitwarden gitea kanboard nextcloud keycloak; do pg_dump -U postgres -h morphine-postgresql-primary "$DB" | gzip > /var/backups/"$DB"/"$DB"-$(date +"%Y%m%d-%H%M").sql.gz; done']
+        args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && pg_dumpall -U postgres -h morphine-postgresql-primary | gzip > /var/backups/morphine-postgresql-$(date +"%Y%m%d-%H%M").gz']
         env:
         - name: PGPASS
           valueFrom:

@@ -145,9 +145,9 @@ tolerations: []
 ## The InfluxDB image uses several environment variables to automatically
 ## configure certain parts of the server.
 ## Ref: https://hub.docker.com/_/influxdb/
-env: {}
-  # - name: INFLUXDB_DB
-  #   value: "demo"
+env:
+  - name: INFLUXDB_DB
+    value: "health"
 
 ## The name of a secret in the same kubernetes namespace which contain values
 ## to be added to the environment.
@@ -185,7 +185,7 @@ initScripts:
   enabled: true
   scripts:
     init.iql: |+
-      CREATE DATABASE "health"
+      CREATE DATABASE "grafana_export"
 
 backup:
   enabled: false

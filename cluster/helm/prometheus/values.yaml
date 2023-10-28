@@ -360,7 +360,7 @@ server:
       replica: 0
 
   terminationGracePeriodSeconds: 30
-  retention: "14d"
+  retention: "10d"
 
   ## Array of extra Kubernetes manifests, in form of YAML object,
   ## if you want to deploy

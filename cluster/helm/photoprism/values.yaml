@@ -52,7 +52,7 @@ database:
   existingSecret: photoprism-secret
 
 nodeSelector:
-  #  kubernetes.io/role: worker
+  kubernetes.io/role: worker
 
 persistence:
   enabled: true

@@ -26,8 +26,7 @@ spec:
         runAsUser: 568
       containers:
       - name: prowlarr
-        image: "ghcr.io/onedr0p/prowlarr-develop:1.9.0.3966"
-          #image: "ghcr.io/onedr0p/prowlarr-develop:1.4.0.3230"
+        image: "ghcr.io/onedr0p/prowlarr:1.9.4.4039"
         imagePullPolicy: IfNotPresent
         env:
           - name: "TZ"

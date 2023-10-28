@@ -26,8 +26,7 @@ spec:
         runAsUser: 568
       containers:
       - name: readarr
-        image: "ghcr.io/onedr0p/readarr-develop:0.3.5.2217"
-          #image: "ghcr.io/onedr0p/readarr-develop:v0.1.1.1320"
+        image: "ghcr.io/onedr0p/readarr-develop:0.3.7.2260"
         imagePullPolicy: IfNotPresent
         env:
           - name: "TZ"

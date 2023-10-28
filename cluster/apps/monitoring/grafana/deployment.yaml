@@ -30,7 +30,7 @@ spec:
                 - "true"
       initContainers:
         - name: create-directory
-          image: busybox:1.36.0
+          image: busybox:1.36.1
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh"]
           args: ["-c", "for f in datasources plugins notifiers dashboards; do mkdir -p /var/lib/grafana/provisioning/$f; done"]
@@ -43,8 +43,7 @@ spec:
           value: yesoreyeram-infinity-datasource,btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel,novatec-sdg-panel,grafana-singlestat-panel,farski-blendstat-panel,grafana-polystat-panel
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/provisioning"
-            #image: grafana/grafana:9.5.7
-        image: grafana/grafana:10.0.3
+        image: grafana/grafana:10.1.5
         imagePullPolicy: IfNotPresent
         name: grafana
         ports:

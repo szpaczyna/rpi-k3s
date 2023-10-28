@@ -9,9 +9,9 @@ helm upgrade --install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --version v1.13.0 \
+  --version v1.13.1 \
   --set installCRDs=true \
   --set prometheus.enabled=true
 
 #sleep 60; echo 'Waiting for containers to be created'
-kubectl apply -f letsencrypt-staging.yaml -f letsencrypt-production.yaml --validate=false
+#kubectl apply -f letsencrypt-staging.yaml -f letsencrypt-production.yaml --validate=false

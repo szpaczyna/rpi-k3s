@@ -23,6 +23,10 @@ loki:
     targetPort: http-metrics
     loadBalancerIP: 10.1.0.11
 
+  extraArgs:
+    querier.max-outstanding-requests-per-tenant: "2048"
+    querier.max-concurrent: "2048"
+
 promtail:
   enabled: true
   config:
