@@ -26,7 +26,7 @@ spec:
         #  runAsUser: 568
       containers:
       - name: jackett
-        image: "linuxserver/jackett:0.21.1043"
+        image: "linuxserver/jackett:0.21.1096"
         imagePullPolicy: IfNotPresent
         env:
           - name: "TZ"
