@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: gentoo
+  namespace: apps
+  labels:
+    app.kubernetes.io/name: gentoo
+spec:
+  replicas: 1
+  serviceName: gentoo
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gentoo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gentoo
+    spec:
+      serviceAccountName: gentoo
+      containers:
+        - name: controller
+          image: "ksmanis/gentoo-distcc:tcp"
+          ports:
+            - containerPort: 3632
+              protocol: TCP
+              name: distcc-tcp
+          volumeMounts:
+            - mountPath: /mnt
+              name: data
+              readOnly: false
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 3000m
+              memory: 2048Mi
+      terminationGracePeriodSeconds: 5
+      restartPolicy: Always
+      volumes:
+      nodeSelector:
+        kubernetes.io/role: worker
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: longhorn
+        resources:
+          requests:
+            storage: 8Gi
