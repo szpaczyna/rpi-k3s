@@ -95,7 +95,7 @@ resources:
     memory: 300Mi
     cpu: 0.1
   limits:
-    memory: 7000Mi
+    memory: 1Gi
     cpu: 0.6
 
 podAnnotations:
