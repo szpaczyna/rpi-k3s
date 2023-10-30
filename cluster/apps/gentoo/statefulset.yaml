@@ -19,7 +19,7 @@ spec:
     spec:
       serviceAccountName: gentoo
       containers:
-        - name: controller
+        - name: gentoo
           image: "ksmanis/gentoo-distcc:tcp"
           ports:
             - containerPort: 3632
