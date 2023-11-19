@@ -30,10 +30,14 @@ controller:
   # Will add custom configuration options to Nginx https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
   config:
     enable-brotli: true
+    brotli-level: 9
     proxy-add-original-uri-header: true
     client-header-buffer-size: "256k"
     server-name-hash-max-size: 65536
     use-geoip2: true
+    use-gzip: true
+    gzip-level: 9
+    hsts-preload: true
     enable-modsecurity: true
     enable-owasp-modsecurity-crs: true
     use-forwarded-headers: "true"
@@ -259,7 +263,7 @@ controller:
   resources:
     limits:
       cpu: "1"
-      memory: 1200Mi
+      memory: 512Mi
     requests:
       cpu: "0.1"
       memory: 256Mi
@@ -302,7 +306,7 @@ controller:
   # apiVersion changes with keda 1.x vs 2.x
   # 2.x = keda.sh/v1alpha1
   # 1.x = keda.k8s.io/v1alpha1
-    enabled: true
+    enabled: false
     minReplicas: 2
     maxReplicas: 8
     pollingInterval: 30

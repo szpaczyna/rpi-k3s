@@ -95,7 +95,7 @@ resources:
     memory: 300Mi
     cpu: 0.1
   limits:
-    memory: 1Gi
+    memory: 1500Mi
     cpu: 0.6
 
 podAnnotations:
@@ -135,6 +135,7 @@ extraContainers: {}
 
 nodeSelector:
   kubernetes.io/role: worker
+  kubernetes.io/hostname: rpi-k3s-worker-02
 affinity: {}
 tolerations: []
 # - key: "key"
@@ -148,7 +149,12 @@ tolerations: []
 env:
   - name: INFLUXDB_DB
     value: "health"
-
+  - name: INFLUXDB_DATA_WAL_FSYNC_DELAY
+    value: "0s"
+      #  - name: INFLUXDB_DATA_CACHE_MAX_MEMORY_SIZE
+      #    value: "256m"
+  - name: INFLUXDB_DATA_MAX_SERIES_PER_DATABASE
+    value: "0"
 ## The name of a secret in the same kubernetes namespace which contain values
 ## to be added to the environment.
 ## This can be used, for example, to set the INFLUXDB_HTTP_SHARED_SECRET
