@@ -76,7 +76,7 @@ kube-state-metrics:
   resources:
     requests:
       cpu: 0.1
-      memory: 26Mi
+      memory: 30Mi
     limits:
       cpu: 0.2
       memory: 128Mi
@@ -160,7 +160,7 @@ server:
 
   image:
     repository: quay.io/prometheus/prometheus
-    tag: v2.46.0
+    tag: v2.47.2
     pullPolicy: IfNotPresent
 
   priorityClassName: "system-cluster-critical"
