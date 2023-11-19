@@ -3,6 +3,6 @@ apiVersion: v2
 name: kanboard
 description: A Helm chart for Kubernetes
 type: application
-version: 0.1.32
-appVersion: v1.2.23
+version: 0.1.33
+appVersion: v1.2.33
 icon: https://user-images.githubusercontent.com/40141083/41202259-db1c76a8-6cb5-11e8-8cdc-cf6c3d560b3b.png
