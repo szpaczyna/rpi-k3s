@@ -1,0 +1,32 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-full-backup
+spec:
+  schedule: "0 1 * * *"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: postgres-full-backup
+            image: postgres:15.4
+            command: ["/bin/sh"]
+            args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && pg_dumpall -U postgres -h morphine-postgresql-primary | gzip > /var/backups/full/morphine-postgresql-$(date +"%Y%m%d-%H%M").sql.gz']
+            env:
+            - name: PGPASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-pgpass
+                  key: pgpass
+            volumeMounts:
+            - mountPath: /var/backups
+              name: postgres-storage
+          restartPolicy: Never
+          volumes:
+          - name: postgres-storage
+            hostPath:
+              path: /data/nfs/postgres-backups
+              type: DirectoryOrCreate
