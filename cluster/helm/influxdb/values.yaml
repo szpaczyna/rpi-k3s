@@ -135,7 +135,7 @@ extraContainers: {}
 
 nodeSelector:
   kubernetes.io/role: worker
-  kubernetes.io/hostname: rpi-k3s-worker-02
+    #  kubernetes.io/hostname: rpi-k3s-worker-02
 affinity: {}
 tolerations: []
 # - key: "key"
