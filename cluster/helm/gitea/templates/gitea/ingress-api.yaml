@@ -4,11 +4,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-api
   labels:
     {{- include "gitea.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: 10.0.0.0/8
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
@@ -28,8 +29,8 @@ spec:
     - host: {{ . | quote }}
       http:
         paths:
-          - path: /
-            pathType: ImplementationSpecific
+          - path: /api
+            pathType: Prefix
             backend:
             {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
               service:

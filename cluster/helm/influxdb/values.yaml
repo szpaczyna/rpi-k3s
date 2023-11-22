@@ -15,17 +15,17 @@ serviceAccount:
 ## ref: https://docs.influxdata.com/influxdb/v1.8/tools/api/#ping-http-endpoint
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 ##
-livenessProbe: {}
-  # path: "/ping"
-  # initialDelaySeconds: 30
-  # timeoutSeconds: 5
-  # scheme: HTTP
+livenessProbe:
+  path: "/ping"
+  initialDelaySeconds: 30
+  timeoutSeconds: 15
+  scheme: HTTP
 
-readinessProbe: {}
-  # path: "/ping"
-  # initialDelaySeconds: 5
-  # timeoutSeconds: 1
-  # scheme: HTTP
+readinessProbe:
+  path: "/ping"
+  initialDelaySeconds: 30
+  timeoutSeconds: 5
+  scheme: HTTP
 
 securityContext: {}
   # runAsUser: 999
@@ -95,8 +95,8 @@ resources:
     memory: 300Mi
     cpu: 0.1
   limits:
-    memory: 1500Mi
-    cpu: 0.6
+    memory: 1800Mi
+    cpu: 1
 
 podAnnotations:
   prometheus.io/scrape: "true"
@@ -150,7 +150,7 @@ env:
   - name: INFLUXDB_DB
     value: "health"
   - name: INFLUXDB_DATA_WAL_FSYNC_DELAY
-    value: "0s"
+    value: "1s"
       #  - name: INFLUXDB_DATA_CACHE_MAX_MEMORY_SIZE
       #    value: "256m"
   - name: INFLUXDB_DATA_MAX_SERIES_PER_DATABASE
@@ -164,7 +164,7 @@ envFromSecret: {}
 ## InfluxDB configuration
 ## ref: https://docs.influxdata.com/influxdb/v1.8/administration/config
 config:
-  reporting_disabled: false
+  reporting_disabled: true
   rpc: {}
   meta: {}
   data: {}
