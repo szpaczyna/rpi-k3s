@@ -11,9 +11,8 @@ controller:
     registry: registry.k8s.io
     image: ingress-nginx/controller
     pullPolicy: IfNotPresent
-    tag: "v1.9.3"
-    digest: sha256:8fd21d59428507671ce0fb47f818b1d859c92d2ad07bb7c947268d433030ba98
-      #digest: sha256:605a737877de78969493a4b1213b21de4ee425d2926906857b98050f57a95b25
+    tag: "v1.9.4"
+      #digest: sha256:8fd21d59428507671ce0fb47f818b1d859c92d2ad07bb7c947268d433030ba98
       #digestChroot: sha256:2ac744ef08850ee86ad7162451a6879f47c1a41c6a757f6b6f913c52103b8836
       #    tag: "v1.8.1"
       #    digest: sha256:e5c4824e7375fcf2a393e1c03c293b69759af37a9ca6abdb91b13d78a93da8bd

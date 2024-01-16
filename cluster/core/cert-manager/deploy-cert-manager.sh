@@ -9,7 +9,7 @@ helm upgrade --install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --version v1.13.1 \
+  --version v$1 \
   --set installCRDs=true \
   --set prometheus.enabled=true
 

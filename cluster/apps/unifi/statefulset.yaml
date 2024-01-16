@@ -23,8 +23,7 @@ spec:
         #hostNetwork: true
       containers:
         - name: controller
-          image: "linuxserver/unifi-controller:8.0.7"
-            #image: "linuxserver/unifi-controller:7.5.187"
+          image: "linuxserver/unifi-controller:8.0.24"
           env:
             - name: MEM_LIMIT
               value: "512"
@@ -55,7 +54,7 @@ spec:
               cpu: 500m
               memory: 768Mi
         - name: poller
-          image: "golift/unifi-poller:v2.9.2"
+          image: "golift/unifi-poller:v2.9.4"
             #image: "golift/unifi-poller:2.1.3"
           imagePullPolicy: IfNotPresent
           env:
