@@ -160,7 +160,7 @@ server:
 
   image:
     repository: quay.io/prometheus/prometheus
-    tag: v2.47.2
+    tag: v2.49.1
     pullPolicy: IfNotPresent
 
   priorityClassName: "system-cluster-critical"
