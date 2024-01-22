@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
           - name: postgres-full-backup
-            image: postgres:15.4
+            image: postgres:16.1
             command: ["/bin/sh"]
             args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && pg_dumpall -U postgres -h morphine-postgresql-primary | gzip > /var/backups/full/morphine-postgresql-$(date +"%Y%m%d-%H%M").sql.gz']
             env:

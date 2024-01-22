@@ -28,7 +28,7 @@ height="144px"/-->
   - [photoprism](cluster/helm/photoprism) - photos management
   - [postgresql](cluster/helm/postgresql) - self explanatory
   - [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
-  - [influxdb](cluster/helm/influxdb) - Database for Apple health exports
+  - [influxdb](cluster/helm/influxdb) - Database for Apple Health exports
 
 - Apps/YAML
 
