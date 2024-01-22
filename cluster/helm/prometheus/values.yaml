@@ -101,7 +101,7 @@ prometheus-node-exporter:
 
   image:
     repository: prometheus/node-exporter
-    tag: v1.6.1
+    tag: v1.7.0
     pullPolicy: IfNotPresent
 
   hostNetwork: true
