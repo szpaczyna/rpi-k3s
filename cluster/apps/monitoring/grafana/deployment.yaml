@@ -46,7 +46,7 @@ spec:
           value: yesoreyeram-infinity-datasource,btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel,novatec-sdg-panel,grafana-singlestat-panel,farski-blendstat-panel,grafana-polystat-panel
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/provisioning"
-        image: grafana/grafana:10.2.2
+        image: grafana/grafana:10.2.4
         imagePullPolicy: IfNotPresent
         name: grafana
         ports:
