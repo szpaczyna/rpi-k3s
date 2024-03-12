@@ -20,11 +20,10 @@ height="144px"/-->
 
   - [bitwarden](cluster/cluster/helm/bitwarden) - Passwords Management
   - [cert-exporter](cluster/helm/cert-exporter) - certificates monitoring
+  - [event-exporter](cluster/helm/event-exporter) - exports k8s events to loki
   - [gitea](cluster/helm/gitea) - Git with a cup of tea
-  - [heimdall](cluster/helm/heimdall) - Dashboard with internal links
   - [kanboard](cluster/helm/kanboard) - Kanban project management software
   - [nextcloud](cluster/helm/nextcloud) - personal cloud service
-  - [pgadmin4](cluster/helm/pgadmin) - postgresql managemenet tool
   - [photoprism](cluster/helm/photoprism) - photos management
   - [postgresql](cluster/helm/postgresql) - self explanatory
   - [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
@@ -32,12 +31,11 @@ height="144px"/-->
 
 - Apps/YAML
 
-  - [databases](cluster/apps/db) - Mongo
   - [unifi](cluster/apps/unifi) - Unifi controller/prometheus poller
   - [www](cluster/apps/www) - Personal website
   - [prometheus stack](cluster/apps/monitoring) - Prometheus/Grafana stack with some additional exporters
-  - [elk stack](cluster/apps/logging) - Elasticsearch/Kibana/Logstash/Filebeat
-  - [media downloads](cluster/apps/media) - jackett, bazarr, radarr, lidarr and sonarr
+  - [media downloads](cluster/apps/media) - jackett, bazarr, radarr, lidarr and sonarr, calibre-web, transmission
+  - [gentoo](cluster/apps/gentoo) - cross-compiler and plyground
 
 - System
 
