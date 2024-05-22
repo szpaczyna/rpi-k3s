@@ -56,17 +56,15 @@ data:
   Corefile: |
     .:53 {
         errors
-        health {
-          lameduck 5s
-        }
+        health
         ready
         kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
-          ttl 30
         }
         hosts /etc/coredns/NodeHosts {
-          reload 1s
+          ttl 60
+          reload 15s
           fallthrough
         }
         prometheus :9153
@@ -75,6 +73,7 @@ data:
         loop
         reload
         loadbalance
+        import /etc/coredns/custom/*.override
     }
     import /etc/coredns/custom/*.server
 ---
@@ -84,21 +83,21 @@ metadata:
   name: coredns
   namespace: kube-system
   labels:
-    k8s-app: coredns
+    k8s-app: kube-dns
     kubernetes.io/name: "CoreDNS"
 spec:
-  replicas: 2
+  revisionHistoryLimit: 0
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 1
   selector:
     matchLabels:
-      k8s-app: coredns
+      k8s-app: kube-dns
   template:
     metadata:
       labels:
-        k8s-app: coredns
+        k8s-app: kube-dns
     spec:
       priorityClassName: "system-cluster-critical"
       serviceAccountName: coredns
@@ -119,14 +118,15 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              k8s-app: coredns
+              k8s-app: kube-dns
       containers:
       - name: coredns
-        image: rancher/mirrored-coredns-coredns:1.9.4
+        image: "rancher/mirrored-coredns-coredns:1.11.1"
         imagePullPolicy: IfNotPresent
         resources:
           limits:
             memory: 170Mi
+            cpu: 300m
           requests:
             cpu: 100m
             memory: 70Mi
@@ -184,6 +184,8 @@ spec:
             items:
             - key: Corefile
               path: Corefile
+            - key: NodeHosts
+              path: NodeHosts
         - name: custom-config-volume
           configMap:
             name: coredns-custom
@@ -192,19 +194,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: coredns
+  name: kube-dns
   namespace: kube-system
   annotations:
     prometheus.io/port: "9153"
     prometheus.io/scrape: "true"
   labels:
-    k8s-app: coredns
+    k8s-app: kube-dns
     kubernetes.io/cluster-service: "true"
     kubernetes.io/name: "CoreDNS"
 spec:
   selector:
-    k8s-app: coredns
+    k8s-app: kube-dns
   clusterIP: 10.43.0.10
+  clusterIPs: [10.43.0.10]
   ports:
   - name: dns
     port: 53
@@ -215,3 +218,4 @@ spec:
   - name: metrics
     port: 9153
     protocol: TCP
+  ipFamilyPolicy: SingleStack
