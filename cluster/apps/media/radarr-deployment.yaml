@@ -29,7 +29,7 @@ spec:
         #  runAsUser: 568
       containers:
       - name: exporter
-        image: "ghcr.io/onedr0p/exportarr:v2.0.0"
+        image: "ghcr.io/onedr0p/exportarr:v2.0.1"
         imagePullPolicy: IfNotPresent
         args:
           - radarr
@@ -68,7 +68,6 @@ spec:
             memory: 50Mi
       - name: radarr
         image: "ghcr.io/onedr0p/radarr:5.0.3.8127"
-          #image: "ghcr.io/onedr0p/radarr:4.7.5.7809"
         imagePullPolicy: IfNotPresent
         env:
           - name: TZ

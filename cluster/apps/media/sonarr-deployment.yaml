@@ -29,7 +29,7 @@ spec:
         runAsUser: 568
       containers:
       - name: exporter
-        image: "ghcr.io/onedr0p/exportarr:v2.0.0"
+        image: "ghcr.io/onedr0p/exportarr:v2.0.1"
         imagePullPolicy: IfNotPresent
         args:
           - sonarr
@@ -67,8 +67,7 @@ spec:
             cpu: 0.05
             memory: 50Mi
       - name: sonarr
-        image: "ghcr.io/onedr0p/sonarr:3.0.10.1567"
-          #        image: "ghcr.io/onedr0p/sonarr:3.0.9.1549"
+        image: "ghcr.io/onedr0p/sonarr:4.0.5"
         imagePullPolicy: IfNotPresent
         env:
           - name: "TZ"
