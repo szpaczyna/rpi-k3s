@@ -10,8 +10,9 @@ helm upgrade --install \
   --namespace cert-manager \
   --create-namespace \
   --version v$1 \
-  --set installCRDs=true \
+  --set crds.enabled=true \
   --set prometheus.enabled=true
 
+#  --set installCRDs=true \
 #sleep 60; echo 'Waiting for containers to be created'
 #kubectl apply -f letsencrypt-staging.yaml -f letsencrypt-production.yaml --validate=false
