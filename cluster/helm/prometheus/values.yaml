@@ -101,7 +101,7 @@ prometheus-node-exporter:
 
   image:
     repository: prometheus/node-exporter
-    tag: v1.7.0
+    tag: v1.8.1
     pullPolicy: IfNotPresent
 
   hostNetwork: true
@@ -160,7 +160,7 @@ server:
 
   image:
     repository: quay.io/prometheus/prometheus
-    tag: v2.49.1
+    tag: v2.53.0
     pullPolicy: IfNotPresent
 
   priorityClassName: "system-cluster-critical"

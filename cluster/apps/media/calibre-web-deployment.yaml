@@ -26,7 +26,7 @@ spec:
         #runAsUser: 1001
       containers:
         - name: calibre-web
-          image: "linuxserver/calibre-web:0.6.21"
+          image: "linuxserver/calibre-web:0.6.22"
           imagePullPolicy: Always
           env:
             - name: TZ
