@@ -26,7 +26,7 @@ spec:
         runAsUser: 568
       containers:
       - name: bazarr
-        image: "ghcr.io/onedr0p/bazarr:1.4.3"
+        image: "ghcr.io/onedr0p/bazarr:1.4.5"
         imagePullPolicy: IfNotPresent
         env:
           - name: "PGID"
