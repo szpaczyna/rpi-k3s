@@ -18,17 +18,17 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                  - {key: "node-role.kubernetes.io/master", operator: In, values: ["true"]}
+                  - {key: "node-role.kubernetes.io/control-plane", operator: In, values: ["true"]}
       serviceAccountName: system-upgrade
       tolerations:
         - key: "CriticalAddonsOnly"
           operator: "Exists"
-        - key: "node-role.kubernetes.io/master"
+        - key: "node-role.kubernetes.io/control-plane"
           operator: "Exists"
           effect: "NoSchedule"
       containers:
         - name: system-upgrade-controller
-          image: rancher/system-upgrade-controller:v0.13.4
+          image: rancher/system-upgrade-controller:v0.14.1
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
