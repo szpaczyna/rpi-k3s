@@ -1,8 +1,8 @@
 ---
 image:
   repository: nextcloud
-  tag: 29.0.5
-    #tag: 28.0.1
+  tag: 30.0.0
+    #tag: 29.0.5
   pullPolicy: IfNotPresent
 
 nameOverride: cloud
@@ -157,7 +157,7 @@ nginx:
 externalDatabase:
   enabled: true
   type: postgresql
-  host: morphine-postgresql-primary
+  host: morphine-postgresql-primary-hl
   existingSecret:
     enabled: true
     secretName: cloud-db-creds
@@ -202,7 +202,7 @@ persistence:
     helm.sh/resource-policy: keep
   storageClass: longhorn
   accessMode: ReadWriteOnce
-  size: 5Gi
+  size: 3Gi
   nextcloudData:
     enabled: true
     subpath:
