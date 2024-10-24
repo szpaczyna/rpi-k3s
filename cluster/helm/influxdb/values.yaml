@@ -3,7 +3,8 @@
 ## ref: https://hub.docker.com/r/library/influxdb/tags/
 image:
   repository: "influxdb"
-  tag: "1.8"
+  tag: 1.8.10-alpine
+  #tag: "1.8"
   pullPolicy: IfNotPresent
 
 serviceAccount:
@@ -71,7 +72,7 @@ persistence:
   storageClass: "longhorn"
   annotations:
   accessMode: ReadWriteOnce
-  size: 8Gi
+  size: 10Gi
 
 
 ## Set default user
@@ -92,11 +93,11 @@ setDefaultUser:
 
 resources:
   requests:
-    memory: 300Mi
-    cpu: 0.1
+    memory: 400Mi
+    cpu: 0.2
   limits:
-    memory: 1800Mi
-    cpu: 1
+    memory: 1000Mi
+      cpu: 3
 
 podAnnotations:
   prometheus.io/scrape: "true"
@@ -151,8 +152,8 @@ env:
     value: "health"
   - name: INFLUXDB_DATA_WAL_FSYNC_DELAY
     value: "1s"
-      #  - name: INFLUXDB_DATA_CACHE_MAX_MEMORY_SIZE
-      #    value: "256m"
+#- name: INFLUXDB_DATA_CACHE_MAX_MEMORY_SIZE
+#value: "368m"
   - name: INFLUXDB_DATA_MAX_SERIES_PER_DATABASE
     value: "0"
 ## The name of a secret in the same kubernetes namespace which contain values
