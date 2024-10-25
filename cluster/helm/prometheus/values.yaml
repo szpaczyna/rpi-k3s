@@ -302,10 +302,10 @@ server:
   ##
   resources:
     limits:
-      cpu: 2000m
-      memory: 2548Mi
+      cpu: 2.5
+      memory: 2000Mi
     requests:
-      cpu: 1000m
+      cpu: 1
       memory: 1024Mi
 
   hostNetwork: false

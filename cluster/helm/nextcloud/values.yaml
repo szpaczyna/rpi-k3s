@@ -1,7 +1,7 @@
 ---
 image:
   repository: nextcloud
-  tag: 30.0.0
+  tag: 30.0.1
     #tag: 29.0.5
   pullPolicy: IfNotPresent
 
@@ -194,7 +194,7 @@ service:
   type: ClusterIP
   port: 80
   loadBalancerIP: nil
-  nodePort: nil
+    #nodePort: nil
 
 persistence:
   enabled: true
@@ -213,8 +213,8 @@ persistence:
 
 resources:
   requests:
-    cpu: 200m
-    memory: 256Mi
+    cpu: 500m
+    memory: 512Mi
 
 livenessProbe:
   enabled: false
