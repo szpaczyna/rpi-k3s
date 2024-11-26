@@ -13,8 +13,8 @@ imagePullSecrets: []
 image:
   registry: docker.io
   repository: enix/x509-certificate-exporter
-  #tag: 3.14.0
-  tag: 3.15.0
+  tag: 3.17.0
+    #tag: 3.15.0
   tagSuffix: ""
   pullPolicy: IfNotPresent
 

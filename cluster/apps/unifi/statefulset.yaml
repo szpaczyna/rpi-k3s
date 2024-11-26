@@ -55,7 +55,8 @@ spec:
               cpu: 1000m
               memory: 768Mi
         - name: poller
-          image: "golift/unifi-poller:v2.10.0"
+          image: "golift/unifi-poller:v2.11.2"
+            #image: "golift/unifi-poller:v2.10.0"
           imagePullPolicy: IfNotPresent
           env:
           - name: TZ
