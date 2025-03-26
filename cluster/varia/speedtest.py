@@ -494,7 +494,7 @@ if HTTPSConnection:
                             kwargs['server_hostname'] = self.host
                     self.sock = self._context.wrap_socket(self.sock, **kwargs)
                 except AttributeError:
-                    self.sock = ssl.wrap_socket(self.sock)
+                    self.sock = ssl.wrap_socket(self.sock, ssl_version=ssl.PROTOCOL_TLSv1_2)
                     try:
                         self.sock.server_hostname = self.host
                     except AttributeError:
