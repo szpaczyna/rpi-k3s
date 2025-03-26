@@ -20,8 +20,8 @@ configmapReload:
     enabled: false
     name: configmap-reload
     image:
-      repository: jimmidyson/configmap-reload
-      tag: v0.8.0
+      repository: ghcr.io/jimmidyson/configmap-reload
+      tag: v0.14.0
       pullPolicy: IfNotPresent
     resources:
       requests:
@@ -101,7 +101,7 @@ prometheus-node-exporter:
 
   image:
     repository: prometheus/node-exporter
-    tag: v1.8.2
+    tag: v1.9.0
     pullPolicy: IfNotPresent
 
   hostNetwork: true
@@ -151,7 +151,7 @@ prometheus-node-exporter:
     enabled: false
     image:
       repository: quay.io/brancz/kube-rbac-proxy
-      tag: v0.14.0
+      tag: v0.19.0
       pullPolicy: IfNotPresent
 
 server:
@@ -160,8 +160,7 @@ server:
 
   image:
     repository: quay.io/prometheus/prometheus
-    tag: v3.0.0
-      #tag: v2.55.0
+    tag: v3.2.1
     pullPolicy: IfNotPresent
 
   priorityClassName: "system-cluster-critical"
