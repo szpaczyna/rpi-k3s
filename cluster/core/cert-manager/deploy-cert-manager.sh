@@ -11,7 +11,8 @@ helm upgrade --install \
   --create-namespace \
   --version v$1 \
   --set crds.enabled=true \
-  --set prometheus.enabled=true
+  --set prometheus.enabled=true \
+  --set 'extraArgs={--acme-http01-solver-nameservers=10.0.0.10:53}'
 
 #  --set installCRDs=true \
 #sleep 60; echo 'Waiting for containers to be created'
