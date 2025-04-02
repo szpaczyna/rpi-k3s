@@ -1,11 +1,8 @@
 - grafana exclude regex
 /^(?!.*/run.*$).*$/
 
-
-THE_REGISTRY=localhost:5000
-
-# Get username:password from docker configuration. You could
-# inject these some other way instead if you wanted.
+- Get username:password from docker configuration. You could inject these some other way instead if you wanted.
+-
 CREDS=$(jq -r ".[\"auths\"][\"$THE_REGISTRY\"][\"auth\"]" .docker/config.json | base64 -d)
 
 curl -s --user $CREDS https://$THE_REGISTRY/v2/_catalog | \
