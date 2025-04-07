@@ -21,6 +21,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "3000"
+        match-regex.version-checker.io/grafana: '(\d+)\.(\d+)\.(\d+)'
     spec:
       affinity:
         nodeAffinity:
