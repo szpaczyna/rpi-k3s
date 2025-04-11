@@ -31,7 +31,7 @@ spec:
         runAsUser: 568
       initContainers:
       - name: flood
-        image: curlimages/curl:8.9.1
+        image: curlimages/curl:8.13.0
         command:
         - /bin/sh
         - -c
@@ -43,7 +43,8 @@ spec:
           subPath: config/transmission
       containers:
       - name: transmission
-        image: "ghcr.io/onedr0p/transmission:4.0.5"
+        image: "linuxserver/transmission:4.0.6"
+          #image: "ghcr.io/onedr0p/transmission:4.0.5"
         imagePullPolicy: IfNotPresent
         env:
         - name: TRANSMISSION_DOWNLOAD_DIR

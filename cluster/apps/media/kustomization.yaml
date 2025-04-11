@@ -2,17 +2,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - bazarr-deployment.yaml
+  - calibre-web-deployment.yaml
+  - ingress.yaml
+  - lidarr-deployment.yaml
+  - local-storage.yaml
+  - prowlarr-deployment.yaml
+  - radarr-deployment.yaml
+  - readarr-deployment.yaml
+  - service.yaml
+  - serviceaccount.yaml
+  - sonarr-deployment.yaml
+  - transmission-deployment.yaml
   - media-secret.yaml
   - media-exporter-secret.yaml
-  - local-storage.yaml
-  - ingress.yaml
-  - serviceaccount.yaml
-  - service.yaml
-  - transmission-deployment.yaml
-  - sonarr-deployment.yaml
-  - radarr-deployment.yaml
-  - jackett-deployment.yaml
-  - bazarr-deployment.yaml
-  - lidarr-deployment.yaml
-  - prowlarr-deployment.yaml
-  - readarr-deployment.yaml
