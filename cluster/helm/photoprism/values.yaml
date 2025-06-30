@@ -35,7 +35,7 @@ config:
   PHOTOPRISM_DISABLE_CHOWN: false
   PHOTOPRISM_DISABLE_TLS: true
   PHOTOPRISM_DEFAULT_TLS: false
-  #PHOTOPRISM_LOG_LEVEL: debug
+  # PHOTOPRISM_LOG_LEVEL: debug
   PHOTOPRISM_UID: 1000
   PHOTOPRISM_GID: 1000
   PHOTOPRISM_UMASK: 0000
@@ -48,7 +48,8 @@ database:
   # password: photoprism
   # port: 3306
   # host: mariadb.db-mariadb
-## Ignore above settings and use existing secret for database DSN. Key 'PHOTOPRISM_DATABASE_DSN'
+## Ignore above settings and use existing secret for database DSN.
+# Key 'PHOTOPRISM_DATABASE_DSN'
   existingSecret: photoprism-secret
 
 nodeSelector:
@@ -79,32 +80,32 @@ service:
   port: 2342
 
 ingress:
-    enabled: true
-    ingressClass: nginx
-    annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        nginx.ingress.kubernetes.io/ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/modsecurity-snippet: |
-          SecRuleEngine On
-    hosts:
+  enabled: true
+  ingressClass: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    #nginx.ingress.kubernetes.io/modsecurity-snippet: |
+    #  SecRuleEngine On
+  hosts:
     - photos.shpaq.org
-    tls:
-    -   secretName: photos-shpaq-org-tls
-        hosts:
+  tls:
+    - secretName: photos-shpaq-org-tls
+      hosts:
         - photos.shpaq.org
 
 securityContext:
- fsGroup: 1000
- runAsUser: 1000
- runAsGroup: 1000
+  fsGroup: 1000
+  runAsUser: 1000
+  runAsGroup: 1000
 
 resources:
   requests:
     memory: 1Gi
-    cpu: 0.3
+    cpu: 1
   limits:
-    cpu: 2
-    memory: 2Gi
+    cpu: 4
+    memory: 3Gi
 
 # tolerations: []
 # affinity: {}
