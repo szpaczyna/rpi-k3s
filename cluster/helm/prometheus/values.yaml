@@ -178,12 +178,11 @@ server:
     enabled: true
     accessModes:
     - ReadWriteOnce
-
     labels: {}
     annotations: {}
     existingClaim: ""
     mountPath: /data
-    size: 40Gi
+    size: 60Gi
     storageClass: "longhorn"
     subPath: ""
 
