@@ -26,7 +26,8 @@ spec:
         runAsUser: 568
       containers:
       - name: lidarr
-        image: "ghcr.io/onedr0p/lidarr:2.4.3"
+        image: linuxserver/lidarr:2.12.4
+        #image: "ghcr.io/onedr0p/lidarr:2.4.3"
         imagePullPolicy: IfNotPresent
         env:
           - name: "TZ"
@@ -35,6 +36,8 @@ spec:
             value: "568"
           - name: PGID
             value: "568"
+          - name: UMASK
+            value: "22"
         ports:
           - name: lidarr
             containerPort: 8686
