@@ -32,11 +32,14 @@ spec:
       initContainers:
       - name: flood
         image: curlimages/curl:8.13.0
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
         command:
         - /bin/sh
         - -c
-        - curl -o- -sL https://github.com/johman10/flood-for-transmission/releases/download/latest/flood-for-transmission.tar.gz
-            | tar xzf - -C /config
+        - curl -o- -v -sL https://github.com/johman10/flood-for-transmission/releases/download/latest/flood-for-transmission.tar.gz
+            | tar xvzf - -C /config && chown -R 568:568 /config
         volumeMounts:
         - mountPath: /config
           name: media
@@ -44,7 +47,6 @@ spec:
       containers:
       - name: transmission
         image: "linuxserver/transmission:4.0.6"
-          #image: "ghcr.io/onedr0p/transmission:4.0.5"
         imagePullPolicy: IfNotPresent
         env:
         - name: TRANSMISSION_DOWNLOAD_DIR
