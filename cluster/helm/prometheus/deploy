@@ -1,7 +1,15 @@
 #!/bin/bash
 
-#helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-#helm repo update
+# Check if prometheus-community repo is already added
+if ! helm repo list | grep -q "prometheus-community"; then
+    echo "Adding prometheus-community Helm repository..."
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+else
+    echo "prometheus-community repository already exists"
+fi
+
+# Update helm repositories
+helm repo update
 
 sops -d --output auth-secret.yaml ../../secrets/prometheus-secret.yaml
 sops -d --output etcd-secret.yaml ../../secrets/prometheus-etcd-secret.yaml

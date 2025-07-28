@@ -7,4 +7,5 @@ sops -d \
 kubectl apply -f secret.yaml -n media
 
 helm upgrade --install photoprism --namespace media -f values.yaml .
+
 rm -rf secret.yaml

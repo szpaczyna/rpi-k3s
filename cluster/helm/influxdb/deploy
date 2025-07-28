@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Check if influxdata repo is already added
+if ! helm repo list | grep -q "influxdata"; then
+    echo "Adding influxdata Helm repository..."
+    helm repo add influxdata https://helm.influxdata.com/
+else
+    echo "influxdata repository already exists"
+fi
+
+# Update helm repositories
+helm repo update
+
+
+sops -d ../../secrets/influxdb-auth.yaml > secret.yaml
+kubectl apply -f ./secret.yaml
+
+helm upgrade --install influxdb influxdata/influxdb -n apps -f ./values.yaml
+rm -rf secret.yaml

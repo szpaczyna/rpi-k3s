@@ -1,4 +1,16 @@
 #!/bin/bash
+
+# Check if bitnami repo is already added
+if ! helm repo list | grep -q "bitnami"; then
+    echo "Adding bitnami Helm repository..."
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+else
+    echo "bitnami repository already exists"
+fi
+
+# Update helm repositories
+helm repo update
+
 #helm repo add bitnami https://charts.bitnami.com/bitnami
 
 sops -d \

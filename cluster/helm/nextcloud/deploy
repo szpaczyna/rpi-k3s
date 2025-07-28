@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Check if nextcloud repo is already added
+if ! helm repo list | grep -q "nextcloud"; then
+    echo "Adding nextcloud Helm repository..."
+    helm repo add nextcloud https://nextcloud.github.io/helm/
+else
+    echo "nextcloud repository already exists"
+fi
+
+# Update helm repositories
+helm repo update
+
 # helm repo add nextcloud https://nextcloud.github.io/helm/
 sops -d \
     --output secret.yaml \

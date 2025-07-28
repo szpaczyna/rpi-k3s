@@ -1,6 +1,15 @@
 #!/bin/bash
-#helm repo add longhorn https://charts.longhorn.io
-#helm repo update
+
+# Check if longhorn repo is already added
+if ! helm repo list | grep -q "longhorn"; then
+    echo "Adding longhorn Helm repository..."
+    helm repo add longhorn https://charts.longhorn.io
+else
+    echo "longhorn repository already exists"
+fi
+
+# Update helm repositories
+helm repo update
 
 sops -d ../../secrets/longhorn-auth.yaml > 00-auth.yaml
 sops -d ../../secrets/longhorn-values.yaml > values.yaml

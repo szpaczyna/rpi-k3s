@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Check if grafana repo is already added
+if ! helm repo list | grep -q "grafana"; then
+    echo "Adding grafana Helm repository..."
+    helm repo add grafana https://grafana.github.io/helm-charts
+else
+    echo "grafana repository already exists"
+fi
+
+# Update helm repositories
+helm repo update
+
+helm upgrade --install loki --create-namespace --namespace logging grafana/loki-stack -f values.yaml
