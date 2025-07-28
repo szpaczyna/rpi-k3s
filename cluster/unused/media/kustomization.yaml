@@ -6,7 +6,7 @@ resources:
   - calibre-web-deployment.yaml
   - ingress.yaml
   - lidarr-deployment.yaml
-  - local-storage.yaml
+    #  - local-storage.yaml
   - prowlarr-deployment.yaml
   - radarr-deployment.yaml
   - readarr-deployment.yaml
@@ -14,5 +14,5 @@ resources:
   - serviceaccount.yaml
   - sonarr-deployment.yaml
   - transmission-deployment.yaml
-  - media-secret.yaml
-  - media-exporter-secret.yaml
+    #  - media-secret.yaml
+    #  - media-exporter-secret.yaml

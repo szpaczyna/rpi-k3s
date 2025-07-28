@@ -1,5 +1,5 @@
+{{- if .Values.lidarr.enable }}
 ---
-## lidarr
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,25 +22,22 @@ spec:
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
       securityContext:
-        runAsGroup: 568
-        runAsUser: 568
+        runAsGroup: {{ .Values.global.runAsGroup }}
+        runAsUser: {{ .Values.global.runAsUser }}
       containers:
       - name: lidarr
-        image: linuxserver/lidarr:2.12.4
-        #image: "ghcr.io/onedr0p/lidarr:2.4.3"
+        image: "{{ .Values.lidarr.image.repository }}:{{ .Values.lidarr.image.tag }}"
         imagePullPolicy: IfNotPresent
         env:
           - name: "TZ"
-            value: "Europe/Warsaw"
+            value: "{{ .Values.global.timezone }}"
           - name: PUID
-            value: "568"
+            value: "{{ .Values.global.runAsUser }}"
           - name: PGID
-            value: "568"
-          - name: UMASK
-            value: "22"
+            value: "{{ .Values.global.runAsGroup }}"
         ports:
           - name: lidarr
-            containerPort: 8686
+            containerPort: {{ .Values.lidarr.service.port }}
             protocol: TCP
         volumeMounts:
           - mountPath: /config
@@ -54,14 +51,14 @@ spec:
             subPath: library/music
         resources:
           limits:
-            cpu: 0.2
-            memory: 250Mi
+            cpu: {{ .Values.global.resources.limits.cpu }}
+            memory: {{ .Values.global.resources.limits.memory }}
           requests:
-            cpu: 0.1
-            memory: 100Mi
+            cpu: {{ .Values.global.resources.requests.cpu }}
+            memory: {{ .Values.global.resources.requests.memory }}
       volumes:
       - name: media
         persistentVolumeClaim:
           claimName: media
-      nodeSelector:
-        kubernetes.io/role: worker
+      nodeSelector: {{- toYaml .Values.global.nodeSelector | nindent 8 }}
+{{- end }}

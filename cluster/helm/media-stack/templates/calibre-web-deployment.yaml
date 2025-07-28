@@ -1,0 +1,61 @@
+{{- if .Values.calibreWeb.enable }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calibre-web
+  labels:
+    app.kubernetes.io/name: calibre-web
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: calibre-web
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: calibre-web
+    spec:
+      serviceAccountName: media
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      securityContext: {}
+      containers:
+        - name: calibre-web
+          image: "{{ .Values.calibreWeb.image.repository }}:{{ .Values.calibreWeb.image.tag }}"
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: "{{ .Values.global.timezone }}"
+            - name: PUID
+              value: "{{ .Values.global.runAsUser }}"
+            - name: PGID
+              value: "{{ .Values.global.runAsGroup }}"
+            - name: UMASK
+              value: "022"
+          ports:
+            - name: calibre-web
+              containerPort: {{ .Values.calibreWeb.service.port }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: media
+              subPath: library/books
+            - mountPath: /books
+              name: media
+              subPath: library/books
+          resources:
+            requests:
+              cpu: {{ .Values.global.resources.requests.cpu }}
+              memory: {{ .Values.global.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.global.resources.limits.cpu }}
+              memory: {{ .Values.global.resources.limits.memory }}
+      volumes:
+      - name: media
+        persistentVolumeClaim:
+          claimName: media
+      nodeSelector: {{- toYaml .Values.global.nodeSelector | nindent 8 }}
+{{- end }}

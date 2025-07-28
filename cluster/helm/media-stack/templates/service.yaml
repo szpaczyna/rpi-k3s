@@ -1,0 +1,183 @@
+{{- if .Values.transmission.enable }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-http
+  labels:
+    app.kubernetes.io/name: transmission
+spec:
+  type: "{{ .Values.transmission.service.type }}"
+  ports:
+    - port: {{ .Values.transmission.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: transmission
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-utptcp
+  labels:
+    app.kubernetes.io/name: transmission
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: "{{ .Values.transmission.loadbalancer.ip }}"
+  ports:
+    - port: {{ .Values.transmission.loadbalancer.port }}
+      targetPort: utptcp
+      protocol: TCP
+      name: utptcp
+  selector:
+    app.kubernetes.io/name: transmission
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission-utpudp
+  labels:
+    app.kubernetes.io/name: transmission
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: "{{ .Values.transmission.loadbalancer.ip }}"
+  ports:
+    - port: {{ .Values.transmission.loadbalancer.port }}
+      targetPort: utpudp
+      protocol: UDP
+      name: utpudp
+  selector:
+    app.kubernetes.io/name: transmission
+{{- end }}
+{{- if .Values.sonarr.enable }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  labels:
+    app.kubernetes.io/name: sonarr
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.sonarr.service.port }}
+      targetPort: sonarr
+      protocol: TCP
+      name: sonarr
+  selector:
+    app.kubernetes.io/name: sonarr
+{{- end }}
+{{- if .Values.bazarr.enable }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bazarr
+  labels:
+    app.kubernetes.io/name: bazarr
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.bazarr.service.port }}
+      targetPort: bazarr
+      protocol: TCP
+      name: bazarr
+  selector:
+    app.kubernetes.io/name: bazarr
+{{- end }}
+{{- if .Values.radarr.enable }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  labels:
+    app.kubernetes.io/name: radarr
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.radarr.service.port }}
+      targetPort: radarr
+      protocol: TCP
+      name: radarr
+  selector:
+    app.kubernetes.io/name: radarr
+{{- end }}
+{{- if .Values.lidarr.enable }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lidarr
+  labels:
+    app.kubernetes.io/name: lidarr
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.lidarr.service.port }}
+      targetPort: lidarr
+      protocol: TCP
+      name: lidarr
+  selector:
+    app.kubernetes.io/name: lidarr
+{{- end }}
+{{- if .Values.prowlarr.enable }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prowlarr
+  labels:
+    app.kubernetes.io/name: prowlarr
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.prowlarr.service.port }}
+      targetPort: prowlarr
+      protocol: TCP
+      name: prowlarr
+  selector:
+    app.kubernetes.io/name: prowlarr
+{{- end }}
+{{- if .Values.readarr.enable }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: readarr
+  labels:
+    app.kubernetes.io/name: readarr
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.readarr.service.port }}
+      targetPort: readarr
+      protocol: TCP
+      name: readarr
+  selector:
+    app.kubernetes.io/name: readarr
+{{- end }}
+{{- if .Values.calibreWeb.enable }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: calibre-web
+  labels:
+    app.kubernetes.io/name: calibre-web
+spec:
+  type: ClusterIP
+  ports:
+    - name: calibre-web
+      port: {{ .Values.calibreWeb.service.port }}
+      protocol: TCP
+      targetPort: calibre-web
+  selector:
+    app.kubernetes.io/name: calibre-web
+{{ - end }}

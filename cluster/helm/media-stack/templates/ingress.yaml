@@ -1,0 +1,118 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: media
+  namespace: media
+  labels:
+    app.kubernetes.io/name: media
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: media-auth
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "media.shpaq.org"
+      secretName: media-shpaq-org-tls
+  rules:
+  - host: "media.shpaq.org"
+    http:
+      paths:
+      {{- if .Values.transmission.enable }}
+        - path: "/transmission"
+          pathType: Prefix
+          backend:
+            service:
+              name: "transmission-http"
+              port:
+                number: {{ .Values.transmission.service.port }}
+      {{- end }}
+      {{- if .Values.sonarr.enable }}
+        - path: "/sonarr"
+          pathType: Prefix
+          backend:
+            service:
+              name: "sonarr"
+              port:
+                number: {{ .Values.sonarr.service.port }}
+      {{- end }}
+      {{- if .Values.bazarr.enable }}
+        - path: "/bazarr"
+          pathType: Prefix
+          backend:
+            service:
+              name: "bazarr"
+              port:
+                number: {{ .Values.bazarr.service.port }}
+      {{- end }}
+      {{- if .Values.radarr.enable }}
+        - path: "/radarr"
+          pathType: Prefix
+          backend:
+            service:
+              name: "radarr"
+              port:
+                number: {{ .Values.radarr.service.port }}
+      {{- end }}
+      {{- if .Values.lidarr.enable }}
+        - path: "/lidarr"
+          pathType: Prefix
+          backend:
+            service:
+              name: "lidarr"
+              port:
+                number: {{ .Values.lidarr.service.port }}
+      {{- end }}
+      {{- if .Values.prowlarr.enable }}
+        - path: "/prowlarr"
+          pathType: Prefix
+          backend:
+            service:
+              name: "prowlarr"
+              port:
+                number: {{ .Values.prowlarr.service.port }}
+      {{- end }}
+      {{- if .Values.readarr.enable }}
+        - path: "/readarr"
+          pathType: Prefix
+          backend:
+            service:
+              name: "readarr"
+              port:
+                number: {{ .Values.readarr.service.port }}
+      {{- end }}
+
+{{- if .Values.calibreWeb.enable }}  
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: calibre-web
+  namespace: media
+  labels:
+    app.kubernetes.io/instance: calibre-web
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "calibre.shpaq.org"
+      secretName: calibre-shpaq-org-tls
+  rules:
+    - host: "calibre.shpaq.org"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: calibre-web
+                port:
+                  number: {{ .Values.calibreWeb.service.port }}
+{{- end }}

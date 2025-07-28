@@ -1,0 +1,61 @@
+{{- if .Values.bazarr.enable }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bazarr
+  labels:
+    app.kubernetes.io/name: bazarr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bazarr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bazarr
+    spec:
+      serviceAccountName: media
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      securityContext:
+        runAsGroup: {{ .Values.global.runAsGroup }}
+        runAsUser: {{ .Values.global.runAsUser }}
+      containers:
+      - name: bazarr
+        image: "{{ .Values.bazarr.image.repository }}:{{ .Values.bazarr.image.tag }}"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: "TZ"
+            value: "{{ .Values.global.timezone }}"
+          - name: PUID
+            value: "{{ .Values.global.runAsUser }}"
+          - name: PGID
+            value: "{{ .Values.global.runAsGroup }}"
+        ports:
+        - name: bazarr
+          containerPort: {{ .Values.bazarr.service.port }}
+          protocol: TCP
+        volumeMounts:
+          - mountPath: /config
+            name: media
+            subPath: config/bazarr
+          - mountPath: /media
+            name: media
+            subPath: library
+        resources:
+          requests:
+            cpu: {{ .Values.global.resources.requests.cpu }}
+            memory: {{ .Values.global.resources.requests.memory }}
+          limits:
+            cpu: {{ .Values.global.resources.limits.cpu }}
+            memory: {{ .Values.global.resources.limits.memory }}
+      volumes:
+      - name: media
+        persistentVolumeClaim:
+          claimName: media
+      nodeSelector: {{- toYaml .Values.global.nodeSelector | nindent 8 }}
+{{- end }}

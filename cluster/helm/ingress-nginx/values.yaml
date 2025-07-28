@@ -26,7 +26,7 @@ controller:
     ## for backwards compatibility consider setting the full image url via the repository value below
     ## use *either* current default registry/image or repository format or installing chart by providing the values.yaml will fail
     ## repository:
-    tag: "v1.12.3"
+    tag: "v1.13.0"
       #digest: sha256:e24f39d3eed6bcc239a56f20098878845f62baa34b9f2be2fd2c38ce9fb0f29e
       #digestChroot: sha256:c155954116b397163c88afcb3252462771bd7867017e8a17623e83601bab7ac7
     pullPolicy: IfNotPresent
@@ -943,14 +943,15 @@ defaultBackend:
     registry: szpaczyn
     image: defaultbackend-arm64
     tag: "v0.0.1"
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
+    runAsNonRoot: true
     # nobody user -> uid 65534
     runAsUser: 65534
-    runAsNonRoot: true
-    readOnlyRootFilesystem: true
+    runAsGroup: 65534
     allowPrivilegeEscalation: false
     seccompProfile:
       type: RuntimeDefault
+    readOnlyRootFilesystem: true
   # -- Use an existing PSP instead of creating one
   existingPsp: ""
   extraArgs: {}

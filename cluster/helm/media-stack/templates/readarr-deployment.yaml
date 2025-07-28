@@ -1,0 +1,64 @@
+{{- if .Values.readarr.enable }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: readarr
+  labels:
+    app.kubernetes.io/name: readarr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: readarr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: readarr
+    spec:
+      serviceAccountName: media
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      securityContext:
+        runAsGroup: {{ .Values.global.runAsGroup }}
+        runAsUser: {{ .Values.global.runAsUser }}
+      containers:
+      - name: readarr
+        image: "{{ .Values.readarr.image.repository }}:{{ .Values.readarr.image.tag }}"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: "TZ"
+            value: "{{ .Values.global.timezone }}"
+          - name: PUID
+            value: "{{ .Values.global.runAsUser }}"
+          - name: PGID
+            value: "{{ .Values.global.runAsGroup }}"
+        ports:
+          - name: readarr
+            containerPort: {{ .Values.readarr.service.port }}
+            protocol: TCP
+        volumeMounts:
+          - mountPath: /config
+            name: media
+            subPath: config/readarr
+          - mountPath: /downloads
+            name: media
+            subPath: downloads/transmission
+          - mountPath: /books
+            name: media
+            subPath: library/books
+        resources:
+          limits:
+            cpu: {{ .Values.global.resources.limits.cpu }}
+            memory: {{ .Values.global.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.global.resources.requests.cpu }}
+            memory: {{ .Values.global.resources.requests.memory }}
+      volumes:
+      - name: media
+        persistentVolumeClaim:
+          claimName: media
+      nodeSelector: {{- toYaml .Values.global.nodeSelector | nindent 8 }}
+{{- end }}

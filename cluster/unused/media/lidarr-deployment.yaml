@@ -1,0 +1,69 @@
+{{- if .Values.lidarr.enable }}
+---
+## lidarr
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lidarr
+  labels:
+    app.kubernetes.io/name: lidarr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: lidarr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: lidarr
+    spec:
+      serviceAccountName: media
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      securityContext:
+        runAsGroup: 568
+        runAsUser: 568
+      containers:
+      - name: lidarr
+        image: linuxserver/lidarr:2.12.4
+        #image: "ghcr.io/onedr0p/lidarr:2.4.3"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: "TZ"
+            value: "Europe/Warsaw"
+          - name: PUID
+            value: "568"
+          - name: PGID
+            value: "568"
+          - name: UMASK
+            value: "22"
+        ports:
+          - name: lidarr
+            containerPort: 8686
+            protocol: TCP
+        volumeMounts:
+          - mountPath: /config
+            name: media
+            subPath: config/lidarr
+          - mountPath: /downloads
+            name: media
+            subPath: downloads/transmission
+          - mountPath: /music
+            name: media
+            subPath: library/music
+        resources:
+          limits:
+            cpu: 0.2
+            memory: 250Mi
+          requests:
+            cpu: 0.1
+            memory: 100Mi
+      volumes:
+      - name: media
+        persistentVolumeClaim:
+          claimName: media
+      nodeSelector:
+        kubernetes.io/role: worker
+{{- end }}
