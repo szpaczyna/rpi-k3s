@@ -19,7 +19,7 @@ service:
   port: 8080
   targetPort: 8080
   portName: http
-  loadBalancerIP: "10.1.0.6"
+  loadBalancerIP: ""  # Set your desired IP here
   annotations: {}
 
 serviceAccount:
@@ -46,7 +46,7 @@ serverDefinitions:
       "Port": 5432,
       "Username": "postgres",
       "Host": "morphine-postgresql",
-      "HostAddr": "10.1.0.3",
+      "HostAddr": "",
       "SSLMode": "prefer",
       "MaintenanceDB": "postgres"
     }
@@ -109,7 +109,7 @@ extraContainers: |
 ## Needed chart reinstall for apply changes
 env:
   # can be email or nickname
-  email: shpaq@shpaq.org
+  email: admin@example.com
   #password: KciV2jqf1C0nM81HImLHP06cpzBAqk05
   pgpassfile: /var/lib/pgadmin/storage/pgadmin/file.pgpass
 
