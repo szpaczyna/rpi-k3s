@@ -3,11 +3,15 @@
 <!--img src="https://raspbernetes.github.io/img/logo.svg" align="left" width="144px"
 height="144px"/-->
 
-# rpi-k3s
-
-### Home Cloud on Raspberry Pie(s)
-
 <br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 2em; font-weight: bold;">rpi-k3s</span>
+<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 1.3em; font-weight: normal;">Home Cloud on Raspberry Pie(s)</span>
+<br>
+<br>
+
 <!--START_SECTION_PROFILE_VIEWS:readme-info-->
 
 <!--END_SECTION_PROFILE_VIEWS:readme-info-->
@@ -17,33 +21,33 @@ height="144px"/-->
 ## Workloads
 
 - Apps/Helm Charts:
-
-  - [bitwarden](cluster/cluster/helm/bitwarden) - Passwords Management
+  - [bitwarden](cluster/helm/bitwarden) - Passwords Management
   - [gitea](cluster/helm/gitea) - Git with a cup of tea
   - [kanboard](cluster/helm/kanboard) - Kanban project management software
-  - [nextcloud](cluster/helm/nextcloud) - personal cloud service
-  - [photoprism](cluster/helm/photoprism) - photos management
-  - [postgresql](cluster/helm/postgresql) - self explanatory
+  - [nextcloud](cluster/helm/nextcloud) - Personal cloud service
+  - [photoprism](cluster/helm/photoprism) - Photos management
+  - [postgresql](cluster/helm/postgresql) - PostgreSQL database
   - [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
   - [influxdb](cluster/helm/influxdb) - Database for Apple Health exports
-  - [shpaq-org](cluster/helm/shpaq) - Personal website
-
-- Apps/YAML
-
+  - [shpaq-org](cluster/helm/shpaq-org) - Personal website
+  - [media-stack](cluster/helm/media-stack) - Transmission, Radarr, Lidarr, Sonarr, Bazarr, Jackett, Calibre-web
+  
+- Apps/YAML:
   - [unifi](cluster/apps/unifi) - Unifi controller/prometheus poller
-
   - [grafana](cluster/apps/monitoring/grafana) - Grafana with some provisioned dashboards
-  - [media downloads](cluster/apps/media) - jackett, bazarr, radarr, lidarr and sonarr, calibre-web, transmission
-  - [gentoo](cluster/apps/gentoo) - cross-compiler and plyground
+  - [gentoo](cluster/apps/gentoo) - cross-compiler and playground
 
-- System
-  - [prometheus](cluster/helm/prometheus) - Prometheus
+- System:
+  - [prometheus](cluster/helm/prometheus) - Prometheus monitoring system
   - [cert-manager](cluster/core/cert-manager) - Automated letsencrypt broker
   - [metallb](cluster/core/networking) - Load-balancer for bare-metal with BGP
-  - [longhorn](cluster/helm/longhorn) - longhorn storage
-  - [ingress-nginx](cluster/helm/ingress-nginx) - ingress operator
-  - [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) - Certs monitoring
-  - [openweather-exporter](cluster/helm/openweather) - Openweather exporter
+  - [longhorn](cluster/helm/longhorn) - Distributed storage system
+  - [ingress-nginx](cluster/helm/ingress-nginx) - Ingress controller
+  - [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) - Certificates monitoring
+  - [openweather-exporter](cluster/helm/openweather) - OpenWeather API exporter
+  - [loki](cluster/helm/loki) - Log aggregation system
+  - [event-exporter](cluster/helm/event-exporter) - Kubernetes events exporter
+  - [local-path-provisioner](cluster/helm/local-path-provisioner) - Local storage provisioner
 
 
 <!--START_SECTION_LINES_OF_CODE:readme-info-->
