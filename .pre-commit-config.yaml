@@ -16,7 +16,7 @@ repos:
   hooks:
   - args:
     - -c
-    - '/Users/michal.laszuk/git/rpi-k3s/.github/yamllint.config.yaml'
+    - '/Users/shpaq/git/rpi-k3s/.github/yamllint.config.yaml'
     id: yamllint
 - repo: https://github.com/sirosen/fix-smartquotes
   rev: 0.2.0

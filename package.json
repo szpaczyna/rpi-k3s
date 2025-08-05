@@ -4,25 +4,21 @@
   "description": "Szpacze Gniazdo k3s",
   "main": "index.js",
   "dependencies": {
-    "merge": "^2.1.1",
-    "semantic-release": "^24.2.7"
+    "merge": "^2.1.1"
   },
   "devDependencies": {
     "cross-spawn": "^7.0.6",
     "cz-conventional-changelog": "^3.3.0",
-    "ip": ">=2.0.1",
-    "normalize-url": ">=8.0.2",
-    "trim-newlines": ">=5.0.0"
+    "ip": "^2.0.1",
+    "normalize-url": "^8.0.2",
+    "trim-newlines": "^5.0.0",
+    "release-please": "^15.0.0"
   },
   "scripts": {
     "jsonlint": "jsonlint json/*/*.json",
     "yamllint": "yamllint cluster/*",
     "shellint": "shellcheck scripts/*.sh",
-    "test": "npm run jsonlint && npm run yammlint && npm run shellint",
-    "release": "standard-version -i CHANGELOG.md ",
-    "release:minor": "standard-version --release-as minor",
-    "release:patch": "standard-version --release-as patch",
-    "release:major": "standard-version --release-as major"
+    "test": "npm run jsonlint && npm run yamllint && npm run shellint"
   },
   "repository": {
     "type": "git",

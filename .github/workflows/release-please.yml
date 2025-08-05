@@ -1,0 +1,21 @@
+---
+name: Manual Release Please
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Release Please - Create PR or GitHub Release
+        uses: googleapis/release-please-action@v4
+        with:
+          release-type: node
+          package-name: rpi-k3s
+          changelog-path: CHANGELOG.md
