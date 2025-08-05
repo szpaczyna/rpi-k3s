@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   create-release-pr:
+  runs-on: ubuntu-latest
     steps:
       - name: Release Please - Create PR or GitHub Release
         uses: googleapis/release-please-action@v4
