@@ -1,7 +1,0 @@
-{
-  "packages": {
-    ".": {
-      "component": "rpi-k3s"
-    }
-  }
-}
