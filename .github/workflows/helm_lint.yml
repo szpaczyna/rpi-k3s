@@ -1,5 +1,8 @@
 ---
 name: Helm Linter
+permissions:
+  contents: read
+  
 on:
   workflow_dispatch:
     inputs:
