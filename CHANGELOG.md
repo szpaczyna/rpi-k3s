@@ -1,4 +1,26 @@
 # Changelog
+## [0.2.0](https://github.com/szpaczyna/rpi-k3s/compare/v0.1.0...v0.2.0) (2025-08-05)
+
+
+### Features
+
+* release action test ([42f9389](https://github.com/szpaczyna/rpi-k3s/commit/42f9389e13986d4dc653c021a3bfc6bd46b75bd2))
+* release workflows work v2 ([a067f37](https://github.com/szpaczyna/rpi-k3s/commit/a067f37a39d376b90ab14738b262c6d5238aedc3))
+* release workflows work v3 ([4eecc09](https://github.com/szpaczyna/rpi-k3s/commit/4eecc09412da4c18eeb65e29071b0231ec5fb966))
+* release workflows work v3 ([2a0778c](https://github.com/szpaczyna/rpi-k3s/commit/2a0778c17bea14faef126ec62e6a22bd2119f413))
+* release workflows work v3 ([fa2a04a](https://github.com/szpaczyna/rpi-k3s/commit/fa2a04a02986a6262fb9c47694e2c44ee4a0c8c1))
+* release workflows work v4 ([873d7c7](https://github.com/szpaczyna/rpi-k3s/commit/873d7c76cbbe3d49d78e3f0025d6ff08f8e7baa6))
+* release workflows work v5 ([415b362](https://github.com/szpaczyna/rpi-k3s/commit/415b36291ab33845cbf8b6c2d694d6982481c68f))
+* release workflows work v6 ([948c859](https://github.com/szpaczyna/rpi-k3s/commit/948c85962b08b15a40d908b999a8df7864aa77c0))
+
+
+### Bug Fixes
+
+* playing with releaser ([2968041](https://github.com/szpaczyna/rpi-k3s/commit/2968041a5932da4b688ef549cb0de3f1c4b1b416))
+* playing with releaser ([dfb2f63](https://github.com/szpaczyna/rpi-k3s/commit/dfb2f63d2d8db4dcd6b7ebd68a9cf74008a4c978))
+* playing with releaser ([00695ad](https://github.com/szpaczyna/rpi-k3s/commit/00695ad8040b337c49ed5d1262bf62529693f9dc))
+* typo fix ([8fbae35](https://github.com/szpaczyna/rpi-k3s/commit/8fbae356e43e855f7760857b18cb8986fb3e94fd))
+
 ### [0.0.12](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.11...v0.0.12) (2024-04-26)
 
 
