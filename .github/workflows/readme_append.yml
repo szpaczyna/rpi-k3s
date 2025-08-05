@@ -8,6 +8,8 @@ on:
 
 jobs:
   README:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
     - name: GitHub README Generator
