@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   create-release-pr:
@@ -19,8 +20,9 @@ jobs:
       - name: Create Release PR
         uses: googleapis/release-please-action@v4
         with:
-          config-file: .release-please-config.json
-          manifest-file: .release-please-manifest.json
+          release-type: node
+          package-name: rpi-k3s
+          changelog-path: CHANGELOG.md      
 
   github-release:
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'Release ')
