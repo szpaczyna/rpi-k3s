@@ -1,5 +1,5 @@
 # Changelog
-## [0.1.0](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.12...v0.1.0) (2025-08-05)
+### [0.1.0](https://github.com/szpaczyna/rpi-k3s/compare/v0.0.12...v0.1.0) (2025-08-05)
 
 ### Features
 
