@@ -1,11 +1,8 @@
 ---
-name: Manual Release
+name: Manual Release Please
 
 on:
-  workflow_dispatch: {}
-  pull_request:
-    types:
-      - closed
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -14,32 +11,11 @@ permissions:
 
 jobs:
   create-release-pr:
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
     steps:
-      - name: Create Release PR
+      - name: Release Please - Create PR or GitHub Release
         uses: googleapis/release-please-action@v4
         with:
           release-type: node
+          package-name: rpi-k3s
+          changelog-path: CHANGELOG.md
 
-
-  github-release:
-    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'Release ')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set version from PR title
-        id: extract_version
-        run: |
-          TITLE="${{ github.event.pull_request.title }}"
-          VERSION="${TITLE#Release }"
-          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ steps.extract_version.outputs.VERSION }}
-          name: Release ${{ steps.extract_version.outputs.VERSION }}
-          generate_release_notes: true
