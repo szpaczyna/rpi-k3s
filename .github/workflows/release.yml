@@ -21,8 +21,7 @@ jobs:
         uses: googleapis/release-please-action@v4
         with:
           release-type: node
-          package-name: rpi-k3s
-          changelog-path: CHANGELOG.md      
+
 
   github-release:
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'Release ')
