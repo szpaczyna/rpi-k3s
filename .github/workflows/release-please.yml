@@ -3,9 +3,6 @@ name: Manual Release Please
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 permissions:
   contents: write
@@ -21,10 +18,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run Release Please (PR or GitHub Release)
+      - name: Release Please PR
         uses: googleapis/release-please-action@v4
         with:
-          release-type: node
-          package-name: rpi-k3s
-          changelog-path: CHANGELOG.md
-          pull-request-title-pattern: "Release ${version}"
+          config-file: .release-please-config.json
+          manifest-file: release-please-manifest.json
