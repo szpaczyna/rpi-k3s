@@ -1,5 +1,7 @@
 ---
 name: Linter
+permissions:
+  contents: read
 
 on:
   push:
