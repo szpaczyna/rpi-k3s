@@ -1,0 +1,5 @@
+{
+  "release-type": "node",
+  "pull-request-title-pattern": "Release ${version}",
+  "include-component-in-tag": false
+}
