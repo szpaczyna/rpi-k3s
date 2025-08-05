@@ -11,12 +11,12 @@ permissions:
 
 jobs:
   create-release-pr:
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
-      - name: Release Please - Create PR or GitHub Release
-        uses: googleapis/release-please-action@v4
-        with:
-          release-type: node
-          package-name: rpi-k3s
-          changelog-path: CHANGELOG.md
+    - name: Release Please - Create PR or GitHub Release
+      uses: googleapis/release-please-action@v4
+      with:
+        release-type: node
+        package-name: rpi-k3s
+        changelog-path: CHANGELOG.md
 
