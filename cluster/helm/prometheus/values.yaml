@@ -670,6 +670,7 @@ kube-state-metrics:
     - daemonsets
     - deployments
     - endpoints
+    - endpointslices
     - horizontalpodautoscalers
     - ingresses
     - jobs
