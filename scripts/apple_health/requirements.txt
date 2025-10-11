@@ -1,4 +1,4 @@
 influxdb==5.3.2
 gpxpy==1.6.2
 lxml==5.2.2
-requests==2.31.0
+requests==2.32.4
