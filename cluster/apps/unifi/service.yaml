@@ -20,7 +20,7 @@ apiVersion: v1
 metadata:
   name: unifi-lb
   annotations:
-    metallb.universe.tf/allow-shared-ip: 'true'
+    metallb.io/allow-shared-ip: 'true'
 spec:
   ports:
     - name: http
@@ -61,7 +61,7 @@ apiVersion: v1
 metadata:
   name: unifi-lb-udp
   annotations:
-    metallb.universe.tf/allow-shared-ip: 'true'
+    metallb.io/allow-shared-ip: 'true'
 spec:
   ports:
     - name: '3478'

@@ -44,11 +44,10 @@ spec:
       containers:
       - env:
         - name: GF_INSTALL_PLUGINS
-          value: yesoreyeram-infinity-datasource,btplc-status-dot-panel,vonage-status-panel,grafana-clock-panel,novatec-sdg-panel,grafana-singlestat-panel,farski-blendstat-panel,grafana-polystat-panel
+          value: yesoreyeram-infinity-datasource,btplc-status-dot-panel,vonage-status-panel,novatec-sdg-panel,grafana-singlestat-panel,farski-blendstat-panel,grafana-polystat-panel
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/provisioning"
-        #image: grafana/grafana:12.1.1
-        image: grafana/grafana:11.6.0
+        image: grafana/grafana:10.4.19
         imagePullPolicy: IfNotPresent
         name: grafana
         ports:

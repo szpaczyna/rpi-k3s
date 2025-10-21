@@ -21,7 +21,7 @@ configmapReload:
     name: configmap-reload
     image:
       repository: quay.io/prometheus-operator/prometheus-config-reloader
-      tag: v0.84.0
+      tag: v0.86.1
       pullPolicy: IfNotPresent
     containerPort: 8080
     containerPortName: metrics
@@ -72,7 +72,7 @@ server:
 
   image:
     repository: quay.io/prometheus/prometheus
-    tag: v3.5.0
+    tag: v3.7.1
     pullPolicy: IfNotPresent
 
   command: []
@@ -182,7 +182,7 @@ server:
     annotations: {}
     existingClaim: ""
     mountPath: /data
-    size: 60Gi
+    size: 45Gi
     storageClass: "longhorn"
     subPath: ""
 
@@ -344,7 +344,7 @@ serverFiles:
 
       - job_name: 'kubernetes-apiservers'
         kubernetes_sd_configs:
-          - role: endpoints
+          - role: endpointslice
         scheme: https
         tls_config:
           ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
@@ -417,7 +417,7 @@ serverFiles:
       - job_name: 'kubernetes-service-endpoints'
         honor_labels: true
         kubernetes_sd_configs:
-          - role: endpoints
+          - role: endpointslice
         relabel_configs:
           - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
             action: keep
@@ -458,7 +458,7 @@ serverFiles:
         scrape_interval: 5m
         scrape_timeout: 30s
         kubernetes_sd_configs:
-          - role: endpoints
+          - role: endpointslice
         relabel_configs:
           - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape_slow]
             action: keep
@@ -669,7 +669,6 @@ kube-state-metrics:
     - cronjobs
     - daemonsets
     - deployments
-    - endpoints
     - endpointslices
     - horizontalpodautoscalers
     - ingresses
@@ -693,14 +692,14 @@ kube-state-metrics:
     - storageclasses
     - validatingwebhookconfigurations
     - volumeattachments
-    
+
   resources:
     requests:
       cpu: 0.1
       memory: 30Mi
     limits:
-      cpu: 0.2
-      memory: 128Mi
+      cpu: 0.5
+      memory: 245Mi
   customLabels:
     app.kubernetes.io/name: kube-state-metrics
 
