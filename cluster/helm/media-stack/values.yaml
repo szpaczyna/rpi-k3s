@@ -27,7 +27,7 @@ bazarr:
 calibreWeb:
   enable: true
   image:
-    repository: "linuxserver/calibre-web"
+    repository: "lscr.io/linuxserver/calibre-web"
     tag: "0.6.24"
   service:
     type: ClusterIP
@@ -36,7 +36,7 @@ calibreWeb:
 lidarr:
   enable: true
   image:
-    repository: "linuxserver/lidarr"
+    repository: "lscr.io/linuxserver/lidarr"
     tag: "2.12.4"
   service:
     type: ClusterIP
@@ -83,7 +83,7 @@ sonarr:
 transmission:
   enable: true
   image:
-    repository: "linuxserver/transmission"
+    repository: "lscr.io/linuxserver/transmission"
     tag: "4.0.6"
   curl:
     repository: "curlimages/curl"
