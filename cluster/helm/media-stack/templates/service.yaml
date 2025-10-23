@@ -23,7 +23,7 @@ metadata:
   labels:
     app.kubernetes.io/name: transmission
   annotations:
-    metallb.universe.tf/allow-shared-ip: "true"
+    metallb.io/allow-shared-ip: "true"
 spec:
   type: LoadBalancer
   loadBalancerIP: "{{ .Values.transmission.loadbalancer.ip }}"
@@ -43,7 +43,7 @@ metadata:
   labels:
     app.kubernetes.io/name: transmission
   annotations:
-    metallb.universe.tf/allow-shared-ip: "true"
+    metallb.io/allow-shared-ip: "true"
 spec:
   type: LoadBalancer
   loadBalancerIP: "{{ .Values.transmission.loadbalancer.ip }}"
@@ -180,4 +180,4 @@ spec:
       targetPort: calibre-web
   selector:
     app.kubernetes.io/name: calibre-web
-{{ - end }}
+{{- end }}

@@ -46,7 +46,8 @@ prowlarr:
   enable: true
   image:
     repository: "ghcr.io/onedr0p/prowlarr"
-    tag: "1.24.3"
+   # tag: "1.24.3"
+    tag: "1.32.2"
   service:
     type: ClusterIP
     port: 9696
@@ -61,10 +62,11 @@ radarr:
     port: 7878
 
 readarr:
-  enable: false
+  enable: true
   image:
-    repository: "ghcr.io/onedr0p/readarr-develop"
-    tag: "0.3.32"
+    #repository: "ghcr.io/onedr0p/readarr-develop"
+    repository: "lscr.io/linuxserver/readarr"
+    tag: "0.4.18-develop"
   service:
     type: ClusterIP
     port: 8787
@@ -96,7 +98,7 @@ transmission:
 exportarr:
   image:
     repository: "ghcr.io/onedr0p/exportarr"
-    tag: "v2.2"
+    tag: "v2.3"
   service:
     port: 9707
 
