@@ -60,6 +60,8 @@ spec:
           value: "/config/flood-for-transmission"
         - name: TZ
           value: "{{ .Values.global.timezone }}"
+        - name: UMASK
+          value: "022"
         ports:
         - name: http
           containerPort: {{ .Values.transmission.service.port }}

@@ -18,8 +18,9 @@ global:
 bazarr:
   enable: true
   image:
-    repository: "ghcr.io/onedr0p/bazarr"
-    tag: "1.5.1"
+    repository: "lscr.io/linuxserver/bazarr"
+    tag: "latest"
+    # tag: "1.5.1"
   service:
     type: ClusterIP
     port: 6767
@@ -45,9 +46,9 @@ lidarr:
 prowlarr:
   enable: true
   image:
-    repository: "ghcr.io/onedr0p/prowlarr"
-   # tag: "1.24.3"
-    tag: "1.32.2"
+    repository: "lscr.io/linuxserver/prowlarr"
+    tag: "latest"
+    # tag: "1.32.2"
   service:
     type: ClusterIP
     port: 9696
@@ -55,8 +56,9 @@ prowlarr:
 radarr:
   enable: true
   image:
-    repository: "ghcr.io/onedr0p/radarr"
-    tag: "5.0.3.8127"
+    repository: "lscr.io/linuxserver/radarr"
+    # tag: "5.0.3.8127"
+    tag: "latest"
   service:
     type: ClusterIP
     port: 7878
@@ -74,8 +76,9 @@ readarr:
 sonarr:
   enable: true
   image:
-    repository: "ghcr.io/onedr0p/sonarr"
-    tag: "4.0.13"
+    repository: "lscr.io/linuxserver/sonarr"
+    tag: "latest"
+    # tag: "4.0.13"
   service:
     type: ClusterIP
     port: 8989

@@ -28,44 +28,6 @@ spec:
         runAsGroup: {{ .Values.global.runAsGroup }}
         runAsUser: {{ .Values.global.runAsUser }}
       containers:
-      - name: exporter
-        image: "{{ .Values.exportarr.image.repository }}:{{ .Values.exportarr.image.tag }}"
-        imagePullPolicy: IfNotPresent
-        args:
-          - sonarr
-        env:
-          - name: PORT
-            value: "{{ .Values.exportarr.service.port }}"
-          - name: URL
-            valueFrom:
-              secretKeyRef:
-                name: media-exporter
-                key: SONAR_URL
-          - name: BASIC_AUTH_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: media-exporter
-                key: BASIC_AUTH_PASSWORD
-          - name: BASIC_AUTH_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: media-exporter
-                key: BASIC_AUTH_USERNAME
-          - name: APIKEY
-            valueFrom:
-              secretKeyRef:
-                name: media-exporter
-                key: SONAR_APIKEY
-        ports:
-          - name: monitoring
-            containerPort: {{ .Values.exportarr.service.port }}
-        resources:
-          limits:
-            cpu: {{ .Values.global.resources.limits.cpu }}
-            memory: {{ .Values.global.resources.limits.memory }}
-          requests:
-            cpu: {{ .Values.global.resources.requests.cpu }}
-            memory: {{ .Values.global.resources.requests.memory }}
       - name: sonarr
         image: "{{ .Values.sonarr.image.repository }}:{{ .Values.sonarr.image.tag }}"
         imagePullPolicy: IfNotPresent
@@ -76,6 +38,8 @@ spec:
             value: "{{ .Values.global.runAsUser }}"
           - name: PGID
             value: "{{ .Values.global.runAsGroup }}"
+          - name: UMASK
+            value: "022"
         ports:
           - name: sonarr
             containerPort: {{ .Values.sonarr.service.port }}
@@ -90,6 +54,44 @@ spec:
           - mountPath: /tv
             name: media
             subPath: library/tv
+        resources:
+          limits:
+            cpu: {{ .Values.global.resources.limits.cpu }}
+            memory: {{ .Values.global.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.global.resources.requests.cpu }}
+            memory: {{ .Values.global.resources.requests.memory }}
+      - name: exportar
+        image: "{{ .Values.exportarr.image.repository }}:{{ .Values.exportarr.image.tag }}"
+        imagePullPolicy: IfNotPresent
+        args:
+          - sonarr
+        env:
+          - name: PORT
+            value: "{{ .Values.exportarr.service.port }}"
+          - name: URL
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: SONARR_URL
+          - name: BASIC_AUTH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: BASIC_AUTH_PASSWORD
+          - name: BASIC_AUTH_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: BASIC_AUTH_USERNAME
+          - name: APIKEY
+            valueFrom:
+              secretKeyRef:
+                name: media-exporter
+                key: SONARR_APIKEY
+        ports:
+          - name: monitoring
+            containerPort: {{ .Values.exportarr.service.port }}
         resources:
           limits:
             cpu: {{ .Values.global.resources.limits.cpu }}

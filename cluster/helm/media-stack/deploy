@@ -2,6 +2,9 @@
 sops -d --output media-secret.yaml ../../secrets/media-secret.yaml
 sops -d --output media-exporter-secret.yaml ../../secrets/media-exporter-secret.yaml
 
+kubectl apply -f media-exporter-secret.yaml
+kubectl apply -f media-secret.yaml
+
 helm upgrade --install media-stack --namespace media --values values.yaml .
 
 
