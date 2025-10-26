@@ -17,6 +17,9 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: prowlarr
+      annotations:
+        prometheus.io/port: "{{ .Values.exportarr.service.port }}"
+        prometheus.io/scrape: "true"
     spec:
       serviceAccountName: media
       dnsPolicy: ClusterFirst

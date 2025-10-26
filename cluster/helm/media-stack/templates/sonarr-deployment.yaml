@@ -18,7 +18,7 @@ spec:
       labels:
         app.kubernetes.io/name: sonarr
       annotations:
-        prometheus.io/port: "9707"
+        prometheus.io/port: "{{ .Values.exportarr.service.port }}"
         prometheus.io/scrape: "true"
     spec:
       serviceAccountName: media
