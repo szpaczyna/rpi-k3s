@@ -31,7 +31,35 @@ To install the media stack Helm chart, follow these steps:
 
 ## Configuration
 
-You can customize the deployment by modifying the `values.yaml` file. This file contains default configuration values for the applications, including resource limits, environment variables, and more.
+This chart uses a simplified values structure:
+
+- `images:` central map of image repository/tag per app (radarr/sonarr/lidarr/prowlarr/readarr/bazarr/transmission/exportarr/calibreWeb).
+- `media:` per-service blocks with `enable: true|false` and `service.port`.
+- `global:` for timezone, runAsUser/runAsGroup, resources and nodeSelector.
+
+Example (see `values.yaml`):
+
+```yaml
+images:
+   radarr:
+      repository: lscr.io/linuxserver/radarr
+      tag: latest
+
+media:
+   radarr:
+      enable: true
+      service:
+         port: 7878
+
+global:
+   timezone: Europe/Warsaw
+   runAsUser: 568
+   runAsGroup: 568
+```
+
+When `media.<name>.enable` is true and the name ends with "arr", the chart will render a Deployment + Service using the centralized `images` map.
+
+Transmission and Calibre web keep specialized templates and are enabled via `transmission.enable` and `calibreWeb.enable`.
 
 ## Uninstallation
 

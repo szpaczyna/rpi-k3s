@@ -22,69 +22,26 @@ spec:
   - host: "media.shpaq.org"
     http:
       paths:
-      {{- if .Values.transmission.enable }}
-        - path: "/transmission"
-          pathType: Prefix
-          backend:
-            service:
-              name: "transmission-http"
-              port:
-                number: {{ .Values.transmission.service.port }}
-      {{- end }}
-      {{- if .Values.sonarr.enable }}
-        - path: "/sonarr"
-          pathType: Prefix
-          backend:
-            service:
-              name: "sonarr"
-              port:
-                number: {{ .Values.sonarr.service.port }}
-      {{- end }}
-      {{- if .Values.bazarr.enable }}
-        - path: "/bazarr"
-          pathType: Prefix
-          backend:
-            service:
-              name: "bazarr"
-              port:
-                number: {{ .Values.bazarr.service.port }}
-      {{- end }}
-      {{- if .Values.radarr.enable }}
-        - path: "/radarr"
-          pathType: Prefix
-          backend:
-            service:
-              name: "radarr"
-              port:
-                number: {{ .Values.radarr.service.port }}
-      {{- end }}
-      {{- if .Values.lidarr.enable }}
-        - path: "/lidarr"
-          pathType: Prefix
-          backend:
-            service:
-              name: "lidarr"
-              port:
-                number: {{ .Values.lidarr.service.port }}
-      {{- end }}
-      {{- if .Values.prowlarr.enable }}
-        - path: "/prowlarr"
-          pathType: Prefix
-          backend:
-            service:
-              name: "prowlarr"
-              port:
-                number: {{ .Values.prowlarr.service.port }}
-      {{- end }}
-      {{- if .Values.readarr.enable }}
-        - path: "/readarr"
-          pathType: Prefix
-          backend:
-            service:
-              name: "readarr"
-              port:
-                number: {{ .Values.readarr.service.port }}
-      {{- end }}
+{{- if .Values.transmission.enable }}
+      - path: "/transmission"
+        pathType: Prefix
+        backend:
+          service:
+            name: transmission-http
+            port:
+              number: {{ .Values.transmission.service.port }}
+{{- end }}
+{{- range $name, $svc := .Values.media }}
+{{- if $svc.enable }}
+      - path: "/{{ $name }}"
+        pathType: Prefix
+        backend:
+          service:
+            name: "{{ $name }}"
+            port:
+              number: {{ $svc.service.port }}
+{{- end }}
+{{- end }}
 
 {{- if .Values.calibreWeb.enable }}  
 ---

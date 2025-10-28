@@ -1,3 +1,4 @@
+{{- /* Transmission-specific services (keep as-is) */ -}}
 {{- if .Values.transmission.enable }}
 apiVersion: v1
 kind: Service
@@ -55,114 +56,8 @@ spec:
   selector:
     app.kubernetes.io/name: transmission
 {{- end }}
-{{- if .Values.sonarr.enable }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: sonarr
-  labels:
-    app.kubernetes.io/name: sonarr
-spec:
-  type: ClusterIP
-  ports:
-    - port: {{ .Values.sonarr.service.port }}
-      targetPort: sonarr
-      protocol: TCP
-      name: sonarr
-  selector:
-    app.kubernetes.io/name: sonarr
-{{- end }}
-{{- if .Values.bazarr.enable }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: bazarr
-  labels:
-    app.kubernetes.io/name: bazarr
-spec:
-  type: ClusterIP
-  ports:
-    - port: {{ .Values.bazarr.service.port }}
-      targetPort: bazarr
-      protocol: TCP
-      name: bazarr
-  selector:
-    app.kubernetes.io/name: bazarr
-{{- end }}
-{{- if .Values.radarr.enable }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: radarr
-  labels:
-    app.kubernetes.io/name: radarr
-spec:
-  type: ClusterIP
-  ports:
-    - port: {{ .Values.radarr.service.port }}
-      targetPort: radarr
-      protocol: TCP
-      name: radarr
-  selector:
-    app.kubernetes.io/name: radarr
-{{- end }}
-{{- if .Values.lidarr.enable }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: lidarr
-  labels:
-    app.kubernetes.io/name: lidarr
-spec:
-  type: ClusterIP
-  ports:
-    - port: {{ .Values.lidarr.service.port }}
-      targetPort: lidarr
-      protocol: TCP
-      name: lidarr
-  selector:
-    app.kubernetes.io/name: lidarr
-{{- end }}
-{{- if .Values.prowlarr.enable }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: prowlarr
-  labels:
-    app.kubernetes.io/name: prowlarr
-spec:
-  type: ClusterIP
-  ports:
-    - port: {{ .Values.prowlarr.service.port }}
-      targetPort: prowlarr
-      protocol: TCP
-      name: prowlarr
-  selector:
-    app.kubernetes.io/name: prowlarr
-{{- end }}
-{{- if .Values.readarr.enable }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: readarr
-  labels:
-    app.kubernetes.io/name: readarr
-spec:
-  type: ClusterIP
-  ports:
-    - port: {{ .Values.readarr.service.port }}
-      targetPort: readarr
-      protocol: TCP
-      name: readarr
-  selector:
-    app.kubernetes.io/name: readarr
-{{- end }}
+
+{{- /* Calibre web service (keep separate for host root path) */ -}}
 {{- if .Values.calibreWeb.enable }}
 ---
 apiVersion: v1
@@ -180,4 +75,26 @@ spec:
       targetPort: calibre-web
   selector:
     app.kubernetes.io/name: calibre-web
+{{- end }}
+
+{{- /* Generic media services */ -}}
+{{- range $name, $svc := .Values.media }}
+  {{- if and $svc.enable (hasSuffix $name "arr") }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+spec:
+  type: {{ $svc.service.type | default "ClusterIP" }}
+  ports:
+    - port: {{ $svc.service.port }}
+      targetPort: {{ $name }}
+      protocol: TCP
+      name: {{ $name }}
+  selector:
+    app.kubernetes.io/name: {{ $name }}
+  {{- end }}
 {{- end }}

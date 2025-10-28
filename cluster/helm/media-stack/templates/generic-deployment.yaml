@@ -1,0 +1,131 @@
+{{- range $name, $svc := .Values.media }}
+  {{- if $svc.enable }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ $name }}
+      annotations:
+        prometheus.io/port: "{{ $.Values.exportarr.service.port }}"
+        prometheus.io/scrape: "true"
+    spec:
+      serviceAccountName: media
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      securityContext:
+        runAsGroup: {{ $.Values.global.runAsGroup }}
+        runAsUser: {{ $.Values.global.runAsUser }}
+      containers:
+      - name: {{ $name }}
+        image: "{{ include "media-stack.image" (dict "name" $name "root" $) }}"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: TZ
+          value: "{{ $.Values.global.timezone }}"
+        - name: PUID
+          value: "{{ $.Values.global.runAsUser }}"
+        - name: PGID
+          value: "{{ $.Values.global.runAsGroup }}"
+        - name: UMASK
+          value: "022"
+        ports:
+        - name: {{ $name }}
+          containerPort: {{ $svc.service.port }}
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config
+          name: media
+          subPath: config/{{ $name }}
+        {{- if or (eq $name "sonarr") (eq $name "radarr") (eq $name "lidarr") (eq $name "readarr") (eq $name "prowlarr") }}
+        - mountPath: /downloads
+          name: media
+          subPath: downloads/transmission
+        {{- end }}
+        {{- if eq $name "radarr" }}
+        - mountPath: /movies
+          name: media
+          subPath: library/movies
+        {{- else if eq $name "sonarr" }}
+        - mountPath: /tv
+          name: media
+          subPath: library/tv
+        {{- else if eq $name "lidarr" }}
+        - mountPath: /music
+          name: media
+          subPath: library/music
+        {{- else if eq $name "readarr" }}
+        - mountPath: /books
+          name: media
+          subPath: library/books
+        {{- else if eq $name "bazarr" }}
+        - mountPath: /media
+          name: media
+          subPath: library
+        {{- end }}
+        resources:
+          requests:
+            cpu: {{ $.Values.global.resources.requests.cpu }}
+            memory: {{ $.Values.global.resources.requests.memory }}
+          limits:
+            cpu: {{ $.Values.global.resources.limits.cpu }}
+            memory: {{ $.Values.global.resources.limits.memory }}
+      - name: exportar
+        image: "{{ include "media-stack.image" (dict "name" "exportarr" "root" $) }}"
+        imagePullPolicy: IfNotPresent
+        args:
+        - {{ $name }}
+        env:
+        - name: PORT
+          value: "{{ $.Values.exportarr.service.port }}"
+        - name: URL
+          valueFrom:
+            secretKeyRef:
+              name: media-exporter
+              key: {{ printf "%s_URL" (upper $name) }}
+        - name: BASIC_AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: media-exporter
+              key: BASIC_AUTH_PASSWORD
+        - name: BASIC_AUTH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: media-exporter
+              key: BASIC_AUTH_USERNAME
+        - name: APIKEY
+          valueFrom:
+            secretKeyRef:
+              name: media-exporter
+              key: {{ printf "%s_APIKEY" (upper $name) }}
+        ports:
+        - name: monitoring
+          containerPort: {{ $.Values.exportarr.service.port }}
+        resources:
+          requests:
+            cpu: {{ $.Values.global.resources.requests.cpu }}
+            memory: {{ $.Values.global.resources.requests.memory }}
+          limits:
+            cpu: {{ $.Values.global.resources.limits.cpu }}
+            memory: {{ $.Values.global.resources.limits.memory }}
+      volumes:
+      - name: media
+        persistentVolumeClaim:
+          claimName: media
+{{- if $.Values.global.nodeSelector }}
+{{ toYaml (dict "nodeSelector" $.Values.global.nodeSelector) | nindent 6 }}
+{{- end }}
+{{- end }}
+{{- end }}

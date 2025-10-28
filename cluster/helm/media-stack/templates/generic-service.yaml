@@ -1,0 +1,21 @@
+{{- /* Generic Service template for all media services under .Values.media */ -}}
+{{- range $name, $svc := .Values.media }}
+  {{- if $svc.enable }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+spec:
+  type: {{ $svc.service.type | default "ClusterIP" }}
+  ports:
+    - port: {{ $svc.service.port }}
+      targetPort: {{ $name }}
+      protocol: TCP
+      name: {{ $name }}
+  selector:
+    app.kubernetes.io/name: {{ $name }}
+  {{- end }}
+{{- end }}

@@ -24,7 +24,7 @@ spec:
       securityContext: {}
       containers:
         - name: calibre-web
-          image: "{{ .Values.calibreWeb.image.repository }}:{{ .Values.calibreWeb.image.tag }}"
+          image: "{{ printf "%s:%s" .Values.images.calibreWeb.repository .Values.images.calibreWeb.tag }}"
           imagePullPolicy: Always
           env:
             - name: TZ
@@ -57,5 +57,7 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: media
-      nodeSelector: {{- toYaml .Values.global.nodeSelector | nindent 8 }}
+{{- if $.Values.global.nodeSelector }}
+{{ toYaml (dict "nodeSelector" $.Values.global.nodeSelector) | nindent 6 }}
+{{- end }}
 {{- end }}
