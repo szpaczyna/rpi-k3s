@@ -1,0 +1,61 @@
+{{- if .Values.configStorage.enabled }}
+{{- range $name, $svc := .Values.media }}
+  {{- if $svc.enable }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "{{ $name }}"
+  namespace: media
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/component: {{ $name }}
+    type: "longhorn"
+spec:
+  storageClassName: "{{ $.Values.configStorage.storageClass }}"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "{{ $svc.storageSize | default "1Gi" }}"
+  {{- end }}
+{{- end }}
+{{- if .Values.transmission.enable }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "transmission"
+  namespace: media
+  labels:
+    app.kubernetes.io/name: transmission
+    app.kubernetes.io/component: transmission
+    type: "longhorn"
+spec:
+  storageClassName: "{{ .Values.configStorage.storageClass }}"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "{{ .Values.transmission.storageSize | default "1Gi" }}"
+{{- end }}
+{{- if .Values.calibreWeb.enable }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "calibre-web"
+  namespace: media
+  labels:
+    app.kubernetes.io/name: calibre-web
+    app.kubernetes.io/component: calibre-web
+    type: "longhorn"
+spec:
+  storageClassName: "{{ .Values.configStorage.storageClass }}"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "{{ .Values.calibreWeb.storageSize | default "1Gi" }}"
+{{- end }}
+{{- end }}

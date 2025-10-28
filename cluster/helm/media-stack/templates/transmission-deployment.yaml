@@ -28,6 +28,19 @@ spec:
         runAsGroup: {{ .Values.global.runAsGroup }}
         runAsUser: {{ .Values.global.runAsUser }}
       initContainers:
+      {{- if $.Values.configStorage.enabled }}
+      - name: fix-permissions
+        image: busybox:latest
+        command:
+        - /bin/sh
+        - -c
+        - chown -R {{ .Values.global.runAsUser }}:{{ .Values.global.runAsGroup }} /config && chmod -R 755 /config
+        volumeMounts:
+        - mountPath: /config
+          name: transmission-config
+        securityContext:
+          runAsUser: 0
+      {{- end }}
       - name: flood
         image: "{{ .Values.transmission.curl.repository }}:{{ .Values.transmission.curl.tag }}"
         command:
@@ -36,9 +49,17 @@ spec:
         - curl -o- -sL https://github.com/johman10/flood-for-transmission/releases/download/latest/flood-for-transmission.tar.gz
             | tar xzf - -C /config
         volumeMounts:
+        {{- if $.Values.configStorage.enabled }}
+        - mountPath: /config
+          name: transmission-config
+        {{- else }}
         - mountPath: /config
           name: media
           subPath: config/transmission
+        {{- end }}
+        securityContext:
+          runAsUser: {{ .Values.global.runAsUser }}
+          runAsGroup: {{ .Values.global.runAsGroup }}
       containers:
       - name: transmission
         image: "{{ printf "%s:%s" .Values.images.transmission.repository .Values.images.transmission.tag }}"
@@ -73,9 +94,14 @@ spec:
           containerPort: {{ .Values.transmission.loadbalancer.port }}
           protocol: UDP
         volumeMounts:
+        {{- if $.Values.configStorage.enabled }}
+        - mountPath: /config
+          name: transmission-config
+        {{- else }}
         - mountPath: /config
           name: media
           subPath: config/transmission
+        {{- end }}
         - mountPath: /downloads
           name: media
           subPath: downloads/transmission
@@ -112,6 +138,11 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: media
+      {{- if $.Values.configStorage.enabled }}
+      - name: transmission-config
+        persistentVolumeClaim:
+          claimName: transmission
+      {{- end }}
 {{- if $.Values.global.nodeSelector }}
 {{ toYaml (dict "nodeSelector" $.Values.global.nodeSelector) | nindent 6 }}
 {{- end }}

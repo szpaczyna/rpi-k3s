@@ -28,6 +28,20 @@ spec:
       securityContext:
         runAsGroup: {{ $.Values.global.runAsGroup }}
         runAsUser: {{ $.Values.global.runAsUser }}
+      {{- if $.Values.configStorage.enabled }}
+      initContainers:
+      - name: fix-permissions
+        image: busybox:latest
+        command:
+        - /bin/sh
+        - -c
+        - chown -R {{ $.Values.global.runAsUser }}:{{ $.Values.global.runAsGroup }} /config && chmod -R 755 /config
+        volumeMounts:
+        - mountPath: /config
+          name: {{ $name }}-config
+        securityContext:
+          runAsUser: 0
+      {{- end }}
       containers:
       - name: {{ $name }}
         image: "{{ include "media-stack.image" (dict "name" $name "root" $) }}"
@@ -46,9 +60,14 @@ spec:
           containerPort: {{ $svc.service.port }}
           protocol: TCP
         volumeMounts:
+        {{- if $.Values.configStorage.enabled }}
+        - mountPath: /config
+          name: {{ $name }}-config
+        {{- else }}
         - mountPath: /config
           name: media
           subPath: config/{{ $name }}
+        {{- end }}
         {{- if or (eq $name "sonarr") (eq $name "radarr") (eq $name "lidarr") (eq $name "readarr") (eq $name "prowlarr") }}
         - mountPath: /downloads
           name: media
@@ -124,6 +143,11 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: media
+      {{- if $.Values.configStorage.enabled }}
+      - name: {{ $name }}-config
+        persistentVolumeClaim:
+          claimName: {{ $name }}
+      {{- end }}
 {{- if $.Values.global.nodeSelector }}
 {{ toYaml (dict "nodeSelector" $.Values.global.nodeSelector) | nindent 6 }}
 {{- end }}

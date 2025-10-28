@@ -20,34 +20,41 @@ media:
     enable: true
     service:
       port: 6767
+    storageSize: 1Gi
 
   lidarr:
     enable: true
     service:
       port: 8686
+    storageSize: 1Gi
 
   prowlarr:
     enable: true
     service:
       port: 9696
+    storageSize: 1Gi
 
   radarr:
     enable: true
     service:
       port: 7878
+    storageSize: 1Gi
 
   readarr:
     enable: true
     service:
       port: 8787
+    storageSize: 1Gi
 
   sonarr:
     enable: true
     service:
       port: 8989
+    storageSize: 1Gi
 
 transmission:
   enable: true
+  storageSize: 1Gi
   curl:
     repository: "curlimages/curl"
     tag: "8.13.0"
@@ -64,12 +71,19 @@ exportarr:
 
 calibreWeb:
   enable: true
+  storageSize: 1Gi
   service:
     port: 8083
 
 persistence:
   storageClass: local-path
   size: 1000Gi
+
+# Configuration storage for SQLite databases and app configs
+# Uses Longhorn for better performance with SQLite databases
+configStorage:
+  enabled: true
+  storageClass: longhorn
 
 images:
   radarr:

@@ -22,6 +22,20 @@ spec:
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
       securityContext: {}
+      {{- if $.Values.configStorage.enabled }}
+      initContainers:
+        - name: fix-permissions
+          image: busybox:latest
+          command:
+            - /bin/sh
+            - -c
+            - chown -R {{ .Values.global.runAsUser }}:{{ .Values.global.runAsGroup }} /config && chmod -R 755 /config
+          volumeMounts:
+            - mountPath: /config
+              name: calibre-web-config
+          securityContext:
+            runAsUser: 0
+      {{- end }}
       containers:
         - name: calibre-web
           image: "{{ printf "%s:%s" .Values.images.calibreWeb.repository .Values.images.calibreWeb.tag }}"
@@ -40,9 +54,14 @@ spec:
               containerPort: {{ .Values.calibreWeb.service.port }}
               protocol: TCP
           volumeMounts:
+            {{- if $.Values.configStorage.enabled }}
+            - mountPath: /config
+              name: calibre-web-config
+            {{- else }}
             - mountPath: /config
               name: media
-              subPath: library/books
+              subPath: config/calibre-web
+            {{- end }}
             - mountPath: /books
               name: media
               subPath: library/books
@@ -57,6 +76,11 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: media
+      {{- if $.Values.configStorage.enabled }}
+      - name: calibre-web-config
+        persistentVolumeClaim:
+          claimName: calibre-web
+      {{- end }}
 {{- if $.Values.global.nodeSelector }}
 {{ toYaml (dict "nodeSelector" $.Values.global.nodeSelector) | nindent 6 }}
 {{- end }}
