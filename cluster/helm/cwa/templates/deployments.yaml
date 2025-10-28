@@ -1,0 +1,264 @@
+{{- if .Values.components.calibreWebAutomated.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cwa.fullname" . }}-main
+  labels:
+    {{- include "cwa.labels" . | nindent 4 }}
+    app.kubernetes.io/component: main
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "cwa.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: main
+  template:
+    metadata:
+      labels:
+        {{- include "cwa.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: main
+        {{- if .Values.monitoring.diun.enabled }}
+        diun.enable: "true"
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "cwa.serviceAccountName" . }}
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      securityContext:
+        runAsGroup: {{ .Values.global.runAsGroup }}
+        runAsUser: {{ .Values.global.runAsUser }}
+        fsGroup: {{ .Values.global.runAsGroup }}
+      {{- if .Values.storage.config.enabled }}
+      initContainers:
+        - name: fix-permissions
+          image: busybox:1.35
+          command: ['sh', '-c', 'chown -R {{ .Values.global.runAsUser }}:{{ .Values.global.runAsGroup }} /config && chmod -R 755 /config']
+          volumeMounts:
+            - name: config
+              mountPath: /config
+          securityContext:
+            runAsUser: 0
+      {{- end }}
+      containers:
+        - name: calibre-web-automated
+          image: "{{ .Values.components.calibreWebAutomated.image.repository }}:{{ .Values.components.calibreWebAutomated.image.tag }}"
+          imagePullPolicy: {{ .Values.components.calibreWebAutomated.image.pullPolicy }}
+          env:
+            - name: UMASK
+              value: "022"
+            # Map CWA-prefixed environment variables to expected names
+            - name: FLASK_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: CWA_FLASK_PORT
+            - name: FLASK_DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: CWA_FLASK_DEBUG
+            - name: CLOUDFLARE_PROXY_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: CWA_CLOUDFLARE_PROXY_URL
+            - name: INGEST_DIR
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: CWA_INGEST_DIR
+            - name: BOOK_LANGUAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: CWA_BOOK_LANGUAGE
+            - name: DOCKER_MODS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: CWA_DOCKER_MODS
+            # Global environment variables
+            - name: TZ
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: TZ
+            - name: PUID
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: PUID
+            - name: PGID
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: PGID
+          ports:
+            - name: http
+              containerPort: {{ .Values.components.calibreWebAutomated.service.port }}
+              protocol: TCP
+          volumeMounts:
+            {{- if .Values.storage.config.enabled }}
+            - name: config
+              mountPath: /config
+            {{- else }}
+            - name: media
+              mountPath: /config
+              subPath: config/calibre-web-automated
+            {{- end }}
+            - name: media
+              mountPath: /calibre-library
+              subPath: library/books
+          resources:
+            {{- toYaml .Values.global.resources | nindent 12 }}
+          securityContext:
+            runAsUser: {{ .Values.global.runAsUser }}
+            runAsGroup: {{ .Values.global.runAsGroup }}
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: {{ include "cwa.fullname" . }}-media
+        {{- if .Values.storage.config.enabled }}
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ include "cwa.fullname" . }}-config
+        {{- end }}
+      {{- with .Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
+
+{{- if .Values.components.bookDownloader.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cwa.fullname" . }}-downloader
+  labels:
+    {{- include "cwa.labels" . | nindent 4 }}
+    app.kubernetes.io/component: downloader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "cwa.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: downloader
+  template:
+    metadata:
+      labels:
+        {{- include "cwa.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: downloader
+        {{- if .Values.monitoring.diun.enabled }}
+        diun.enable: "true"
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "cwa.serviceAccountName" . }}
+      securityContext:
+        fsGroup: {{ .Values.global.runAsGroup }}
+        runAsUser: {{ .Values.global.runAsUser }}
+        runAsGroup: {{ .Values.global.runAsGroup }}
+      {{- if .Values.storage.config.enabled }}
+      initContainers:
+        - name: fix-permissions
+          image: busybox:1.35
+          command: ['sh', '-c', 'chown -R {{ .Values.global.runAsUser }}:{{ .Values.global.runAsGroup }} /config']
+          volumeMounts:
+            - name: config
+              mountPath: /config
+          securityContext:
+            runAsUser: 0
+      {{- end }}
+      containers:
+        - name: book-downloader
+          image: "{{ .Values.components.bookDownloader.image.repository }}:{{ .Values.components.bookDownloader.image.tag }}"
+          imagePullPolicy: {{ .Values.components.bookDownloader.image.pullPolicy }}
+          env:
+            - name: UMASK
+              value: "022"
+            # Map DOWNLOADER-prefixed environment variables to expected names
+            - name: FLASK_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: DOWNLOADER_FLASK_PORT
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: DOWNLOADER_LOG_LEVEL
+            - name: BOOK_LANGUAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: DOWNLOADER_BOOK_LANGUAGE
+            - name: USE_BOOK_TITLE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: DOWNLOADER_USE_BOOK_TITLE
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: DOWNLOADER_APP_ENV
+            - name: MAX_CONCURRENT_DOWNLOADS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: DOWNLOADER_MAX_CONCURRENT_DOWNLOADS
+            - name: DOWNLOAD_PROGRESS_UPDATE_INTERVAL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: DOWNLOADER_DOWNLOAD_PROGRESS_UPDATE_INTERVAL
+            # Global environment variables
+            - name: TZ
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: TZ
+            - name: UID
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: UID
+            - name: GID
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "cwa.fullname" . }}-config
+                  key: GID
+          ports:
+            - name: http
+              containerPort: {{ .Values.components.bookDownloader.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.global.resources | nindent 12 }}
+          securityContext:
+            runAsUser: {{ .Values.global.runAsUser }}
+            runAsGroup: {{ .Values.global.runAsGroup }}
+          volumeMounts:
+            - name: media
+              mountPath: /cwa-book-ingest
+              subPath: calibre/ingest
+            {{- if .Values.storage.config.enabled }}
+            - name: config
+              mountPath: /config
+            {{- end }}
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: {{ include "cwa.fullname" . }}-media
+        {{- if .Values.storage.config.enabled }}
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ include "cwa.fullname" . }}-config
+        {{- end }}
+      {{- with .Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

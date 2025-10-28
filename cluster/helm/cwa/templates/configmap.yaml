@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "cwa.fullname" . }}-config
+  labels:
+    {{- include "cwa.labels" . | nindent 4 }}
+data:
+  # Global environment variables
+  TZ: {{ .Values.global.timezone | quote }}
+  PUID: {{ .Values.global.runAsUser | quote }}
+  PGID: {{ .Values.global.runAsGroup | quote }}
+  UID: {{ .Values.global.runAsUser | quote }}
+  GID: {{ .Values.global.runAsGroup | quote }}
+  
+  {{- if .Values.components.calibreWebAutomated.enabled }}
+  # Calibre Web Automated environment variables
+  CWA_FLASK_PORT: {{ .Values.components.calibreWebAutomated.env.FLASK_PORT | quote }}
+  CWA_FLASK_DEBUG: {{ .Values.components.calibreWebAutomated.env.FLASK_DEBUG | quote }}
+  CWA_CLOUDFLARE_PROXY_URL: {{ .Values.components.calibreWebAutomated.env.CLOUDFLARE_PROXY_URL | quote }}
+  CWA_INGEST_DIR: {{ .Values.components.calibreWebAutomated.env.INGEST_DIR | quote }}
+  CWA_BOOK_LANGUAGE: {{ .Values.components.calibreWebAutomated.env.BOOK_LANGUAGE | quote }}
+  CWA_DOCKER_MODS: {{ .Values.components.calibreWebAutomated.env.DOCKER_MODS | quote }}
+  {{- end }}
+  
+  {{- if .Values.components.bookDownloader.enabled }}
+  # Book Downloader environment variables
+  DOWNLOADER_FLASK_PORT: {{ .Values.components.bookDownloader.env.FLASK_PORT | quote }}
+  DOWNLOADER_LOG_LEVEL: {{ .Values.components.bookDownloader.env.LOG_LEVEL | quote }}
+  DOWNLOADER_BOOK_LANGUAGE: {{ .Values.components.bookDownloader.env.BOOK_LANGUAGE | quote }}
+  DOWNLOADER_USE_BOOK_TITLE: {{ .Values.components.bookDownloader.env.USE_BOOK_TITLE | quote }}
+  DOWNLOADER_APP_ENV: {{ .Values.components.bookDownloader.env.APP_ENV | quote }}
+  DOWNLOADER_MAX_CONCURRENT_DOWNLOADS: {{ .Values.components.bookDownloader.env.MAX_CONCURRENT_DOWNLOADS | quote }}
+  DOWNLOADER_DOWNLOAD_PROGRESS_UPDATE_INTERVAL: {{ .Values.components.bookDownloader.env.DOWNLOAD_PROGRESS_UPDATE_INTERVAL | quote }}
+  {{- end }}
