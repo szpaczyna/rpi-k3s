@@ -72,7 +72,7 @@ server:
 
   image:
     repository: quay.io/prometheus/prometheus
-    tag: v3.7.1
+    tag: v3.7.3
     pullPolicy: IfNotPresent
 
   command: []
@@ -721,7 +721,7 @@ prometheus-node-exporter:
 
   image:
     repository: prometheus/node-exporter
-    tag: v1.9.1
+    tag: v1.10.2
     pullPolicy: IfNotPresent
 
   hostNetwork: true
