@@ -1,4 +1,16 @@
 #!/bin/bash
+
+# Check if jetstack repo is already added
+if ! helm repo list | grep -q "jetstack"; then
+    echo "Adding jetstack Helm repository..."
+    helm repo add jetstack https://charts.jetstack.io
+else
+    echo "jetstack repository already exists"
+fi
+
+# Update helm repositories
+helm repo update
+
 #kubectl create namespace cert-manager
 #kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true
 #kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.6.0/cert-manager.yaml
@@ -9,10 +21,18 @@ helm upgrade --install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --version v$1 \
-  --set crds.enabled=true \
-  --set prometheus.enabled=true \
-  --set 'extraArgs={--acme-http01-solver-nameservers=10.0.0.10:53}'
+  --values values.yaml \
+  --version v$1
+
+
+#helm upgrade --install \
+#  cert-manager jetstack/cert-manager \
+#  --namespace cert-manager \
+#  --create-namespace \
+#  --version v$1 \
+#  --set crds.enabled=true \
+#  --set prometheus.enabled=true \
+#  --set 'extraArgs={--acme-http01-solver-nameservers=10.0.0.10:53}'
 
 #  --set installCRDs=true \
 #sleep 60; echo 'Waiting for containers to be created'
