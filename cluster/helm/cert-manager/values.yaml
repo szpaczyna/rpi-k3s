@@ -1,58 +1,20 @@
 global:
-  imagePullSecrets: []
-  nodeSelector: {}
-  commonLabels: {}
+  nodeSelector:
+    kubernetes.io/os: linux
   rbac:
     create: true
     aggregateClusterRoles: true
   podSecurityPolicy:
     enabled: false
-    useAppArmor: true
   logLevel: 2
   leaderElection:
     namespace: "kube-system"
-
-installCRDs: false
 
 crds:
   enabled: true
   keep: true
 
 replicaCount: 1
-strategy: {}
-
-podDisruptionBudget:
-  enabled: false
-
-featureGates: ""
-maxConcurrentChallenges: 60
-
-image:
-  repository: quay.io/jetstack/cert-manager-controller
-  pullPolicy: IfNotPresent
-
-clusterResourceNamespace: ""
-namespace: ""
-
-serviceAccount:
-  create: true
-  automountServiceAccountToken: true
-
-enableCertificateOwnerRef: false
-config: {}
-
-dns01RecursiveNameservers: ""
-dns01RecursiveNameserversOnly: false
-
-disableAutoApproval: false
-approveSignerNames:
-- issuers.cert-manager.io/*
-- clusterissuers.cert-manager.io/*
-
-extraArgs:
-- --acme-http01-solver-nameservers=10.0.0.10:53
-
-extraEnv: []
 
 resources:
   requests:
@@ -62,445 +24,17 @@ resources:
     cpu: "50m"
     memory: "128Mi"
 
-securityContext:
-  runAsNonRoot: true
-  seccompProfile:
-    type: RuntimeDefault
-
-containerSecurityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-    - ALL
-  readOnlyRootFilesystem: true
-
-volumes: []
-volumeMounts: []
-
-podLabels: {}
 podAnnotations:
   match-regex.version-checker.io/cert-manager: 'v(\d+)\.(\d+)\.(\d+)'
-serviceLabels: {}
-
-nodeSelector:
-  kubernetes.io/os: linux
-
-ingressShim: {}
-affinity: {}
-tolerations: []
-topologySpreadConstraints: []
-
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  timeoutSeconds: 15
-  successThreshold: 1
-  failureThreshold: 8
-
-enableServiceLinks: false
-
-prometheus:
-  enabled: true
-  servicemonitor:
-    enabled: false
-    prometheusInstance: default
-    targetPort: http-metrics
-    path: /metrics
-    interval: 60s
-    scrapeTimeout: 30s
-    labels: {}
-    annotations: {}
-    honorLabels: false
-    endpointAdditionalProperties: {}
-  podmonitor:
-    enabled: false
-    prometheusInstance: default
-    path: /metrics
-    interval: 60s
-    scrapeTimeout: 30s
-    labels: {}
-    annotations: {}
-    honorLabels: false
-    endpointAdditionalProperties: {}
-
-webhook:
-  replicaCount: 1
-  timeoutSeconds: 30
-  config: {}
-  strategy: {}
-  securityContext:
-    runAsNonRoot: true
-    seccompProfile:
-      type: RuntimeDefault
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    readOnlyRootFilesystem: true
-  nodeSelector:
-    kubernetes.io/os: linux
-  affinity: {}
-  tolerations: []
-  topologySpreadConstraints: []
-  podLabels: {}
-  podAnnotations:
-    match-regex.version-checker.io/cert-manager: 'v(\d+)\.(\d+)\.(\d+)'
-  serviceLabels: {}
-  image:
-    repository: quay.io/jetstack/cert-manager-webhook
-    pullPolicy: IfNotPresent
-  serviceAccount:
-    create: true
-    automountServiceAccountToken: true
-  securePort: 10250
-  hostNetwork: false
-  serviceType: ClusterIP
-  url: {}
-  networkPolicy:
-    enabled: false
-    ingress:
-    - from:
-      - ipBlock:
-          cidr: 0.0.0.0/0
-      - ipBlock:
-          cidr: "::/0"
-    egress:
-    - ports:
-      - port: 80
-        protocol: TCP
-      - port: 443
-        protocol: TCP
-      - port: 53
-        protocol: TCP
-      - port: 53
-        protocol: UDP
-      - port: 6443
-        protocol: TCP
-      to:
-      - ipBlock:
-          cidr: 0.0.0.0/0
-      - ipBlock:
-          cidr: "::/0"
-  volumes: []
-  volumeMounts: []
-  enableServiceLinks: false
-  extraArgs: []
-  extraEnv: []
-  featureGates: ""
-  resources:
-    requests:
-      cpu: "1m"
-      memory: "43Mi"
-    limits:
-      cpu: "50m"
-      memory: "128Mi"
-  livenessProbe:
-    failureThreshold: 3
-    initialDelaySeconds: 60
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 1
-  readinessProbe:
-    failureThreshold: 3
-    initialDelaySeconds: 5
-    periodSeconds: 5
-    successThreshold: 1
-    timeoutSeconds: 1
-
-cainjector:
-  enabled: true
-  replicaCount: 1
-  config: {}
-  strategy: {}
-  securityContext:
-    runAsNonRoot: true
-    seccompProfile:
-      type: RuntimeDefault
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    readOnlyRootFilesystem: true
-  podDisruptionBudget:
-    enabled: false
-  extraArgs: []
-  extraEnv: []
-  featureGates: ""
-  resources:
-    requests:
-      cpu: "2m"
-      memory: "19Mi"
-    limits:
-      cpu: "50m"
-      memory: "64Mi"
-  nodeSelector:
-    kubernetes.io/os: linux
-  affinity: {}
-  tolerations: []
-  topologySpreadConstraints: []
-  podLabels: {}
-  podAnnotations:
-    match-regex.version-checker.io/cert-manager: 'v(\d+)\.(\d+)\.(\d+)'
-  serviceLabels: {}
-  image:
-    repository: quay.io/jetstack/cert-manager-cainjector
-    pullPolicy: IfNotPresent
-  serviceAccount:
-    create: true
-    automountServiceAccountToken: true
-  volumes: []
-  volumeMounts: []
-  enableServiceLinks: false
-
-acmesolver:
-  image:
-    repository: quay.io/jetstack/cert-manager-acmesolver
-    pullPolicy: IfNotPresent
-
-startupapicheck:
-  enabled: true
-  securityContext:
-    runAsNonRoot: true
-    seccompProfile:
-      type: RuntimeDefault
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    readOnlyRootFilesystem: true
-  timeout: 1m
-  backoffLimit: 4
-  jobAnnotations:
-    helm.sh/hook: post-install
-    helm.sh/hook-weight: "1"
-    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-  extraArgs:
-  - -v
-  extraEnv: []
-  resources: {}
-  nodeSelector:
-    kubernetes.io/os: linux
-  affinity: {}
-  tolerations: []
-  podLabels: {}
-  image:
-    repository: quay.io/jetstack/cert-manager-startupapicheck
-    pullPolicy: IfNotPresent
-  rbac:
-    annotations:
-      helm.sh/hook: post-install
-      helm.sh/hook-weight: "-5"
-      helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-  serviceAccount:
-    create: true
-    annotations:
-      helm.sh/hook: post-install
-      helm.sh/hook-weight: "-5"
-      helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-    automountServiceAccountToken: true
-  volumes: []
-  volumeMounts: []
-  enableServiceLinks: false
-
-extraObjects: []
-creator: "helm"
-enabled: true
-
-global:
-  imagePullSecrets: []
-  nodeSelector: {}
-  commonLabels: {}
-  rbac:
-    create: true
-    aggregateClusterRoles: true
-  podSecurityPolicy:
-    enabled: false
-    useAppArmor: true
-  logLevel: 2
-  leaderElection:
-    namespace: "kube-system"
-
-installCRDs: false
-
-crds:
-  enabled: true
-  keep: true
-
-replicaCount: 1
-strategy: {}
-
-podDisruptionBudget:
-  enabled: false
-
-featureGates: ""
-maxConcurrentChallenges: 60
-
-image:
-  repository: quay.io/jetstack/cert-manager-controller
-  pullPolicy: IfNotPresent
-
-clusterResourceNamespace: ""
-namespace: ""
-
-serviceAccount:
-  create: true
-  automountServiceAccountToken: true
-
-enableCertificateOwnerRef: false
-config: {}
-
-dns01RecursiveNameservers: ""
-dns01RecursiveNameserversOnly: false
-
-disableAutoApproval: false
-approveSignerNames:
-- issuers.cert-manager.io/*
-- clusterissuers.cert-manager.io/*
 
 extraArgs:
-- --acme-http01-solver-nameservers=10.0.0.10:53
-
-extraEnv: []
-
-resources:
-  requests:
-    cpu: "2m"
-    memory: "37Mi"
-  limits:
-    cpu: "50m"
-    memory: "128Mi"
-
-securityContext:
-  runAsNonRoot: true
-  seccompProfile:
-    type: RuntimeDefault
-
-containerSecurityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-    - ALL
-  readOnlyRootFilesystem: true
-
-volumes: []
-volumeMounts: []
-
-podLabels: {}
-podAnnotations:
-  match-regex.version-checker.io/cert-manager: 'v(\d+)\.(\d+)\.(\d+)'
-serviceLabels: {}
-
-nodeSelector:
-  kubernetes.io/os: linux
-
-ingressShim: {}
-affinity: {}
-tolerations: []
-topologySpreadConstraints: []
-
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  timeoutSeconds: 15
-  successThreshold: 1
-  failureThreshold: 8
-
-enableServiceLinks: false
+  - --acme-http01-solver-nameservers=10.0.0.10:53
 
 prometheus:
   enabled: true
-  servicemonitor:
-    enabled: false
-    prometheusInstance: default
-    targetPort: http-metrics
-    path: /metrics
-    interval: 60s
-    scrapeTimeout: 30s
-    labels: {}
-    annotations: {}
-    honorLabels: false
-    endpointAdditionalProperties: {}
-  podmonitor:
-    enabled: false
-    prometheusInstance: default
-    path: /metrics
-    interval: 60s
-    scrapeTimeout: 30s
-    labels: {}
-    annotations: {}
-    honorLabels: false
-    endpointAdditionalProperties: {}
 
 webhook:
   replicaCount: 1
-  timeoutSeconds: 30
-  config: {}
-  strategy: {}
-  securityContext:
-    runAsNonRoot: true
-    seccompProfile:
-      type: RuntimeDefault
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    readOnlyRootFilesystem: true
-  nodeSelector:
-    kubernetes.io/os: linux
-  affinity: {}
-  tolerations: []
-  topologySpreadConstraints: []
-  podLabels: {}
-  podAnnotations:
-    match-regex.version-checker.io/cert-manager: 'v(\d+)\.(\d+)\.(\d+)'
-  serviceLabels: {}
-  image:
-    repository: quay.io/jetstack/cert-manager-webhook
-    pullPolicy: IfNotPresent
-  serviceAccount:
-    create: true
-    automountServiceAccountToken: true
-  securePort: 10250
-  hostNetwork: false
-  serviceType: ClusterIP
-  url: {}
-  networkPolicy:
-    enabled: false
-    ingress:
-    - from:
-      - ipBlock:
-          cidr: 0.0.0.0/0
-      - ipBlock:
-          cidr: "::/0"
-    egress:
-    - ports:
-      - port: 80
-        protocol: TCP
-      - port: 443
-        protocol: TCP
-      - port: 53
-        protocol: TCP
-      - port: 53
-        protocol: UDP
-      - port: 6443
-        protocol: TCP
-      to:
-      - ipBlock:
-          cidr: 0.0.0.0/0
-      - ipBlock:
-          cidr: "::/0"
-  volumes: []
-  volumeMounts: []
-  enableServiceLinks: false
-  extraArgs: []
-  extraEnv: []
-  featureGates: ""
   resources:
     requests:
       cpu: "1m"
@@ -508,39 +42,14 @@ webhook:
     limits:
       cpu: "50m"
       memory: "128Mi"
-  livenessProbe:
-    failureThreshold: 3
-    initialDelaySeconds: 60
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 1
-  readinessProbe:
-    failureThreshold: 3
-    initialDelaySeconds: 5
-    periodSeconds: 5
-    successThreshold: 1
-    timeoutSeconds: 1
+  podAnnotations:
+    match-regex.version-checker.io/cert-manager: 'v(\d+)\.(\d+)\.(\d+)'
+  extraArgs:
+    - --webhook-timeout=30s
 
 cainjector:
   enabled: true
   replicaCount: 1
-  config: {}
-  strategy: {}
-  securityContext:
-    runAsNonRoot: true
-    seccompProfile:
-      type: RuntimeDefault
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    readOnlyRootFilesystem: true
-  podDisruptionBudget:
-    enabled: false
-  extraArgs: []
-  extraEnv: []
-  featureGates: ""
   resources:
     requests:
       cpu: "2m"
@@ -548,76 +57,14 @@ cainjector:
     limits:
       cpu: "50m"
       memory: "64Mi"
-  nodeSelector:
-    kubernetes.io/os: linux
-  affinity: {}
-  tolerations: []
-  topologySpreadConstraints: []
-  podLabels: {}
   podAnnotations:
     match-regex.version-checker.io/cert-manager: 'v(\d+)\.(\d+)\.(\d+)'
-  serviceLabels: {}
-  image:
-    repository: quay.io/jetstack/cert-manager-cainjector
-    pullPolicy: IfNotPresent
-  serviceAccount:
-    create: true
-    automountServiceAccountToken: true
-  volumes: []
-  volumeMounts: []
-  enableServiceLinks: false
+  extraArgs:
+    - --feature-gates=ExperimentalFeature
 
 acmesolver:
   image:
     repository: quay.io/jetstack/cert-manager-acmesolver
-    pullPolicy: IfNotPresent
 
 startupapicheck:
   enabled: true
-  securityContext:
-    runAsNonRoot: true
-    seccompProfile:
-      type: RuntimeDefault
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    readOnlyRootFilesystem: true
-  timeout: 1m
-  backoffLimit: 4
-  jobAnnotations:
-    helm.sh/hook: post-install
-    helm.sh/hook-weight: "1"
-    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-  extraArgs:
-  - -v
-  extraEnv: []
-  resources: {}
-  nodeSelector:
-    kubernetes.io/os: linux
-  affinity: {}
-  tolerations: []
-  podLabels: {}
-  image:
-    repository: quay.io/jetstack/cert-manager-startupapicheck
-    pullPolicy: IfNotPresent
-  rbac:
-    annotations:
-      helm.sh/hook: post-install
-      helm.sh/hook-weight: "-5"
-      helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-  serviceAccount:
-    create: true
-    annotations:
-      helm.sh/hook: post-install
-      helm.sh/hook-weight: "-5"
-      helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
-    automountServiceAccountToken: true
-  volumes: []
-  volumeMounts: []
-  enableServiceLinks: false
-
-extraObjects: []
-creator: "helm"
-enabled: true
