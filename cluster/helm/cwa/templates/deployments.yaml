@@ -120,7 +120,7 @@ spec:
       volumes:
         - name: media
           persistentVolumeClaim:
-            claimName: {{ include "cwa.fullname" . }}-media
+            claimName: {{ default (printf "%s-media" (include "cwa.fullname" .)) .Values.storage.media.existingClaim }}
         {{- if .Values.storage.config.enabled }}
         - name: config
           persistentVolumeClaim:
@@ -251,7 +251,7 @@ spec:
       volumes:
         - name: media
           persistentVolumeClaim:
-            claimName: {{ include "cwa.fullname" . }}-media
+            claimName: {{ default (printf "%s-media" (include "cwa.fullname" .)) .Values.storage.media.existingClaim }}
         {{- if .Values.storage.config.enabled }}
         - name: config
           persistentVolumeClaim:

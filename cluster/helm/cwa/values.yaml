@@ -1,6 +1,9 @@
 ---
 # Default values for calibre-web-automated (cwa)
 
+#nameOverride: cwa
+#fullnameOverride: cwa
+
 global:
   timezone: Europe/Warsaw
   runAsUser: 568
@@ -21,24 +24,24 @@ components:
     enabled: true
     image:
       repository: crocodilestick/calibre-web-automated
-      tag: "latest"
-      pullPolicy: Always
+      tag: V3.1.4
+      pullPolicy: IfNotPresent
     service:
       port: 8083
     env:
       FLASK_PORT: "8084"
       FLASK_DEBUG: "false"
       CLOUDFLARE_PROXY_URL: ""
-      INGEST_DIR: "/path/to/calibre/ingest:/cwa-book-ingest"
-      BOOK_LANGUAGE: "en"
+      INGEST_DIR: "/books/ingest:/cwa-book-ingest"
+      BOOK_LANGUAGE: "pl"
       DOCKER_MODS: "lscr.io/linuxserver/mods:universal-calibre-v7.16.0"
   
   bookDownloader:
     enabled: true
     image:
       repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
-      tag: "latest"
-      pullPolicy: Always
+      tag: 0.2.3
+      pullPolicy: IfNotPresent
     service:
       port: 8084
     env:
@@ -52,12 +55,11 @@ components:
 
 # Storage configuration
 storage:
-  # Shared media storage (books, library)
   media:
+    create: false
+    existingClaim: media
     storageClass: local-path
     size: 1000Gi
-  
-  # Individual config storage for better SQLite performance
   config:
     enabled: true
     storageClass: longhorn
@@ -84,7 +86,7 @@ networking:
         hosts:
           - books.shpaq.org
     certManager:
-      clusterIssuer: "letsencrypt"
+      clusterIssuer: "letsencrypt-stage"
 
 # Security and service account
 security:
@@ -95,4 +97,5 @@ security:
 # Monitoring
 monitoring:
   diun:
-    enabled: true
+    enabled: false
+
