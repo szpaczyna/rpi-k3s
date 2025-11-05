@@ -101,7 +101,7 @@ spec:
           limits:
             cpu: {{ $.Values.global.resources.limits.cpu }}
             memory: {{ $.Values.global.resources.limits.memory }}
-      - name: exportar
+      - name: {{ printf "%s-exporter" $name }}
         image: "{{ include "media-stack.image" (dict "name" "exportarr" "root" $) }}"
         imagePullPolicy: IfNotPresent
         args:
