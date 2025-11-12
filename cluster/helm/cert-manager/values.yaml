@@ -44,8 +44,6 @@ webhook:
       memory: "128Mi"
   podAnnotations:
     match-regex.version-checker.io/cert-manager: 'v(\d+)\.(\d+)\.(\d+)'
-  extraArgs:
-    - --webhook-timeout=30s
 
 cainjector:
   enabled: true
@@ -59,8 +57,6 @@ cainjector:
       memory: "64Mi"
   podAnnotations:
     match-regex.version-checker.io/cert-manager: 'v(\d+)\.(\d+)\.(\d+)'
-  extraArgs:
-    - --feature-gates=ExperimentalFeature
 
 acmesolver:
   image:
