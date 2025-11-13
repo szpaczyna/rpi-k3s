@@ -1,148 +1,23 @@
 ## values for grafana
 ---
-global:
-  imageRegistry: null
-  imagePullSecrets: []
-
-rbac:
-  create: true
-  pspEnabled: false
-  pspUseAppArmor: false
-  namespaced: false
-  extraRoleRules: []
-  extraClusterRoleRules: []
-
 serviceAccount:
-  create: true
   name: grafana
-  labels: {}
-  automountServiceAccountToken: false
-
-replicas: 1
 
 headlessService: true
 
-automountServiceAccountToken: true
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 5
-  targetCPU: "60"
-  targetMemory: ""
-  behavior: {}
-
-podDisruptionBudget: {}
-
 deploymentStrategy:
   type: Recreate
-
-readinessProbe:
-  httpGet:
-global:
-  imageRegistry: null
-  imagePullSecrets: []
-
-rbac:
-  create: true
-  pspEnabled: false
-  pspUseAppArmor: false
-  namespaced: false
-  extraRoleRules: []
-  extraClusterRoleRules: []
-
-serviceAccount:
-  create: true
-  name: grafana
-  labels: {}
-  automountServiceAccountToken: false
-
-replicas: 1
-
-headlessService: true
-
-automountServiceAccountToken: true
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 5
-  targetCPU: "60"
-  targetMemory: ""
-  behavior: {}
-
-podDisruptionBudget: {}
-
-deploymentStrategy:
-  type: Recreate
-
-readinessProbe:
-  httpGet:
-    path: /api/health
-    port: 3000
-
-livenessProbe:
-  httpGet:
-    path: /api/health
-    port: 3000
-  initialDelaySeconds: 60
-  timeoutSeconds: 30
-  failureThreshold: 10
 
 image:
-  registry: docker.io
-  repository: grafana/grafana
   tag: 10.4.19
-  sha: ""
-  pullPolicy: IfNotPresent
 
 testFramework:
   enabled: false
-  image:
-    registry: docker.io
-    repository: bats/bats
-    tag: "v1.4.1"
-  imagePullPolicy: IfNotPresent
-  securityContext: {}
-  containerSecurityContext: {}
-  resources: {}
-
-dnsPolicy: ~
-dnsConfig: {}
 
 securityContext:
-  runAsNonRoot: true
-  runAsUser: 472
-  runAsGroup: 472
-  fsGroup: 472
   fsGroupChangePolicy: OnRootMismatch
 
-containerSecurityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-    - ALL
-  seccompProfile:
-    type: RuntimeDefault
-
-createConfigmap: true
-
-extraConfigmapMounts: []
-
-extraEmptyDirMounts: []
-
-extraLabels: {}
-
-downloadDashboardsImage:
-  registry: docker.io
-  repository: curlimages/curl
-  tag: 8.9.1
-  sha: ""
-  pullPolicy: IfNotPresent
-
 downloadDashboards:
-  env: {}
-  envFromSecret: ""
   resources:
     limits:
       cpu: 100m
@@ -150,45 +25,14 @@ downloadDashboards:
     requests:
       cpu: 50m
       memory: 64Mi
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    seccompProfile:
-      type: RuntimeDefault
-  envValueFrom: {}
 
 podAnnotations:
   prometheus.io/scrape: "true"
   prometheus.io/port: "3000"
   match-regex.version-checker.io/grafana: '(\d+)\.(\d+)\.(\d+)'
 
-podPortName: grafana
-gossipPortName: gossip
-
 service:
-  enabled: true
-  type: ClusterIP
-  ipFamilyPolicy: ""
-  ipFamilies: []
-  loadBalancerIP: ""
-  loadBalancerClass: ""
-  loadBalancerSourceRanges: []
   port: 3000
-  targetPort: 3000
-  annotations: {}
-  labels: {}
-  portName: service
-  appProtocol: ""
-  sessionAffinity: ""
-
-serviceMonitor:
-  enabled: false
-
-extraExposePorts: []
-
-hostAliases: []
 
 ingress:
   enabled: true
@@ -197,7 +41,6 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/default-backend: shpaq-org
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-  labels: {}
   path: /
   pathType: Prefix
   hosts:
@@ -207,22 +50,6 @@ ingress:
       hosts:
         - grafana.shpaq.org
   extraPaths: []
-
-route:
-  main:
-    enabled: false
-    apiVersion: gateway.networking.k8s.io/v1
-    kind: HTTPRoute
-    annotations: {}
-    labels: {}
-    hostnames: []
-    parentRefs: []
-    matches:
-      - path:
-          type: PathPrefix
-          value: /
-    filters: []
-    additionalRules: []
 
 resources:
   limits:
@@ -235,25 +62,15 @@ resources:
 nodeSelector:
   kubernetes.io/role: worker
 
-tolerations: []
-
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
-      - matchExpressions:
-        - key: "kubernetes.io/ssd"
-          operator: In
-          values:
-          - "true"
-
-topologySpreadConstraints: []
-
-extraInitContainers: []
-
-extraContainers: ""
-
-extraContainerVolumes: []
+        - matchExpressions:
+            - key: "kubernetes.io/ssd"
+              operator: In
+              values:
+                - "true"
 
 persistence:
   type: pvc
@@ -273,13 +90,6 @@ persistence:
     enabled: false
 
 initChownData:
-  enabled: true
-  image:
-    registry: docker.io
-    repository: library/busybox
-    tag: "1.31.1"
-    sha: ""
-    pullPolicy: IfNotPresent
   resources:
     limits:
       cpu: 50m
@@ -287,54 +97,19 @@ initChownData:
     requests:
       cpu: 10m
       memory: 16Mi
-  securityContext:
-    readOnlyRootFilesystem: false
-    runAsNonRoot: false
-    runAsUser: 0
-    seccompProfile:
-      type: RuntimeDefault
-    capabilities:
-      add:
-        - CHOWN
-      drop:
-        - ALL
-
-adminUser: admin
 
 admin:
   existingSecret: "grafana-admin-creds"
-  userKey: admin-user
-  passwordKey: admin-password
-
-env: {}
-
-envValueFrom: {}
-
-envFromSecret: ""
-
-envRenderSecret: {}
-
-envFromSecrets: []
-
-envFromConfigMaps: []
 
 enableServiceLinks: true
-
-extraSecretMounts: []
-
-extraVolumeMounts: []
 
 extraVolumes:
   - name: data-grafana
     existingClaim: data-grafana
 
-lifecycleHooks: {}
-
 plugins:
-  - yesoreyeram-infinity-datasource
   - vonage-status-panel
   - novatec-sdg-panel
-  - grafana-singlestat-panel
   - farski-blendstat-panel
   - grafana-polystat-panel
 
@@ -342,179 +117,90 @@ datasources:
   datasources.yaml:
     apiVersion: 1
     datasources:
-    - name: prometheus
-      access: proxy
-      editable: false
-      orgId: 1
-      type: prometheus
-      url: http://prometheus-server-headless:9090
-      version: 1
-      isDefault: true
-    - name: influxdb
-      type: influxdb
-      typeName: InfluxDB
-      access: proxy
-      url: http://influxdb.apps:8086
-      user: admin
-      database: health
-      orgId: 1
-      basicAuth: false
-      isDefault: false
-      jsonData: {}
-      readOnly: false
-    - name: Loki
-      type: loki
-      typeName: Loki
-      access: proxy
-      url: http://loki.logging:3100
-      timeout: 
-      orgId: 1
-      basicAuth: false
-      isDefault: false
-      jsonData:
-        manageAlerts: false
-        tlsSkipVerify: true
-        maxLines: 100000
-        timeout: 500
-      readOnly: false
-    - name: PostgreSQL
-      type: postgres
-      typeName: PostgreSQL
-      access: proxy
-      url: morphine-postgresql-primary-hl.apps:5432
-      user: postgres
-      database: postgres
-      basicAuth: false
-      isDefault: false
-      jsonData:
-        postgresVersion: 1200
-        sslmode: disable
-        tlsAuth: false
-        tlsAuthWithCACert: false
-        tlsConfigurationMethod: file-path
-        tlsSkipVerify: true
-      readOnly: false
-
-alerting: {}
-
-dashboards: {}
-
-dashboardsConfigMaps: {}
+      - name: prometheus
+        access: proxy
+        editable: false
+        orgId: 1
+        type: prometheus
+        url: http://prometheus-server-headless:9090
+        version: 1
+        isDefault: true
+      - name: influxdb
+        type: influxdb
+        typeName: InfluxDB
+        access: proxy
+        url: http://influxdb.apps:8086
+        user: admin
+        database: health
+        orgId: 1
+        basicAuth: false
+        isDefault: false
+        jsonData: {}
+        readOnly: false
+      - name: Loki
+        type: loki
+        typeName: Loki
+        access: proxy
+        url: http://loki.logging:3100
+        timeout:
+        orgId: 1
+        basicAuth: false
+        isDefault: false
+        jsonData:
+          manageAlerts: false
+          tlsSkipVerify: true
+          maxLines: 100000
+          timeout: 500
+        readOnly: false
+      - name: PostgreSQL
+        type: postgres
+        typeName: PostgreSQL
+        access: proxy
+        url: morphine-postgresql-primary-hl.apps:5432
+        user: postgres
+        database: postgres
+        basicAuth: false
+        isDefault: false
+        jsonData:
+          postgresVersion: 1200
+          sslmode: disable
+          tlsAuth: false
+          tlsAuthWithCACert: false
+          tlsConfigurationMethod: file-path
+          tlsSkipVerify: true
+        readOnly: false
 
 grafana.ini:
   app_mode: production
   instance_name: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ tpl (.Values.ingress.hosts | first) . }}{{ else }}''{{ end }}"
 
   paths:
-    data: /var/lib/grafana
-    temp_data_lifetime: 24h
     logs: /var/lib/grafana/log
-    plugins: /var/lib/grafana/plugins
     provisioning: /var/lib/grafana/provisioning
 
   server:
-    protocol: http
     domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ tpl (.Values.ingress.hosts | first) . }}{{ else }}''{{ end }}"
-    http_port: 3000
-    router_logging: false
-    static_root_path: public
     enable_gzip: true
     socket: /tmp/grafana.sock
-    read_timeout: 0
-
-  database:
-    type: sqlite3
-    name: grafana
-    user: grafana
-    max_idle_conn: 2
-    conn_max_lifetime: 14400
-    path: grafana.db
-    cache_mode: private
-
-  remote_cache:
-    type: database
-
-  dataproxy:
-    logging: false
-    timeout: 30
-    dialTimeout: 10
-    keep_alive_seconds: 30
-    tls_handshake_timeout_seconds: 10
-    expect_continue_timeout_seconds: 1
-    max_conns_per_host: 0
-    max_idle_connections: 100
-    idle_conn_timeout_seconds: 90
-    send_user_header: false
-    response_limit: 0
-    row_limit: 1000000
-
-  analytics:
-    reporting_enabled: true
-    reporting_distributor: grafana-labs
-    check_for_updates: true
 
   security:
-    disable_initial_admin_creation: false
-    admin_user: admin
     encryption_provider: secretKey
-    disable_gravatar: false
-    disable_brute_force_login_protection: false
     cookie_secure: true
-    cookie_samesite: lax
-    allow_embedding: false
     strict_transport_security: true
-    strict_transport_security_max_age_seconds: 86400
     strict_transport_security_preload: true
-    strict_transport_security_subdomains: false
-    x_content_type_options: true
-    x_xss_protection: true
     content_security_policy: true
     content_security_policy_template: |
       script-src 'self' 'unsafe-eval' 'unsafe-inline' 'strict-dynamic' $NONCE;object-src 'none';font-src 'self';style-src 'self' 'unsafe-inline' blob:;img-src * data:;base-uri 'self';connect-src 'self' grafana.com ws://$ROOT_PATH wss://$ROOT_PATH;manifest-src 'self';media-src 'none';form-action 'self';
 
   snapshots:
     external_enabled: false
-    external_snapshot_url: https://snapshots-origin.raintank.io
-    external_snapshot_name: Publish to snapshot.raintank.io
-    public_mode: false
-    snapshot_remove_expired: true
 
   dashboards:
     versions_to_keep: 5
-    min_refresh_interval: 5s
-
-  datasources:
-    datasource_limit: 5000
 
   users:
     allow_sign_up: false
     allow_org_create: false
-    auto_assign_org: true
-    auto_assign_org_id: 1
-    auto_assign_org_role: Viewer
-    verify_email_enabled: false
-    default_theme: dark
-    home_page: ""
-    external_manage_link_url: ""
-    external_manage_link_name: ""
-    external_manage_info: ""
-    viewers_can_edit: false
-    editors_can_admin: false
-    user_invite_max_lifetime_duration: 24h
-    hidden_users: ""
-
-  auth:
-    login_cookie_name: grafana_session
-    login_maximum_inactive_lifetime_duration: ""
-    login_maximum_lifetime_duration: ""
-    token_rotation_interval_minutes: 10
-    disable_login_form: false
-    disable_signout_menu: false
-    signout_redirect_url: ""
-    oauth_auto_login: false
-    oauth_state_cookie_max_age: 600
-    api_key_max_seconds_to_live: -1
-    sigv4_auth_enabled: false
 
   auth.anonymous:
     enabled: false
@@ -525,1071 +211,5 @@ grafana.ini:
   auth.basic:
     enabled: false
 
-  smtp:
-    enabled: false
-
-  emails:
-    welcome_email_on_sign_up: false
-    templates_pattern: 'emails/*.html, emails/*.txt'
-    content_types: text/html
-
-  log:
-    mode: 'console file'
-    level: info
-    filters: ""
-
-  log.console:
-    level: ""
-    format: console
-
-  log.file:
-    level: ""
-    format: text
-    log_rotate: true
-    max_lines: 1000000
-    max_size_shift: 28
-    daily_rotate: true
-    max_days: 7
-
-  explore:
-    enabled: true
-
-  metrics:
-    enabled: true
-    interval_seconds: 10
-    disable_total_stats: false
-
-  panels:
-    enable_alpha: false
-    disable_sanitize_html: false
-
-  plugins:
-    enable_alpha: false
-    app_tls_skip_verify_insecure: false
-    allow_loading_unsigned_plugins: ""
-    plugin_admin_enabled: true
-    plugin_admin_external_manage_enabled: false
-    plugin_catalog_url: https://grafana.com/grafana/plugins/
-    plugin_catalog_hidden_plugins: ""
-
   date_formats:
-    full_date: 'YYYY-MM-DD HH:mm:ss'
-    interval_second: 'HH:mm:ss'
-    interval_minute: HH:mm
-    interval_hour: 'MM/DD HH:mm'
-    interval_day: 'MM/DD'
-    interval_month: 'YYYY-MM'
-    interval_year: 'YYYY'
-    use_browser_locale: false
     default_timezone: 'Europe/Warsaw'
-
-  expressions:
-    enabled: true
-
-  geomap:
-    default_baselayer_config: ""
-    enable_custom_baselayers: true
-
-ldap:
-  enabled: false
-  existingSecret: ""
-  config: ""
-
-shareProcessNamespace: false
-
-smtp:
-  existingSecret: ""
-  userKey: "user"
-  passwordKey: "password"
-
-sidecar:
-  image:
-    registry: quay.io
-    repository: kiwigrid/k8s-sidecar
-    tag: 1.30.10
-    sha: ""
-  imagePullPolicy: IfNotPresent
-  resources:
-    limits:
-      cpu: 250m
-      memory: 400Mi
-    requests:
-      cpu: 100m
-      memory: 100Mi
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    seccompProfile:
-      type: RuntimeDefault
-  enableUniqueFilenames: false
-  readinessProbe: {}
-  livenessProbe: {}
-  alerts:
-    enabled: false
-    env: {}
-    envValueFrom: {}
-    label: grafana_alert
-    labelValue: ""
-    searchNamespace: null
-    watchMethod: WATCH
-    resource: both
-    resourceName: ""
-    reloadURL: "http://localhost:3000/api/admin/provisioning/alerting/reload"
-    script: null
-    skipReload: false
-    initAlerts: false
-    extraMounts: []
-    sizeLimit: ""
-  dashboards:
-    enabled: false
-    env: {}
-    envValueFrom: {}
-    SCProvider: true
-    label: grafana_dashboard
-    labelValue: ""
-    folder: /tmp/dashboards
-    defaultFolderName: null
-    searchNamespace: null
-    watchMethod: WATCH
-    resource: both
-    provider:
-      name: sidecarProvider
-      orgid: 1
-      folder: ''
-      folderUid: ''
-      type: file
-      disableDelete: false
-      allowUiUpdates: false
-      foldersFromFilesStructure: false
-    extraMounts: []
-    sizeLimit: ""
-  datasources:
-    enabled: false
-    env: {}
-    envValueFrom: {}
-    label: grafana_datasource
-    labelValue: ""
-    searchNamespace: null
-    watchMethod: WATCH
-    resource: both
-    resourceName: ""
-    reloadURL: "http://localhost:3000/api/admin/provisioning/datasources/reload"
-    script: null
-    skipReload: false
-    initDatasources: false
-    extraMounts: []
-    sizeLimit: ""
-  plugins:
-    enabled: false
-    env: {}
-    envValueFrom: {}
-    label: grafana_plugin
-    labelValue: ""
-    searchNamespace: null
-    watchMethod: WATCH
-    resource: both
-    resourceName: ""
-    reloadURL: "http://localhost:3000/api/admin/provisioning/plugins/reload"
-    script: null
-    skipReload: false
-    initPlugins: false
-    extraMounts: []
-    sizeLimit: ""
-  notifiers:
-    enabled: false
-    env: {}
-    envValueFrom: {}
-    label: grafana_notifier
-    labelValue: ""
-    searchNamespace: null
-    watchMethod: WATCH
-    resource: both
-    resourceName: ""
-    reloadURL: "http://localhost:3000/api/admin/provisioning/notifications/reload"
-    script: null
-    skipReload: false
-    initNotifiers: false
-    extraMounts: []
-    sizeLimit: ""
-
-namespaceOverride: ""
-
-revisionHistoryLimit: 10
-
-imageRenderer:
-  deploymentStrategy: {}
-  enabled: false
-  replicas: 1
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 5
-    targetCPU: "60"
-    targetMemory: ""
-    behavior: {}
-  serverURL: ""
-  renderingCallbackURL: ""
-  image:
-    registry: docker.io
-    repository: grafana/grafana-image-renderer
-    tag: latest
-    sha: ""
-    pullSecrets: []
-    pullPolicy: Always
-  env:
-    HTTP_HOST: "0.0.0.0"
-    XDG_CONFIG_HOME: /tmp/.chromium
-    XDG_CACHE_HOME: /tmp/.chromium
-  envValueFrom: {}
-  serviceAccountName: ""
-  automountServiceAccountToken: false
-  securityContext: {}
-  containerSecurityContext:
-    seccompProfile:
-      type: RuntimeDefault
-    capabilities:
-      drop: ['ALL']
-    allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: true
-  podAnnotations: {}
-  hostAliases: []
-  priorityClassName: ''
-  service:
-    enabled: true
-    portName: 'http'
-    port: 8081
-    targetPort: 8081
-    appProtocol: ""
-  serviceMonitor:
-    enabled: false
-    path: /metrics
-    labels: {}
-    interval: 1m
-    scheme: http
-    tlsConfig: {}
-    scrapeTimeout: 30s
-    relabelings: []
-    targetLabels: []
-  grafanaProtocol: http
-  grafanaSubPath: ""
-  podPortName: http
-  revisionHistoryLimit: 10
-  networkPolicy:
-    limitIngress: true
-    limitEgress: false
-    extraIngressSelectors: []
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 200m
-      memory: 256Mi
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-  extraConfigmapMounts: []
-  extraSecretMounts: []
-  extraVolumeMounts: []
-  extraVolumes: []
-
-networkPolicy:
-  enabled: false
-  ingress: true
-  allowExternal: true
-  explicitNamespacesSelector: {}
-  egress:
-    enabled: false
-    blockDNSResolution: false
-    ports: []
-    to: []
-
-enableKubeBackwardCompatibility: false
-useStatefulSet: false
-
-extraObjects: []
-
-assertNoLeakedSecrets: true
-
-
-deploymentStrategy:
-  type: Recreate
-
-readinessProbe:
-  httpGet:
-    path: /api/health
-    port: 3000
-
-livenessProbe:
-  httpGet:
-    path: /api/health
-    port: 3000
-  initialDelaySeconds: 60
-  timeoutSeconds: 30
-  failureThreshold: 10
-
-image:
-  registry: docker.io
-  repository: grafana/grafana
-  tag: 10.4.19
-  sha: ""
-  pullPolicy: IfNotPresent
-
-testFramework:
-  enabled: false
-  image:
-    registry: docker.io
-    repository: bats/bats
-    tag: "v1.4.1"
-  imagePullPolicy: IfNotPresent
-  securityContext: {}
-  containerSecurityContext: {}
-  resources: {}
-
-dnsPolicy: ~
-dnsConfig: {}
-
-securityContext:
-  runAsNonRoot: true
-  runAsUser: 472
-  runAsGroup: 472
-  fsGroup: 472
-  fsGroupChangePolicy: OnRootMismatch
-
-containerSecurityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-    - ALL
-  seccompProfile:
-    type: RuntimeDefault
-
-createConfigmap: true
-
-extraConfigmapMounts: []
-
-
-extraEmptyDirMounts: []
-
-
-extraLabels: {}
-
-
-downloadDashboardsImage:
-  registry: docker.io
-  repository: curlimages/curl
-  tag: 8.9.1
-  sha: ""
-  pullPolicy: IfNotPresent
-
-downloadDashboards:
-  env: {}
-  envFromSecret: ""
-  resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
-    requests:
-      cpu: 50m
-      memory: 64Mi
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    seccompProfile:
-      type: RuntimeDefault
-  envValueFrom: {}
-
-podAnnotations:
-  prometheus.io/scrape: "true"
-  prometheus.io/port: "3000"
-  match-regex.version-checker.io/grafana: '(\d+)\.(\d+)\.(\d+)'
-
-
-
-podPortName: grafana
-gossipPortName: gossip
-
-service:
-  enabled: true
-  type: ClusterIP
-  ipFamilyPolicy: ""
-  ipFamilies: []
-  loadBalancerIP: ""
-  loadBalancerClass: ""
-  loadBalancerSourceRanges: []
-  port: 3000
-  targetPort: 3000
-  annotations: {}
-  labels: {}
-  portName: service
-  appProtocol: ""
-  sessionAffinity: ""
-
-serviceMonitor:
-  enabled: false
-
-extraExposePorts: []
-
-hostAliases: []
-
-ingress:
-  enabled: true
-  ingressClassName: nginx
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/default-backend: shpaq-org
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-  labels: {}
-  path: /
-  pathType: Prefix
-  hosts:
-    - grafana.shpaq.org
-  tls:
-    - secretName: grafana-tls
-      hosts:
-        - grafana.shpaq.org
-
-  extraPaths: []
-
-
-
-route:
-  main:
-    enabled: false
-
-    apiVersion: gateway.networking.k8s.io/v1
-    kind: HTTPRoute
-
-    annotations: {}
-    labels: {}
-
-    hostnames: []
-    parentRefs: []
-
-    matches:
-      - path:
-          type: PathPrefix
-          value: /
-
-    filters: []
-
-    additionalRules: []
-
-resources:
-  limits:
-    cpu: 250m
-    memory: 400Mi
-  requests:
-    cpu: 100m
-    memory: 150Mi
-
-nodeSelector:
-  kubernetes.io/role: worker
-
-tolerations: []
-
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: "kubernetes.io/ssd"
-          operator: In
-          values:
-          - "true"
-topologySpreadConstraints: []
-
-extraInitContainers: []
-
-extraContainers: ""
-
-extraContainerVolumes: []
-
-persistence:
-  type: pvc
-  enabled: true
-  storageClassName: longhorn
-  volumeName: "data-grafana"
-  accessModes:
-    - ReadWriteOnce
-  size: 2Gi
-  finalizers:
-    - kubernetes.io/pvc-protection
-  existingClaim: "data-grafana"
-
-  extraPvcLabels: {}
-  disableWarning: false
-
-  inMemory:
-    enabled: false
-
-  lookupVolumeName: true
-
-initChownData:
-  enabled: true
-  image:
-    registry: docker.io
-    repository: library/busybox
-    tag: "1.31.1"
-    sha: ""
-    pullPolicy: IfNotPresent
-  resources:
-    limits:
-      cpu: 50m
-      memory: 64Mi
-    requests:
-      cpu: 10m
-      memory: 16Mi
-  securityContext:
-    readOnlyRootFilesystem: false
-    runAsNonRoot: false
-    runAsUser: 0
-    seccompProfile:
-      type: RuntimeDefault
-    capabilities:
-      add:
-        - CHOWN
-      drop:
-        - ALL
-
-adminUser: admin
-
-admin:
-  existingSecret: "grafana-admin-creds"
-  userKey: admin-user
-  passwordKey: admin-password
-
-
-
-
-env: {}
-
-envValueFrom: {}
-
-envFromSecret: ""
-
-envRenderSecret: {}
-
-envFromSecrets: []
-
-envFromConfigMaps: []
-
-enableServiceLinks: true
-
-extraSecretMounts: []
-
-extraVolumeMounts: []
-
-extraVolumes:
-  - name: data-grafana
-    existingClaim: data-grafana
-
-lifecycleHooks: {}
-
-plugins:
-  - yesoreyeram-infinity-datasource
-  - vonage-status-panel
-  - novatec-sdg-panel
-  - grafana-singlestat-panel
-  - farski-blendstat-panel
-  - grafana-polystat-panel
-
-
-datasources:
-  datasources.yaml:
-    apiVersion: 1
-    datasources:
-    - name: prometheus
-      access: proxy
-      editable: false
-      orgId: 1
-      type: prometheus
-      url: http://prometheus-server-headless:9090
-      version: 1
-      isDefault: true
-    - name: influxdb
-      type: influxdb
-      typeName: InfluxDB
-      access: proxy
-      url: http://influxdb.apps:8086
-      user: admin
-      database: health
-      orgId: 1
-      basicAuth: false
-      isDefault: false
-      jsonData: {}
-      readOnly: false
-    - name: Loki
-      type: loki
-      typeName: Loki
-      access: proxy
-      url: http://loki.logging:3100
-      timeout:
-      orgId: 1
-      basicAuth: false
-      isDefault: false
-      jsonData:
-        manageAlerts: false
-        tlsSkipVerify: true
-        maxLines: 100000
-        timeout: 500
-      readOnly: false
-    - name: PostgreSQL
-      type: postgres
-      typeName: PostgreSQL
-      access: proxy
-      url: morphine-postgresql-primary-hl.apps:5432
-      user: postgres
-      database: postgres
-      basicAuth: false
-      isDefault: false
-      jsonData:
-        postgresVersion: 1200
-        sslmode: disable
-        tlsAuth: false
-        tlsAuthWithCACert: false
-        tlsConfigurationMethod: file-path
-        tlsSkipVerify: true
-      readOnly: false
-  
-alerting: {}
-
-notifiers: {}
-
-dashboardProviders: {}
-
-defaultCurlOptions: "-skf"
-
-dashboards: {}
-
-dashboardsConfigMaps: {}
-
-grafana.ini:
-  app_mode: production
-  instance_name: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ tpl (.Values.ingress.hosts | first) . }}{{ else }}''{{ end }}"
-
-  paths:
-    data: /var/lib/grafana
-    temp_data_lifetime: 24h
-    logs: /var/lib/grafana/log
-    plugins: /var/lib/grafana/plugins
-    provisioning: /var/lib/grafana/provisioning
-
-  server:
-    protocol: http
-    domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ tpl (.Values.ingress.hosts | first) . }}{{ else }}''{{ end }}"
-    http_port: 3000
-    router_logging: false
-    static_root_path: public
-    enable_gzip: true
-    socket: /tmp/grafana.sock
-    read_timeout: 0
-
-  database:
-    type: sqlite3
-    name: grafana
-    user: grafana
-    max_idle_conn: 2
-    conn_max_lifetime: 14400
-    path: grafana.db
-    cache_mode: private
-
-  remote_cache:
-    type: database
-
-  dataproxy:
-    logging: false
-    timeout: 30
-    dialTimeout: 10
-    keep_alive_seconds: 30
-    tls_handshake_timeout_seconds: 10
-    expect_continue_timeout_seconds: 1
-    max_conns_per_host: 0
-    max_idle_connections: 100
-    idle_conn_timeout_seconds: 90
-    send_user_header: false
-    response_limit: 0
-    row_limit: 1000000
-
-  analytics:
-    reporting_enabled: true
-    reporting_distributor: grafana-labs
-    check_for_updates: true
-
-  security:
-    disable_initial_admin_creation: false
-    admin_user: admin
-    encryption_provider: secretKey
-    disable_gravatar: false
-    disable_brute_force_login_protection: false
-    cookie_secure: true
-    cookie_samesite: lax
-    allow_embedding: false
-    strict_transport_security: true
-    strict_transport_security_max_age_seconds: 86400
-    strict_transport_security_preload: true
-    strict_transport_security_subdomains: false
-    x_content_type_options: true
-    x_xss_protection: true
-    content_security_policy: true
-    content_security_policy_template: |
-      script-src 'self' 'unsafe-eval' 'unsafe-inline' 'strict-dynamic' $NONCE;object-src 'none';font-src 'self';style-src 'self' 'unsafe-inline' blob:;img-src * data:;base-uri 'self';connect-src 'self' grafana.com ws://$ROOT_PATH wss://$ROOT_PATH;manifest-src 'self';media-src 'none';form-action 'self';
-
-  snapshots:
-    external_enabled: false
-    external_snapshot_url: https://snapshots-origin.raintank.io
-    external_snapshot_name: Publish to snapshot.raintank.io
-    public_mode: false
-    snapshot_remove_expired: true
-
-  dashboards:
-    versions_to_keep: 5
-    min_refresh_interval: 5s
-
-  datasources:
-    datasource_limit: 5000
-
-  users:
-    allow_sign_up: false
-    allow_org_create: false
-    auto_assign_org: true
-    auto_assign_org_id: 1
-    auto_assign_org_role: Viewer
-    verify_email_enabled: false
-    default_theme: dark
-    home_page: ""
-    external_manage_link_url: ""
-    external_manage_link_name: ""
-    external_manage_info: ""
-    viewers_can_edit: false
-    editors_can_admin: false
-    user_invite_max_lifetime_duration: 24h
-    hidden_users: ""
-
-  auth:
-    login_cookie_name: grafana_session
-    login_maximum_inactive_lifetime_duration: ""
-    login_maximum_lifetime_duration: ""
-    token_rotation_interval_minutes: 10
-    disable_login_form: false
-    disable_signout_menu: false
-    signout_redirect_url: ""
-    oauth_auto_login: false
-    oauth_state_cookie_max_age: 600
-    api_key_max_seconds_to_live: -1
-    sigv4_auth_enabled: false
-
-  auth.anonymous:
-    enabled: false
-    org_name: Szpacze Gniazdo
-    org_role: Viewer
-    hide_version: true
-
-  auth.basic:
-    enabled: false
-
-  smtp:
-    enabled: false
-
-  emails:
-    welcome_email_on_sign_up: false
-    templates_pattern: 'emails/*.html, emails/*.txt'
-    content_types: text/html
-
-  log:
-    mode: 'console file'
-    level: info
-    filters: ""
-
-  log.console:
-    level: ""
-    format: console
-
-  log.file:
-    level: ""
-    format: text
-    log_rotate: true
-    max_lines: 1000000
-    max_size_shift: 28
-    daily_rotate: true
-    max_days: 7
-
-  explore:
-    enabled: true
-
-  metrics:
-    enabled: true
-    interval_seconds: 10
-    disable_total_stats: false
-
-  panels:
-    enable_alpha: false
-    disable_sanitize_html: false
-
-  plugins:
-    enable_alpha: false
-    app_tls_skip_verify_insecure: false
-    allow_loading_unsigned_plugins: ""
-    plugin_admin_enabled: true
-    plugin_admin_external_manage_enabled: false
-    plugin_catalog_url: https://grafana.com/grafana/plugins/
-    plugin_catalog_hidden_plugins: ""
-
-  date_formats:
-    full_date: 'YYYY-MM-DD HH:mm:ss'
-    interval_second: 'HH:mm:ss'
-    interval_minute: HH:mm
-    interval_hour: 'MM/DD HH:mm'
-    interval_day: 'MM/DD'
-    interval_month: 'YYYY-MM'
-    interval_year: 'YYYY'
-    use_browser_locale: false
-    default_timezone: 'Europe/Warsaw'
-
-  expressions:
-    enabled: true
-
-  geomap:
-    default_baselayer_config: ""
-    enable_custom_baselayers: true
-
-ldap:
-  enabled: false
-  existingSecret: ""
-  config: ""
-
-
-shareProcessNamespace: false
-
-smtp:
-  enabled: false
-  existingSecret: ""
-  userKey: "user"
-  passwordKey: "password"
-
-sidecar:
-  image:
-    registry: quay.io
-    repository: kiwigrid/k8s-sidecar
-    tag: 1.30.10
-    sha: ""
-  imagePullPolicy: IfNotPresent
-  resources:
-    limits:
-      cpu: 250m
-      memory: 400Mi
-    requests:
-      cpu: 100m
-      memory: 100Mi
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    seccompProfile:
-      type: RuntimeDefault
-  enableUniqueFilenames: false
-  readinessProbe: {}
-  livenessProbe: {}
-  alerts:
-    enabled: false
-    env: {}
-    envValueFrom: {}
-    label: grafana_alert
-    labelValue: ""
-    searchNamespace: null
-    watchMethod: WATCH
-    resource: both
-    resourceName: ""
-    reloadURL: "http://localhost:3000/api/admin/provisioning/alerting/reload"
-    script: null
-    skipReload: false
-    initAlerts: false
-    extraMounts: []
-    sizeLimit: ""
-  dashboards:
-    enabled: false
-    env: {}
-    envValueFrom: {}
-    SCProvider: true
-    label: grafana_dashboard
-    labelValue: ""
-    folder: /tmp/dashboards
-    defaultFolderName: null
-    searchNamespace: null
-    watchMethod: WATCH
-    resource: both
-    folderAnnotation: null
-    resourceName: ""
-    reloadURL: "http://localhost:3000/api/admin/provisioning/dashboards/reload"
-    script: null
-    skipReload: false
-    provider:
-      name: sidecarProvider
-      orgid: 1
-      folder: ''
-      folderUid: ''
-      type: file
-      disableDelete: false
-      allowUiUpdates: false
-      foldersFromFilesStructure: false
-    extraMounts: []
-    sizeLimit: ""
-  datasources:
-    enabled: false
-    env: {}
-    envValueFrom: {}
-    label: grafana_datasource
-    labelValue: ""
-    searchNamespace: null
-    watchMethod: WATCH
-    resource: both
-    resourceName: ""
-    reloadURL: "http://localhost:3000/api/admin/provisioning/datasources/reload"
-    script: null
-    skipReload: false
-    initDatasources: false
-    extraMounts: []
-    sizeLimit: ""
-  plugins:
-    enabled: false
-    env: {}
-    label: grafana_plugin
-    labelValue: ""
-    searchNamespace: null
-    watchMethod: WATCH
-    resource: both
-    resourceName: ""
-    reloadURL: "http://localhost:3000/api/admin/provisioning/plugins/reload"
-    script: null
-    skipReload: false
-    initPlugins: false
-    extraMounts: []
-    sizeLimit: ""
-  notifiers:
-    enabled: false
-    env: {}
-    label: grafana_notifier
-    labelValue: ""
-    searchNamespace: null
-    watchMethod: WATCH
-    resource: both
-    resourceName: ""
-    reloadURL: "http://localhost:3000/api/admin/provisioning/notifications/reload"
-    script: null
-    skipReload: false
-    initNotifiers: false
-    extraMounts: []
-    sizeLimit: ""
-
-namespaceOverride: ""
-
-revisionHistoryLimit: 10
-
-imageRenderer:
-  deploymentStrategy: {}
-  enabled: false
-  replicas: 1
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 5
-    targetCPU: "60"
-    targetMemory: ""
-    behavior: {}
-  serverURL: ""
-  renderingCallbackURL: ""
-  image:
-    registry: docker.io
-    repository: grafana/grafana-image-renderer
-    tag: latest
-    sha: ""
-    pullSecrets: []
-    pullPolicy: Always
-  env:
-    HTTP_HOST: "0.0.0.0"
-    XDG_CONFIG_HOME: /tmp/.chromium
-    XDG_CACHE_HOME: /tmp/.chromium
-
-  envValueFrom: {}
-
-  serviceAccountName: ""
-  automountServiceAccountToken: false
-  securityContext: {}
-  containerSecurityContext:
-    seccompProfile:
-      type: RuntimeDefault
-    capabilities:
-      drop: ['ALL']
-    allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: true
-  podAnnotations: {}
-  hostAliases: []
-  priorityClassName: ''
-  service:
-    enabled: true
-    portName: 'http'
-    port: 8081
-    targetPort: 8081
-    appProtocol: ""
-  serviceMonitor:
-    enabled: false
-    path: /metrics
-    labels: {}
-    interval: 1m
-    scheme: http
-    tlsConfig: {}
-    scrapeTimeout: 30s
-    relabelings: []
-    targetLabels: []
-  grafanaProtocol: http
-  grafanaSubPath: ""
-  podPortName: http
-  revisionHistoryLimit: 10
-  networkPolicy:
-    limitIngress: true
-    limitEgress: false
-    extraIngressSelectors: []
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 200m
-      memory: 256Mi
-  nodeSelector: {}
-
-  tolerations: []
-
-  affinity: {}
-
-
-  extraConfigmapMounts: []
-
-  extraSecretMounts: []
-
-  extraVolumeMounts: []
-
-  extraVolumes: []
-
-networkPolicy:
-  enabled: false
-  ingress: true
-  allowExternal: true
-  explicitNamespacesSelector: {}
-  egress:
-    enabled: false
-    blockDNSResolution: false
-    ports: []
-    to: []
-
-enableKubeBackwardCompatibility: false
-useStatefulSet: false
-
-extraObjects: []
-
-assertNoLeakedSecrets: true

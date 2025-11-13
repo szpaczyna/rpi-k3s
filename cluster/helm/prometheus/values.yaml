@@ -338,9 +338,16 @@ serverFiles:
       #  scheme: https
       #  tls_config:
       #    insecure_skip_verify: true
-      #    ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      #    ca_file: /etc/etcd-certs/ca.crt
+      #    # ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
       #    cert_file: /etc/etcd-certs/tls.crt
       #    key_file: /etc/etcd-certs/tls.key
+      - job_name: 'etcd'
+        scheme: http
+        static_configs:
+          - targets:
+            - 10.0.0.9:2381
+        metrics_path: /metrics
 
       - job_name: 'kubernetes-apiservers'
         kubernetes_sd_configs:
