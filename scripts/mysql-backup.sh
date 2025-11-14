@@ -16,15 +16,8 @@ NOTIFY_EMAIL="somemail@example.com"
 NOTIFY_SUBJECT="MariaDB Backup Notification on ${HOST}"
 
 ## Linux bin paths
-MYSQLDUMP=$(command -v mysqldump)
-GREP=$(command -v grep)
-CHOWN=$(command -v chown)
-CHMOD=$(command -v chmod)
-GZIP=$(command -v gzip)
 MAIL=$(command -v mail)
-FIND=$(command -v find)
 DF=$(command -v df)
-FREE=$(command -v free)
 DU=$(command -v du)
 
 ## Function for generating Email
@@ -73,8 +66,7 @@ for db in "${DBS[@]}"; do
         gen_email "$SEND_EMAIL" "$TMP_MSG_FILE" 1 "Error: Backup files ${DEST}$GZ_FILENAME: already exists for today."
     elif [ "$skipdb" == "-1" ]; then
         # Connect to MySQL using mysqldump for selected database
-        mysqldump -u root --quote-names --opt --single-transaction --quick "$db" | gzip -cf > "${DEST}${GZ_FILENAME}"
-        if [ $? -ne 0 ]; then
+        if ! mysqldump -u root --quote-names --opt --single-transaction --quick "$db" | gzip -cf > "${DEST}${GZ_FILENAME}"; then
             NOTIFY_MESSAGE="Error while backing up database: $db"
             logger -i -t "${syslogtag}" "MySQL Database Backup FAILED; Database: $db"
         else

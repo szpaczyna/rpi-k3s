@@ -2,12 +2,14 @@
 export LD_LIBRARY_PATH=/opt/vc/lib
 
 function convert_to_MHz {
-    let value=$1/1000
+    local value
+    (( value=$1/1000 ))
     echo "$value"
 }
 
 function calculate_overvolts {
-    let overvolts=${1#*.}-20
+    local overvolts
+    (( overvolts=${1#*.} - 20 ))
     echo "$overvolts"
 }
 

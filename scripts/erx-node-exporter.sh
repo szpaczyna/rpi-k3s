@@ -13,7 +13,7 @@ sudo cp node_exporter-${VER}.linux-mipsle/node_exporter /usr/bin/node-exporter/n
 rm node* -R
 
 ## create systemd service
-sudo cat << EOF > /lib/systemd/system/node_exporter.service
+cat << EOF | sudo tee /lib/systemd/system/node_exporter.service > /dev/null
 [Unit]
 Description=NodeExporter
 After=network-online.target
