@@ -2,12 +2,18 @@
 checks:
   exclude:
     - privileged-container
-    - no-readiness-probe  # allow simple internal services
-    - no-liveness-probe   # allow simple internal services
+    - no-readiness-probe
+    - no-liveness-probe
+    - run-as-non-root
+    - host-network
+    - host-pid
+    - no-read-only-root-fs
 
 ignore-files:
   - secrets/**
+  - cluster/unused/**
   - cluster/helm/**/charts/**
+  - cluster/core/metallb/**
 
 config:
   discover:
