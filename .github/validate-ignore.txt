@@ -1,0 +1,9 @@
+.yamllint.yml
+.github/
+provisioning/
+ignore/
+cluster/helm/
+cluster/secrets/
+cluster/unused/
+*-crds.yaml
+*.asc.yaml

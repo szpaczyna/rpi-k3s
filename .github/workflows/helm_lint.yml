@@ -13,7 +13,7 @@ jobs:
   kubeval:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v5
     - name: Lint Helm
       uses: desaintmartin/helm-kubeval-action@master
       with:
