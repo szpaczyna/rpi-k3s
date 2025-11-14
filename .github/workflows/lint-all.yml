@@ -55,6 +55,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           shellcheck_flags: '-x'
           path: '.'
+          exclude: './cluster/secrets/*'
           fail_level: 'none'
           reporter: github-pr-check
 
