@@ -1,9 +1,0 @@
-#!/bin/bash
-
-sops -d --output media-secret.yaml ../../secrets/media-secret.yaml
-sops -d --output media-exporter-secret.yaml ../../secrets/media-exporter-secret.yaml
-
-kubectl -n media apply -k .
-
-rm -rf media-secret.yaml
-rm -rf media-exporter-secret.yaml

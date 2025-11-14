@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Check if metallb repo is already added
+if ! helm repo list | grep -q "metallb"; then
+    echo "Adding metallb Helm repository..."
+    helm repo add metallb https://metallb.github.io/metallb
+else
+    echo "metallb repository already exists"
+fi
+
+# Update helm repositories
+helm repo update
+
+helm upgrade --install \
+    metallb metallb/metallb \
+    --create-namespace \
+    -n metallb-system \
+    -f values.yaml \
+    --version 0.15.2
+
+kubectl apply -f resources.yaml

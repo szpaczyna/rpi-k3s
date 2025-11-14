@@ -1,2 +1,0 @@
-#!/bin/bash
-helm upgrade --install pgadmin4 -n apps -f values.yaml .

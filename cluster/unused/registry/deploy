@@ -1,3 +1,0 @@
-#!/bin/bash
-
-helm upgrade --install registry --namespace dev . --values values.yaml

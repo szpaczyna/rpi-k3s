@@ -56,7 +56,6 @@ spec:
               memory: 768Mi
         - name: poller
           image: "golift/unifi-poller:v2.11.2"
-            #image: "golift/unifi-poller:v2.10.0"
           imagePullPolicy: IfNotPresent
           env:
           - name: TZ
@@ -84,7 +83,13 @@ spec:
           - name: metrics
             containerPort: 9130
             protocol: TCP
-          volumeMounts:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
       terminationGracePeriodSeconds: 10
       restartPolicy: Always
       tolerations:
