@@ -12,14 +12,14 @@ height="144px"/-->
 <br>
 <br>
 <p>
-  <a href="https://github.com/mlaszuk/rpi-k3s/actions/workflows/lint-all.yml">
-    <img src="https://github.com/mlaszuk/rpi-k3s/actions/workflows/lint-all.yml/badge.svg" alt="Lint & Validate" />
+  <a href="https://github.com/szpaczyna/rpi-k3s/actions/workflows/lint-all.yml">
+    <img src="https://github.com/szpaczyna/rpi-k3s/actions/workflows/lint-all.yml/badge.svg" alt="Lint & Validate" />
   </a>
-  <a href="https://github.com/mlaszuk/rpi-k3s/actions/workflows/release.yml">
-    <img src="https://github.com/mlaszuk/rpi-k3s/actions/workflows/release.yml/badge.svg" alt="Release Please" />
+  <a href="https://github.com/szpaczyna/rpi-k3s/actions/workflows/release.yml">
+    <img src="https://github.com/szpaczyna/rpi-k3s/actions/workflows/release.yml/badge.svg" alt="Release Please" />
   </a>
-  <a href="https://github.com/mlaszuk/rpi-k3s/actions/workflows/readme_append.yml">
-    <img src="https://github.com/mlaszuk/rpi-k3s/actions/workflows/readme_append.yml/badge.svg" alt="README Update" />
+  <a href="https://github.com/szpaczyna/rpi-k3s/actions/workflows/readme_append.yml">
+    <img src="https://github.com/szpaczyna/rpi-k3s/actions/workflows/readme_append.yml/badge.svg" alt="README Update" />
   </a>
 </p>
 

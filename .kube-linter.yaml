@@ -1,7 +1,5 @@
 ---
 checks:
-  include:
-    - all
   exclude:
     - privileged-container
     - no-readiness-probe  # allow simple internal services

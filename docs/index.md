@@ -2,70 +2,52 @@
 layout: default
 ---
 
-
 ## Workloads
 
--   Apps/Helm Charts:
+- Apps/Helm Charts:
+    - [bitwarden](cluster/helm/bitwarden) - Passwords Management
+    - [gitea](cluster/helm/gitea) - Git with a cup of tea
+    - [kanboard](cluster/helm/kanboard) - Kanban project management software
+    - [nextcloud](cluster/helm/nextcloud) - Personal cloud service
+    - [postgresql](cluster/helm/postgresql) - PostgreSQL database
+    - [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
+    - [influxdb](cluster/helm/influxdb) - Database for Apple Health exports
+    - [shpaq-org](cluster/helm/shpaq-org) - Personal website
+    - [media-stack](cluster/helm/media-stack) - Transmission, Radarr, Lidarr, Sonarr, Bazarr, Jackett, Calibre-web
+    - [grafana](cluster/helm/grafana) - Grafana (for dashboards)
 
-    -   [bitwarden](https://bitwarden.com/) - Passwords Management and Storage
-    -   [gitea](https://github.com/jfelten/gitea-helm-chart) - Git with a cup of tea
-    -   [kanboard](https://kanboard.org/) - Kanban project management software
-    -   [pihole](https://pi-hole.net/) - Network-wide AD Blocking
-    -   [registry](https://hub.docker.com/_/registry/) - Docker registry
-    -   [version-cehcker](charts/version-checker) - Checker for newest version of deployed apps
-    -   [locust](charts/locust) - template for performance testing
-    -   [cert-exporter](charts/cert-exporter) - certificates monitoring
+- Apps/YAML:
+    - [unifi](cluster/apps/unifi) - Unifi controller/prometheus poller
+    - [gentoo](cluster/apps/gentoo) - cross-compiler and playground
 
-
--   Apps/YAML
-
-    -   [databases](yaml/db) - Mongo, Mysql, CockroachDB
-    -   [squid](yaml/squid) - Squid Proxy Service
-    -   [ubooquity](yaml/ubooquity) - Books Management
-    -   [unifi](yaml/unifi) - Unifi controller
-    -   [unifi poller](yaml/unifi-poller) - Unifi pollers for Prometheus
-    -   [www](yaml/www) - Personal website
-    -   [prometheus stack](yaml/metrics) - Prometheus/Grafana stack with some additional exporters
-    -   [elk stack](yaml/elk) - Elasticsearch/Kibana/Logstash/Filebeat
-    -   [elastichq](yaml/eshq) - Elasticsearch management
-    -   [registry-ui](yaml/registry-ui) - GUI for managaning docker registry
-
-
--   System
-
-    -   [cert-manager](https://github.com/jetstack/cert-manager) - Automated letsencrypt broker
-    -   [metallb](yaml/metallb) - Load-balancer for bare-metal with BGP
-    -   [kubernetes-dashboard](yaml/kubernetes-dashboard) - Kubernetes Dashboard
-    -   [storage](yaml/storage) - local-path, nfs and samba for home users
-    -   [traefik](varia/traefik.yaml) - Traefik
-    -   [coredns](varia/coredns.yaml) - CoreDNS
-
-
--   Backup
-
-    -   [velero](backup/velero) - Velero backup with minio
-
-
--   Varia
-    -   [scripts](varia/scripts) - some custom stuff, quite simple
-    -   [config](varia/config) - performance and some hardening
+- System:
+    - [prometheus](cluster/helm/prometheus) - Prometheus monitoring system
+    - [cert-manager](cluster/helm/cert-manager) - Automated letsencrypt broker
+    - [metallb](cluster/core/networking) - Load-balancer for bare-metal with BGP
+    - [longhorn](cluster/helm/longhorn) - Distributed storage system
+    - [ingress-nginx](cluster/helm/ingress-nginx) - Ingress controller
+    - [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) - Certificates monitoring
+    - [openweather-exporter](cluster/helm/openweather) - OpenWeather API exporter
+    - [loki](cluster/helm/loki) - Log aggregation system
+    - [event-exporter](cluster/helm/event-exporter) - Kubernetes events exporter
+    - [local-path-provisioner](cluster/helm/local-path-provisioner) - Local storage provisioner
 
 
 ## Docker Stuff
 
 > <https://github.com/szpaczyna/docker>
 
-#### Images
+### Images
 
--   [gitlab-ce](https://hub.docker.com/repository/docker/szpaczyn/gitlab-ce)
--   [elastic-hq](https://hub.docker.com/repository/docker/szpaczyn/elastic-hq)
--   [cockroachdb](https://hub.docker.com/repository/docker/szpaczyn/cockroachdb)
--   [squid](https://hub.docker.com/repository/docker/szpaczyn/squid)
--   [elasticsearch](https://hub.docker.com/repository/docker/szpaczyn/elasticsearch-arm64)
--   [kibana](https://hub.docker.com/repository/docker/szpaczyn/kibana-arm64)
--   [logstash](https://hub.docker.com/repository/docker/szpaczyn/logstash-arm64)
--   [elastic-curator](https://hub.docker.com/repository/docker/szpaczyn/elasticsearch-curator)
--   [xbrowsersync](https://hub.docker.com/repository/docker/szpaczyn/xbrowsersync)
+- [gitlab-ce](https://hub.docker.com/repository/docker/szpaczyn/gitlab-ce)
+- [elastic-hq](https://hub.docker.com/repository/docker/szpaczyn/elastic-hq)
+- [cockroachdb](https://hub.docker.com/repository/docker/szpaczyn/cockroachdb)
+- [squid](https://hub.docker.com/repository/docker/szpaczyn/squid)
+- [elasticsearch](https://hub.docker.com/repository/docker/szpaczyn/elasticsearch-arm64)
+- [kibana](https://hub.docker.com/repository/docker/szpaczyn/kibana-arm64)
+- [logstash](https://hub.docker.com/repository/docker/szpaczyn/logstash-arm64)
+- [elastic-curator](https://hub.docker.com/repository/docker/szpaczyn/elasticsearch-curator)
+- [xbrowsersync](https://hub.docker.com/repository/docker/szpaczyn/xbrowsersync)
 
 ## Helm
 
@@ -77,7 +59,7 @@ layout: default
 
 ## TODO
 
--   Automation
--   Logging (partially done)
--   Wazuh (security stuff)
--   Zalando postgres operator
+- Automation
+- Logging (partially done)
+- Wazuh (security stuff)
+- Zalando postgres operator
