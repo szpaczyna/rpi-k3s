@@ -7,3 +7,5 @@ cluster/secrets/
 cluster/unused/
 *-crds.yaml
 *.asc.yaml
+cluster/core/metallb/
+cluster/varia/
