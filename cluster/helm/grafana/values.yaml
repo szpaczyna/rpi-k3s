@@ -9,7 +9,8 @@ deploymentStrategy:
   type: Recreate
 
 image:
-  tag: 10.4.19
+  # tag: 10.4.19
+  tag: 11.6.7
 
 testFramework:
   enabled: false
@@ -110,7 +111,6 @@ extraVolumes:
 plugins:
   - vonage-status-panel
   - novatec-sdg-panel
-  - farski-blendstat-panel
   - grafana-polystat-panel
 
 datasources:
@@ -206,7 +206,7 @@ grafana.ini:
     enabled: false
     org_name: Szpacze Gniazdo
     org_role: Viewer
-    hide_version: true
+    hide_version: false
 
   auth.basic:
     enabled: false
