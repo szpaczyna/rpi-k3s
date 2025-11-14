@@ -12,6 +12,7 @@ checks:
 # Use ignore-paths (not ignore-files) so kube-linter actually skips these directories.
 ignore-paths:
   - secrets/**
+  - cluster/secrets/**
   - cluster/unused/**
   - cluster/helm/**/charts/**
   - cluster/core/metallb/**

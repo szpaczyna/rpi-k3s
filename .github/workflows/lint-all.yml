@@ -95,7 +95,8 @@ jobs:
       - name: kube-linter
         uses: stackrox/kube-linter-action@v1.0.4
         with:
-          directory: cluster
+          # Run from repo root so config discover.paths limits scope; ignore-paths handles exclusions
+          directory: .
           config: .kube-linter.yaml
 
   chart_testing:
