@@ -27,7 +27,7 @@ jobs:
         uses: ibiqlik/action-yamllint@v3
         with:
           file_or_dir: '.'
-          config_file: '.yamllint.yml'
+          config_file: '.github/.yamllint.config.yaml'
 
   markdown:
     name: Markdown Lint
@@ -39,7 +39,7 @@ jobs:
         uses: DavidAnson/markdownlint-cli2-action@v15
         with:
           globs: '**/*.md'
-          config: '.markdownlint.json'
+          config: '.github/.markdownlint.json'
       - name: Markdown summary
         run: echo 'Markdown lint completed (non-blocking).'
 
@@ -95,9 +95,9 @@ jobs:
       - name: kube-linter
         uses: stackrox/kube-linter-action@v1.0.4
         with:
-          # Run from repo root so config discover.paths limits scope; ignore-paths handles exclusions
+          # Run from repo root so config discover.paths limits scope; excludePaths handles exclusions
           directory: .
-          config: .kube-linter.yaml
+          config: .github/.kube-linter.yaml
 
   chart_testing:
     name: Chart Testing
@@ -115,7 +115,7 @@ jobs:
       - name: List changed charts
         id: list
         run: |
-          changed=$(ct list-changed --config ct.yaml || true)
+          changed=$(ct list-changed --config .github/ct.yaml || true)
           echo "changed=$changed" >> $GITHUB_OUTPUT
           echo "$changed"
       - name: Lint & install eligible charts (skip missing values.yaml)

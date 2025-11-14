@@ -1,0 +1,28 @@
+---
+checks:
+  exclude:
+    - privileged-container
+    - no-readiness-probe
+    - no-liveness-probe
+    - run-as-non-root
+    - host-network
+    - host-pid
+    - no-read-only-root-fs
+
+config:
+  discover:
+    # Search these paths for manifests / Helm charts
+    paths:
+      - cluster/apps
+      - cluster/core
+      - cluster/helm
+    # Exclude specific patterns from discovery
+    excludePaths:
+      - secrets/**
+      - cluster/secrets/**
+      - cluster/unused/**
+      - cluster/helm/**/charts/**
+      - cluster/core/metallb/**
+  helm-values:
+    # Provide common value overrides if needed (none for now)
+    global: {}

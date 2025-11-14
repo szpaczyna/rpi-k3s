@@ -16,4 +16,4 @@ jobs:
         uses: stackrox/kube-linter-action@v1.0.4
         with:
           directory: cluster
-          config: .kube-linter.yaml
+          config: .github/.kube-linter.yaml

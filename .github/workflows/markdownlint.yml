@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: Lint Markdown
+      - name: Lint Markdown (informational)
         continue-on-error: true
         uses: DavidAnson/markdownlint-cli2-action@v15
         with:
           globs: '**/*.md'
-          config: '.markdownlint.json'
+          config: '.github/.markdownlint.json'
       - name: Summary
         run: echo 'Markdown lint completed (non-blocking).'
