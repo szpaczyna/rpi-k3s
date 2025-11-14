@@ -76,9 +76,9 @@
     group: root
     mode: 0644
   loop:
-    - { src: 'templates/apt/10periodic.j2', dest: '/etc/apt/apt.conf.d/10.periodic' }
-    - { src: 'templates/apt/50unattended-upgrades.j2', dest: '/etc/apt/apt.conf.d/40unattended-upgrades' }
-    - { src: 'templates/apt/999_decompress_rpi_kernel.j2', dest: '/etc/apt/apt.conf.d/999_decompress_rpi_kernel' }
+    - {src: 'templates/apt/10periodic.j2', dest: '/etc/apt/apt.conf.d/10.periodic'}
+    - {src: 'templates/apt/50unattended-upgrades.j2', dest: '/etc/apt/apt.conf.d/40unattended-upgrades'}
+    - {src: 'templates/apt/999_decompress_rpi_kernel.j2', dest: '/etc/apt/apt.conf.d/999_decompress_rpi_kernel'}
 
 - name: Copy decompress rpi kernel script in place
   template:
@@ -88,7 +88,7 @@
     group: root
     mode: 0755
   loop:
-    - { src: 'templates/apt/999_decompress_rpi_kernel.j2', dest: '/etc/apt/apt.conf.d/999_decompress_rpi_kernel' }
+    - {src: 'templates/apt/999_decompress_rpi_kernel.j2', dest: '/etc/apt/apt.conf.d/999_decompress_rpi_kernel'}
 
 # See: https://github.com/kubernetes/kubernetes/issues/71305
 - name: Use iptables-legacy instead of nftables.
@@ -156,13 +156,14 @@
     mode: 0644
 
 - name: Efemeric journald
-  template:- include: user.yml
-  tags:
-    - user
-
+  template:
     src: journald.conf.j2
     dest: /etc/systemd/journald.conf
     mode: 0644
+
+- include: user.yml
+  tags:
+    - user
 
 # Allowed to fail inorder to be idempotent
 - name: Stop log2ram service
@@ -195,8 +196,8 @@
     dest: /etc/log2ram.conf
     mode: 0644
 
-## zram
-- name: Cloning zram-swap-config from GitHub # noqa 401
+# zram
+- name: Cloning zram-swap-config from GitHub
   git:
     repo: https://github.com/StuartIanNaylor/zram-swap-config.git
     dest: /opt/zram-swap-config

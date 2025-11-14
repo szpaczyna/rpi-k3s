@@ -1,6 +1,6 @@
 .yamllint.yml
 .github/
-provisioning/
+provision/
 ignore/
 cluster/helm/
 cluster/secrets/
