@@ -9,7 +9,8 @@ checks:
     - host-pid
     - no-read-only-root-fs
 
-ignore-files:
+# Use ignore-paths (not ignore-files) so kube-linter actually skips these directories.
+ignore-paths:
   - secrets/**
   - cluster/unused/**
   - cluster/helm/**/charts/**

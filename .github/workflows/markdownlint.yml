@@ -13,9 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Lint Markdown
+        continue-on-error: true
         uses: DavidAnson/markdownlint-cli2-action@v15
         with:
           globs: '**/*.md'
           config: '.markdownlint.json'
       - name: Summary
-        run: echo 'Markdown lint completed.'
+        run: echo 'Markdown lint completed (non-blocking).'

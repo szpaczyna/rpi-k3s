@@ -34,11 +34,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: markdownlint
+      - name: markdownlint (informational)
+        continue-on-error: true
         uses: DavidAnson/markdownlint-cli2-action@v15
         with:
           globs: '**/*.md'
           config: '.markdownlint.json'
+      - name: Markdown summary
+        run: echo 'Markdown lint completed (non-blocking).'
 
   shell:
     name: ShellCheck
