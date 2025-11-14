@@ -1,0 +1,23 @@
+---
+# DEPRECATED: Consolidated into lint-all.yml
+name: (Deprecated) Shellcheck
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run ShellCheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          shellcheck_flags: '-x'
+          path: '.'
+          fail_level: 'error'
+      - name: Summary
+        run: echo 'ShellCheck completed.'

@@ -1,0 +1,21 @@
+---
+# DEPRECATED: Consolidated into lint-all.yml
+name: (Deprecated) Markdown Lint
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v15
+        with:
+          globs: '**/*.md'
+          config: '.markdownlint.json'
+      - name: Summary
+        run: echo 'Markdown lint completed.'

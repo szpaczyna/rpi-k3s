@@ -1,0 +1,117 @@
+---
+name: Lint & Validate
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    paths-ignore:
+      - 'secrets/**'
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'secrets/**'
+  workflow_dispatch: {}
+
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  yaml:
+    name: YAML Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: yamllint
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: '.'
+          config_file: '.yamllint.yml'
+
+  markdown:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v15
+        with:
+          globs: '**/*.md'
+          config: '.markdownlint.json'
+
+  shell:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: ShellCheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          shellcheck_flags: '-x'
+          path: '.'
+          fail_level: 'error'
+
+  kubeconform:
+    name: Kubeconform (Rendered Helm & Raw Manifests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+      - name: Render Helm charts
+        run: |
+          mkdir -p rendered
+          for d in cluster/helm/*/; do
+            chart="${d%/}"; name=$(basename "$chart")
+            echo "Rendering $name";
+            helm dependency update "$chart" || true
+            helm template "$name" "$chart" > "rendered/${name}.yaml"
+          done
+      - name: Run kubeconform
+        uses: docker://ghcr.io/yannh/kubeconform:latest
+        with:
+          args: -strict -ignore-missing-schemas -schema-location default -summary rendered cluster/apps cluster/core
+
+  kube_linter:
+    name: Kube Linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: kube-linter
+        uses: stackrox/kube-linter-action@v1.0.4
+        with:
+          directory: cluster
+          config: .kube-linter.yaml
+
+  chart_testing:
+    name: Chart Testing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.6.1
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.9.0
+        with:
+          version: v0.23.0
+      - name: List changed charts
+        id: list
+        run: |
+          changed=$(ct list-changed --config ct.yaml || true)
+          echo "changed=$changed" >> $GITHUB_OUTPUT
+          echo "$changed"
+      - name: Lint changed charts
+        if: steps.list.outputs.changed != ''
+        run: ct lint --config ct.yaml
+      - name: Install changed charts
+        if: steps.list.outputs.changed != ''
+        run: ct install --config ct.yaml
+      - name: No chart changes
+        if: steps.list.outputs.changed == ''
+        run: echo 'No Helm chart changes detected.'

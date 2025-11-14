@@ -1,0 +1,23 @@
+---
+checks:
+  include:
+    - all
+  exclude:
+    - privileged-container
+    - no-readiness-probe  # allow simple internal services
+    - no-liveness-probe   # allow simple internal services
+
+ignore-files:
+  - secrets/**
+  - cluster/helm/**/charts/**
+
+config:
+  discover:
+    # Search these paths for manifests / Helm charts
+    paths:
+      - cluster/apps
+      - cluster/core
+      - cluster/helm
+  helm-values:
+    # Provide common value overrides if needed (none for now)
+    global: {}

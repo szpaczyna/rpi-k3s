@@ -11,6 +11,17 @@ height="144px"/-->
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 1.3em; font-weight: normal;">Home Cloud on Raspberry Pie(s)</span>
 <br>
 <br>
+<p>
+  <a href="https://github.com/mlaszuk/rpi-k3s/actions/workflows/lint-all.yml">
+    <img src="https://github.com/mlaszuk/rpi-k3s/actions/workflows/lint-all.yml/badge.svg" alt="Lint & Validate" />
+  </a>
+  <a href="https://github.com/mlaszuk/rpi-k3s/actions/workflows/release.yml">
+    <img src="https://github.com/mlaszuk/rpi-k3s/actions/workflows/release.yml/badge.svg" alt="Release Please" />
+  </a>
+  <a href="https://github.com/mlaszuk/rpi-k3s/actions/workflows/readme_append.yml">
+    <img src="https://github.com/mlaszuk/rpi-k3s/actions/workflows/readme_append.yml/badge.svg" alt="README Update" />
+  </a>
+</p>
 
 <!--START_SECTION_PROFILE_VIEWS:readme-info-->
 
@@ -68,6 +79,7 @@ height="144px"/-->
 
 A lot of inspiration for my cluster came from the people that have shared their
 clusters over at [awesome-home-kubernetes].
+
 
 [awesome-home-kubernetes]: https://github.com/k8s-at-home/awesome-home-kubernetes
 

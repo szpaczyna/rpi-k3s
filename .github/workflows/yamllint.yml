@@ -1,0 +1,23 @@
+---
+# DEPRECATED: Consolidated into lint-all.yml
+name: (Deprecated) YAML Lint
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run yamllint
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: '.'
+          config_file: '.yamllint.yml'
+      - name: Fail on warnings in changed files (optional tighten)
+        if: always()
+        run: |
+          echo 'Consider enforcing stricter rules later.'

@@ -1,17 +1,15 @@
 ---
-name: Linter
+# DEPRECATED: Consolidated into lint-all.yml
+name: (Deprecated) Legacy JSON/YAML Linter
 permissions:
   contents: read
 
 on:
-  push:
-    branches:
-    - main
+  workflow_dispatch: {}
 
 jobs:
   json-yaml-lint:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci-skip]')"
     steps:
       - uses: actions/checkout@v5
       - name: Validate JSON and YAML files

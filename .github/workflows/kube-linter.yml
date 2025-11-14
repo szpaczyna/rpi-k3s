@@ -1,0 +1,19 @@
+---
+# DEPRECATED: Consolidated into lint-all.yml
+name: (Deprecated) Kube Linter
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  kube-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run kube-linter
+        uses: stackrox/kube-linter-action@v1.0.4
+        with:
+          directory: cluster
+          config: .kube-linter.yaml

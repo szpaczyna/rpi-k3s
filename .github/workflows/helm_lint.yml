@@ -1,13 +1,11 @@
 ---
-name: Helm Linter
+# DEPRECATED: Consolidated into lint-all.yml
+name: (Deprecated) Helm Linter
 permissions:
   contents: read
   
 on:
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'Helm linter'
+  workflow_dispatch: {}
 
 jobs:
   kubeval:
