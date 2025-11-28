@@ -9,8 +9,8 @@ deploymentStrategy:
   type: Recreate
 
 image:
-  # tag: 10.4.19
-  tag: 11.6.7
+  tag: 10.4.19
+    #tag: 11.6.7
 
 testFramework:
   enabled: false
