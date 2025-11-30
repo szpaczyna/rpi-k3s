@@ -1,0 +1,6 @@
+apiVersion: v2
+name: whoops
+description: A Helm chart for Whoops
+type: application
+version: 0.2.4
+appVersion: "1.0"

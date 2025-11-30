@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sops -d --output values.yaml ../../secrets/whoops-values.yaml
+
+helm upgrade --install whoops -n apps -f values.yaml .
+
+rm -rf values.yaml
