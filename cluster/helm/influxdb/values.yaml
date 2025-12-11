@@ -3,8 +3,8 @@
 ## ref: https://hub.docker.com/r/library/influxdb/tags/
 image:
   repository: "influxdb"
-  tag: 1.8.10-alpine
-  #tag: "1.8"
+  tag: 1.12.2-alpine
+  # tag: 1.8.10-alpine
   pullPolicy: IfNotPresent
 
 serviceAccount:
@@ -28,7 +28,8 @@ readinessProbe:
   timeoutSeconds: 5
   scheme: HTTP
 
-securityContext: {}
+securityContext:
+  fsGroup: 999
   # runAsUser: 999
   # runAsGroup: 999
 
@@ -47,7 +48,7 @@ service:
   ## Add annotations to service
   # annotations: {}
   type: LoadBalancer
-  loadBalancerIP: 10.1.0.4
+  loadBalancerIP: 10.0.0.43
   # externalIPs: []
   # externalTrafficPolicy: ""
   # nodePort(s) value for the LoadBalancer and NodePort service types
@@ -97,12 +98,12 @@ resources:
     cpu: 0.2
   limits:
     memory: 1000Mi
-      cpu: 3
+    cpu: 3
 
 podAnnotations:
   prometheus.io/scrape: "true"
   prometheus.io/port: "8086"
-    #  prometheus.io/path: "/api/v1/prom/write?db=prometheus"
+  #  prometheus.io/path: "/api/v1/prom/write?db=prometheus"
   prometheus.io/path: "/metrics"
 
 podLabels: {}

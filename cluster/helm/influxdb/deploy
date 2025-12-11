@@ -9,11 +9,11 @@ else
 fi
 
 # Update helm repositories
-helm repo update
+#helm repo update
 
 
 sops -d ../../secrets/influxdb-auth.yaml > secret.yaml
 kubectl apply -f ./secret.yaml
 
-helm upgrade --install influxdb influxdata/influxdb -n apps -f ./values.yaml
+helm upgrade --install influxdb influxdata/influxdb -n apps -f ./values.yaml --version 4.12.5
 rm -rf secret.yaml
