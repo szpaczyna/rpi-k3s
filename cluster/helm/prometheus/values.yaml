@@ -124,7 +124,7 @@ server:
   fullnameOverride: ""
 
   ingress:
-    enabled: true
+    enabled: false
     ingressClassName: nginx
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -284,11 +284,11 @@ server:
     labels: {}
     clusterIP: ""
     externalIPs: []
-    loadBalancerIP: ""
+    loadBalancerIP: "10.0.0.47"
     loadBalancerSourceRanges: []
     servicePort: 9090
     sessionAffinity: None
-    type: ClusterIP
+    type: LoadBalancer # ClusterIP
     externalTrafficPolicy: ""
 
     gRPC:
@@ -624,21 +624,22 @@ extraScrapeConfigs: |
   - job_name: 'raspberries'
     static_configs:
       - targets:
+
+        - 10.0.0.2:9100 #blueberry
         - 10.0.0.20:9100 #greypi
-        - 10.0.0.10:9100 #blueberry
-        - 10.0.10.11:9100 #whitepi
-        - 10.0.10.12:9100 #greenpi
-        - 10.0.10.13:9100 #redpi
+        - 10.0.0.21:9100 #whitepi
+        - 10.0.0.22:9100 #redpi
+        - 10.0.0.23:9100 #greenpi
 
   - job_name: 'pihole'
     static_configs:
       - targets:
-        - 10.0.0.10:9617
+        - 10.0.0.2:9617
 
-  - job_name: 'erx'
-    static_configs:
-      - targets:
-        - 10.0.0.1:9100
+  # - job_name: 'erx'
+  #   static_configs:
+  #     - targets:
+  #       - 10.0.0.1:9100
 
 alertRelabelConfigs: {}
   # alert_relabel_configs:
