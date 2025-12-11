@@ -15,4 +15,4 @@ spec:
   selector:
     app.kubernetes.io/name: gentoo
   type: LoadBalancer
-  loadBalancerIP: 10.1.0.5
+  loadBalancerIP: 10.0.0.44

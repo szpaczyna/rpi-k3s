@@ -62,7 +62,7 @@ transmission:
     type: ClusterIP
     port: 9091
   loadbalancer:
-    ip: "10.1.0.20"
+    ip: "10.0.0.45"
     port: 51413
 
 exportarr:

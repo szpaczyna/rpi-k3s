@@ -9,7 +9,7 @@ else
 fi
 
 # Update helm repositories
-helm repo update
+#helm repo update
 
 #helm repo add bitnami https://charts.bitnami.com/bitnami
 
