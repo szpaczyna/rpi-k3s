@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Check if unpoller repo is already added
+#if ! helm repo list | grep -q "unpoller"; then
+#    echo "Adding unpoller Helm repository..."
+#    helm repo add unpoller https://unpoller.github.io/helm-chart
+#
+#else
+#    echo "unpoller repository already exists"
+#fi
+
+#helm repo update
+sops -d \
+    --output values.yaml \
+    ../../secrets/unifipoller-values.yaml
+
+helm upgrade --install unifipoller -n monitoring -f values.yaml .
+
+rm -f values.yaml

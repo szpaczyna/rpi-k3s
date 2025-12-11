@@ -1,0 +1,22 @@
+apiVersion: v2
+name: unpoller
+description: |
+  A Helm chart for unpoller, a unifi prometheus exporter. This chart helps deploy Unpoller (unifi metrics exporter)
+  in kubernetes clusters.
+  It crates a Deployment to run the unpoller container, confiuration is stored in a ConfigMap and mounted in the container.
+  It supports integration with Prometheus operator, so a PodMonitor is created that will scrape the Deployment for the metrics.
+  See further documentation in how to install unpoller in Kubernetes in http://unpoller.github.io/helm-chart
+
+  **Note**: *This is a best effort to keep this chart working for kubernetes.*
+
+type: application
+version: "2.11.2-Chart7"
+appVersion: "v2.11.2"
+keywords:
+  - unifi
+  - unpoller
+  - monitoring
+  - prometheus
+home: https://unpoller.com/
+sources:
+  - https://github.com/unpoller/helm-chart
