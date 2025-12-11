@@ -16,6 +16,6 @@ sops -d --output grafana-admin-creds.yaml ../../secrets/grafana-admin-creds.yaml
 
 kubectl apply -f grafana-admin-creds.yaml
 
-helm upgrade --install grafana grafana/grafana -n monitoring -f values.yaml
+helm upgrade --install grafana grafana/grafana -n monitoring -f values.yaml --version 10.3.0
 
 rm -rf grafana-admin-creds.yaml
