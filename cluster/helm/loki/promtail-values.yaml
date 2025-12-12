@@ -1,0 +1,36 @@
+config:
+  clients:
+    - url: http://loki-headless:3100/loki/api/v1/push
+  snippets:
+    extraScrapeConfigs: |
+      - job_name: unifi
+        syslog:
+          listen_address: 0.0.0.0:1514
+          labels:
+            job: unifi
+        relabel_configs:
+          - source_labels: ['__syslog_message_hostname']
+            target_label: 'host'
+
+# Promtail chart expects extraPorts as a map keyed by name
+extraPorts:
+  syslog-udp:
+    name: syslog-udp
+    port: 1514
+    targetPort: 1514
+    protocol: UDP
+    containerPort: 1514
+    service:
+      port: 1514
+      type: LoadBalancer
+      loadBalancerIP: 10.0.0.49
+      externalTrafficPolicy: Cluster
+      targetPort: syslog-udp
+
+resources:
+  requests:
+    cpu: 0.1
+    memory: 100Mi
+  limits:
+    cpu: 0.2
+    memory: 256Mi

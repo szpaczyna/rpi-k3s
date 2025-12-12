@@ -1,0 +1,64 @@
+loki:
+  enabled: true
+  isDefault: true
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: 'filesystem'
+
+  resources:
+    requests:
+      cpu: 0.1
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
+
+  persistence:
+    enabled: true
+    accessModes:
+    - ReadWriteOnce
+    size: 20Gi
+    annotations: {}
+
+  service:
+    type: ClusterIP
+    port: 3100
+    targetPort: http-metrics
+
+  extraArgs:
+    querier.max-outstanding-requests-per-tenant: "2048"
+    querier.max-concurrent: "2048"
+  # For quick setup, use the chart's test schema. Replace with a proper schema_config for production.
+  useTestSchema: true
+
+# Explicitly set deployment mode to SingleBinary to avoid transitional validation errors
+deploymentMode: SingleBinary
+
+singleBinary:
+  replicas: 1
+
+test:
+  enabled: false
+
+# Ensure other modes are fully disabled with zero replicas
+gateway:
+  enabled: false
+backend:
+  enabled: false
+  replicas: 0
+read:
+  enabled: false
+  replicas: 0
+write:
+  enabled: false
+  replicas: 0
+table-manager:
+  enabled: false
+lokiCanary:
+  enabled: false
+chunksCache:
+  enabled: false
+resultsCache:
+  enabled: false

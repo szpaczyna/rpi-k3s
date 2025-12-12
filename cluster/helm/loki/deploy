@@ -11,4 +11,8 @@ fi
 # Update helm repositories
 helm repo update
 
-helm upgrade --install loki --create-namespace --namespace logging grafana/loki-stack -f values.yaml
+# Install loki
+helm upgrade --install loki --create-namespace --namespace logging grafana/loki -f loki-values.yaml
+
+# Install promtail
+helm upgrade --install promtail --namespace logging grafana/promtail -f promtail-values.yaml
