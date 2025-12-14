@@ -83,6 +83,10 @@ spec:
           value: "{{ .Values.global.timezone }}"
         - name: UMASK
           value: "022"
+        - name: PUID
+          value: "{{ .Values.global.runAsUser }}"
+        - name: PGID
+          value: "{{ .Values.global.runAsGroup }}"
         ports:
         - name: http
           containerPort: {{ .Values.transmission.service.port }}
