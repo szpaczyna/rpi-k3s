@@ -1,18 +1,34 @@
 #!/bin/bash
 
-# Check if grafana repo is already added
-if ! helm repo list | grep -q "grafana"; then
-    echo "Adding grafana Helm repository..."
-    helm repo add grafana https://grafana.github.io/helm-charts
-else
-    echo "grafana repository already exists"
-fi
+# Check if grafana and fluent repos are already added
+repos=(
+    grafana=https://grafana.github.io/helm-charts
+    fluent=https://fluent.github.io/helm-charts
+)
+for entry in "${repos[@]}"; do
+    name="${entry%%=*}"
+    url="${entry#*=}"
+    if ! helm repo list | grep -q "$name"; then
+        echo "Adding $name Helm repository..."
+        helm repo add "$name" "$url"
+    else
+        echo "$name repository already exists"
+    fi
+done
 
-# Update helm repositories
+# Update helm repos
 helm repo update
 
 # Install loki
-helm upgrade --install loki --create-namespace --namespace logging grafana/loki -f loki-values.yaml
+helm upgrade --install loki --create-namespace --namespace logging grafana/loki -f loki-values.yaml --version=6.49.0
+
+# Install fluent-bit
+helm upgrade --install fluent-bit --namespace logging fluent/fluent-bit -f fluentbit-values.yaml --version=0.54.0
 
 # Install promtail
-helm upgrade --install promtail --namespace logging grafana/promtail -f promtail-values.yaml
+# helm upgrade --install promtail --namespace logging grafana/promtail -f promtail-values.yaml --version=6.17.1
+#
+
+# Install alloy
+# helm upgrade --install alloy --namespace logging grafana/alloy -f alloy-values.yaml --version=1.5.0
+#
