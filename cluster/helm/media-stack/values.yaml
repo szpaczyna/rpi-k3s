@@ -109,10 +109,13 @@ images:
     tag: "4.0.6"
   exportarr:
     repository: "ghcr.io/onedr0p/exportarr"
-    tag: "v2.3"
+    tag: "v2.3.0"
   calibreWeb:
     repository: "lscr.io/linuxserver/calibre-web"
     tag: "0.6.25"
+  busybox:
+    repository: "busybox"
+    tag: "1.37.0"
 
 ingress:
   host: media.shpaq.org

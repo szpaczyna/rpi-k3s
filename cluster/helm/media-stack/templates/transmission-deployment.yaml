@@ -30,7 +30,7 @@ spec:
       initContainers:
       {{- if $.Values.configStorage.enabled }}
       - name: fix-permissions
-        image: busybox:latest
+        image: "{{ printf "%s:%s" .Values.images.busybox.repository .Values.images.busybox.tag }}"
         command:
         - /bin/sh
         - -c
