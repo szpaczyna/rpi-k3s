@@ -1,0 +1,15 @@
+{{- if and .Values.mariadb.enabled .Values.mariadb.persistence.config.enabled (not .Values.mariadb.persistence.config.existingClaim) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "booklore.fullname" . }}-mariadb-config
+  labels:
+    app.kubernetes.io/name: mariadb
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.mariadb.persistence.config.size }}
+{{- end }}

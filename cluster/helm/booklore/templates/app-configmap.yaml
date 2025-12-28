@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "booklore.fullname" . }}-app-config
+  labels:
+    {{- include "booklore.labels" . | nindent 4 }}
+data:
+  BOOKLORE_PORT: {{ .Values.service.port | quote }}
+  DATABASE_URL: 'jdbc:mariadb://{{ .Release.Name }}-mariadb:{{ include "booklore.dbPort" . }}/{{ .Values.mariadb.auth.database }}'
+  DATABASE_USERNAME: {{ .Values.mariadb.auth.username | quote }}

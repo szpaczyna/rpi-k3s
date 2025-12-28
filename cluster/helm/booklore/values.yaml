@@ -1,0 +1,119 @@
+# Default values for booklore.
+---
+mariadb:
+  enabled: true
+  port: 3306
+  image:
+    repository: lscr.io/linuxserver/mariadb
+    tag: "11.4.5"
+    pullPolicy: IfNotPresent
+  auth:
+    database: booklore
+    username: booklore
+    password: ""
+    existingSecret: "booklore-db-secret"
+  rootPassword: ""
+  env:
+    PUID: "1000"
+    PGID: "1000"
+    TZ: "Europe/Warsaw"
+  persistence:
+    config:
+      enabled: true
+      size: 1Gi
+      existingClaim: ""
+
+image:
+  repository: ghcr.io/booklore-app/booklore
+  pullPolicy: IfNotPresent
+  tag: "v1.16.0"
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 568
+
+securityContext: {}
+  #drop:
+  #  - ALL
+  #readOnlyRootFilesystem: true
+  #runAsNonRoot: true
+  #runAsUser: 568
+
+service:
+  type: ClusterIP
+  port: 6060
+  targetPort: http
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/default-backend: shpaq-org
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - host: books.shpaq.org
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: bookslore-tls
+      hosts:
+        - books.shpaq.org
+  extraPaths: []
+
+resources:
+  limits:
+    cpu: 1500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+livenessProbe:
+  tcpSocket:
+    port: http
+readinessProbe:
+  tcpSocket:
+    port: http
+
+persistence:
+  dataVolume:
+    enabled: true
+    size: 100Mi
+    existingClaim: ""
+  booksVolume:
+    enabled: true
+    size: 10Gi
+    existingClaim: "media"
+    subPath: "library/books"
+
+extraVolumes:
+  - name: bookdrop
+    hostPath:
+      path: /data/media/downloads/transmission/complete
+      type: Directory
+
+extraVolumeMounts:
+  - name: bookdrop
+    mountPath: /bookdrop
+    readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

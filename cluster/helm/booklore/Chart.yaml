@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: booklore
+description: A Helm chart for [Booklore](https://github.com/booklore-app/booklore)
+type: application
+version: 0.1.1
+appVersion: "1.16.0"

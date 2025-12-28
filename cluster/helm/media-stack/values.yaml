@@ -70,7 +70,7 @@ exportarr:
     port: 9707
 
 calibreWeb:
-  enable: true
+  enable: false
   storageSize: 1Gi
   service:
     port: 8083

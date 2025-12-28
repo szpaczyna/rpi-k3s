@@ -1,0 +1,12 @@
+#!/bin/bash
+
+sops -d --output \
+    booklore-db-secret.yaml \
+    ../../secrets/booklore-db-secret.yaml
+
+kubectl apply -f booklore-db-secret.yaml -n media
+
+helm upgrade --install booklore -n media -f values.yaml .
+
+rm -rf booklore-db-secret.yaml
+
