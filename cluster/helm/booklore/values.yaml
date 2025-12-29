@@ -62,26 +62,27 @@ ingress:
   className: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/default-backend: shpaq-org
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
   hosts:
-    - host: books.shpaq.org
+    - host: booklore.shpaq.org
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   tls:
-    - secretName: bookslore-tls
-      hosts:
-        - books.shpaq.org
+    - hosts:
+        - booklore.shpaq.org
+      secretName: booklore-shpaq-org-tls
   extraPaths: []
 
 resources:
   limits:
     cpu: 1500m
-    memory: 512Mi
+    memory: 768Mi
   requests:
-    cpu: 250m
-    memory: 128Mi
+    cpu: 500m
+    memory: 256Mi
 
 livenessProbe:
   tcpSocket:
