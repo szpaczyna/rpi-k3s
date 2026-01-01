@@ -2,6 +2,8 @@
 ---
 mariadb:
   enabled: true
+  # Run MariaDB inside the app pod (inline) instead of a separate StatefulSet
+  inline: true
   port: 3306
   image:
     repository: lscr.io/linuxserver/mariadb
@@ -21,12 +23,12 @@ mariadb:
     config:
       enabled: true
       size: 1Gi
-      existingClaim: ""
+      existingClaim: "booklore-mariadb-config"
 
 image:
   repository: ghcr.io/booklore-app/booklore
   pullPolicy: IfNotPresent
-  tag: "v1.16.0"
+  tag: "v1.16.1"
 
 imagePullSecrets: []
 
@@ -42,15 +44,17 @@ serviceAccount:
 podAnnotations: {}
 podLabels: {}
 
-podSecurityContext: {}
-  # fsGroup: 568
+podSecurityContext:
+  fsGroup: 568
 
 securityContext: {}
-  #drop:
-  #  - ALL
-  #readOnlyRootFilesystem: true
-  #runAsNonRoot: true
-  #runAsUser: 568
+  # readOnlyRootFilesystem: false
+  # runAsNonRoot: true
+  # runAsUser: 568
+  # allowPrivilegeEscalation: false
+  # capabilities:
+  #   drop:
+  #     - ALL
 
 service:
   type: ClusterIP
@@ -94,8 +98,8 @@ readinessProbe:
 persistence:
   dataVolume:
     enabled: true
-    size: 100Mi
-    existingClaim: ""
+    size: 2000Mi
+    existingClaim: "booklore-data"
   booksVolume:
     enabled: true
     size: 10Gi
@@ -111,9 +115,10 @@ extraVolumes:
 extraVolumeMounts:
   - name: bookdrop
     mountPath: /bookdrop
-    readOnly: true
+    readOnly: false
 
-nodeSelector: {}
+nodeSelector:
+  kubernetes.io/role: worker
 
 tolerations: []
 

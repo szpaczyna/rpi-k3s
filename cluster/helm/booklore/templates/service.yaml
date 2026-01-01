@@ -11,5 +11,11 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    {{- if .Values.mariadb.enabled }}
+    - port: {{ .Values.mariadb.port }}
+      targetPort: mysql
+      protocol: TCP
+      name: mysql
+    {{- end }}
   selector:
     {{- include "booklore.selectorLabels" . | nindent 4 }}

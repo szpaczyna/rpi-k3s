@@ -5,6 +5,8 @@ metadata:
   labels:
     {{- include "booklore.labels" . | nindent 4 }}
 spec:
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "booklore.selectorLabels" . | nindent 6 }}
@@ -29,26 +31,6 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      initContainers:
-        - name: wait-for-database
-          image: busybox:1.37
-          command:
-            - /bin/sh
-            - -c
-            - |
-              echo "Waiting for database on port {{ include "booklore.dbPort" . }}..."
-              until nc -z -v -w5 {{ .Release.Name }}-mariadb {{ include "booklore.dbPort" . }}; do
-                echo "Waiting for database..."
-                sleep 2
-              done
-              echo "Database is available!"
-          resources:
-            requests:
-              cpu: 10m
-              memory: 16Mi
-            limits:
-              cpu: 50m
-              memory: 32Mi
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
@@ -103,7 +85,40 @@ spec:
             {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- end }}
-      {{- if (or .Values.persistence.dataVolume.enabled .Values.persistence.booksVolume.enabled .Values.extraVolumes) }}
+        {{- if and .Values.mariadb.enabled .Values.mariadb.inline }}
+        - name: mariadb
+          image: "{{ .Values.mariadb.image.repository }}:{{ .Values.mariadb.image.tag }}"
+          imagePullPolicy: {{ .Values.mariadb.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-mariadb-env
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.mariadb.auth.existingSecret }}
+                  name: {{ .Values.mariadb.auth.existingSecret }}
+                  {{- else }}
+                  name: {{ .Release.Name }}-mariadb
+                  {{- end }}
+                  key: mariadb-root-password
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.mariadb.auth.existingSecret }}
+                  name: {{ .Values.mariadb.auth.existingSecret }}
+                  {{- else }}
+                  name: {{ .Release.Name }}-mariadb
+                  {{- end }}
+                  key: mariadb-password
+          ports:
+            - name: mysql
+              containerPort: 3306
+          volumeMounts:
+            - name: mariadb-config
+              mountPath: /config
+        {{- end }}
+      {{- if (or .Values.persistence.dataVolume.enabled .Values.persistence.booksVolume.enabled .Values.extraVolumes (and .Values.mariadb.enabled .Values.mariadb.inline .Values.mariadb.persistence.config.enabled)) }}
       volumes:
         {{- if .Values.persistence.dataVolume.enabled }}
         - name: data
@@ -121,6 +136,15 @@ spec:
               {{- .Values.persistence.booksVolume.existingClaim }}
             {{ else }}
               {{- include "booklore.fullname" . }}-books
+            {{- end }}
+        {{- end }}
+        {{- if and .Values.mariadb.enabled .Values.mariadb.inline .Values.mariadb.persistence.config.enabled }}
+        - name: mariadb-config
+          persistentVolumeClaim:
+            claimName: {{ if .Values.mariadb.persistence.config.existingClaim }}
+              {{- .Values.mariadb.persistence.config.existingClaim }}
+            {{ else }}
+              {{- include "booklore.fullname" . }}-mariadb-config
             {{- end }}
         {{- end }}
         {{- with .Values.extraVolumes }}
