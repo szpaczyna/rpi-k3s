@@ -97,7 +97,7 @@ resources:
     memory: 400Mi
     cpu: 0.2
   limits:
-    memory: 1000Mi
+    memory: 1200Mi
     cpu: 3
 
 podAnnotations:
@@ -137,7 +137,6 @@ extraContainers: {}
 
 nodeSelector:
   kubernetes.io/role: worker
-    #  kubernetes.io/hostname: rpi-k3s-worker-02
 affinity: {}
 tolerations: []
 # - key: "key"

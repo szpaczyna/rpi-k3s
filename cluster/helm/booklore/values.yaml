@@ -28,7 +28,7 @@ mariadb:
 image:
   repository: ghcr.io/booklore-app/booklore
   pullPolicy: IfNotPresent
-  tag: "v1.16.1"
+  tag: "v1.16.5"
 
 imagePullSecrets: []
 

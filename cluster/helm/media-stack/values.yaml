@@ -88,22 +88,24 @@ configStorage:
 images:
   radarr:
     repository: "lscr.io/linuxserver/radarr"
-    tag: "5.28.0"
+    # tag: "5.28.0"
+    tag: "6.0.4"
   sonarr:
     repository: "lscr.io/linuxserver/sonarr"
-    tag: "4.0.15"
+    tag: "4.0.16"
   lidarr:
     repository: "lscr.io/linuxserver/lidarr"
-    tag: "2.14.5"
+    # tag: "2.14.5"
+    tag: "3.1.0"
   prowlarr:
     repository: "lscr.io/linuxserver/prowlarr"
-    tag: "2.1.5"
+    tag: "2.3.0"
   readarr:
     repository: "lscr.io/linuxserver/readarr"
     tag: "0.4.18-develop"
   bazarr:
     repository: "lscr.io/linuxserver/bazarr"
-    tag: "1.5.3"
+    tag: "1.5.4"
   transmission:
     repository: "lscr.io/linuxserver/transmission"
     tag: "4.0.6"

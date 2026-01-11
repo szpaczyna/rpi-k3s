@@ -12,6 +12,15 @@ image:
   tag: 10.4.19
     #tag: 11.6.7
 
+livenessProbe:
+  httpGet:
+    path: /api/health
+    port: 3000
+  initialDelaySeconds: 60
+  timeoutSeconds: 30
+  periodSeconds: 10
+  failureThreshold: 20
+
 testFramework:
   enabled: false
 
@@ -57,10 +66,10 @@ ingress:
 
 resources:
   limits:
-    cpu: 250m
-    memory: 400Mi
+    cpu: 1000m
+    memory: 500Mi
   requests:
-    cpu: 100m
+    cpu: 200m
     memory: 150Mi
 
 nodeSelector:
@@ -71,10 +80,10 @@ affinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
         - matchExpressions:
-            - key: "kubernetes.io/ssd"
+            - key: "kubernetes.io/role"
               operator: In
               values:
-                - "true"
+                - "worker"
 
 persistence:
   type: pvc
@@ -87,7 +96,7 @@ persistence:
   finalizers:
     - kubernetes.io/pvc-protection
   lookupVolumeName: true
-  existingClaim: "data-grafana"
+  #existingClaim: "data-grafana"
   extraPvcLabels: {}
   disableWarning: false
   inMemory:
@@ -107,9 +116,9 @@ admin:
 
 enableServiceLinks: true
 
-extraVolumes:
-  - name: data-grafana
-    existingClaim: data-grafana
+extraVolumes: []
+#  - name: data-grafana
+#    existingClaim: data-grafana
 
 plugins:
   - vonage-status-panel

@@ -18,46 +18,100 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 82,
+  "id": 65,
   "links": [],
   "panels": [
     {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "cf9kahyrj47wgd"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^sport_name$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.19",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "cf9kahyrj47wgd"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT sport_name, 1 as value FROM whoop_workout WHERE id = '${workout_id}'",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Sport",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "cf9kahyrj47wgd"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -68,40 +122,129 @@
                 "value": null
               },
               {
+                "color": "orange",
+                "value": 10
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 14
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
+        "h": 4,
+        "w": 4,
+        "x": 4,
         "y": 0
       },
-      "id": 9,
+      "id": 2,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "title": "Panel Title",
-      "type": "timeseries"
+      "pluginVersion": "10.4.19",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "cf9kahyrj47wgd"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT strain FROM whoop_workout WHERE id = '${workout_id}'",
+          "refId": "A"
+        }
+      ],
+      "title": "Strain",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "cf56wicug5xc0d"
+        "uid": "cf9kahyrj47wgd"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "kcal"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.19",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "cf9kahyrj47wgd"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT kilojoule * 0.239006 as kcal FROM whoop_workout WHERE id = '${workout_id}'",
+          "refId": "A"
+        }
+      ],
+      "title": "Calories Burned",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "cf9kahyrj47wgd"
       },
       "fieldConfig": {
         "defaults": {
@@ -151,7 +294,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "cf56wicug5xc0d"
+            "uid": "cf9kahyrj47wgd"
           },
           "editorMode": "code",
           "format": "table",
@@ -183,7 +326,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "cf56wicug5xc0d"
+        "uid": "cf9kahyrj47wgd"
       },
       "fieldConfig": {
         "defaults": {
@@ -233,7 +376,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "cf56wicug5xc0d"
+            "uid": "cf9kahyrj47wgd"
           },
           "editorMode": "code",
           "format": "table",
@@ -248,7 +391,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "cf56wicug5xc0d"
+        "uid": "cf9kahyrj47wgd"
       },
       "fieldConfig": {
         "defaults": {
@@ -298,7 +441,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "cf56wicug5xc0d"
+            "uid": "cf9kahyrj47wgd"
           },
           "editorMode": "code",
           "format": "table",
@@ -313,7 +456,124 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "cf56wicug5xc0d"
+        "uid": "cf9kahyrj47wgd"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "Zone 0 (50-60%)": {
+                  "color": "light-purple",
+                  "index": 0
+                },
+                "Zone 1 (60-70%)": {
+                  "color": "light-blue",
+                  "index": 1
+                },
+                "Zone 2 (70-80%)": {
+                  "color": "light-green",
+                  "index": 2
+                },
+                "Zone 3 (80-90%)": {
+                  "color": "light-yellow",
+                  "index": 3
+                },
+                "Zone 4 (90-100%)": {
+                  "color": "light-orange",
+                  "index": 4
+                },
+                "Zone 5 (MAX)": {
+                  "color": "light-red",
+                  "index": 5
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "id": 7,
+      "options": {
+        "displayLabels": [
+          "name",
+          "percent"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "allValues"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "cf9kahyrj47wgd"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  'Zone 0 (50-60%)' as zone, zone_zero_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\nUNION ALL\nSELECT\n  'Zone 1 (60-70%)' as zone, zone_one_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\nUNION ALL\nSELECT\n  'Zone 2 (70-80%)' as zone, zone_two_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\nUNION ALL\nSELECT\n  'Zone 3 (80-90%)' as zone, zone_three_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\nUNION ALL\nSELECT\n  'Zone 4 (90-100%)' as zone, zone_four_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\nUNION ALL\nSELECT\n  'Zone 5 (MAX)' as zone, zone_five_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Heart Rate Zone Distribution",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "cf9kahyrj47wgd"
       },
       "fieldConfig": {
         "defaults": {
@@ -396,7 +656,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "cf56wicug5xc0d"
+            "uid": "cf9kahyrj47wgd"
           },
           "editorMode": "code",
           "format": "table",
@@ -407,343 +667,6 @@
       ],
       "title": "Time in Heart Rate Zones",
       "type": "barchart"
-    },
-    {
-      "datasource": {
-        "type": "grafana-postgresql-datasource",
-        "uid": "cf56wicug5xc0d"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 0,
-        "y": 8
-      },
-      "id": 1,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "/^sport_name$/",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.19",
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "cf56wicug5xc0d"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT sport_name, 1 as value FROM whoop_workout WHERE id = '${workout_id}'",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "Sport",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "grafana-postgresql-datasource",
-        "uid": "cf56wicug5xc0d"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "orange",
-                "value": 10
-              },
-              {
-                "color": "red",
-                "value": 14
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 4,
-        "y": 8
-      },
-      "id": 2,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.19",
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "cf56wicug5xc0d"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT strain FROM whoop_workout WHERE id = '${workout_id}'",
-          "refId": "A"
-        }
-      ],
-      "title": "Strain",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "grafana-postgresql-datasource",
-        "uid": "cf56wicug5xc0d"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "kcal"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 8,
-        "y": 8
-      },
-      "id": 3,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.4.19",
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "cf56wicug5xc0d"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT kilojoule * 0.239006 as kcal FROM whoop_workout WHERE id = '${workout_id}'",
-          "refId": "A"
-        }
-      ],
-      "title": "Calories Burned",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "grafana-postgresql-datasource",
-        "uid": "cf56wicug5xc0d"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": [
-            {
-              "options": {
-                "Zone 0 (50-60%)": {
-                  "color": "light-purple",
-                  "index": 0
-                },
-                "Zone 1 (60-70%)": {
-                  "color": "light-blue",
-                  "index": 1
-                },
-                "Zone 2 (70-80%)": {
-                  "color": "light-green",
-                  "index": 2
-                },
-                "Zone 3 (80-90%)": {
-                  "color": "light-yellow",
-                  "index": 3
-                },
-                "Zone 4 (90-100%)": {
-                  "color": "light-orange",
-                  "index": 4
-                },
-                "Zone 5 (MAX)": {
-                  "color": "light-red",
-                  "index": 5
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "unit": "ms"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 12,
-        "w": 12,
-        "x": 0,
-        "y": 12
-      },
-      "id": 7,
-      "options": {
-        "displayLabels": [
-          "name",
-          "percent"
-        ],
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "pieType": "pie",
-        "reduceOptions": {
-          "calcs": [
-            "allValues"
-          ],
-          "fields": "",
-          "values": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.6.7",
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "cf56wicug5xc0d"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  'Zone 0 (50-60%)' as zone, zone_zero_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\nUNION ALL\nSELECT\n  'Zone 1 (60-70%)' as zone, zone_one_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\nUNION ALL\nSELECT\n  'Zone 2 (70-80%)' as zone, zone_two_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\nUNION ALL\nSELECT\n  'Zone 3 (80-90%)' as zone, zone_three_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\nUNION ALL\nSELECT\n  'Zone 4 (90-100%)' as zone, zone_four_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\nUNION ALL\nSELECT\n  'Zone 5 (MAX)' as zone, zone_five_milli as time_ms FROM whoop_workout WHERE id = '${workout_id}'\n",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          }
-        }
-      ],
-      "title": "Heart Rate Zone Distribution",
-      "type": "piechart"
     }
   ],
   "refresh": "30m",
@@ -758,12 +681,12 @@
       {
         "current": {
           "selected": true,
-          "text": "walking - 2025-11-25 11:02",
-          "value": "6947dce7-7b6e-4ee0-a461-a31ca2f78072"
+          "text": "other - 2026-01-08 08:50",
+          "value": "e99b951d-9eaf-4599-837a-4b2b5431ad65"
         },
         "datasource": {
           "type": "grafana-postgresql-datasource",
-          "uid": "cf56wicug5xc0d"
+          "uid": "cf9kahyrj47wgd"
         },
         "definition": "SELECT sport_name || ' - ' || to_char(start, 'YYYY-MM-DD HH24:MI') as __text, id as __value FROM whoop_workout ORDER BY start DESC",
         "hide": 0,
@@ -788,6 +711,6 @@
   "timezone": "browser",
   "title": "Whoop - Workout Details",
   "uid": "whoop-workout-details",
-  "version": 8,
+  "version": 2,
   "weekStart": ""
 }

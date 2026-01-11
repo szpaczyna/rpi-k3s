@@ -20,5 +20,5 @@ helm upgrade --install \
   --version v$1
   
 # Apply Let's Encrypt ClusterIssuers after a short delay to ensure cert-manager is ready
-#sleep 60; echo 'Waiting for containers to be created'
-#kubectl apply -f letsencrypt-staging.yaml -f letsencrypt-production.yaml --validate=false
+sleep 60; echo 'Waiting for containers to be created'
+kubectl apply -f letsencrypt-staging.yaml -f letsencrypt-production.yaml --validate=false
