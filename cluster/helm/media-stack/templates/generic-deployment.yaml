@@ -90,9 +90,12 @@ spec:
           name: media
           subPath: library/books
         {{- else if eq $name "bazarr" }}
-        - mountPath: /media
+        - mountPath: /tv
           name: media
-          subPath: library
+          subPath: library/tv
+        - mountPath: /movies
+          name: media
+          subPath: library/movies
         {{- end }}
         resources:
           requests:

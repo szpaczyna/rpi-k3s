@@ -1,0 +1,55 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: k3s-backup-onetime
+  namespace: kube-system
+  labels:
+    app: k3s-backup
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: k3s-backup-onetime
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: k3s-backup
+          image: busybox:1.37
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c"]
+          args:
+            - |
+              set -e
+              echo "[backup] K3s backup start"
+              echo "[backup] Cleaning up backups older than 14 days"
+              find /backup -name "*.tar.gz" -type f -mtime +14 -delete
+              TIMESTAMP=$(date +%Y%m%d%H%M)
+              BACKUP_FILE="${TIMESTAMP}.tar.gz"
+              echo "[backup] Creating archive: ${BACKUP_FILE}"
+              tar -czf /backup/${BACKUP_FILE} -C /k3s/server db token
+              echo "[backup] Archive created successfully"
+              ls -lh /backup/${BACKUP_FILE}
+              echo "[backup] K3s backup done"
+          volumeMounts:
+            - name: k3s-data
+              mountPath: /k3s/server
+              readOnly: true
+            - name: backup-storage
+              mountPath: /backup
+      volumes:
+        - name: k3s-data
+          hostPath:
+            path: /k3s/server
+            type: Directory
+        - name: backup-storage
+          hostPath:
+            path: /data/nfs/k3s-backups
+            type: DirectoryOrCreate
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: "true"
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
