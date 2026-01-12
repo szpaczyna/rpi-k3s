@@ -1,0 +1,46 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: grafana-backup-tool
+  namespace: monitoring
+  labels:
+    app: grafana-backup-tool
+spec:
+  schedule: "3 4 * * *"
+  jobTemplate:
+    metadata:
+      labels:
+        app: grafana-backup-tool
+    spec:
+      template:
+        spec:
+          initContainers:
+            - name: fix-permissions
+              image: busybox:1.37
+              imagePullPolicy: IfNotPresent
+              command: ["sh","-c"]
+              args: ["set -e; echo '[init] Permissions fix start'; mkdir -p /opt/grafana-backup-tool/_OUTPUT_; chown -R 1337:1337 /opt/grafana-backup-tool/_OUTPUT_; echo '[init] Permissions fix done'" ]
+              volumeMounts:
+                - mountPath: /opt/grafana-backup-tool/_OUTPUT_
+                  name: grafana-storage
+          restartPolicy: "Never"
+          containers:
+            - name: grafana-backup-tool
+              image: "szpaczyn/grafana-backup-tool:1.4.2"
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                runAsUser: 1337
+                runAsGroup: 1337
+              envFrom:
+                - secretRef:
+                    name: grafana-backup-tool
+              volumeMounts:
+                - mountPath: /opt/grafana-backup-tool/_OUTPUT_
+                  name: grafana-storage
+          volumes:
+            - name: grafana-storage
+              hostPath:
+                path: /data/nfs/grafana-backups
+                type: DirectoryOrCreate
+

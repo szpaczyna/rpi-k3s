@@ -6,4 +6,3 @@ resources:
   - clusterrolebinding.yaml
   - configmap.yaml
   - deployment.yaml
-  - plan.yaml
