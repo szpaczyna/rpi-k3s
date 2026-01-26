@@ -5,7 +5,7 @@ fullnameOverride: ""
 replicaCount: 1
 image:
   repository: vaultwarden/server
-  tag: 1.34.3
+  tag: 1.35.2
   pullPolicy: IfNotPresent
 
 service:
