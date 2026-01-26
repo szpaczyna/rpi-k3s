@@ -13,16 +13,18 @@
   "ignorePaths": [
     "cluster/secrets/**",
     "**/*.enc",
-    "**/*.enc.*"
+    "**/*.enc.*",
+    "**/*.md.*",
+    "cluster/helm/postgresql/**"
   ],
 
   "packageRules": [
     {
       "matchManagers": ["helm-values"],
       "matchDatasources": ["docker"],
-      "groupName": "Docker image updates",
-      "groupSlug": "docker-image-updates",
-      "automerge": false
+      "automerge": false,
+      "separateMajorMinor": true,
+      "separateMultipleMajor": true
     }
   ],
 
