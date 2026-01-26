@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+
+  "enabledManagers": ["helm-values"],
+  "helm-values": {
+    "fileMatch": [
+      "(^|/)values\\.yaml$",
+      "(^|/)values-public\\.yaml$"
+    ]
+  },
+
+  "ignorePaths": [
+    "cluster/secrets/**",
+    "**/*.enc",
+    "**/*.enc.*"
+  ],
+
+  "packageRules": [
+    {
+      "matchManagers": ["helm-values"],
+      "matchDatasources": ["docker"],
+      "groupName": "Docker image updates",
+      "groupSlug": "docker-image-updates",
+      "automerge": false
+    }
+  ],
+
+  "automerge": false,
+  "prConcurrentLimit": 1
+}

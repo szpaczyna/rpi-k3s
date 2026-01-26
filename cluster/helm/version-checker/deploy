@@ -1,9 +1,8 @@
 #!/bin/bash
 
-sops -d \
-    --output  values.yaml \
-    ../../secrets/version-checker-values.yaml
-
-helm upgrade --install version-checker -n apps -f values.yaml .
-
-rm -rf values.yaml
+helm upgrade \
+    --install version-checker \
+    --namespace apps \
+    --values values-public.yaml \
+    --values <(sops -d ../../secrets/version-checker-values.yaml) \
+    .

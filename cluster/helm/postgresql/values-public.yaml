@@ -1,0 +1,257 @@
+---
+nameOverride: ""
+fullnameOverride: ""
+clusterDomain: cluster.local
+
+global:
+  security:
+    allowInsecureImages: true
+  storageClass: longhorn
+  postgresql:
+    service:
+      ports:
+        postgresql: 5432
+
+image:
+  registry: docker.io
+  repository: bitnamilegacy/postgresql
+  tag: 16.6.0
+  pullPolicy: IfNotPresent
+  debug: false
+
+diagnosticMode:
+  enabled: false
+
+containerPorts:
+  postgresql: 5432
+
+audit:
+  logHostname: true
+  logConnections: true
+  logDisconnections: false
+  pgAuditLog: ""
+  pgAuditLogCatalog: "off"
+  clientMinMessages: error
+  logLinePrefix: ""
+  logTimezone: ""
+
+ldap:
+  enabled: false
+
+architecture: replication
+
+replication:
+  synchronousCommit: "on"
+  numSynchronousReplicas: 1
+  applicationName: morphine
+
+postgresqlDataDir: /postgresql/data
+postgresqlSharedPreloadLibraries: pgaudit
+
+shmVolume:
+  enabled: true
+  sizeLimit: 500Mi
+
+primary:
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+    limits:
+      memory: 1Gi
+      cpu: 1500m
+  extendedConfiguration: []
+  standby:
+    enabled: false
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  hostNetwork: false
+  hostIPC: false
+  labels: {}
+  annotations: {}
+  podLabels: {}
+  podAnnotations: {}
+  podAffinityPreset: ""
+  podAntiAffinityPreset: soft
+  nodeAffinityPreset:
+    type: ""
+    key: ""
+    values: []
+  affinity: {}
+
+  nodeSelector:
+    kubernetes.io/role: worker
+  tolerations: []
+  topologySpreadConstraints: []
+  priorityClassName: ""
+  schedulerName: ""
+  terminationGracePeriodSeconds: "30"
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  extraVolumeMounts: []
+  extraVolumes: []
+  sidecars: []
+  initContainers: []
+  #    - name: init-copy-config
+  #    image: busybox:1.32.0
+  #    imagePullPolicy: IfNotPresent
+  #    command:
+  #      - /bin/sh
+  #    args:
+  #      - -c
+  #      - cp /bitnami/postgresql/conf/*.conf /postgresql/conf/
+  #    volumeMounts:
+  #      - mountPath: /postgresql
+  #        name: data
+  #      - mountPath: /bitnami/postgresql/conf
+  #        name: postgresql-config
+  extraPodSpec: {}
+  service:
+    type: LoadBalancer
+    ports:
+        postgresql: 5432
+    annotations: {}
+    loadBalancerIP: 10.0.0.42
+    # loadBalancerIP: 10.1.0.3
+    externalTrafficPolicy: Cluster
+  persistence:
+    enabled: true
+    mountPath: /postgresql
+    storageClass: longhorn
+    accessModes:
+      - ReadWriteOnce
+    size: 6Gi
+
+readReplicas:
+    name: read
+    replicaCount: 0
+    extendedConfiguration: ""
+    resources:
+        requests:
+            memory: 256Mi
+            cpu: "0.2"
+        limits:
+            memory: 1Gi
+            cpu: "1.5"
+    podSecurityContext:
+        enabled: true
+        fsGroup: 1001
+    containerSecurityContext:
+        enabled: true
+        runAsUser: 1001
+    hostAliases: []
+    hostNetwork: false
+    hostIPC: false
+    labels: {}
+    annotations: {}
+    podLabels: {}
+    podAnnotations: {}
+    podAffinityPreset: ""
+    podAntiAffinityPreset: soft
+    nodeAffinityPreset:
+        type: ""
+        key: ""
+        values: []
+    affinity: {}
+    nodeSelector:
+        kubernetes.io/role: worker
+    tolerations: []
+    topologySpreadConstraints: []
+    priorityClassName: ""
+    schedulerName: ""
+    terminationGracePeriodSeconds: "10"
+    updateStrategy:
+        type: RollingUpdate
+        rollingUpdate: {}
+    extraVolumeMounts: []
+    extraVolumes: []
+    sidecars: []
+    service:
+        type: ClusterIP
+        ports:
+            postgresql: 5432
+    persistence:
+        enabled: true
+        existingClaim: ""
+        mountPath: /postgresql
+        subPath: ""
+        storageClass: longhorbn
+        accessModes:
+            - ReadWriteOnce
+        size: 6Gi
+        annotations: {}
+        labels: {}
+        selector: {}
+        dataSource: {}
+
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true
+    
+rbac:
+  create: false
+psp:
+  create: false
+    
+metrics:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: prometheuscommunity/postgres-exporter
+    tag: v0.16.0
+    pullPolicy: IfNotPresent
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
+    runAsNonRoot: true
+  livenessProbe: {}
+  readinessProbe: {}
+  startupProbe: {}
+  containerPorts:
+    metrics: 9187
+  service:
+    ports:
+      metrics: 9187
+    clusterIP: ""
+    sessionAffinity: None
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: '{{ .Values.metrics.service.ports.metrics }}'
+
+networkPolicy:
+  enabled: false
+  metrics:
+    enabled: false
+    namespaceSelector:
+      label: monitoring
+    podSelector: {}
+
+volumePermissions:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: busybox
+    tag: 1.37.0
+    pullPolicy: IfNotPresent
+  containerSecurityContext:
+    runAsUser: 0

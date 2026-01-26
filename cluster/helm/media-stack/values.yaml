@@ -112,6 +112,9 @@ images:
   exportarr:
     repository: "ghcr.io/onedr0p/exportarr"
     tag: "v2.3.0"
+  transmissionExporter:
+    repository: "szpaczyn/transmission_exporter-arm64"
+    tag: "v0.3.0"
   calibreWeb:
     repository: "lscr.io/linuxserver/calibre-web"
     tag: "0.6.25"

@@ -1,7 +1,8 @@
 #!/bin/bash
 
-sops -d --output values.yaml ../../secrets/whoops-values.yaml
-
-helm upgrade --install whoops -n apps -f values.yaml .
-
-rm -rf values.yaml
+helm upgrade \
+  --install whoops \
+  --namespace apps \
+  --values values-public.yaml \
+  --values <(sops -d ../../secrets/whoops-values.yaml) \
+  .

@@ -7,3 +7,4 @@ resources:
   - kube-state-metrics/
   - system-upgrade-controller/
   - local-path/
+  - renovate/

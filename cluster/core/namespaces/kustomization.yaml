@@ -9,3 +9,4 @@ resources:
   - monitoring.yaml
   - system-upgrade.yaml
   - dev.yaml
+  - renovate.yaml

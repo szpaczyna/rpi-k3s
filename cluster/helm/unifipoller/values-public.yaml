@@ -1,0 +1,60 @@
+---
+# default values for unifipoller
+
+replicaCount: 1
+image:
+  repository: ghcr.io/unpoller/unpoller
+  pullPolicy: IfNotPresent
+  tag: v2.21.0
+
+imagePullSecrets: []
+nameOverride: unifipoller
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  prometheus.io/path: /metrics
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9130"
+
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: tcp
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: tcp
+
+nodeSelector:
+  kubernetes.io/role: worker
+
+tolerations: []
+affinity: {}

@@ -3,7 +3,7 @@ set -euo pipefail
 
 NAMESPACE="media"
 OLD_PVC="media"
-APPS=(radarr sonarr lidarr prowlarr readarr bazarr transmission calibre-web)
+APPS=(radarr sonarr lidarr prowlarr readarr bazarr transmission)
 RSYNC_FLAGS="-Paz"  # progress, archive, compress
 FORCE=0
 NO_SCALE=0
@@ -47,7 +47,7 @@ scale_down() {
   echo "Scaling down deployments..."
   kubectl scale deployment -n "$NAMESPACE" "${APPS[@]}" --replicas=0 || true
   kubectl wait --for=delete pod -n "$NAMESPACE" \
-    -l 'app.kubernetes.io/name in (radarr,sonarr,lidarr,prowlarr,readarr,bazarr,transmission,calibre-web)' \
+    -l 'app.kubernetes.io/name in (radarr,sonarr,lidarr,prowlarr,readarr,bazarr,transmission)' \
     --timeout=180s || true
   echo "✓ Deployments scaled down"
 }
@@ -98,8 +98,6 @@ spec:
       mountPath: /new-config/bazarr
     - name: new-transmission
       mountPath: /new-config/transmission
-    - name: new-calibre-web
-      mountPath: /new-config/calibre-web
   volumes:
   - name: old-config
     persistentVolumeClaim:
@@ -125,9 +123,6 @@ spec:
   - name: new-transmission
     persistentVolumeClaim:
       claimName: transmission
-  - name: new-calibre-web
-    persistentVolumeClaim:
-      claimName: calibre-web
 EOF
   kubectl wait --for=condition=Ready pod/migration-pod -n "$NAMESPACE" --timeout=120s
   echo "✓ Migration pod ready"

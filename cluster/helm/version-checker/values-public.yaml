@@ -1,0 +1,60 @@
+---
+# default values for version-checker
+replicaCount: 1
+additionalLabels: {}
+additionalAnnotations: {}
+
+image:
+  repository: quay.io/jetstack/version-checker
+  tag: v0.10.0
+  pullPolicy: IfNotPresent
+
+service:
+  labels: {}
+  annotations: {}
+  port: 8080
+
+versionChecker:
+  imageCacheTimeout: 30m
+  # debug, info, warn, error, fatal, panic
+  logLevel: info
+  metricsServingAddress: 0.0.0.0:8080
+  testAllContainers: true
+
+# Can be used to provide custom environment variables e.g. proxy settings
+env: {}
+selfhosted: {}
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 200m
+    memory: 200Mi
+
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /readyz
+    port: 8080
+  initialDelaySeconds: 3
+  periodSeconds: 3
+
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /readyz
+    port: 8080
+  initialDelaySeconds: 3
+  periodSeconds: 3
+
+# Prometheus Operator
+prometheus:
+  enabled: false
+  replicas: 1
+  serviceAccountName: prometheus
+
+serviceMonitor:
+  enabled: false
+  additionalLabels: {}

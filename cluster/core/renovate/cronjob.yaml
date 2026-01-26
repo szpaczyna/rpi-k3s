@@ -1,0 +1,70 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: renovate
+  namespace: renovate
+  labels:
+    app.kubernetes.io/name: renovate
+spec:
+  schedule: "0 */6 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: renovate
+        spec:
+          # Renovate only needs outbound access to GitHub.
+          automountServiceAccountToken: false
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+            - name: renovate
+              image: renovate/renovate:latest
+              imagePullPolicy: IfNotPresent
+              # Required Secret keys (create separately, do not commit tokens):
+              # - RENOVATE_TOKEN: GitHub personal access token
+              # - RENOVATE_REPOSITORIES: e.g. "org/repo" or "org/repo1,org/repo2"
+              # Optional: RENOVATE_PLATFORM, RENOVATE_ENDPOINT,
+              #           RENOVATE_GIT_AUTHOR, ...
+              envFrom:
+                - secretRef:
+                    name: renovate-env
+              env:
+                - name: RENOVATE_PLATFORM
+                  value: github
+                - name: RENOVATE_ENDPOINT
+                  value: https://api.github.com/
+                - name: RENOVATE_REQUIRE_CONFIG
+                  value: required
+                - name: LOG_LEVEL
+                  value: info
+                - name: RENOVATE_BASE_DIR
+                  value: /tmp/renovate
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 256Mi
+                limits:
+                  cpu: 500m
+                  memory: 1024Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+          volumes:
+            - name: tmp
+              emptyDir: {}

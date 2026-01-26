@@ -1,0 +1,74 @@
+---
+# default values for kanboard
+
+image:
+  repository: kanboard/kanboard
+  pullPolicy: IfNotPresent
+  tag: v1.2.48
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+persistence:
+  enabled: true
+  size: 3G
+  accessMode: ReadWriteOnce
+  storageClass: longhorn
+  annotations:
+    helm.sh/resource-policy: keep
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  classname: nginx
+  hosts:
+    - name: kanboard.shpaq.org
+      tls: true
+      tlsSecret: kanboard-shpaq-org-tls
+      annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: kanboard-sa
+
+additionalSpec: {}
+podAnnotations: {}
+deploymentAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext: {}
+#  capabilities:
+#    drop:
+#    - ALL
+#  readOnlyRootFilesystem: true
+#  runAsNonRoot: false
+#  runAsUser: 2000
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 250Mi
+  requests:
+    cpu: 100m
+    memory: 60Mi
+
+nodeSelector:
+  kubernetes.io/role: worker
+
+tolerations: []
+affinity: {}
+
+hpa:
+  enabled: false
+  limit: 2
+
+podDisruptionBudget: {}

@@ -33,7 +33,7 @@ spec:
       serviceAccountName: {{ $chartname }}
       containers:
       - name: {{ $chartname }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 8080

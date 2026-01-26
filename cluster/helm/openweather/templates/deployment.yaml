@@ -20,8 +20,8 @@ spec:
         app: {{ .Chart.Name }}
     spec:
       containers:
-        - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-          name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           resources:
           {{- toYaml .Values.resources | nindent 12 }}
           envFrom:

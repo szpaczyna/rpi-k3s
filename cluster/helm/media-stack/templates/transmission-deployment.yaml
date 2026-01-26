@@ -117,7 +117,7 @@ spec:
             cpu: {{ .Values.global.resources.limits.cpu }}
             memory: {{ .Values.global.resources.limits.memory }}
       - name: exporter      
-        image: "szpaczyn/transmission_exporter-arm64:v0.3.0"
+        image: "{{ printf "%s:%s" .Values.images.transmissionExporter.repository .Values.images.transmissionExporter.tag }}"
         imagePullPolicy: IfNotPresent
         ports:
         - name: exporter

@@ -1,0 +1,218 @@
+global:
+  pullPolicy: IfNotPresent
+  cattle:
+    systemDefaultRegistry: ""
+    windowsCluster:
+      # Enable this to allow Longhorn to run on the Rancher deployed Windows cluster
+      enabled: false
+      # Tolerate Linux node taint
+      tolerations:
+        - key: cattle.io/os
+          value: linux
+          effect: NoSchedule
+          operator: Equal
+      # Select Linux nodes
+      nodeSelector:
+        kubernetes.io/os: linux
+      # Recognize toleration and node selector for Longhorn run-time created components
+      defaultSetting:
+        taintToleration: cattle.io/os=linux:NoSchedule
+        systemManagedComponentsNodeSelector: kubernetes.io/os:linux
+        image:
+          longhorn:
+            engine:
+              repository: longhornio/longhorn-engine
+              #tag: v1.5.3
+            manager:
+              repository: longhornio/longhorn-manager
+              #tag: v1.5.3
+            ui:
+              repository: longhornio/longhorn-ui
+              #tag: v1.5.3
+            instanceManager:
+              repository: longhornio/longhorn-instance-manager
+              #tag: v1.5.3
+            shareManager:
+              repository: longhornio/longhorn-share-manager
+              #tag: v1.5.3
+            backingImageManager:
+              repository: longhornio/backing-image-manager
+              #tag: v1.5.3
+            supportBundleKit:
+              repository: longhornio/support-bundle-kit
+              #tag: v0.0.17
+          csi:
+            attacher:
+              repository: longhornio/csi-attacher
+              #tag: v4.7.0
+            provisioner:
+              repository: longhornio/csi-provisioner
+              #tag: v5.1.0
+            nodeDriverRegistrar:
+              repository: longhornio/csi-node-driver-registrar
+              #tag: v2.10.1
+            resizer:
+              repository: longhornio/csi-resizer
+              #tag: v1.12.0
+            snapshotter:
+              repository: longhornio/csi-snapshotter
+              #tag: v8.1.0
+            livenessProbe:
+              repository: longhornio/livenessprobe
+              #tag: v2.11.0
+service:
+  ui:
+    # type: ClusterIP
+    type: LoadBalancer
+    loadBalancerIP: 10.0.0.48
+  manager:
+    type: ClusterIP
+    nodePort: ""
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: ""
+
+persistence:
+  defaultClass: true
+  defaultFsType: ext4
+  defaultMkfsParams: -m 0 -b 4096
+  defaultClassReplicaCount: 2
+  # best-effort otherwise
+  defaultDataLocality: best-effort
+  reclaimPolicy: Retain
+  # reclaimPolicy: Delete
+  migratable: true
+  recurringJobSelector:
+    enable: false
+    jobList: []
+  backingImage:
+    enable: false
+    name: null
+    dataSourceType: null
+    dataSourceParameters: null
+    expectedChecksum: null
+  defaultNodeSelector:
+    # disable by default
+    enable: true
+    selector: worker
+  # "enabled" or "disabled" otherwise
+  removeSnapshotsDuringFilesystemTrim: ignored
+
+csi:
+  kubeletRootDir: null
+  attacherReplicaCount: 1
+  provisionerReplicaCount: 1
+  resizerReplicaCount: 1
+  snapshotterReplicaCount: 1
+
+defaultSettings:
+  backupTarget: null
+  #backupTarget: nfs://10.0.10.12:/data/nfs/longhorn
+  backupTargetCredentialSecret: longhorn-s3-secret
+  allowRecurringJobWhileVolumeDetached: null
+  createDefaultDiskLabeledNodes: false
+  defaultDataPath: /k3s/storage
+  defaultDataLocality: best-effort
+  replicaSoftAntiAffinity: null
+  replicaAutoBalance: best-effort
+  storageOverProvisioningPercentage: "200"
+  storageMinimalAvailablePercentage: null
+  upgradeChecker: true
+  defaultReplicaCount: "2"
+  defaultLonghornStaticStorageClass: longhorn-static
+  backupstorePollInterval: 0
+  taintToleration: null
+  systemManagedComponentsNodeSelector: null
+  priorityClass: null
+  autoSalvage: true
+  autoDeletePodWhenVolumeDetachedUnexpectedly: true
+  disableSchedulingOnCordonedNode: true
+  replicaZoneSoftAntiAffinity: true
+  nodeDownPodDeletionPolicy: delete-both-statefulset-and-deployment-pod
+  allowNodeDrainWithLastHealthyReplica: null
+  mkfsExt4Parameters: null
+  disableReplicaRebuild: null
+  replicaReplenishmentWaitInterval: null
+  disableRevisionCounter: null
+  systemManagedPodsImagePullPolicy: null
+  allowVolumeCreationWithDegradedAvailability: false
+  autoCleanupSystemGeneratedSnapshot: true
+  snapshotDataIntegrity: fast-check
+  concurrentAutomaticEngineUpgradePerNodeLimit: "3"
+  backingImageCleanupWaitInterval: "60"
+  backingImageRecoveryWaitInterval: null
+  guaranteedEngineManagerCPU: null
+  guaranteedReplicaManagerCPU: null
+  kubernetesClusterAutoscalerEnabled: null
+  orphanAutoDeletion: true
+  fastReplicaRebuildEnabled: "true"
+
+privateRegistry:
+  registryUrl: null
+  registryUser: null
+  registryPasswd: null
+  registrySecret: null
+
+longhornManager:
+  log:
+    ## Allowed values are `plain` or `json`.
+    format: plain
+  priorityClass: null
+  tolerations: []
+  nodeSelector: {}
+  serviceAnnotations: {}
+
+longhornDriver:
+  priorityClass: null
+  tolerations: []
+  nodeSelector: {}
+
+longhornUI:
+  replicas: 1
+  priorityClass: null
+  tolerations: []
+  nodeSelector: {}
+
+resources:
+  requests:
+    cpu: 0.05
+    memory: 128Mi
+
+longhornConversionWebhook:
+  replicas: 1
+  priorityClass: null
+  tolerations: []
+  nodeSelector: {}
+
+longhornAdmissionWebhook:
+  replicas: 1
+  priorityClass: null
+  tolerations: []
+  nodeSelector: {}
+
+longhornRecoveryBackend:
+  replicas: 1
+  priorityClass: null
+  tolerations: []
+  nodeSelector: {}
+
+ingress:
+  enabled: false
+  ingressClassName: nginx
+  host: longhorn.shpaq.org
+  tls: true
+  tlsSecret: longhorn-shpaq-org-tls
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: longhorn-auth
+    nginx.ingress.kubernetes.io/auth-realm: Authentication Required
+  secrets: null
+
+enablePSP: false
+namespaceOverride: ""
+
+annotations:
+  prometheus.io/port: "9500"
+  prometheus.io/scrape: "true"
+

@@ -1,2 +1,6 @@
 #!/bin/bash
-helm upgrade --install shpaq-org --namespace apps . --values values.yaml
+helm upgrade \
+  --install shpaq-org \
+  --namespace apps \
+  --values values.yaml \
+  .

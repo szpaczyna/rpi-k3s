@@ -1,0 +1,74 @@
+---
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
+image:
+  repository: vaultwarden/server
+  tag: 1.34.3
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  loadBalancerIP: null
+
+ingress:
+  enabled: true
+  classname: nginx
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  path: /
+  hosts:
+    - bitwarden.shpaq.org
+  tls:
+    - secretName: bitwarden-shpaq-org-tls
+      hosts:
+        - bitwarden.shpaq.org
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi
+
+nodeSelector:
+  kubernetes.io/role: worker
+
+tolerations: []
+affinity: {}
+podAnnotations: {}
+deploymentAnnotations: {}
+#    backup.velero.io/backup-volumes: bitwarden
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 15
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  timeoutSeconds: 15
+  successThreshold: 1
+  failureThreshold: 3
+
+persistence:
+  enabled: false
+  storageClass: longhorn
+  accessMode: ReadWriteOnce
+  size: 2Gi
+
+podDisruptionBudget: {}
+#    minAvailable: 1
+hpa:
+  enabled: false
+vpa:
+  enabled: false
+

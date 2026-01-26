@@ -1,3 +1,2 @@
 #!/bin/bash
 sops -d ../../secrets/longhorn-auth.yaml > 00-auth.yaml
-sops -d ../../secrets/longhorn-values.yaml > values.yaml

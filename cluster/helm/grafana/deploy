@@ -12,13 +12,13 @@ fi
 # Update helm repositories
 helm repo update
 
-sops -d --output grafana-admin-creds.yaml ../../secrets/grafana-admin-creds.yaml
-sops -d --output grafana-backup-secret.yaml ../../secrets/grafana-backup-secret.yaml
-
-kubectl apply -f grafana-admin-creds.yaml
-kubectl apply -f grafana-backup-secret.yaml
+kubectl apply -f <(sops -d ../../secrets/grafana-admin-creds.yaml)
+kubectl apply -f <(sops -d ../../secrets/grafana-backup-secret.yaml)
 kubectl apply -f backup-cronjob.yaml
 
-helm upgrade --install grafana grafana/grafana -n monitoring -f values.yaml --version 10.3.0
-
-rm -rf grafana-admin-creds.yaml grafana-backup-secret.yaml
+helm upgrade \
+    --install grafana \
+    grafana/grafana \
+    --namespace monitoring \
+    --values values.yaml \
+    --version 10.3.0

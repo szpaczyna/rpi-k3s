@@ -1,6 +1,6 @@
 #!/bin/bash
-sops -d ../../secrets/openweather-values.yaml > values.yaml
-
-helm upgrade --install openweather-exporter --namespace monitoring . --values values.yaml
-
-rm -rf values.yaml
+helm upgrade --install openweather-exporter \
+	--namespace monitoring \
+	--values values-public.yaml \
+	--values <(sops -d ../../secrets/openweather-values.yaml) \
+	.

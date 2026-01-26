@@ -1,0 +1,199 @@
+---
+# values for gitea
+replicaCount: 1
+clusterDomain: cluster.local
+
+image:
+  repository: gitea/gitea
+  tag: 1.25.2
+  pullPolicy: IfNotPresent
+  rootless: false
+
+imagePullSecrets: []
+
+gitea:
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 200
+    timeoutSeconds: 1
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 10
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    timeoutSeconds: 1
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 10
+  database:
+    builtIn:
+      postgresql:
+        enabled: false
+      mysql:
+        enabled: false
+      mariadb:
+        enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: false
+  ldap:
+    enabled: false
+  oauth:
+    enabled: false
+  cache:
+    builtIn:
+      enabled: true
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3000"
+
+securityContext:
+  allowPrivilegeEscalation: true
+  capabilities:
+    drop:
+      - ALL
+  privileged: true
+  #  fsGroupChangePolicy: OnRootMismatch
+  #  readOnlyRootFilesystem: true
+  #  runAsGroup: 1000
+  #  runAsNonRoot: true
+  #  runAsUser: 1000
+
+service:
+  http:
+    type: ClusterIP
+    port: 3000
+    clusterIP: None
+    externalPort: 3000
+    externalHost: gitea.shpaq.org
+    #loadBalancerIP:
+    #nodePort:
+    annotations: null
+  ssh:
+    type: LoadBalancer
+    port: 22
+    clusterIP: None
+    loadBalancerIP: 10.0.0.41
+    #nodePort:
+    #externalTrafficPolicy:
+    #externalIPs:
+    loadBalancerSourceRanges: []
+    # annotations:
+    # metallb.universe.tf/allow-shared-ip: "false"
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - gitea.shpaq.org
+  tls:
+    - secretName: gitea-shpaq-org-tls
+      hosts:
+        - gitea.shpaq.org
+
+resources:
+  limits:
+    cpu: 1
+    memory: 768Mi
+  requests:
+    cpu: 0.3
+    memory: 570Mi
+
+nodeSelector:
+  kubernetes.io/role: worker
+
+tolerations: []
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/role
+            operator: In
+            values:
+              - worker
+
+statefulset:
+  env: []
+  # - name: VARIABLE
+  #   value: my-value
+  terminationGracePeriodSeconds: 60
+  labels: {}
+
+persistence:
+    enabled: true
+    # existingClaim:
+    size: 8Gi
+    storageClass: longhorn
+    accessModes:
+      - ReadWriteOnce
+    labels: {}
+    annotations:
+      helm.sh/resource-policy: keep
+
+extraVolumes: null
+# - name: postgres-ssl-vol
+#   readOnly: true
+#   mountPath: "/pg-ssl"
+# bash shell script copied verbatim to the start of the init-container.
+extraVolumeMounts: null
+
+initPreScript: ""
+#
+# initPreScript: |
+#   mkdir -p /data/git/.postgresql
+#   cp /pg-ssl/* /data/git/.postgresql/
+#   chown -R git:git /data/git/.postgresql/
+#   chmod 400 /data/git/.postgresql/postgresql.key
+
+redis:
+  image: redis:7.4.7
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 50m
+  service:
+      port: 6739
+
+# postgresql:
+#   global:
+#     postgresql:
+#       postgresqlDatabase: gitea
+#       postgresqlUsername: gitea
+#       postgresqlPassword: gitea
+#       servicePort: 5432
+#     persistence:
+#       size: 10Gi
+# mysql:
+#   root:
+#     password: gitea
+#   db:
+#     user: gitea
+#     password: gitea
+#     name: gitea
+#   service:
+#     port: 3306
+#   persistence:
+#     size: 10Gi
+# mariadb:
+#   auth:
+#     database: gitea
+#     username: gitea
+#     password: gitea
+#     rootPassword: gitea
+#   primary:
+#     service:
+#       port: 3306
+#     persistence:
+#       size: 10Gi
