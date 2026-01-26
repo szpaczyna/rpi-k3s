@@ -2,21 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shpaq-org
-  namespace: apps
+  name: {{ include "shpaq-org.fullname" . }}
   labels:
-    app.kubernetes.io/name: shpaq-org
+    {{- include "shpaq-org.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: shpaq-org
+      {{- include "shpaq-org.selectorLabels" . | nindent 6 }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: shpaq-org
+        {{- include "shpaq-org.selectorLabels" . | nindent 8 }}
     spec:
       containers:
       - name: nginx
@@ -33,14 +32,16 @@ spec:
             subPath: robots.txt
         resources:
           requests:
-            cpu: 8m
-            memory: 8Mi
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
           limits:
-            cpu: 24m
-            memory: 64Mi
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
       volumes:
         - name: nginx-conf
           configMap:
-            name: shpaq-org
+            name: {{ include "shpaq-org.fullname" . }}
+      {{- with .Values.nodeSelector }}
       nodeSelector:
-        kubernetes.io/role: worker
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

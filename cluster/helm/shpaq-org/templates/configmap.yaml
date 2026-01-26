@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: shpaq-org
+  name: {{ include "shpaq-org.fullname" . }}
   labels:
-    app.kubernetes.io/name: shpaq-org
+    {{- include "shpaq-org.labels" . | nindent 4 }}
 data:
   robots.txt: |
     User-Agent: *

@@ -1,28 +1,32 @@
+{{- if .Values.ingress.enabled }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: shpaq-org
-  namespace: apps
+  name: {{ include "shpaq-org.fullname" . }}
+  {{- with .Values.ingress.annotations }}
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   labels:
-    app.kubernetes.io/name: shpaq-org
+    {{- include "shpaq-org.labels" . | nindent 4 }}
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.className }}
   rules:
-  - host: shpaq.org
+  - host: {{ .Values.ingress.host }}
     http:
       paths:
       - backend:
           service:
-            name: shpaq-org
+            name: {{ include "shpaq-org.fullname" . }}
             port:
               number: 80
         path: /
         pathType: Prefix
+  {{- if .Values.ingress.tls.enabled }}
   tls:
-  - secretName: shpaq-org-tls
+  - secretName: {{ .Values.ingress.tls.secretName }}
     hosts:
-      - shpaq.org
+      - {{ .Values.ingress.host }}
+  {{- end }}
+{{- end }}

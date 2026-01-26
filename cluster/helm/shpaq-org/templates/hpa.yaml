@@ -1,38 +1,46 @@
+{{- if .Values.hpa.memory.enabled }}
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: shpaq-org-mem-scale
-  namespace: apps
+  name: {{ include "shpaq-org.fullname" . }}-mem-scale
   labels:
-    app.kubernetes.io/name: shpaq-org
+    {{- include "shpaq-org.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: shpaq-org
-  minReplicas: 1
-  maxReplicas: 2
+    name: {{ include "shpaq-org.fullname" . }}
+  minReplicas: {{ .Values.hpa.memory.minReplicas }}
+  maxReplicas: {{ .Values.hpa.memory.maxReplicas }}
   metrics:
   - type: Resource
     resource:
       name: memory
       target:
-        type: Utilization
-        averageValue: 24M
+        type: AverageValue
+        averageValue: {{ .Values.hpa.memory.targetAverageValue }}
+{{- end }}
+{{- if .Values.hpa.cpu.enabled }}
 ---
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: shpaq-org-cpu-scale
-  namespace: apps
+  name: {{ include "shpaq-org.fullname" . }}-cpu-scale
   labels:
-    app.kubernetes.io/name: shpaq-org
+    {{- include "shpaq-org.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: shpaq-org
-  minReplicas: 1
-  maxReplicas: 2
-  targetCPUUtilizationPercentage: 80
+    name: {{ include "shpaq-org.fullname" . }}
+  minReplicas: {{ .Values.hpa.cpu.minReplicas }}
+  maxReplicas: {{ .Values.hpa.cpu.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.cpu.targetAverageUtilization }}
+{{- end }}

@@ -2,14 +2,13 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ include "shpaq-org.fullname" . }}
   labels:
-    app.kubernetes.io/name: shpaq-org
-  name: shpaq-org
-  namespace: apps
+    {{- include "shpaq-org.labels" . | nindent 4 }}
 spec:
   ports:
   - name: http
     port: 80
     targetPort: http
   selector:
-    app.kubernetes.io/name: shpaq-org
+    {{- include "shpaq-org.selectorLabels" . | nindent 4 }}

@@ -1,3 +1,37 @@
 image:
   repository: nginx
   tag: "1.29.4"
+
+resources:
+  requests:
+    cpu: 8m
+    memory: 8Mi
+  limits:
+    cpu: 24m
+    memory: 64Mi
+
+nodeSelector:
+  kubernetes.io/role: worker
+
+hpa:
+  cpu:
+    enabled: true
+    targetAverageUtilization: 80
+    minReplicas: 1
+    maxReplicas: 2
+  memory:
+    enabled: false
+    targetAverageValue: 24Mi
+    minReplicas: 1
+    maxReplicas: 2
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  host: shpaq.org
+  tls:
+    enabled: true
+    secretName: shpaq-org-tls
