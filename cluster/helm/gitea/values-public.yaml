@@ -5,7 +5,7 @@ clusterDomain: cluster.local
 
 image:
   repository: gitea/gitea
-  tag: 1.25.2
+  tag: 1.25.4
   pullPolicy: IfNotPresent
   rootless: false
 

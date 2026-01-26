@@ -13,7 +13,7 @@ imagePullSecrets: []
 image:
   registry: docker.io
   repository: enix/x509-certificate-exporter
-  tag: 3.18.1
+  tag: 3.19.1
   tagSuffix: ""
   pullPolicy: IfNotPresent
 
@@ -303,7 +303,7 @@ rbacProxy:
     # -- kube-rbac-proxy image repository
     repository: brancz/kube-rbac-proxy
     # -- kube-rbac-proxy image version
-    tag: v0.13.1
+    tag: v0.20.2
     # -- kube-rbac-proxy image pull policy
     pullPolicy: IfNotPresent
   # -- Listen port for the exporter running inside kube-rbac-proxy exposed Pods

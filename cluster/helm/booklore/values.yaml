@@ -7,7 +7,7 @@ mariadb:
   port: 3306
   image:
     repository: lscr.io/linuxserver/mariadb
-    tag: "11.4.5"
+    tag: "11.4.8"
     pullPolicy: IfNotPresent
   auth:
     database: booklore
@@ -28,7 +28,7 @@ mariadb:
 image:
   repository: ghcr.io/booklore-app/booklore
   pullPolicy: IfNotPresent
-  tag: "v1.16.5"
+  tag: "v1.18.5"
 
 imagePullSecrets: []
 

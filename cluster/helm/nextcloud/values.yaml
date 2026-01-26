@@ -1,7 +1,7 @@
 ---
 image:
   repository: nextcloud
-  tag: 30.0.1
+  tag: 30.0.17
     #tag: 29.0.5
   pullPolicy: IfNotPresent
 
@@ -181,7 +181,7 @@ cronjob:
   enabled: true
   image:
     repository: curlimages/curl
-    tag: 7.87.0
+    tag: 7.88.1
     pullPolicy: IfNotPresent
   schedule: '*/5 * * * *'
   annotations: {}
