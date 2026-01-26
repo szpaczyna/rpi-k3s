@@ -1,3 +1,7 @@
 #!/bin/bash
 
-helm upgrade --install local-path-provisioner -n kube-system -f ./values.yaml .
+helm upgrade \
+  --install local-path-provisioner \
+  --namespace kube-system \
+  --values values.yaml \
+  .
