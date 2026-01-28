@@ -23,14 +23,6 @@
     "cluster/helm/postgresql/**"
   ],
 
-  "hostRules": [
-    {
-      "matchHost": "docker.io",
-      "username": "{{ env.DOCKERHUB_USERNAME }}",
-      "password": "{{ env.DOCKERHUB_TOKEN }}"
-    }
-  ],
-
   "packageRules": [
     {
       "matchManagers": ["helm-values", "kubernetes"],
