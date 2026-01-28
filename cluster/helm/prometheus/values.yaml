@@ -717,7 +717,7 @@ prometheus-node-exporter:
   fullNameOverride: node-exporter
 
   image:
-    repository: prometheus/node-exporter
+    repository: quay.io/prometheus/node-exporter
     tag: v1.10.2
     pullPolicy: IfNotPresent
 
