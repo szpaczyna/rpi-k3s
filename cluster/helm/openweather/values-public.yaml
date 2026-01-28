@@ -1,20 +1,25 @@
 ---
-# Non-sensitive values for openweather-exporter.
-# Secrets (e.g. ow.apiKey) must be provided via the encrypted file in cluster/secrets.
+# value file for openweather-exporter helm chart
 
 image:
-  # Update this to your actual image repository.
-  repository: szpaczyn/openweather-exporter
+  repository: billykwooten/openweather-exporter
   tag: "0.0.13"
 
-resources: {}
+env_vars: []
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 ow:
-  port: 9101
-  interval: "60s"
-  cacheTTL: "10m"
-  enablePol: false
-  enableUv: false
-  degreesUnit: metric
-  language: en
-  city: ""
+  port: "9091"
+  degreesUnit: C
+  language: EN
+  cacheTTL: "180"
+  enablePol: "true"
+  enableUv: "true"
+  interval: 2m
