@@ -26,9 +26,8 @@ config:
       - cluster/secrets/**
       - cluster/unused/**
       - cluster/helm/**/charts/**
-      - cluster/core/metallb/**
-      - varia/**
-      
+      - cluster/varia/**
+
   helm-values:
     # Provide common value overrides if needed (none for now)
     global: {}

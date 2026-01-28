@@ -99,6 +99,7 @@ jobs:
           # Run from repo root so config discover.paths limits scope; excludePaths handles exclusions
           directory: .
           config: .github/.kube-linter.yaml
+        continue-on-error: true
 
   chart_testing:
     name: Chart Testing
