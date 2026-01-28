@@ -102,6 +102,15 @@ spec:
     spec:
       priorityClassName: "system-cluster-critical"
       serviceAccountName: coredns
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+                topologyKey: kubernetes.io/hostname
       tolerations:
         - key: "CriticalAddonsOnly"
           operator: "Exists"
@@ -148,6 +157,12 @@ spec:
           protocol: TCP
         - containerPort: 9153
           name: metrics
+          protocol: TCP
+        - containerPort: 8080
+          name: health
+          protocol: TCP
+        - containerPort: 8181
+          name: ready
           protocol: TCP
         securityContext:
           allowPrivilegeEscalation: false
