@@ -5,5 +5,6 @@ ignore/
 cluster/helm/
 cluster/secrets/
 cluster/unused/
+cluster/varia/
 *-crds.yaml
 *.asc.yaml
