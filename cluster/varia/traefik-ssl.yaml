@@ -62,7 +62,6 @@ metadata:
 spec:
   selector:
     k8s-app: traefik
-    name: traefik
     app: traefik
   ports:
     - protocol: TCP
