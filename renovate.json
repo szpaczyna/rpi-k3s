@@ -26,8 +26,8 @@
   "hostRules": [
     {
       "matchHost": "docker.io",
-      "username": "{{ secrets.DOCKERHUB_USERNAME }}",
-      "password": "{{ secrets.DOCKERHUB_TOKEN }}"
+      "username": "{{ env.DOCKERHUB_USERNAME }}",
+      "password": "{{ env.DOCKERHUB_TOKEN }}"
     }
   ],
 
