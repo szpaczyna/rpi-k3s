@@ -3,7 +3,7 @@
 
 image:
   repository: billykwooten/openweather-exporter
-  tag: "0.0.13"
+  tag: "0.0.14"
 
 env_vars: []
 
