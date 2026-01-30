@@ -75,7 +75,7 @@ jobs:
             chart="${d%/}"; name=$(basename "$chart")
             # Skip if no standard values.yaml present and only encrypted values expected
             if [ ! -f "$chart/values.yaml" ]; then
-              echo "Skipping $name (no values.yaml present)";
+              echo " skipping $name (no values.yaml present)";
               continue
             fi
             echo "Rendering $name";
@@ -106,6 +106,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          # ensure full fetch so ct can compare against origin/main (avoid targetBranch does not exist errors)
+          fetch-depth: 0
       - name: Set up Helm
         uses: azure/setup-helm@v4
       - name: Set up chart-testing
@@ -124,6 +127,8 @@ jobs:
         if: steps.list.outputs.changed != ''
         run: |
           set -euo pipefail
+          # initialize changed from the previous step output to avoid unbound variable under 'set -u'
+          changed="${{ steps.list.outputs.changed }}"
           eligible=""
           for c in ${changed}; do
             if [ ! -f "$c/Chart.yaml" ]; then
