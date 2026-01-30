@@ -1,4 +1,0 @@
-#!/bin/bash
-sops -d \
-    --output secret.yaml \
-    ../../secrets/unifi-secret.yaml
