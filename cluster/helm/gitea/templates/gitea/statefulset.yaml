@@ -32,8 +32,12 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- $podSecurityContext := dict "fsGroup" 1000 -}}
+      {{- if .Values.podSecurityContext -}}
+      {{- $podSecurityContext = merge $podSecurityContext .Values.podSecurityContext -}}
+      {{- end }}
       securityContext:
-        fsGroup: 1000
+        {{- toYaml $podSecurityContext | nindent 8 }}
       initContainers:
         - name: init
           image: "{{ include "gitea.image" . }}"

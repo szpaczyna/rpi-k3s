@@ -53,6 +53,8 @@ media:
     storageSize: 1Gi
 
 transmission:
+  flood:
+    version: "v1.0.1"
   enable: true
   storageSize: 1Gi
   curl:

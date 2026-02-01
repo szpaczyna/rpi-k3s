@@ -6,6 +6,8 @@ metadata:
   labels:
     app.kubernetes.io/name: mariadb
     app.kubernetes.io/instance: {{ .Release.Name }}
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
   accessModes:
     - ReadWriteOnce

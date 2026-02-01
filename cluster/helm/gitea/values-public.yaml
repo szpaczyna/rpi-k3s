@@ -55,13 +55,15 @@ gitea:
     prometheus.io/scrape: "true"
     prometheus.io/port: "3000"
 
+podSecurityContext:
+  fsGroupChangePolicy: OnRootMismatch
+
 securityContext:
   allowPrivilegeEscalation: true
   capabilities:
     drop:
       - ALL
   privileged: true
-  #  fsGroupChangePolicy: OnRootMismatch
   #  readOnlyRootFilesystem: true
   #  runAsGroup: 1000
   #  runAsNonRoot: true
