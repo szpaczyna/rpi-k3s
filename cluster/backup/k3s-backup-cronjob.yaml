@@ -8,6 +8,9 @@ metadata:
     app: k3s-backup
 spec:
   schedule: "1 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
   jobTemplate:
     metadata:
       labels:
