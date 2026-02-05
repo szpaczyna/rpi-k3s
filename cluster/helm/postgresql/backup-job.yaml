@@ -5,7 +5,9 @@ metadata:
   name: postgres-backup
 spec:
   schedule: "0 2 * * *"
-  successfulJobsHistoryLimit: 2
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
   jobTemplate:
     spec:
       template:
