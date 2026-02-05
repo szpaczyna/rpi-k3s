@@ -8,6 +8,9 @@ metadata:
     app: grafana-backup-tool
 spec:
   schedule: "3 4 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
   jobTemplate:
     metadata:
       labels:
