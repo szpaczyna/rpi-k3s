@@ -75,7 +75,7 @@ persistence:
   defaultClass: true
   defaultFsType: ext4
   defaultMkfsParams: -m 0 -b 4096
-  defaultClassReplicaCount: 2
+  defaultClassReplicaCount: 3
   # best-effort otherwise
   defaultDataLocality: best-effort
   reclaimPolicy: Retain

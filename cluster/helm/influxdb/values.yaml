@@ -156,6 +156,8 @@ env:
 #value: "368m"
   - name: INFLUXDB_DATA_MAX_SERIES_PER_DATABASE
     value: "0"
+  - name: INFLUXDB_LOGGING_LEVEL
+    value: warn
 ## The name of a secret in the same kubernetes namespace which contain values
 ## to be added to the environment.
 ## This can be used, for example, to set the INFLUXDB_HTTP_SHARED_SECRET
