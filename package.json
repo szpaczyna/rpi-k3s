@@ -7,12 +7,12 @@
     "merge": "^2.1.1"
   },
   "devDependencies": {
+    "@ryansonshine/cz-conventional-changelog": "^3.3.4",
     "cross-spawn": "^7.0.6",
-    "cz-conventional-changelog": "^3.3.0",
     "ip": "^2.0.1",
     "normalize-url": "^8.0.2",
-    "trim-newlines": "^5.0.0",
-    "release-please": "^15.0.0"
+    "release-please": "^17.2.0",
+    "trim-newlines": "^5.0.0"
   },
   "scripts": {
     "jsonlint": "jsonlint json/*/*.json",
