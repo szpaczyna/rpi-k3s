@@ -8,7 +8,7 @@ metadata:
     velero.io/plugin-config: "true"
     velero.io/restic: RestoreItemAction
 data:
-  image: velero/velero-restic-restore-helper:v1.5.3
+  image: velero/velero-restic-restore-helper:v1.9.7
   cpuRequest: 200m
   memRequest: 32Mi
   cpuLimit: 200m
