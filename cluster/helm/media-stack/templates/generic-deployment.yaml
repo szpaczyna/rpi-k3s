@@ -117,21 +117,35 @@ spec:
             secretKeyRef:
               name: media-exporter
               key: {{ printf "%s_URL" (upper $name) }}
-        - name: BASIC_AUTH_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: media-exporter
-              key: BASIC_AUTH_PASSWORD
-        - name: BASIC_AUTH_USERNAME
+        
+        # Exportarr expects AUTH_USERNAME/AUTH_PASSWORD (basic or form auth).
+        # Our secret uses BASIC_AUTH_*.
+        - name: AUTH_USERNAME
           valueFrom:
             secretKeyRef:
               name: media-exporter
               key: BASIC_AUTH_USERNAME
+              optional: true
+        - name: AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: media-exporter
+              key: BASIC_AUTH_PASSWORD
+              optional: true
+
+        # Exportarr supports API_KEY; docs/examples also show APIKEY.
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: media-exporter
+              key: {{ printf "%s_APIKEY" (upper $name) }}
+              optional: true
         - name: APIKEY
           valueFrom:
             secretKeyRef:
               name: media-exporter
               key: {{ printf "%s_APIKEY" (upper $name) }}
+              optional: true
         ports:
         - name: monitoring
           containerPort: {{ $.Values.exportarr.service.port }}
