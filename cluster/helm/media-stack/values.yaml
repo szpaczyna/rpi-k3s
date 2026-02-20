@@ -125,5 +125,6 @@ images:
     tag: "1.37.0"
 
 ingress:
+  className: nginx
   host: media.shpaq.org
   secretName: media-shpaq-org-tls

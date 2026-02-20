@@ -13,7 +13,7 @@ metadata:
     nginx.ingress.kubernetes.io/auth-secret: media-auth
     nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.className }}
   tls:
     - hosts:
         - "media.shpaq.org"
@@ -56,7 +56,7 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.className }}
   tls:
     - hosts:
         - "calibre.shpaq.org"
