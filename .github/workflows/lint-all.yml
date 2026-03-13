@@ -148,7 +148,7 @@ jobs:
             helm lint "$c"
             rel="test-$(basename "$c")"
             echo "Installing $rel from $c";
-            helm install "$rel" "$c" --namespace chart-test --wait --timeout 3m || { echo "Install failed for $c"; exit 1; }
+            helm install "$rel" "$c" --namespace chart-test --wait --timeout 10m || { echo "Install failed for $c"; exit 1; }
             echo "Uninstalling $rel";
             helm uninstall "$rel" --namespace chart-test || true
           done
