@@ -21,7 +21,7 @@ configmapReload:
     name: configmap-reload
     image:
       repository: quay.io/prometheus-operator/prometheus-config-reloader
-      tag: v0.89.0
+      tag: v0.90.0
       pullPolicy: IfNotPresent
     containerPort: 8080
     containerPortName: metrics
@@ -72,7 +72,7 @@ server:
 
   image:
     repository: quay.io/prometheus/prometheus
-    tag: v3.9.1
+    tag: v3.10.0
     pullPolicy: IfNotPresent
 
   command: []
