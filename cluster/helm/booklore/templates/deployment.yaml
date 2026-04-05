@@ -151,6 +151,14 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- end -}}
+        {{- if .Values.extraVolumes }}
+        {{- range .Values.extraVolumes }}
+        {{- if eq .name "tmp" }}
+        - name: tmp
+          emptyDir: {}
+        {{- end }}
+        {{- end }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -162,4 +170,17 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.mounterInitContainer.enabled }}
+      initContainers:
+        - name: volume-chown
+          image: "{{ .Values.mounterInitContainer.image }}:{{ .Values.mounterInitContainer.tag }}"
+          command: ["sh", "-c", "chown -R 568:568 /app/data /books || true"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+            - name: books
+              mountPath: /books
       {{- end }}
