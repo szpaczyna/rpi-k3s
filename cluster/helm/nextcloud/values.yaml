@@ -181,7 +181,7 @@ cronjob:
   enabled: true
   image:
     repository: curlimages/curl
-    tag: 7.88.1
+    tag: 8.18.0
     pullPolicy: IfNotPresent
   schedule: '*/5 * * * *'
   annotations: {}
