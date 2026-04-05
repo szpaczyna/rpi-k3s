@@ -5,8 +5,8 @@
   "hostRules": [
     {
       "matchHost": "ghcr.io",
-      "username": "x-access-token",
-      "password": "{{{RENOVATE_TOKEN}}}"
+      "username": "USERNAME",
+      "password": "{{{RENOVATE_GITHUB_TOKEN}}}"
     }
   ],
 
