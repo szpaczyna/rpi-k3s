@@ -24,11 +24,12 @@ spec:
           restartPolicy: Never
           containers:
             - name: renovate
-              image: renovate/renovate:latest
+              image: renovate/renovate:43.104.4
               imagePullPolicy: IfNotPresent
               # Required Secret keys (create separately, do not commit tokens):
               # - RENOVATE_TOKEN: GitHub personal access token
-              # - RENOVATE_REPOSITORIES: e.g. "org/repo" or "org/repo1,org/repo2"
+              # - RENOVATE_REPOSITORIES:
+              #   e.g. "org/repo" or "org/repo1,org/repo2"
               # Optional: RENOVATE_PLATFORM, RENOVATE_ENDPOINT,
               #           RENOVATE_GIT_AUTHOR, ...
               envFrom:

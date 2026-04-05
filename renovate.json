@@ -2,14 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
 
-  "hostRules": [
-    {
-      "matchHost": "ghcr.io",
-      "username": "USERNAME",
-      "password": "{{{RENOVATE_GITHUB_TOKEN}}}"
-    }
-  ],
-
   "enabledManagers": ["helm-values", "kubernetes"],
 
   "helm-values": {
