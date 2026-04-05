@@ -1,6 +1,6 @@
 {{- if .Values.hpa.enabled -}}
 ---
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "bitwarden.fullname" . }}-memory
@@ -24,7 +24,7 @@ spec:
         type: Utilization
         averageValue: 128M
 ---
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "bitwarden.fullname" . }}-cpu

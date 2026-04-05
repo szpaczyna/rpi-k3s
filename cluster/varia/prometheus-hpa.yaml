@@ -1,5 +1,5 @@
 ---
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: prometheus-mem-scale
@@ -19,7 +19,7 @@ spec:
         type: Utilization
         averageValue: 512M
 ---
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: prometheus-cpu-scale
