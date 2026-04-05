@@ -39,6 +39,8 @@ spec:
                   value: github
                 - name: RENOVATE_ENDPOINT
                   value: https://api.github.com/
+                - name: NODE_OPTIONS
+                  value: --no-deprecation
                 - name: RENOVATE_REQUIRE_CONFIG
                   value: required
                 - name: LOG_LEVEL
