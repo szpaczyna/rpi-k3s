@@ -9,15 +9,15 @@ else
 fi
 
 # Update helm repositories
-helm repo update
+#helm repo update
 
 helm upgrade \
     --install longhorn \
     -n longhorn-system \
     longhorn/longhorn \
-    -f values.yaml \
     --create-namespace \
-    --version $1
+    --version $1 \
+    -f values.yaml
 
 kubectl apply -f <(sops -d ../../secrets/longhorn-auth.yaml) -n longhorn-system
 

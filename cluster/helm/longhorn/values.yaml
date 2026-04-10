@@ -25,7 +25,7 @@ global:
               #tag: v1.5.3
             manager:
               repository: longhornio/longhorn-manager
-              #tag: v1.5.3
+              #tag: v1.11.0
             ui:
               repository: longhornio/longhorn-ui
               #tag: v1.5.3
@@ -116,7 +116,7 @@ defaultSettings:
   replicaAutoBalance: best-effort
   storageOverProvisioningPercentage: "200"
   storageMinimalAvailablePercentage: null
-  upgradeChecker: true
+  upgradeChecker: false
   defaultReplicaCount: "2"
   defaultLonghornStaticStorageClass: longhorn-static
   backupstorePollInterval: 0
