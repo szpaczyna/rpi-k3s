@@ -1,6 +1,6 @@
 image:
   repository: nginx
-  tag: "1.29.8"
+  tag: "1.30.0"
 
 resources:
   requests:
