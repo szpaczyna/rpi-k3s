@@ -25,61 +25,60 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "bitwarden.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- with .Values.podAnnotations }}
       annotations:
-{{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations | indent 8 }}
-{{- end }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+            {{- toYaml .Values.resources | nindent 12 }}
           env:
             {{- range $key, $val := .Values.env }}
             - name: {{ $key }}
               value: {{ $val | quote }}
-            {{- end}}
+            {{- end }}
           ports:
             - name: http
               containerPort: 80
               protocol: TCP
-        {{- if .Values.livenessProbe }}
+          {{- with .Values.livenessProbe }}
           livenessProbe:
             httpGet:
               path: /
               port: http
-            {{- .Values.livenessProbe | toYaml | nindent 12 }}
-        {{- end }}
-        {{- if .Values.readinessProbe }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
           readinessProbe:
             httpGet:
               path: /
               port: http
-            {{- .Values.readinessProbe | toYaml | nindent 12 }}
-        {{- end }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
-          - name: data
-            mountPath: /data
-
+            - name: data
+              mountPath: /data
       volumes:
-      - name: data
-        {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "bitwarden.fullname" . }}{{- end }}
-        {{- else }}
-        emptyDir: {}
-        {{- end }}
-    {{- with .Values.nodeSelector }}
+        - name: data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "bitwarden.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
       nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
       tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
