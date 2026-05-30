@@ -1,4 +1,11 @@
 # Changelog
+## [0.3.1](https://github.com/szpaczyna/rpi-k3s/compare/v0.3.0...v0.3.1) (2026-05-30)
+
+
+### Bug Fixes
+
+* Added action which will trigger release if needed ([9634061](https://github.com/szpaczyna/rpi-k3s/commit/9634061d7c63c5bf854e557fc02db2851e41f359))
+
 ## [0.3.0](https://github.com/szpaczyna/rpi-k3s/compare/v0.2.0...v0.3.0) (2026-05-16)
 
 
