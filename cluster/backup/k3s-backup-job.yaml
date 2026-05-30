@@ -16,7 +16,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: k3s-backup
-          image: busybox:1.37
+          image: busybox:1.38
           imagePullPolicy: IfNotPresent
           command: ["sh", "-c"]
           args:
