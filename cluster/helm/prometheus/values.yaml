@@ -309,7 +309,7 @@ server:
   terminationGracePeriodSeconds: 30
   retention: "15d"
   ## Prometheus' data retention size. Supported units: B, KB, MB, GB, TB, PB, EB.
-  retentionSize: ""
+  retentionSize: "50GB"
 
 ruleFiles: {}
 scrapeConfigFiles: []
