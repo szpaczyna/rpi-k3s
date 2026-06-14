@@ -1,4 +1,11 @@
 # Changelog
+## [0.3.2](https://github.com/szpaczyna/rpi-k3s/compare/v0.3.1...v0.3.2) (2026-06-14)
+
+
+### Bug Fixes
+
+* prom retention size added ([ebb2ad8](https://github.com/szpaczyna/rpi-k3s/commit/ebb2ad800dbe81945e7f6250dcd7b431b4e89e6b))
+
 ## [0.3.1](https://github.com/szpaczyna/rpi-k3s/compare/v0.3.0...v0.3.1) (2026-05-30)
 
 
