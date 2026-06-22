@@ -16,7 +16,7 @@ spec:
           dnsPolicy: ClusterFirstWithHostNet
           containers:
           - name: backup
-            image: alpine:3.24.0
+            image: alpine:3.24.1
             args:
             - /bin/sh
             - -c
