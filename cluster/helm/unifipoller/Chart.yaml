@@ -10,8 +10,8 @@ description: |
   **Note**: *This is a best effort to keep this chart working for kubernetes.*
 
 type: application
-version: "2.11.2-Chart8"
-appVersion: "v2.11.2"
+version: "3.3.1"
+appVersion: "v3.3.1"
 keywords:
   - unifi
   - unpoller
