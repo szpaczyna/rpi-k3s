@@ -1,4 +1,11 @@
 # Changelog
+## [0.5.0](https://github.com/szpaczyna/rpi-k3s/compare/v0.4.0...v0.5.0) (2026-06-22)
+
+
+### Features
+
+* updated release action ([dfa02f7](https://github.com/szpaczyna/rpi-k3s/commit/dfa02f766fdf86ceb8e2e98d412c8d19ccfccf66))
+
 ## [0.4.0](https://github.com/szpaczyna/rpi-k3s/compare/v0.3.2...v0.4.0) (2026-06-22)
 
 
