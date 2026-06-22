@@ -1,4 +1,17 @@
 # Changelog
+## [0.4.0](https://github.com/szpaczyna/rpi-k3s/compare/v0.3.2...v0.4.0) (2026-06-22)
+
+
+### Features
+
+* metallb version bump ([969d6c2](https://github.com/szpaczyna/rpi-k3s/commit/969d6c20e67567555aaddbc8e816370d95bfc00d))
+* unpoller version bump ([b73bfb8](https://github.com/szpaczyna/rpi-k3s/commit/b73bfb88c07d460d0fee1b02fb4c750fb7015822))
+
+
+### Bug Fixes
+
+* prom helm chart bump ([762790a](https://github.com/szpaczyna/rpi-k3s/commit/762790a8456595d41d7101b19bc3f1d80ed737e3))
+
 ## [0.3.2](https://github.com/szpaczyna/rpi-k3s/compare/v0.3.1...v0.3.2) (2026-06-14)
 
 
