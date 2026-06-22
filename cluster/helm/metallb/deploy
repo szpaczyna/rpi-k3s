@@ -15,7 +15,8 @@ helm upgrade --install \
     metallb metallb/metallb \
     --create-namespace \
     -n metallb-system \
-    -f values.yaml \
-    --version 0.15.3
+    -f values.yaml 
+
+# --version 0.15.3
 
 kubectl apply -f resources.yaml
