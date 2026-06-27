@@ -1,4 +1,11 @@
 # Changelog
+## [0.5.1](https://github.com/szpaczyna/rpi-k3s/compare/v0.5.0...v0.5.1) (2026-06-27)
+
+
+### Bug Fixes
+
+* updated unpoller chart version ([edee671](https://github.com/szpaczyna/rpi-k3s/commit/edee671866cf1fe25044c5d932d02f4aff12c567))
+
 ## [0.5.0](https://github.com/szpaczyna/rpi-k3s/compare/v0.4.0...v0.5.0) (2026-06-22)
 
 
