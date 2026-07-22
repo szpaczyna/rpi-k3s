@@ -5,13 +5,12 @@ modprobe zram num_devices="$cores"
 swapoff -a
 
 totalmem=$(free | grep -e "^Mem:" | awk '{print $2}')
-mem=$(( ($totalmem / $cores)* 1024 ))
-
+mem=$(( (totalmem / cores) * 1024 ))
 
 core=0
 while [ $core -lt "$cores" ]; do
-    zramctl -f -a lz4 -t 8 -s $mem
-    mkswap /dev/zram$core
-    swapon -p 5 /dev/zram$core
-    let core=core+1
+    zramctl -f -a lz4 -t 8 -s "$mem"
+    mkswap "/dev/zram${core}"
+    swapon -p 5 "/dev/zram${core}"
+    (( core=core+1 ))
 done

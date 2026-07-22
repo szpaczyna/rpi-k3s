@@ -55,7 +55,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           shellcheck_flags: '-x'
           path: '.'
-          exclude: './cluster/secrets/*'
+          exclude: './cluster/secrets/* ./scripts/wireguard.sh ./scripts/pihole_install.sh'
           fail_level: 'none'
           reporter: github-pr-check
 

@@ -139,7 +139,8 @@ copy_with_tar() {
 }
 
 rsync_app() {
-  local app="$1" src="/old-config/config/${app}" dst="/new-config/${app}"
+  local app="$1"
+  local src="/old-config/config/${app}" dst="/new-config/${app}"
   echo "-- $app --"
   if ! kubectl exec -n "$NAMESPACE" migration-pod -- test -d "$src"; then echo "  Source missing, skipping"; return; fi
   kubectl exec -n "$NAMESPACE" migration-pod -- sh -c "mkdir -p '$dst'"

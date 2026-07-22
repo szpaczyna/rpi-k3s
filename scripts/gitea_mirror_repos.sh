@@ -36,11 +36,11 @@ REPOS=(https://github.com/QNapi/qnapi-docker.git
   https://github.com/anthr76/infra.git
   )
 
-for URL in ${REPOS[@]}; do
-    REPO_NAME=$(echo $URL | sed -e 's|https://github.com/||g' -e 's|/|-|g'  -e 's|.git||g')
+for URL in "${REPOS[@]}"; do
+    REPO_NAME=$(echo "$URL" | sed -e 's|https://github.com/||g' -e 's|/|-|g'  -e 's|.git||g')
     echo "Importing repo from $URL to $REPO_NAME…"
 
-    curlie -X POST "https://$GITEA_DOMAIN/api/v1/repos/migrate" -u $GITEA_USERNAME:$GITEA_TOKEN -H  "accept: application/json" -H  "Content-Type: application/json" -d "{  \
+    curlie -X POST "https://$GITEA_DOMAIN/api/v1/repos/migrate" -u "$GITEA_USERNAME:$GITEA_TOKEN" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{  \
     \"clone_addr\": \"$URL\", \
     \"mirror\": true, \
     \"private\": false, \

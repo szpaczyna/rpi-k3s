@@ -1,5 +1,6 @@
 #!/bin/bash
-export POSTGRES_PASSWORD=$(kubectl get secret --namespace apps morphine-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+POSTGRES_PASSWORD=$(kubectl get secret --namespace apps morphine-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRES_PASSWORD
 kubectl run morphine-postgresql-client \
     --rm --tty -i \
     --restart='Never' \

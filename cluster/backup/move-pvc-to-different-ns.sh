@@ -11,15 +11,15 @@ export PVC=gitea-data
 #export NAMESPACE2=apps
 #export PVC=gitea-postgres
 
-kubectl get pvc -n $NAMESPACE1 $PVC -o yaml | tee /tmp/pvc.yaml
-kubectl get pv  $PV -o yaml | tee /tmp/pv.yaml
+kubectl get pvc -n "$NAMESPACE1" "$PVC" -o yaml | tee /tmp/pvc.yaml
+kubectl get pv "$PV" -o yaml | tee /tmp/pv.yaml
 kubectl patch pv "$PV" -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
 kubectl describe pv "$PV" | grep -e Reclaim
 kubectl delete pvc -n "$NAMESPACE1" "$PVC"
-kubectl patch pv "$PV" -p '{"spec":{"claimRef":{"namespace":"'$NAMESPACE2'","name":"'$PVC'","uid":null}}}'
+kubectl patch pv "$PV" -p '{"spec":{"claimRef":{"namespace":"'"$NAMESPACE2"'","name":"'"$PVC"'","uid":null}}}'
 kubectl get pv "$PV" -o yaml | grep -e Reclaim -e namespace -e uid: -e name: -e claimRef | grep -v " f:"
 grep -v -e "uid:" -e "resourceVersion:" -e "namespace:" -e "selfLink:"  /tmp/pvc.yaml | kubectl -n "$NAMESPACE2" apply -f -
-PVCUID=$( kubectl get -n "$NAMESPACE2" pvc "$PVC" -o custom-columns=UID:.metadata.uid --no-headers )
-kubectl patch pv "$PV" -p '{"spec":{"claimRef":{"uid":"'$PVCUID'","name":null}}}'
+PVCUID=$(kubectl get -n "$NAMESPACE2" pvc "$PVC" -o custom-columns=UID:.metadata.uid --no-headers)
+kubectl patch pv "$PV" -p '{"spec":{"claimRef":{"uid":"'"$PVCUID"'","name":null}}}'
 kubectl patch pv "$PV" -p '{"spec":{"persistentVolumeReclaimPolicy":"Delete"}}'
-kubectl get pv $PV -o yaml | grep -e Reclaim -e namespace
+kubectl get pv "$PV" -o yaml | grep -e Reclaim -e namespace
