@@ -116,7 +116,7 @@ spec:
           limits:
             cpu: {{ .Values.global.resources.limits.cpu }}
             memory: {{ .Values.global.resources.limits.memory }}
-      - name: exporter      
+      - name: exporter
         image: "{{ printf "%s:%s" .Values.images.transmissionExporter.repository .Values.images.transmissionExporter.tag }}"
         imagePullPolicy: IfNotPresent
         ports:

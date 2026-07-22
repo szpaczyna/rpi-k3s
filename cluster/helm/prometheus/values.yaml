@@ -448,7 +448,7 @@ serverFiles:
       #     - source_labels: [__meta_kubernetes_pod_node_name]
       #       action: replace
       #       target_label: kubernetes_node
-# 
+#
       # - job_name: 'kubernetes-service-endpoints-slow'
       #   honor_labels: true
       #   scrape_interval: 5m
@@ -486,7 +486,7 @@ serverFiles:
       #     - source_labels: [__meta_kubernetes_pod_node_name]
       #       action: replace
       #       target_label: kubernetes_node
-# 
+#
       # The relabeling allows the actual service scrape endpoint to be configured
       # via the following annotations:
       #
@@ -515,8 +515,8 @@ serverFiles:
       #       target_label: kubernetes_namespace
       #     - source_labels: [__meta_kubernetes_service_name]
       #       target_label: job
-# 
-# 
+#
+#
       # - job_name: 'kubernetes-pods'
       #   honor_labels: true
       #   kubernetes_sd_configs:
@@ -776,4 +776,3 @@ prometheus-pushgateway:
   enabled: false
   serviceAnnotations:
     prometheus.io/probe: pushgateway
-

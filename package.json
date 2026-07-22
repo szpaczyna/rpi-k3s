@@ -3,12 +3,7 @@
   "version": "0.5.4",
   "description": "Szpacze Gniazdo k3s",
   "main": "index.js",
-  "scripts": {
-    "jsonlint": "jsonlint json/*/*.json",
-    "yamllint": "yamllint cluster/*",
-    "shellint": "shellcheck scripts/*.sh",
-    "test": "npm run jsonlint && npm run yamllint && npm run shellint"
-  },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/szpaczyna/rpi-k3s.git"

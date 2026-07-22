@@ -55,7 +55,7 @@ scale_down() {
 create_migration_pod() {
   echo "Creating migration pod..."
   local image="instrumentisto/rsync-ssh:latest"
-  
+
   kubectl apply -f - <<EOF
 apiVersion: v1
 kind: Pod

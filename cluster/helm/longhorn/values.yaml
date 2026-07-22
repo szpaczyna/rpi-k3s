@@ -215,4 +215,3 @@ namespaceOverride: ""
 annotations:
   prometheus.io/port: "9500"
   prometheus.io/scrape: "true"
-

@@ -11,7 +11,7 @@ ignore: |
   cluster/unused/
   *-crds.yaml
   *.asc.yaml
- 
+
 rules:
   truthy:
     allowed-values: ['true', 'false', 'on', 'yes']
@@ -31,4 +31,3 @@ rules:
     max-spaces-after: 1
   key-duplicates:
     level: warning
-

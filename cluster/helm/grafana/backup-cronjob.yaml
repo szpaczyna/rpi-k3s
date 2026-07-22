@@ -46,4 +46,3 @@ spec:
               hostPath:
                 path: /data/nfs/grafana-backups
                 type: DirectoryOrCreate
-

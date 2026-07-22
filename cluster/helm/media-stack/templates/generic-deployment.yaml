@@ -117,7 +117,7 @@ spec:
             secretKeyRef:
               name: media-exporter
               key: {{ printf "%s_URL" (upper $name) }}
-        
+
         # Exportarr expects AUTH_USERNAME/AUTH_PASSWORD (basic or form auth).
         # Our secret uses BASIC_AUTH_*.
         - name: AUTH_USERNAME

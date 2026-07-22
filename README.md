@@ -43,7 +43,7 @@ height="144px"/-->
   - [media-stack](cluster/helm/media-stack) - Transmission, Radarr, Lidarr, Sonarr, Bazarr, Jackett, Calibre-web
   - [grafana](cluster/helm/grafana) - Grafana (for dashboards)
 
-  
+
 - Apps/YAML:
   - [unifi](cluster/apps/unifi) - Unifi controller/prometheus poller
   - [gentoo](cluster/apps/gentoo) - cross-compiler and playground
@@ -65,7 +65,7 @@ height="144px"/-->
 
 <!--END_SECTION_LINES_OF_CODE:readme-info-->
 
-<!--  - 
+<!--  -
 - [cert-exporter](cluster/helm/cert-exporter) - certificates monitoring
 - [node-problem-detector](cluster/helm/node-problem-detector) - Node problem detector
 - [loki](cluster/helm/loki) - Logs shipper and browser
@@ -82,4 +82,3 @@ clusters over at [awesome-home-kubernetes].
 
 
 [awesome-home-kubernetes]: https://github.com/k8s-at-home/awesome-home-kubernetes
-

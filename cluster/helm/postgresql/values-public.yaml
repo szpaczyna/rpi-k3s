@@ -207,12 +207,12 @@ readReplicas:
 serviceAccount:
   create: true
   automountServiceAccountToken: true
-    
+
 rbac:
   create: false
 psp:
   create: false
-    
+
 metrics:
   enabled: true
   image:

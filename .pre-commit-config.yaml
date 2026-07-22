@@ -1,7 +1,7 @@
 ---
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.4.0
+  rev: v6.0.0
   hooks:
   - id: trailing-whitespace
   - id: end-of-file-fixer
@@ -12,12 +12,12 @@ repos:
   - id: check-json
   - id: check-symlinks
 - repo: https://github.com/adrienverge/yamllint.git
-  rev: v1.31.0
+  rev: v1.35.1
   hooks:
-  - args:
+  - id: yamllint
+    args:
     - -c
-    - '~/git/rpi-k3s/.github/yamllint.yml'
-    id: yamllint
+    - .github/.yamllint.config.yaml
 - repo: https://github.com/sirosen/fix-smartquotes
   rev: 0.2.0
   hooks:
