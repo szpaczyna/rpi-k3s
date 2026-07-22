@@ -1,0 +1,40 @@
+scripts/gitea_mirror_repos.sh
+  s_7c4ae00dbcebba::t_8820d528ec83aa 39-40
+cluster/helm/postgresql/run_client.sh
+  s_7c4ae00dbcebba::t_83db1458d344f9 2-3
+scripts/install_helm_secrets.sh
+  s_7c4ae00dbcebba::t_0575127457b2fa 11-13
+cluster/helm/media-stack/migrate-config.sh
+  s_7c4ae00dbcebba::t_d043ee44f900fb 142-143
+.github/workflows/lint-all.yml
+  s_7c4ae00dbcebba::t_23af8eed8defc4 58
+scripts/zram.sh
+  s_7c4ae00dbcebba::t_1b0dcf53acbc59 8,12-15
+cluster/helm/longhorn/cleanup.sh
+  s_7c4ae00dbcebba::t_491051fc7400e3 8,17,33-39,44-49,54-55
+  s_7c4ae00dbcebba::t_ebc2eb2960a102 7,12
+scripts/backup_dashboards.sh
+  s_7c4ae00dbcebba::t_c3755249da3d63 5-10
+scripts/throttled.sh
+  s_7c4ae00dbcebba::t_19383f8f87e90a 28,32,34,38,40,44,46
+scripts/discover_service.sh
+  s_7c4ae00dbcebba::t_2d13cd0788e5a0 4,7,13,19,23,26
+cluster/backup/move-pvc-to-different-ns.sh
+  s_7c4ae00dbcebba::t_867181abbe8fcf 14-15,19,22-23,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "63064a4e7fdc973bf7e4a51718872c1f1da263fd",
+  "prompts": {},
+  "sessions": {
+    "s_7c4ae00dbcebba": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_6c1909ae-aa41-4051-8a1d-dadd5060c1c9",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
