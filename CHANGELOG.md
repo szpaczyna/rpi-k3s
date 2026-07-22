@@ -1,4 +1,11 @@
 # Changelog
+## [0.5.3](https://github.com/szpaczyna/rpi-k3s/compare/v0.5.2...v0.5.3) (2026-07-22)
+
+
+### Bug Fixes
+
+* make markdownlint happy ([18f260e](https://github.com/szpaczyna/rpi-k3s/commit/18f260e9e113e815641227efd27f5712541c0cf0))
+
 ## [0.5.2](https://github.com/szpaczyna/rpi-k3s/compare/v0.5.1...v0.5.2) (2026-07-22)
 
 
