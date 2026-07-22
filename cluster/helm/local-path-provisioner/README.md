@@ -6,12 +6,12 @@ utilize the local storage in each node. Based on the user configuration, the Loc
 Persistent Volume feature](https://kubernetes.io/blog/2018/04/13/local-persistent-volumes-beta/), but make it a simpler
 solution than the built-in `local` volume feature in Kubernetes.
 
-## TL;DR;
+## TL;DR
 
 ```console
-$ git clone https://github.com/rancher/local-path-provisioner.git
-$ cd local-path-provisioner
-$ helm install --name local-path-storage --namespace local-path-storage ./deploy/chart/
+git clone https://github.com/rancher/local-path-provisioner.git
+cd local-path-provisioner
+helm install --name local-path-storage --namespace local-path-storage ./deploy/chart/
 ```
 
 ## Introduction
@@ -28,9 +28,9 @@ This chart bootstraps a [Local Path Provisioner](https://github.com/rancher/loca
 To install the chart with the release name `local-path-storage`:
 
 ```console
-$ git clone https://github.com/rancher/local-path-provisioner.git
-$ cd local-path-provisioner
-$ helm install ./deploy/chart/ --name local-path-storage --namespace local-path-storage
+git clone https://github.com/rancher/local-path-provisioner.git
+cd local-path-provisioner
+helm install ./deploy/chart/ --name local-path-storage --namespace local-path-storage
 ```
 
 The command deploys Local Path Provisioner on the Kubernetes cluster in the default configuration. The
@@ -43,7 +43,7 @@ The command deploys Local Path Provisioner on the Kubernetes cluster in the defa
 To uninstall/delete the `local-path-storage` deployment:
 
 ```console
-$ helm delete --purge local-path-storage
+helm delete --purge local-path-storage
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -80,14 +80,14 @@ default values.
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install ./deploy/chart/ --name local-path-storage --namespace local-path-storage --set storageClass.provisionerName=rancher.io/local-path
+helm install ./deploy/chart/ --name local-path-storage --namespace local-path-storage --set storageClass.provisionerName=rancher.io/local-path
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the
 chart. For example,
 
 ```console
-$ helm install --name local-path-storage --namespace local-path-storage ./deploy/chart/ -f values.yaml
+helm install --name local-path-storage --namespace local-path-storage ./deploy/chart/ -f values.yaml
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -102,7 +102,7 @@ You need to have the flag `--authorization-mode=RBAC` on the api server. See the
 To determine if your cluster supports RBAC, run the following command:
 
 ```console
-$ kubectl api-versions | grep rbac
+kubectl api-versions | grep rbac
 ```
 
 If the output contains "beta", you may install the chart with RBAC enabled (see below).
@@ -112,5 +112,5 @@ If the output contains "beta", you may install the chart with RBAC enabled (see 
 To enable the creation of RBAC resources (On clusters with RBAC). Do the following:
 
 ```console
-$ helm install ./deploy/chart/ --name local-path-storage --namespace local-path-storage --set rbac.create=true
+helm install ./deploy/chart/ --name local-path-storage --namespace local-path-storage --set rbac.create=true
 ```

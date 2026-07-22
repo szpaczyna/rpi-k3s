@@ -7,12 +7,14 @@
 This chart bootstraps a Kanboard deployment on a Kubernetes cluster using the Helm package manager.
 
 ## Installation
+
 ```sh
 cd <path-to-repo>
 helm install -n <my-namespace> kanboard -f values.yaml .
 ```
 
 ## Parameters
+
 The following table lists the configurable parameters of the Kanboard chart and their default values.
 
 | Parameter                            | Description                                                                                            | Default                                                      |

@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This helm chart is forked and changed chart from official gitea repository https://dl.gitea.io/charts/
+This helm chart is forked and changed chart from official gitea repository <https://dl.gitea.io/charts/>
 But takes a completely different approach in providing a database and cache with dependencies.
 
 Memcached was removed for redis favor.
@@ -16,6 +16,7 @@ Memcached was removed for redis favor.
 ```
 
 ## Prerequisites
+
 * Kubernetes 1.12+
 * Helm 3.0+
 * PV provisioner for persistent data support
@@ -65,6 +66,7 @@ USER = gitea
 ```
 
 #### Redis run params
+
 ```sh
 redis-server --save "" --appendonly no
 ```
@@ -277,6 +279,7 @@ kebab-case:
       bind-password: JustAnotherBindPw
       username-attribute: CN
 ```
+
 ### OAuth2 Settings
 
 Like the admin user the OAuth2 settings can be updated but also disabled or deleted.
@@ -323,7 +326,7 @@ kebab-case:
 
 A Prometheus `/metrics` endpoint on the `HTTP_PORT` and `pprof` profiling endpoints on port 6060 can be enabled under `gitea`. Beware that the metrics endpoint is exposed via the ingress, manage access using ingress annotations for example.
 
-To deploy the `ServiceMonitor`, you first need to ensure that you have deployed `prometheus-operator` and its CRDs: https://github.com/prometheus-operator/prometheus-operator#customresourcedefinitions.
+To deploy the `ServiceMonitor`, you first need to ensure that you have deployed `prometheus-operator` and its CRDs: <https://github.com/prometheus-operator/prometheus-operator#customresourcedefinitions>.
 
 ```yaml
 gitea:
@@ -370,11 +373,11 @@ Annotations can be added to the Gitea pod.
 
 ### Persistence
 
-| Parameter           | Description                       | Default                      |
+|Parameter|Description|Default|
 |---------------------|-----------------------------------|------------------------------|
-|persistence.enabled| Enable persistence for Gitea |true|
-|persistence.existingClaim| Use an existing claim to store repository information | |
-|persistence.size| Size for persistence to store repo information | 10Gi |
+|persistence.enabled|Enable persistence for Gitea|true|
+|persistence.existingClaim|Use an existing claim to store repository information||
+|persistence.size|Size for persistence to store repo information|10Gi|
 |persistence.accessModes|AccessMode for persistence||
 |persistence.storageClass|Storage class for repository persistence||
 |persistence.labels|Labels for the persistence volume claim to be created|{}|
@@ -411,29 +414,29 @@ Annotations can be added to the Gitea pod.
 
 Configure Liveness, Readiness and Startup [Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
 
-| Parameter           | Description                       | Default                      |
-|---------------------|-----------------------------------|------------------------------|
-|gitea.livenessProbe.enabled | Enable liveness probe | true |
-|gitea.livenessProbe.initialDelaySeconds | Delay before probe start| 200 |
-|gitea.livenessProbe.timeoutSeconds | probe timeout | 1 |
-|gitea.livenessProbe.periodSeconds | period between probes | 10 |
-|gitea.livenessProbe.successThreshold | Minimum consecutive success probes | 1 |
-|gitea.livenessProbe.failureThreshold | Minimum consecutive error probes | 10 |
-|gitea.readinessProbe.enabled | Enable readiness probe | true |
-|gitea.readinessProbe.initialDelaySeconds | Delay before probe start| 200 |
-|gitea.readinessProbe.timeoutSeconds | probe timeout | 1 |
-|gitea.readinessProbe.periodSeconds | period between probes | 10 |
-|gitea.readinessProbe.successThreshold | Minimum consecutive success probes | 1 |
-|gitea.readinessProbe.failureThreshold | Minimum consecutive error probes | 10 |
-|gitea.startupProbe.enabled | Enable startup probe | false |
-|gitea.startupProbe.initialDelaySeconds | Delay before probe start| 200 |
-|gitea.startupProbe.timeoutSeconds | probe timeout | 1 |
-|gitea.startupProbe.periodSeconds | period between probes | 10 |
-|gitea.startupProbe.successThreshold | Minimum consecutive success probes | 1 |
-|gitea.startupProbe.failureThreshold | Minimum consecutive error probes | 10 |
-|gitea.customLivenessProbe | Custom liveness probe (needs `gitea.livenessProbe.enabled: false`) |  |
-|gitea.customReadinessProbe | Custom readiness probe (needs `gitea.readinessProbe.enabled: false`) |  |
-|gitea.customStartupProbe | Custom startup probe (needs `gitea.startupProbe.enabled: false`) |  |
+| Parameter | Description | Default |
+| --------------------- | ----------------------------------- | ------------------------------ |
+| gitea.livenessProbe.enabled | Enable liveness probe | true |
+| gitea.livenessProbe.initialDelaySeconds | Delay before probe start | 200 |
+| gitea.livenessProbe.timeoutSeconds | probe timeout | 1 |
+| gitea.livenessProbe.periodSeconds | period between probes | 10 |
+| gitea.livenessProbe.successThreshold | Minimum consecutive success probes | 1 |
+| gitea.livenessProbe.failureThreshold | Minimum consecutive error probes | 10 |
+| gitea.readinessProbe.enabled | Enable readiness probe | true |
+| gitea.readinessProbe.initialDelaySeconds | Delay before probe start | 200 |
+| gitea.readinessProbe.timeoutSeconds | probe timeout | 1 |
+| gitea.readinessProbe.periodSeconds | period between probes | 10 |
+| gitea.readinessProbe.successThreshold | Minimum consecutive success probes | 1 |
+| gitea.readinessProbe.failureThreshold | Minimum consecutive error probes | 10 |
+| gitea.startupProbe.enabled | Enable startup probe | false |
+| gitea.startupProbe.initialDelaySeconds | Delay before probe start | 200 |
+| gitea.startupProbe.timeoutSeconds | probe timeout | 1 |
+| gitea.startupProbe.periodSeconds | period between probes | 10 |
+| gitea.startupProbe.successThreshold | Minimum consecutive success probes | 1 |
+| gitea.startupProbe.failureThreshold | Minimum consecutive error probes | 10 |
+| gitea.customLivenessProbe | Custom liveness probe (needs `gitea.livenessProbe.enabled: false`) | |
+| gitea.customReadinessProbe | Custom readiness probe (needs `gitea.readinessProbe.enabled: false`) | |
+| gitea.customStartupProbe | Custom startup probe (needs `gitea.startupProbe.enabled: false`) | |
 
 ### Memcached BuiltIn
 
@@ -451,14 +454,14 @@ Mysql is loaded as a dependency from stable. Configuration can be found from thi
 
 The following parameters are the defaults set by this chart
 
-| Parameter           | Description                       | Default                      |
+|Parameter|Description|Default|
 |---------------------|-----------------------------------|------------------------------|
 |mysql.mysqlRootPassword|Password for the root user. Ignored if existing secret is provided|gitea|
 |mysql.mysqlUser|Username of new user to create.|gitea|
 |mysql.mysqlPassword|Password for the new user. Ignored if existing secret is provided|gitea|
 |mysql.mysqlDatabase|Name for new database to create.|gitea|
 |mysql.service.port|Port to connect to mysql service|3306|
-|mysql.persistence.size|Persistence size for mysql |10Gi|
+|mysql.persistence.size|Persistence size for mysql|10Gi|
 
 ### Postgresql BuiltIn
 
@@ -466,13 +469,13 @@ Postgresql is loaded as a dependency from Bitnami. The chart configuration can b
 
 The following parameters are the defaults set by this chart
 
-| Parameter           | Description                       | Default                      |
+|Parameter|Description|Default|
 |---------------------|-----------------------------------|------------------------------|
-|postgresql.global.postgresql.postgresqlDatabase| PostgreSQL database (overrides postgresqlDatabase)|gitea|
-|postgresql.global.postgresql.postgresqlUsername| PostgreSQL username (overrides postgresqlUsername)|gitea|
-|postgresql.global.postgresql.postgresqlPassword| PostgreSQL admin password (overrides postgresqlPassword)|gitea|
+|postgresql.global.postgresql.postgresqlDatabase|PostgreSQL database (overrides postgresqlDatabase)|gitea|
+|postgresql.global.postgresql.postgresqlUsername|PostgreSQL username (overrides postgresqlUsername)|gitea|
+|postgresql.global.postgresql.postgresqlPassword|PostgreSQL admin password (overrides postgresqlPassword)|gitea|
 |postgresql.global.postgresql.servicePort|PostgreSQL port (overrides service.port)|5432|
-|postgresql.persistence.size| PVC Storage Request for PostgreSQL volume |10Gi|
+|postgresql.persistence.size|PVC Storage Request for PostgreSQL volume|10Gi|
 
 ### MariaDB BuiltIn
 
@@ -480,11 +483,11 @@ MariaDB is loaded as a dependency from bitnami. Configuration can be found from 
 
 The following parameters are the defaults set by this chart
 
-| Parameter           | Description                       | Default                      |
+|Parameter|Description|Default|
 |---------------------|-----------------------------------|------------------------------|
 |mariadb.auth.username|Username of new user to create.|gitea|
 |mariadb.auth.password|Password for the new user. Ignored if existing secret is provided|gitea|
 |mariadb.auth.database|Name for new database to create.|gitea|
 |mariadb.auth.rootPassword|Password for the root user.|gitea|
 |mariadb.primary.service.port|Port to connect to mariadb service|3306|
-|mariadb.primary.persistence.size|Persistence size for mariadb |10Gi|
+|mariadb.primary.persistence.size|Persistence size for mariadb|10Gi|

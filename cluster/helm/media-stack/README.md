@@ -1,6 +1,6 @@
 # Media Stack Helm Chart
 
-This Helm chart deploys a media application stack on Kubernetes, including popular applications such as Bazarr, Calibre Web, Lidarr, Prowlarr, Radarr, Readarr, Sonarr, and Transmission. 
+This Helm chart deploys a media application stack on Kubernetes, including popular applications such as Bazarr, Calibre Web, Lidarr, Prowlarr, Radarr, Readarr, Sonarr, and Transmission.
 
 ## Prerequisites
 
@@ -12,11 +12,13 @@ This Helm chart deploys a media application stack on Kubernetes, including popul
 To install the media stack Helm chart, follow these steps:
 
 1. **Add the Helm repository (if applicable)**:
+
    ```bash
    helm repo add <repository-name> <repository-url>
    ```
 
 2. **Install the chart**:
+
    ```bash
    helm install <release-name> ./media-stack-helm \
      --set global.timezone="Europe/Warsaw" \
@@ -25,6 +27,7 @@ To install the media stack Helm chart, follow these steps:
    ```
 
 3. **Verify the installation**:
+
    ```bash
    helm list
    ```
@@ -64,6 +67,7 @@ Transmission and Calibre web keep specialized templates and are enabled via `tra
 ## Uninstallation
 
 To uninstall the media stack, run:
+
 ```bash
 helm uninstall <release-name>
 ```

@@ -14,7 +14,7 @@ or use a deploy script
 
 # Migrating from sqlite to external postgres
 
-##### WARN:
+## WARN
 
 pgloader compiled manually from git. Dist version is not working properly.
 
@@ -46,4 +46,4 @@ pgloader compiled manually from git. Dist version is not working properly.
 
 # TODO
 
--   db init container
+- db init container

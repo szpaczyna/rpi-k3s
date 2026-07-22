@@ -15,6 +15,7 @@ helm upgrade --install morphine bitnami/postgresql -n apps -f values.yaml
 
 rm -rf values.yaml
 ```
+
 ## Run psql client
 
 ```sh

@@ -6,11 +6,13 @@
 A Prometheus exporter for certificates focusing on expiration monitoring, written in Go with cloud deployments in mind.
 
 Get notified before they expire:
+
 * TLS Secrets from a Kubernetes cluster
 * PEM encoded files, by path or scanning directories
 * Kubeconfigs with embedded certificates or file references
 
 The following metrics are available:
+
 * `x509_cert_not_before`
 * `x509_cert_not_after`
 * `x509_cert_expired`
@@ -30,21 +32,26 @@ It only takes two commands to install x509-certificate-exporter, however you sho
 take advantage of all the features!
 
 Add our Charts repository :
+
+```sh
+helm repo add enix https://charts.enix.io
 ```
-$ helm repo add enix https://charts.enix.io
-```
+
 Install x509-certificate-exporter for TLS Secrets monitoring with prometheus-operator support :
-```
-$ helm install x509-certificate-exporter enix/x509-certificate-exporter
+
+```sh
+helm install x509-certificate-exporter enix/x509-certificate-exporter
 ```
 
 To remove built-in Prometheus alerts if you'd rather craft your own :
-```
-$ helm upgrade x509-certificate-exporter enix/x509-certificate-exporter --reuse-values --set prometheusRules.create=false
+
+```sh
+helm upgrade x509-certificate-exporter enix/x509-certificate-exporter --reuse-values --set prometheusRules.create=false
 ```
 
 If you don't use the Prometheus operator at all, and don't have the CRD, disable resource creation and perhaps add Pod
 annotations for scrapping :
+
 ```yaml
 secretsExporter:
   podAnnotations:
@@ -70,6 +77,7 @@ detect expiring certificates whether you manage them on your own or rely on cont
 > 🙂 If you're only interested in this feature, you could probably install the Chart not specifying any value.
 
 Disable this exporter when Secrets metrics are not wanted – if you're looking for hostPath DaemonSets only :
+
 ```yaml
 secretsExporter:
   enabled: false
@@ -84,6 +92,7 @@ unattended.
 
 This Chart provides a facility to deploy `DaemonSets` so that each node of a cluster can run its own x509-certificate-exporter
 and export metrics for host files :
+
 * `etcd` server and client certificates
 * Kubernetes CA
 * `kube-apiserver` certificates
@@ -95,7 +104,7 @@ Obviously it also works with any other application deployed on cluster nodes as 
 
 > ⚙️ You'll have to compile a list of files and directories of interest. There is no "one size fits all" configuration
 that we could recommend, or even a decent boilerplate. Examples below should give an idea of what to look after.
-
+>
 > 🏙️ While having a single DaemonSet sounds like a fair option, it is not uncommon for nodes to assume different roles,
 and as a result hold different sets of certificate files requiring targeted x509-certificate-exporter configurations.
 For example, with the help of node selectors and tolerations, we can have nodes of the control plane run their own
@@ -107,6 +116,7 @@ Then you'll need to create at least one DaemonSet in `hostPathsExporter.daemonSe
 
 This is the most basic configuration. It will create one DaemonSet named `nodes` with an empty configuration. Exporters
 won't export no certificate metric.
+
 ```yaml
 hostPathsExporter:
   daemonSets:
@@ -114,6 +124,7 @@ hostPathsExporter:
 ```
 
 Moving on, we can add all flavors of "watch" settings :
+
 * `watchDirectories` : to monitor all PEM files found in a host directory (no recursion in subdirectories)
 * `watchFiles` : to target known file paths, this is highly recommended over the directory option when file paths are
 predictable
@@ -121,6 +132,7 @@ predictable
 
 This will create a DaemonSet able to monitor the same files on all nodes. It could fit a typical kubeadm cluster with no
 control plane dedicated nodes :
+
 ```yaml
 hostPathsExporter:
   daemonSets:
@@ -144,6 +156,7 @@ hostPathsExporter:
 ```
 
 Dedicated nodes will require other DaemonSets. Based on our kubeadm example, it could be extended like this :
+
 ```yaml
 hostPathsExporter:
   podAnnotations:
@@ -186,6 +199,7 @@ hostPathsExporter:
 ```
 
 With this last configuration we demonstrated :
+
 * using `podAnnotations` right under `hostPathsExporter`, it will apply to all `hostPathsExporter.daemonSets` because
 they don't override that setting
 * two DaemonSets, `cp` for control plane nodes, and `nodes` for regular ones
@@ -201,24 +215,31 @@ The operator is usually installed with [kube-prometheus](https://github.com/prom
 the Kubernetes distribution.
 
 When it's missing and you don't have the CRD, helm will raise one of this error :
-```
+
+```text
 Error: unable to build kubernetes objects from release manifest: [unable to recognize "": no matches for kind "PrometheusRule" in version "monitoring.coreos.com/v1", unable to recognize "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"]
 ```
+
 Add the following values to disable creation of `ServiceMonitors` and `PrometheusRules` :
+
 ```yaml
 prometheusServiceMonitor:
   create: false
 prometheusRules:
   create: false
 ```
+
 Then perhaps you would need Pod annotations to work with the Kubernetes service discovery in Prometheus :
+
 ```yaml
 secretsExporter:
   podAnnotations:
     prometheus.io/port: "9793"
     prometheus.io/scrape: "true"
 ```
+
 Also in such case the headless service may not serve any purpose and can be removed :
+
 ```yaml
 service:
   create: false
@@ -226,7 +247,7 @@ service:
 
 > ℹ️ [Chart Values](#values) provide a few knobs to control Prometheus rules, such as numbers of days before
 certificate expiration for warning and critical alerts are triggered.
-
+>
 > ⚠️ Special alert `X509ExporterReadErrors` is meant to report anomalies with the exporter, such as API authorization
 issues or unreadable files. If the Kubernetes API is unstable it could be disabled with
 `prometheusRules.alertOnReadErrors`.\
@@ -240,30 +261,35 @@ Create a file named `x509-certificate-exporter.values.yaml` with your values, as
 [Chart Values](#values).
 
 Add our Charts repository :
-```
-$ helm repo add enix https://charts.enix.io
+
+```sh
+helm repo add enix https://charts.enix.io
 ```
 
 Install the x509-certificate-exporter with release name `x509-certificate-exporter` :
-```
-$ helm install x509-certificate-exporter enix/x509-certificate-exporter --values x509-certificate-exporter.values.yaml
+
+```sh
+helm install x509-certificate-exporter enix/x509-certificate-exporter --values x509-certificate-exporter.values.yaml
 ```
 
 The `upgrade` command is used to change configuration when values are modified :
-```
-$ helm upgrade x509-certificate-exporter enix/x509-certificate-exporter --values x509-certificate-exporter.values.yaml
+
+```sh
+helm upgrade x509-certificate-exporter enix/x509-certificate-exporter --values x509-certificate-exporter.values.yaml
 ```
 
 ### Upgrading the Chart
 
 Update Helm repositories :
-```
-$ helm repo update
+
+```sh
+helm repo update
 ```
 
 Upgrade release names `x509-certificate-exporter` to the latest version :
-```
-$ helm upgrade x509-certificate-exporter enix/x509-certificate-exporter
+
+```sh
+helm upgrade x509-certificate-exporter enix/x509-certificate-exporter
 ```
 
 ## 📝 Notes
@@ -294,10 +320,12 @@ directory. This is dynamic for each metrics scrape and will track symlink change
 A typical case of this is the Kubelet client certificate that now uses a symlink pointing to a new file each time the
 certificate gets rotated.
 For instance you may be using :
+
 ```yaml
 watchFiles:
 - /var/lib/kubelet/pki/kubelet-client-current.pem
 ```
+
 Because all client certificates reside in the `pki` directory, the exporter will be able to read
 `kubelet-client-current.pem` and it's target properly. Even though the Operating System cannot resolve the link itself
 in the container namespace.
@@ -305,7 +333,7 @@ in the container namespace.
 ## Values
 
 | Key | Type | Default | Description |
-|-----|------|---------|-------------|
+| ----- | ------ | --------- | ------------- |
 | nameOverride | string | `""` | Partially override x509-certificate-exporter.fullname template (will prepend the release name) |
 | fullnameOverride | string | `""` | Fully override x509-certificate-exporter.fullname template |
 | extraDeploy | list | `[]` | Additional objects to deploy with the release |
@@ -378,12 +406,12 @@ in the container namespace.
 | prometheusServiceMonitor.scrapeInterval | string | `"60s"` | Target scrape interval set in the ServiceMonitor |
 | prometheusServiceMonitor.scrapeTimeout | string | `"30s"` | Target scrape timeout set in the ServiceMonitor |
 | prometheusServiceMonitor.extraLabels | object | `{}` | Additional labels to add to ServiceMonitor objects |
-| prometheusServiceMonitor.relabelings | list | `[]` | Relabel config for the ServiceMonitor, see: https://coreos.com/operators/prometheus/docs/latest/api.html#relabelconfig |
+| prometheusServiceMonitor.relabelings | list | `[]` | Relabel config for the ServiceMonitor, see: <https://coreos.com/operators/prometheus/docs/latest/api.html#relabelconfig> |
 | prometheusPodMonitor.create | bool | `false` | Should a PodMonitor object be installed to scrape this exporter. For prometheus-operator (kube-prometheus) users. |
 | prometheusPodMonitor.scrapeInterval | string | `"60s"` | Target scrape interval set in the PodMonitor |
 | prometheusPodMonitor.scrapeTimeout | string | `"30s"` | Target scrape timeout set in the PodMonitor |
 | prometheusPodMonitor.extraLabels | object | `{}` | Additional labels to add to PodMonitor objects |
-| prometheusPodMonitor.relabelings | list | `[]` | Relabel config for the PodMonitor, see: https://coreos.com/operators/prometheus/docs/latest/api.html#relabelconfig |
+| prometheusPodMonitor.relabelings | list | `[]` | Relabel config for the PodMonitor, see: <https://coreos.com/operators/prometheus/docs/latest/api.html#relabelconfig> |
 | prometheusRules.create | bool | `true` | Should a PrometheusRule object be installed to alert on certificate expiration. For prometheus-operator (kube-prometheus) users. |
 | prometheusRules.alertOnReadErrors | bool | `true` | Should the X509ExporterReadErrors alerting rule be created to notify when the exporter can't read files or authenticate with the Kubernetes API. It aims at preventing undetected misconfigurations and monitoring regressions. |
 | prometheusRules.readErrorsSeverity | string | `"warning"` | Severity for the X509ExporterReadErrors alerting rule |
@@ -427,7 +455,7 @@ in the container namespace.
 
 ## ⚖️ License
 
-```
+```text
 Copyright (c) 2020, 2021 ENIX
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

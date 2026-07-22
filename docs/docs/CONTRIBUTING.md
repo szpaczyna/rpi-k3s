@@ -24,7 +24,7 @@ Here are a few tips for writing *great* bug reports:
 * Only include one bug per issue. If you have discovered two bugs, please file two issues
 * Even if you don't know how to fix the bug, including a failing test may help others track it down
 
-**If you find a security vulnerability, do not open an issue. Please email security@github.com instead.**
+**If you find a security vulnerability, do not open an issue. Please email <security@github.com> instead.**
 
 ## How to suggest a feature or enhancement
 

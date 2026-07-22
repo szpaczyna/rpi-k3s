@@ -5,32 +5,32 @@ layout: default
 ## Workloads
 
 - Apps/Helm Charts:
-    - [bitwarden](cluster/helm/bitwarden) - Passwords Management
-    - [gitea](cluster/helm/gitea) - Git with a cup of tea
-    - [kanboard](cluster/helm/kanboard) - Kanban project management software
-    - [nextcloud](cluster/helm/nextcloud) - Personal cloud service
-    - [postgresql](cluster/helm/postgresql) - PostgreSQL database
-    - [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
-    - [influxdb](cluster/helm/influxdb) - Database for Apple Health exports
-    - [shpaq-org](cluster/helm/shpaq-org) - Personal website
-    - [media-stack](cluster/helm/media-stack) - Transmission, Radarr, Lidarr, Sonarr, Bazarr, Jackett, Calibre-web
-    - [grafana](cluster/helm/grafana) - Grafana (for dashboards)
+  - [bitwarden](cluster/helm/bitwarden) - Passwords Management
+  - [gitea](cluster/helm/gitea) - Git with a cup of tea
+  - [kanboard](cluster/helm/kanboard) - Kanban project management software
+  - [nextcloud](cluster/helm/nextcloud) - Personal cloud service
+  - [postgresql](cluster/helm/postgresql) - PostgreSQL database
+  - [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
+  - [influxdb](cluster/helm/influxdb) - Database for Apple Health exports
+  - [shpaq-org](cluster/helm/shpaq-org) - Personal website
+  - [media-stack](cluster/helm/media-stack) - Transmission, Radarr, Lidarr, Sonarr, Bazarr, Jackett, Calibre-web
+  - [grafana](cluster/helm/grafana) - Grafana (for dashboards)
 
 - Apps/YAML:
-    - [unifi](cluster/apps/unifi) - Unifi controller/prometheus poller
-    - [gentoo](cluster/apps/gentoo) - cross-compiler and playground
+  - [unifi](cluster/apps/unifi) - Unifi controller/prometheus poller
+  - [gentoo](cluster/apps/gentoo) - cross-compiler and playground
 
 - System:
-    - [prometheus](cluster/helm/prometheus) - Prometheus monitoring system
-    - [cert-manager](cluster/helm/cert-manager) - Automated letsencrypt broker
-    - [metallb](cluster/core/networking) - Load-balancer for bare-metal with BGP
-    - [longhorn](cluster/helm/longhorn) - Distributed storage system
-    - [ingress-nginx](cluster/helm/ingress-nginx) - Ingress controller
-    - [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) - Certificates monitoring
-    - [openweather-exporter](cluster/helm/openweather) - OpenWeather API exporter
-    - [loki](cluster/helm/loki) - Log aggregation system
-    - [event-exporter](cluster/helm/event-exporter) - Kubernetes events exporter
-    - [local-path-provisioner](cluster/helm/local-path-provisioner) - Local storage provisioner
+  - [prometheus](cluster/helm/prometheus) - Prometheus monitoring system
+  - [cert-manager](cluster/helm/cert-manager) - Automated letsencrypt broker
+  - [metallb](cluster/core/networking) - Load-balancer for bare-metal with BGP
+  - [longhorn](cluster/helm/longhorn) - Distributed storage system
+  - [ingress-nginx](cluster/helm/ingress-nginx) - Ingress controller
+  - [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) - Certificates monitoring
+  - [openweather-exporter](cluster/helm/openweather) - OpenWeather API exporter
+  - [loki](cluster/helm/loki) - Log aggregation system
+  - [event-exporter](cluster/helm/event-exporter) - Kubernetes events exporter
+  - [local-path-provisioner](cluster/helm/local-path-provisioner) - Local storage provisioner
 
 
 ## Docker Stuff
