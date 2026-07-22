@@ -1,0 +1,48 @@
+cluster/helm/x509-certificate-exporter/.helmignore
+  s_3519d611ab7456::t_6670db300f1db2 22-25
+cluster/helm/kanboard/.helmignore
+  s_3519d611ab7456::t_2a4665ea54d648 22-25
+cluster/helm/traefik/deploy
+  s_3519d611ab7456::t_7adefcc089388b 1-13,15
+  s_3519d611ab7456::t_8a410966d5d275 14
+cluster/helm/version-checker/.helmignore
+  s_3519d611ab7456::t_de019cb19dcc1f 1-25
+cluster/helm/unifipoller/.helmignore
+  s_3519d611ab7456::t_f8c98d85a9f912 1-25
+cluster/helm/gitea/.helmignore
+  s_3519d611ab7456::t_ee230628f73ac8 15,21-25
+cluster/helm/bitwarden/.helmignore
+  s_3519d611ab7456::t_250605094a0f85 22-25
+cluster/helm/openweather/.helmignore
+  s_3519d611ab7456::t_369e1f7f06e2de 1-25
+cluster/helm/local-path-provisioner/.helmignore
+  s_3519d611ab7456::t_935d58b7ae83ee 15,22-25
+cluster/helm/shpaq-org/.helmignore
+  s_3519d611ab7456::t_b34e5c5f7283fa 1-25
+cluster/helm/whoops/.helmignore
+  s_3519d611ab7456::t_1f88ddc21499dd 1-25
+cluster/helm/media-stack/.helmignore
+  s_3519d611ab7456::t_24a14a14071d1d 1-25
+cluster/helm/event-exporter/.helmignore
+  s_3519d611ab7456::t_4f5fc6aa1a974b 1-25
+cluster/helm/cert-manager/deploy
+  s_3519d611ab7456::t_80a41eb07addd2 1-23
+cluster/helm/booklore/.helmignore
+  s_3519d611ab7456::t_4ab34804a92ee0 1-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "6cbb158c1b76b25ac4a0cbf118f5ac7dba03d972",
+  "prompts": {},
+  "sessions": {
+    "s_3519d611ab7456": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_467dd17d-2c1b-4318-b766-3994db64045f",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
