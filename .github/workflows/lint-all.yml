@@ -36,7 +36,7 @@ jobs:
       - uses: actions/checkout@v5
       - name: markdownlint (informational)
         continue-on-error: true
-        uses: DavidAnson/markdownlint-cli2-action@v19
+        uses: DavidAnson/markdownlint-cli2-action@v24
         with:
           globs: '**/*.md !CHANGELOG.md'
           config: '.markdownlint.json'
