@@ -1,0 +1,20 @@
+cluster/helm/influxdb/deploy
+  s_3519d611ab7456::t_90284e26ede4f5 2,4-7,9-11,13,15-16,18-19
+  s_3519d611ab7456::t_4429ff496c307f 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "3deadf9b5d3ef948c1c72431f345328013ac9766",
+  "prompts": {},
+  "sessions": {
+    "s_3519d611ab7456": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_467dd17d-2c1b-4318-b766-3994db64045f",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
