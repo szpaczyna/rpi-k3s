@@ -1,9 +1,11 @@
 #!/bin/bash
+set -euo pipefail
 
-helm upgrade \
-    --install \
-    bitwarden \
-    --namespace apps \
-    --values values-public.yaml \
-    --values <(sops -d ../../secrets/bitwarden-values.yaml) \
-    .
+NAMESPACE="apps"
+RELEASE_NAME="bitwarden"
+
+helm upgrade --install "${RELEASE_NAME}" . \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values-public.yaml \
+  --values <(sops -d ../../secrets/bitwarden-values.yaml)

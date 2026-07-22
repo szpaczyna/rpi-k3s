@@ -1,24 +1,19 @@
 #!/bin/bash
+set -euo pipefail
 
-# Check if bitnami repo is already added
-if ! helm repo list | grep -q "bitnami"; then
-    echo "Adding bitnami Helm repository..."
-    helm repo add bitnami https://charts.bitnami.com/bitnami
-else
-    echo "bitnami repository already exists"
-fi
+NAMESPACE="apps"
+RELEASE_NAME="morphine"
+CHART="bitnami/postgresql"
 
-# Update helm repositories
-#helm repo update
+# Add helm repo
+helm repo add bitnami https://charts.bitnami.com/bitnami 2>/dev/null || true
+helm repo update
 
-#helm repo add bitnami https://charts.bitnami.com/bitnami
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values-public.yaml \
+  --values <(sops -d ../../secrets/postgresql-values.yaml)
 
-helm upgrade \
-    --install morphine \
-    bitnami/postgresql \
-    --namespace apps \
-    --values values-public.yaml \
-    --values <(sops -d ../../secrets/postgresql-values.yaml)
-
-kubectl apply -f <(sops -d ../../secrets/postgresql-pgpass.yaml)
-kubectl apply -f backup-job.yaml
+kubectl apply -f <(sops -d ../../secrets/postgresql-pgpass.yaml) -n "${NAMESPACE}"
+kubectl apply -f backup-job.yaml -n "${NAMESPACE}"

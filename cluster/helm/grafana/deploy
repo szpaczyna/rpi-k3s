@@ -1,24 +1,21 @@
 #!/bin/bash
+set -euo pipefail
 
-# Check if grafana repo is already added
-if ! helm repo list | grep -q "grafana"; then
-    echo "Adding grafana Helm repository..."
-    helm repo add grafana https://grafana.github.io/helm-charts
-    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-else
-    echo "grafana repository already exists"
-fi
+NAMESPACE="monitoring"
+RELEASE_NAME="grafana"
+CHART="grafana/grafana"
+VERSION="10.3.0"
 
-# Update helm repositories
+# Add helm repo
+helm repo add grafana https://grafana.github.io/helm-charts 2>/dev/null || true
 helm repo update
 
-kubectl apply -f <(sops -d ../../secrets/grafana-admin-creds.yaml)
-kubectl apply -f <(sops -d ../../secrets/grafana-backup-secret.yaml)
-kubectl apply -f backup-cronjob.yaml
+kubectl apply -f <(sops -d ../../secrets/grafana-admin-creds.yaml) -n "${NAMESPACE}"
+kubectl apply -f <(sops -d ../../secrets/grafana-backup-secret.yaml) -n "${NAMESPACE}"
+kubectl apply -f backup-cronjob.yaml -n "${NAMESPACE}"
 
-helm upgrade \
-    --install grafana \
-    grafana/grafana \
-    --namespace monitoring \
-    --values values.yaml \
-    --version 10.3.0
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml \
+  --version "${VERSION}"

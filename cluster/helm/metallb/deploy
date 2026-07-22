@@ -1,22 +1,17 @@
 #!/bin/bash
+set -euo pipefail
 
-# Check if metallb repo is already added
-if ! helm repo list | grep -q "metallb"; then
-    echo "Adding metallb Helm repository..."
-    helm repo add metallb https://metallb.github.io/metallb
-else
-    echo "metallb repository already exists"
-fi
+NAMESPACE="metallb-system"
+RELEASE_NAME="metallb"
+CHART="metallb/metallb"
 
-# Update helm repositories
+# Add helm repo
+helm repo add metallb https://metallb.github.io/metallb 2>/dev/null || true
 helm repo update
 
-helm upgrade --install \
-    metallb metallb/metallb \
-    --create-namespace \
-    -n metallb-system \
-    -f values.yaml 
-
-# --version 0.15.3
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml
 
 kubectl apply -f resources.yaml

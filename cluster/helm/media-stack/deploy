@@ -1,12 +1,13 @@
 #!/bin/bash
-sops -d --output media-secret.yaml ../../secrets/media-secret.yaml
-sops -d --output media-exporter-secret.yaml ../../secrets/media-exporter-secret.yaml
+set -euo pipefail
 
-kubectl apply -f media-exporter-secret.yaml
-kubectl apply -f media-secret.yaml
+NAMESPACE="media"
+RELEASE_NAME="media-stack"
 
-helm upgrade --install media-stack --namespace media --values values.yaml .
+kubectl apply -f <(sops -d ../../secrets/media-secret.yaml) -n "${NAMESPACE}"
+kubectl apply -f <(sops -d ../../secrets/media-exporter-secret.yaml) -n "${NAMESPACE}"
 
-
-rm -rf media-secret.yaml
-rm -rf media-exporter-secret.yaml
+helm upgrade --install "${RELEASE_NAME}" . \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml

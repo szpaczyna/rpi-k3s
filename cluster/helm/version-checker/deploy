@@ -1,8 +1,11 @@
 #!/bin/bash
+set -euo pipefail
 
-helm upgrade \
-    --install version-checker \
-    --namespace apps \
-    --values values-public.yaml \
-    --values <(sops -d ../../secrets/version-checker-values.yaml) \
-    .
+NAMESPACE="apps"
+RELEASE_NAME="version-checker"
+
+helm upgrade --install "${RELEASE_NAME}" . \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values-public.yaml \
+  --values <(sops -d ../../secrets/version-checker-values.yaml)

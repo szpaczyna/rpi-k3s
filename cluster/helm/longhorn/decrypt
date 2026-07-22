@@ -1,2 +1,4 @@
 #!/bin/bash
-sops -d ../../secrets/longhorn-auth.yaml > 00-auth.yaml
+set -euo pipefail
+
+sops -d --output longhorn-auth.yaml ../../secrets/longhorn-auth.yaml

@@ -1,19 +1,11 @@
 #!/bin/bash
+set -euo pipefail
 
-# Check if unpoller repo is already added
-#if ! helm repo list | grep -q "unpoller"; then
-#    echo "Adding unpoller Helm repository..."
-#    helm repo add unpoller https://unpoller.github.io/helm-chart
-#
-#else
-#    echo "unpoller repository already exists"
-#fi
+NAMESPACE="monitoring"
+RELEASE_NAME="unifipoller"
 
-#helm repo update
-
-helm upgrade \
-    --install unifipoller \
-    --namespace monitoring \
-    --values values-public.yaml \
-    --values <(sops -d ../../secrets/unifipoller-values.yaml) \
-    .
+helm upgrade --install "${RELEASE_NAME}" . \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values-public.yaml \
+  --values <(sops -d ../../secrets/unifipoller-values.yaml)

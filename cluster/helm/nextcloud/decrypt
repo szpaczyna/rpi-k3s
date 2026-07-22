@@ -1,5 +1,4 @@
 #!/bin/bash
+set -euo pipefail
 
-sops -d \
-    --output secret.yaml \
-    ../../secrets/nextcloud-secret.yaml
+sops -d --output secret.yaml ../../secrets/nextcloud-secret.yaml

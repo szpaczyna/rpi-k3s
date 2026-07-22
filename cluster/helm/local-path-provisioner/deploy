@@ -1,7 +1,10 @@
 #!/bin/bash
+set -euo pipefail
 
-helm upgrade \
-  --install local-path-provisioner \
-  --namespace kube-system \
-  --values values.yaml \
-  .
+NAMESPACE="kube-system"
+RELEASE_NAME="local-path-provisioner"
+
+helm upgrade --install "${RELEASE_NAME}" . \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml

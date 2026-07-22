@@ -1,23 +1,18 @@
 #!/bin/bash
+set -euo pipefail
 
-# Check if nextcloud repo is already added
-if ! helm repo list | grep -q "nextcloud"; then
-    echo "Adding nextcloud Helm repository..."
-    helm repo add nextcloud https://nextcloud.github.io/helm/
-else
-    echo "nextcloud repository already exists"
-fi
+NAMESPACE="apps"
+RELEASE_NAME="cloud"
+CHART="nextcloud/nextcloud"
 
-# Update helm repositories
+# Add helm repo
+helm repo add nextcloud https://nextcloud.github.io/helm/ 2>/dev/null || true
 helm repo update
 
-# helm repo add nextcloud https://nextcloud.github.io/helm/
-sops -d \
-    --output secret.yaml \
-    ../../secrets/nextcloud-secret.yaml
+kubectl apply -f <(sops -d ../../secrets/nextcloud-secret.yaml) -n "${NAMESPACE}"
+kubectl apply -f local-storage.yaml -n "${NAMESPACE}"
 
-kubectl apply -f secret.yaml -n apps
-kubectl apply -f local-storage.yaml -n apps
-helm upgrade --install cloud nextcloud/nextcloud -n apps -f values.yaml
-
-rm -rf secret.yaml
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml

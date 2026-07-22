@@ -1,7 +1,10 @@
 #!/bin/bash
+set -euo pipefail
 
-helm upgrade \
-  --install x509-certificate-exporter \
-  --namespace monitoring \
-  --values values.yaml \
-  .
+NAMESPACE="monitoring"
+RELEASE_NAME="x509-certificate-exporter"
+
+helm upgrade --install "${RELEASE_NAME}" . \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml

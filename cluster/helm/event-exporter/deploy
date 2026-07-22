@@ -1,9 +1,10 @@
 #!/bin/bash
+set -euo pipefail
 
-#helm repo add kubernetes-event-exporter https://resmoio.github.io/kubernetes-event-exporter
-##helm repo update
-helm upgrade --install \
-  event-exporter \
-  -n monitoring \
-  -f ./values.yaml \
-  .
+NAMESPACE="monitoring"
+RELEASE_NAME="event-exporter"
+
+helm upgrade --install "${RELEASE_NAME}" . \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml

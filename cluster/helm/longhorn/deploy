@@ -1,23 +1,19 @@
 #!/bin/bash
+set -euo pipefail
 
-# Check if longhorn repo is already added
-if ! helm repo list | grep -q "longhorn"; then
-    echo "Adding longhorn Helm repository..."
-    helm repo add longhorn https://charts.longhorn.io
-else
-    echo "longhorn repository already exists"
-fi
+NAMESPACE="longhorn-system"
+RELEASE_NAME="longhorn"
+CHART="longhorn/longhorn"
+VERSION="${1:?Usage: ./deploy <version>}"
 
-# Update helm repositories
-#helm repo update
+# Add helm repo
+helm repo add longhorn https://charts.longhorn.io 2>/dev/null || true
+helm repo update
 
-helm upgrade \
-    --install longhorn \
-    -n longhorn-system \
-    longhorn/longhorn \
-    --create-namespace \
-    --version $1 \
-    -f values.yaml
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml \
+  --version "${VERSION}"
 
-kubectl apply -f <(sops -d ../../secrets/longhorn-auth.yaml) -n longhorn-system
-
+kubectl apply -f <(sops -d ../../secrets/longhorn-auth.yaml) -n "${NAMESPACE}"

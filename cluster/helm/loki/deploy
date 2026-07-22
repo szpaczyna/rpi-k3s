@@ -1,34 +1,25 @@
 #!/bin/bash
+set -euo pipefail
 
-# Check if grafana and fluent repos are already added
-repos=(
-    grafana=https://grafana.github.io/helm-charts
-    fluent=https://fluent.github.io/helm-charts
-)
-for entry in "${repos[@]}"; do
-    name="${entry%%=*}"
-    url="${entry#*=}"
-    if ! helm repo list | grep -q "$name"; then
-        echo "Adding $name Helm repository..."
-        helm repo add "$name" "$url"
-    else
-        echo "$name repository already exists"
-    fi
-done
+NAMESPACE="logging"
+LOKI_VERSION="6.49.0"
+FLUENT_BIT_VERSION="0.54.0"
 
-# Update helm repos
+# Add helm repos
+helm repo add grafana https://grafana.github.io/helm-charts 2>/dev/null || true
+helm repo add fluent https://fluent.github.io/helm-charts 2>/dev/null || true
 helm repo update
 
 # Install loki
-helm upgrade --install loki --create-namespace --namespace logging grafana/loki -f loki-values.yaml --version=6.49.0
+helm upgrade --install loki grafana/loki \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values loki-values.yaml \
+  --version "${LOKI_VERSION}"
 
 # Install fluent-bit
-helm upgrade --install fluent-bit --namespace logging fluent/fluent-bit -f fluentbit-values.yaml --version=0.54.0
-
-# Install promtail
-# helm upgrade --install promtail --namespace logging grafana/promtail -f promtail-values.yaml --version=6.17.1
-#
-
-# Install alloy
-# helm upgrade --install alloy --namespace logging grafana/alloy -f alloy-values.yaml --version=1.5.0
-#
+helm upgrade --install fluent-bit fluent/fluent-bit \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values fluentbit-values.yaml \
+  --version "${FLUENT_BIT_VERSION}"

@@ -1,4 +1,4 @@
 #!/bin/bash
-sops -d \
-    --output  values.yaml \
-    ../../secrets/postgresql-values.yaml
+set -euo pipefail
+
+sops -d --output values.yaml ../../secrets/postgresql-values.yaml

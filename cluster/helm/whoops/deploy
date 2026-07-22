@@ -1,8 +1,11 @@
 #!/bin/bash
+set -euo pipefail
 
-helm upgrade \
-  --install whoops \
-  --namespace apps \
+NAMESPACE="apps"
+RELEASE_NAME="whoops"
+
+helm upgrade --install "${RELEASE_NAME}" . \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
   --values values-public.yaml \
-  --values <(sops -d ../../secrets/whoops-values.yaml) \
-  .
+  --values <(sops -d ../../secrets/whoops-values.yaml)

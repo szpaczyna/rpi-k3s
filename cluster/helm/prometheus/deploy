@@ -1,27 +1,19 @@
 #!/bin/bash
+set -euo pipefail
 
-# Check if prometheus-community repo is already added
-if ! helm repo list | grep -q "prometheus-community"; then
-    echo "Adding prometheus-community Helm repository..."
-    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-else
-    echo "prometheus-community repository already exists"
-fi
+NAMESPACE="monitoring"
+RELEASE_NAME="prometheus"
+CHART="prometheus-community/prometheus"
+VERSION="29.13.0"
 
-# Update helm repositories
+# Add helm repo
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts 2>/dev/null || true
 helm repo update
 
-#sops -d --output auth-secret.yaml ../../secrets/prometheus-secret.yaml
-#sops -d --output etcd-secret.yaml ../../secrets/prometheus-etcd-secret.yaml
+kubectl apply -f <(sops -d ../../secrets/prometheus-secret.yaml) -n "${NAMESPACE}"
 
-kubectl apply -f <(sops -d ../../secrets/prometheus-secret.yaml)
-#kubectl apply -f etcd-secret.yaml
-
-helm upgrade \
-    --install prometheus \
-    prometheus-community/prometheus \
-    --namespace monitoring \
-    --values values.yaml \
-    --version=29.13.0
-
-
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml \
+  --version "${VERSION}"

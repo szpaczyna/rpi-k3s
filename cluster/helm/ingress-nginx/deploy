@@ -1,14 +1,15 @@
 #!/bin/bash
+set -euo pipefail
 
-# Check if ingress-nginx repo is already added
-if ! helm repo list | grep -q "ingress-nginx"; then
-    echo "Adding ingress-nginx Helm repository..."
-    helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-else
-    echo "ingress-nginx repository already exists"
-fi
+NAMESPACE="kube-system"
+RELEASE_NAME="ingress-nginx"
+CHART="ingress-nginx/ingress-nginx"
 
-# Update helm repositories
+# Add helm repo
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx 2>/dev/null || true
 helm repo update
 
-helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace kube-system --values values.yaml
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml
