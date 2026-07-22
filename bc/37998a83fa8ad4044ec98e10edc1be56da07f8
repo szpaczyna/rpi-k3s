@@ -1,0 +1,21 @@
+cluster/varia/prometheus-hpa.yaml
+  s_3519d611ab7456::t_53cd0ea1827b8f 11,15-20,31,34-40
+cluster/backup/backup-cron.yaml
+  s_3519d611ab7456::t_9fb0ff53ed375e 6,19-26,29-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "bc37998a83fa8ad4044ec98e10edc1be56da07f8",
+  "prompts": {},
+  "sessions": {
+    "s_3519d611ab7456": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_467dd17d-2c1b-4318-b766-3994db64045f",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
