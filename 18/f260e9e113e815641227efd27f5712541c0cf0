@@ -1,0 +1,19 @@
+.github/copilot-instructions.md
+  s_d56dba92a00897::t_d81b37a854fc28 4,11,20,29,38,46,53,57,61,72,75,80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "18f260e9e113e815641227efd27f5712541c0cf0",
+  "prompts": {},
+  "sessions": {
+    "s_d56dba92a00897": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_a2f51ff5-8b33-4195-b85a-b27e5ee29e82",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
