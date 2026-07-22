@@ -1,0 +1,93 @@
+cluster/helm/media-stack/deploy
+  s_3519d611ab7456::t_f5bdb4403c75bb 2,4-5,7-8,10-11,13
+  s_3519d611ab7456::t_196d1695c77aca 12
+cluster/helm/nextcloud/deploy
+  s_3519d611ab7456::t_9230cde63b9659 17
+  s_3519d611ab7456::t_b456dc6252671b 2,4-6,8-9,12-13,15-16,18
+cluster/helm/x509-certificate-exporter/deploy
+  s_3519d611ab7456::t_1924bace6e85d4 9
+  s_3519d611ab7456::t_9dbc6aa2a83818 2,4-8,10
+cluster/helm/openweather/deploy
+  s_3519d611ab7456::t_17f20f431e7d67 9
+  s_3519d611ab7456::t_23c5ca7197d352 2-8,10-11
+cluster/helm/kanboard/deploy
+  s_3519d611ab7456::t_b5d22581566f9a 9
+  s_3519d611ab7456::t_b39941a374dde7 2,4-8,11
+cluster/backup/velero/deploy
+  s_3519d611ab7456::t_b2ba9332a0cd89 2,7-23
+cluster/helm/shpaq-org/deploy
+  s_3519d611ab7456::t_cdd11b06df6673 2,4-8,10
+  s_3519d611ab7456::t_2148737840f2ab 9
+cluster/helm/prometheus/deploy
+  s_3519d611ab7456::t_588ee3e1e49f9f 17
+  s_3519d611ab7456::t_ac7df02fcf666e 2,4-7,9-10,13,15-16,18-19
+cluster/helm/loki/deploy
+  s_3519d611ab7456::t_c8532edb93e3dd 23
+  s_3519d611ab7456::t_ba3120b90f39d0 2,4-6,8-10,14-18,21-22,24-25
+cluster/helm/version-checker/deploy
+  s_3519d611ab7456::t_6d46ff1d4cb557 9
+  s_3519d611ab7456::t_812313a737fe44 2,4-8,10-11
+cluster/helm/postgresql/decrypt
+  s_3519d611ab7456::t_b6fe3211a30279 2-4
+cluster/helm/whoops/deploy
+  s_3519d611ab7456::t_36b4e1050c8aea 9
+  s_3519d611ab7456::t_f6248aa62e7f46 2,4-8,11
+cluster/helm/local-path-provisioner/deploy
+  s_3519d611ab7456::t_9101e21bfbd96e 2,4-8,10
+  s_3519d611ab7456::t_8b648ab9ca03f1 9
+cluster/helm/longhorn/deploy
+  s_3519d611ab7456::t_f2283590e2b592 2,4-7,9-11,13-17,19
+cluster/helm/bitwarden/decrypt
+  s_3519d611ab7456::t_fe885ba00b228c 2-4
+cluster/helm/bitwarden/deploy
+  s_3519d611ab7456::t_5fe83819d6f37d 2,4-8,10-11
+  s_3519d611ab7456::t_8410cf260eb9d1 9
+cluster/helm/grafana/deploy
+  s_3519d611ab7456::t_a32e5ba9ebfe68 2,4-7,9-10,13-15,17-18,20-21
+  s_3519d611ab7456::t_b65fee4e694c0a 19
+cluster/helm/kanboard/decrypt
+  s_3519d611ab7456::t_ebfe2eb361179d 2-4
+cluster/helm/event-exporter/deploy
+  s_3519d611ab7456::t_4f6d4d8990209b 9
+  s_3519d611ab7456::t_f4daa69b897e4c 2,4-8,10
+cluster/helm/prometheus/decrypt
+  s_3519d611ab7456::t_f0d87ca3e922eb 2
+cluster/helm/longhorn/decrypt
+  s_3519d611ab7456::t_8db79dce1b0545 2-4
+cluster/helm/ingress-nginx/deploy
+  s_3519d611ab7456::t_60103067cfdd0b 14
+  s_3519d611ab7456::t_fe22c9a4fa6589 2,4-6,8-9,12-13,15
+cluster/helm/unifipoller/deploy
+  s_3519d611ab7456::t_404c621c00ff62 2,4-5,7-8,10-11
+  s_3519d611ab7456::t_80b19e7272a0eb 9
+cluster/helm/metallb/deploy
+  s_3519d611ab7456::t_3a8a94e3c07235 2,4-6,8-9,12-15
+cluster/helm/gitea/deploy
+  s_3519d611ab7456::t_55dc08f8ea7fc7 9
+  s_3519d611ab7456::t_473f4bb152ee1d 6-8
+  s_3519d611ab7456::t_8bb7754a348b97 10-11
+cluster/helm/booklore/deploy
+  s_3519d611ab7456::t_ddcd8f2a75c1ce 2,4-5,7-10,12
+  s_3519d611ab7456::t_0541bcfaae21f1 11
+cluster/helm/postgresql/deploy
+  s_3519d611ab7456::t_ec2d48b97b39e2 2,4-6,8-10,12-13,15-16,18-19
+  s_3519d611ab7456::t_00095c41fc8a5f 14
+cluster/helm/nextcloud/decrypt
+  s_3519d611ab7456::t_6df358cf4b9858 2,4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "27d074eecd85670d93ad740f77b9d5eb8061f23f",
+  "prompts": {},
+  "sessions": {
+    "s_3519d611ab7456": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_467dd17d-2c1b-4318-b766-3994db64045f",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
