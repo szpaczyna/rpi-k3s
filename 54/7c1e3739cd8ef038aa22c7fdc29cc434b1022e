@@ -1,0 +1,19 @@
+.github/workflows/lint-all.yml
+  s_7c4ae00dbcebba::t_715f8c4f0212b8 39,41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "547c1e3739cd8ef038aa22c7fdc29cc434b1022e",
+  "prompts": {},
+  "sessions": {
+    "s_7c4ae00dbcebba": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_6c1909ae-aa41-4051-8a1d-dadd5060c1c9",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
