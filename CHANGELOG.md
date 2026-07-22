@@ -1,4 +1,11 @@
 # Changelog
+## [0.5.4](https://github.com/szpaczyna/rpi-k3s/compare/v0.5.3...v0.5.4) (2026-07-22)
+
+
+### Bug Fixes
+
+* make linter happy ([d74204e](https://github.com/szpaczyna/rpi-k3s/commit/d74204e4600c5e2aee6c6973d880ebe6e94c7e0b))
+
 ## [0.5.3](https://github.com/szpaczyna/rpi-k3s/compare/v0.5.2...v0.5.3) (2026-07-22)
 
 
