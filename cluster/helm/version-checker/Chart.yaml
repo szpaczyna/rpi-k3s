@@ -1,8 +1,10 @@
-apiVersion: v1
-appVersion: "v0.10.0"
-version: "v0.6.1"
-description: A Helm chart for version-checker
-home: https://github.com/jetstack/version-checker
+---
+apiVersion: v2
 name: version-checker
+description: A Helm chart for version-checker
+type: application
+version: 0.6.1
+appVersion: "0.10.0"
+home: https://github.com/jetstack/version-checker
 maintainers:
   - name: davidcollom

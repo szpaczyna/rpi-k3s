@@ -1,24 +1,10 @@
-version: '0.0.1'
-appVersion: '3.8.0'
-annotations:
-  artifacthub.io/containsSecurityUpdates: 'false'
-  artifacthub.io/prerelease: 'false'
-  artifacthub.io/license: MIT
-  artifacthub.io/changes: ''
-  artifacthub.io/links: |
-    - name: Chart Sources
-      url: https://github.com/enix/x509-certificate-exporter/tree/master/deploy/charts/x509-certificate-exporter
-    - name: Application Sources
-      url: https://github.com/enix/x509-certificate-exporter
-    - name: Helm Repository
-      url: https://charts.enix.io
-    - name: Grafana Dashboard
-      url: https://grafana.com/grafana/dashboards/13922
-
+---
 apiVersion: v2
 name: x509-certificate-exporter
-type: application
 description: A Prometheus exporter for certificates focusing on expiration monitoring
+type: application
+version: 0.0.1
+appVersion: "3.21.0"
 keywords:
   - prometheus
   - exporter
