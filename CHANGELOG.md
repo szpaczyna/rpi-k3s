@@ -1,4 +1,16 @@
 # Changelog
+## [0.5.2](https://github.com/szpaczyna/rpi-k3s/compare/v0.5.1...v0.5.2) (2026-07-22)
+
+
+### Bug Fixes
+
+* added helmignore ([6cbb158](https://github.com/szpaczyna/rpi-k3s/commit/6cbb158c1b76b25ac4a0cbf118f5ac7dba03d972))
+* law and order - some sanitation and removed duplicates ([bc37998](https://github.com/szpaczyna/rpi-k3s/commit/bc37998a83fa8ad4044ec98e10edc1be56da07f8))
+* remove unused grafana json charts definitions ([9a95223](https://github.com/szpaczyna/rpi-k3s/commit/9a95223d5f54180dd889d420ae7c27437e0be507))
+* standardize chart.yaml for custom charts ([4867022](https://github.com/szpaczyna/rpi-k3s/commit/48670223248b1d529b3ce31db9e3915bc1325ef8))
+* standardize deploy and decrypt scripts ([3deadf9](https://github.com/szpaczyna/rpi-k3s/commit/3deadf9b5d3ef948c1c72431f345328013ac9766))
+* standardize deploy and decrypt scripts ([27d074e](https://github.com/szpaczyna/rpi-k3s/commit/27d074eecd85670d93ad740f77b9d5eb8061f23f))
+
 ## [0.5.1](https://github.com/szpaczyna/rpi-k3s/compare/v0.5.0...v0.5.1) (2026-06-27)
 
 
