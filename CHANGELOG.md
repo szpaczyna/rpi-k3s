@@ -1,4 +1,21 @@
 # Changelog
+## [0.6.0](https://github.com/szpaczyna/rpi-k3s/compare/v0.5.4...v0.6.0) (2026-07-22)
+
+
+### Features
+
+* direct shellcheck excluding encrypted and upstream files ([bb4ea20](https://github.com/szpaczyna/rpi-k3s/commit/bb4ea2069dc626e010e046bd33de6de29d7daab5))
+
+
+### Bug Fixes
+
+* cleared npm dependencies ([b31240f](https://github.com/szpaczyna/rpi-k3s/commit/b31240fc476314966f1a25698b1d8e89ea08e749))
+* make shellcheck happy ([63064a4](https://github.com/szpaczyna/rpi-k3s/commit/63064a4e7fdc973bf7e4a51718872c1f1da263fd))
+* reinitialized pre-commit | pre-commit fixes ([307c7d9](https://github.com/szpaczyna/rpi-k3s/commit/307c7d98da354223de6cb6bde0252bcc65215e49))
+* updated actions to andress node20 deprecation ([547c1e3](https://github.com/szpaczyna/rpi-k3s/commit/547c1e3739cd8ef038aa22c7fdc29cc434b1022e))
+* updated all deprecated actions ([c35bcd2](https://github.com/szpaczyna/rpi-k3s/commit/c35bcd234a312584a7fd40deac0b80ec70b09216))
+* updated markdownlint action ([4b48557](https://github.com/szpaczyna/rpi-k3s/commit/4b4855721f9ce18b8a57b78aa94cd3c21c0fcd1b))
+
 ## [0.5.4](https://github.com/szpaczyna/rpi-k3s/compare/v0.5.3...v0.5.4) (2026-07-22)
 
 

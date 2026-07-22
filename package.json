@@ -1,9 +1,8 @@
 {
   "name": "rpi-k3s",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "description": "Szpacze Gniazdo k3s",
   "main": "index.js",
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/szpaczyna/rpi-k3s.git"
