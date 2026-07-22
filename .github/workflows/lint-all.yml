@@ -50,14 +50,12 @@ jobs:
       - uses: actions/checkout@v7
       - name: ShellCheck
         continue-on-error: true
-        uses: reviewdog/action-shellcheck@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          shellcheck_flags: '-x'
-          path: '.'
-          exclude: './cluster/secrets/* ./scripts/wireguard.sh ./scripts/pihole_install.sh'
-          fail_level: 'none'
-          reporter: github-pr-check
+        run: |
+          find . -name '*.sh' -type f \
+            -not -path './cluster/secrets/*' \
+            -not -path './scripts/wireguard.sh' \
+            -not -path './scripts/pihole_install.sh' \
+            -print0 | xargs -0 shellcheck -x
 
   kubeconform:
     name: Kubeconform (Rendered Helm & Raw Manifests)
