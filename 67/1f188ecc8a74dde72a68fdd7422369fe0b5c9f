@@ -1,0 +1,24 @@
+README.md
+  s_7c4ae00dbcebba::t_f991e8b4d93203 8,26,33-34,52-54,60-62,73-75,86,88,90-101,103,105-109,113-117
+  s_7c4ae00dbcebba::t_7cadb0141f602a 63-72
+  s_7c4ae00dbcebba::t_a9417ce9f2da8d 40-51
+  s_7c4ae00dbcebba::t_d58c6b40334fe0 28-32,38-39,55-59,76-84
+  s_7c4ae00dbcebba::t_5f83019c0bc4e7 27
+  s_7c4ae00dbcebba::t_555b181fe0ef02 35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "671f188ecc8a74dde72a68fdd7422369fe0b5c9f",
+  "prompts": {},
+  "sessions": {
+    "s_7c4ae00dbcebba": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_6c1909ae-aa41-4051-8a1d-dadd5060c1c9",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
