@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+
+NAMESPACE="kube-system"
+RELEASE_NAME="traefik"
+CHART="traefik/traefik"
+
+# Add helm repo
+helm repo add traefik https://traefik.github.io/charts 2>/dev/null || true
+helm repo update
+
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml

@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+
+NAMESPACE="cert-manager"
+RELEASE_NAME="cert-manager"
+CHART="jetstack/cert-manager"
+VERSION="${1:?Usage: ./deploy <version>}"
+
+# Add helm repo
+helm repo add jetstack https://charts.jetstack.io 2>/dev/null || true
+helm repo update
+
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml \
+  --version "v${VERSION}"
+
+# Wait for cert-manager to be ready before applying issuers
+echo "Waiting 60s for cert-manager pods to be ready..."
+sleep 60
+
+kubectl apply -f letsencrypt-staging.yaml -f letsencrypt-production.yaml --validate=false

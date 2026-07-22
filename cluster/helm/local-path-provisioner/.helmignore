@@ -1,6 +1,4 @@
 # Patterns to ignore when building packages.
-# This supports shell glob matching, relative path matching, and
-# negation (prefixed with !). Only one pattern per line.
 .DS_Store
 # Common VCS dirs
 .git/
@@ -14,9 +12,14 @@
 *.swp
 *.bak
 *.tmp
+*.orig
 *~
 # Various IDEs
 .project
 .idea/
 *.tmproj
 .vscode/
+# Deploy scripts and secrets
+deploy
+decrypt
+README.md
