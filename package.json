@@ -3,17 +3,6 @@
   "version": "0.5.4",
   "description": "Szpacze Gniazdo k3s",
   "main": "index.js",
-  "dependencies": {
-    "merge": "^2.1.1"
-  },
-  "devDependencies": {
-    "@ryansonshine/cz-conventional-changelog": "^3.3.4",
-    "cross-spawn": "^7.0.6",
-    "ip": "^2.0.1",
-    "normalize-url": "^8.0.2",
-    "release-please": "^17.2.0",
-    "trim-newlines": "^5.0.0"
-  },
   "scripts": {
     "jsonlint": "jsonlint json/*/*.json",
     "yamllint": "yamllint cluster/*",
