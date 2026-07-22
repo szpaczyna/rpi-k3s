@@ -8,16 +8,16 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: StatefulSet
-    name: prometheus-k8s
+    name: prometheus-server
   minReplicas: 1
   maxReplicas: 2
   metrics:
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageValue: 512M
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageValue: 512M
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -28,7 +28,13 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: StatefulSet
-    name: prometheus-k8s
+    name: prometheus-server
   minReplicas: 1
   maxReplicas: 2
-  targetCPUUtilizationPercentage: 350
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
