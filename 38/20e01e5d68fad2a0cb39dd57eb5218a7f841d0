@@ -1,0 +1,20 @@
+renovate.json
+  s_26fddb6a6bfe73::t_70267a86107250 29-37
+  s_26fddb6a6bfe73::t_b8d946a356c22c 60-65
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.17",
+  "base_commit_sha": "3820e01e5d68fad2a0cb39dd57eb5218a7f841d0",
+  "prompts": {},
+  "sessions": {
+    "s_26fddb6a6bfe73": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_855a539e-880f-40a3-bcae-2b35cb7b0e5e",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
