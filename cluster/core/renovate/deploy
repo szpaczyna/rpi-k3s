@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
+SECRET_FILE="${REPO_ROOT}/cluster/secrets/renovate-secret.yaml"
+
+echo "==> Deploying renovate secret and cronjob"
+
+# Apply decrypted secret
+echo "--> Applying secret from ${SECRET_FILE}"
+kubectl apply -f <(sops -d "${SECRET_FILE}")
+
+# Apply cronjob
+echo "--> Applying cronjob"
+kubectl apply -f "${SCRIPT_DIR}/cronjob.yaml"
+
+echo "==> Done"
