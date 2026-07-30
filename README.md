@@ -8,6 +8,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 1.3em; font-weight: normal;">Home Cloud on Raspberry Pi(s)</span>
 <br>
 <br>
+<br>
 <p>
   <a href="https://github.com/szpaczyna/rpi-k3s/actions/workflows/lint-all.yml">
     <img src="https://github.com/szpaczyna/rpi-k3s/actions/workflows/lint-all.yml/badge.svg" alt="Lint & Validate" />
