@@ -6,7 +6,7 @@ image:  # @schema additionalProperties: false
   # -- Traefik image repository
   repository: rancher/mirrored-library-traefik
   # -- defaults to appVersion
-  tag: "v3.3.2"
+  tag: "3.7.8"
   # -- Traefik image pull policy
   pullPolicy: IfNotPresent
 
