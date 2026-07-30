@@ -6,7 +6,7 @@ additionalAnnotations: {}
 
 image:
   repository: quay.io/jetstack/version-checker
-  tag: v0.10.0
+  tag: v0.11.0
   pullPolicy: IfNotPresent
 
 service:
