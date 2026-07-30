@@ -67,5 +67,6 @@
   ],
 
   "automerge": false,
-  "prConcurrentLimit": 20
+  "prConcurrentLimit": 20,
+  "semanticCommits": "enabled"
 }
