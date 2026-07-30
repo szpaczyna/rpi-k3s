@@ -1,0 +1,23 @@
+cluster/helm/media-stack/templates/transmission-deployment.yaml
+  s_b3cc34d139cd6d::t_87df367dde7db1 23
+cluster/helm/media-stack/templates/generic-deployment.yaml
+  s_b3cc34d139cd6d::t_cfe60ccdb27f89 24
+cluster/helm/booklore/values.yaml
+  s_b3cc34d139cd6d::t_35904fbcd33498 45-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.17",
+  "base_commit_sha": "5c8792dd2975b2864d5e707aa0fbb9ebc8268ea0",
+  "prompts": {},
+  "sessions": {
+    "s_b3cc34d139cd6d": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_2205e1e7-a181-419e-b409-d42301ab9fdc",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
