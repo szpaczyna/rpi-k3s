@@ -68,5 +68,7 @@
 
   "automerge": false,
   "prConcurrentLimit": 20,
-  "semanticCommits": "enabled"
+  "semanticCommits": "enabled",
+  "semanticCommitType": "fix",
+  "semanticCommitScope": "deps"
 }
