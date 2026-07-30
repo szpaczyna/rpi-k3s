@@ -42,7 +42,8 @@ serviceAccount:
   annotations: {}
   name: ""
 
-podAnnotations: {}
+podAnnotations:
+  override-url.version-checker.io/mariadb: "ghcr.io/linuxserver/mariadb"
 podLabels: {}
 
 podSecurityContext:

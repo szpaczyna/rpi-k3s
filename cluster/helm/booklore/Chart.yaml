@@ -3,6 +3,6 @@ apiVersion: v2
 name: booklore
 description: A Helm chart for Booklore
 type: application
-version: 0.1.4
+version: 0.1.5
 appVersion: "1.18.5"
 home: https://github.com/booklore-app/booklore

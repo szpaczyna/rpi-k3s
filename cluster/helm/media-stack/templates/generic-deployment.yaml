@@ -21,6 +21,7 @@ spec:
       annotations:
         prometheus.io/port: "{{ $.Values.exportarr.service.port }}"
         prometheus.io/scrape: "true"
+        override-url.version-checker.io/{{ $name }}: "ghcr.io/linuxserver/{{ $name }}"
     spec:
       serviceAccountName: media
       dnsPolicy: ClusterFirst

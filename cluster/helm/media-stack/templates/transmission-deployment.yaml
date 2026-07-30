@@ -20,6 +20,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9190"
+        override-url.version-checker.io/transmission: "ghcr.io/linuxserver/transmission"
     spec:
       serviceAccountName: media
       dnsPolicy: ClusterFirst
