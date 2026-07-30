@@ -119,7 +119,7 @@ images:
     tag: "v0.3.0"
   calibreWeb:
     repository: "lscr.io/linuxserver/calibre-web"
-    tag: "0.6.25"
+    tag: "0.6.26"
   busybox:
     repository: "busybox"
     tag: "1.37.0"
