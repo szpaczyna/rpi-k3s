@@ -18,6 +18,14 @@
         "repository:\\s*[\"']?(?<depName>[^\"'\\s]+)[\"']?\\s*\\n\\s*(?:#.*\\n\\s*)*tag:\\s*[\"']?(?<currentValue>[^\"'\\s]+)[\"']?"
       ],
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/).*values.*\\.yaml$"],
+      "matchStrings": [
+        "image:\\s*(?<depName>[a-zA-Z0-9._\\-\\/]+):(?<currentValue>[^\\s\"']+)"
+      ],
+      "datasourceTemplate": "docker"
     }
   ],
 
@@ -35,7 +43,7 @@
 
   "packageRules": [
     {
-      "matchManagers": ["helm-values", "kubernetes"],
+      "matchManagers": ["helm-values", "kubernetes", "custom.regex"],
       "matchDatasources": ["docker"],
       "automerge": false,
       "separateMajorMinor": true,

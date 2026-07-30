@@ -82,8 +82,8 @@ prometheus:
 
   # the image to be used for the kuberbacproxy container
   rbacProxy:
-    repository: gcr.io/kubebuilder/kube-rbac-proxy
-    tag: v0.12.0
+    repository: quay.io/brancz/kube-rbac-proxy
+    tag: v0.22.1
     pullPolicy:
 
   # Prometheus Operator PodMonitors
