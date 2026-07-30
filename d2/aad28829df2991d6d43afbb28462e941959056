@@ -1,0 +1,24 @@
+cluster/helm/metallb/values.yaml
+  s_0250e307fe3abb::t_48556a005160b1 85-86
+renovate.json
+  s_0250e307fe3abb::t_e4698246fdd46f 21-28
+  s_0250e307fe3abb::t_9f15832f27bcc3 46
+cluster/helm/prometheus/values.yaml
+  s_0250e307fe3abb::t_75fec5fbc90673 720
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.17",
+  "base_commit_sha": "d2aad28829df2991d6d43afbb28462e941959056",
+  "prompts": {},
+  "sessions": {
+    "s_0250e307fe3abb": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_ee4aea33-37a0-44cc-bb06-d25257032183",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
