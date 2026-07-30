@@ -1,4 +1,37 @@
 # Changelog
+## [0.6.1](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.0...v0.6.1) (2026-07-30)
+
+
+### Bug Fixes
+
+* adjust renovate config for wider check ([d2aad28](https://github.com/szpaczyna/rpi-k3s/commit/d2aad28829df2991d6d43afbb28462e941959056))
+* adjust renovate config for wider check ([332b415](https://github.com/szpaczyna/rpi-k3s/commit/332b41563179fc13944b1d659e070bbb7d79960f))
+* bitwarden version bump ([1a79c91](https://github.com/szpaczyna/rpi-k3s/commit/1a79c9141ad19623d8252915a919b0bafe8ddd2c))
+* configure release-please and renovate for automatic dependency releases ([7b0e5a1](https://github.com/szpaczyna/rpi-k3s/commit/7b0e5a13be33d0b20e591220885b622ec484647b))
+* configure release-please and renovate for automatic dependency releases ([7f189c2](https://github.com/szpaczyna/rpi-k3s/commit/7f189c223c5195cec1a17eb87d0a44176196d28d))
+* make version checker finally work ([5c8792d](https://github.com/szpaczyna/rpi-k3s/commit/5c8792dd2975b2864d5e707aa0fbb9ebc8268ea0))
+* more renovate related work ([3820e01](https://github.com/szpaczyna/rpi-k3s/commit/3820e01e5d68fad2a0cb39dd57eb5218a7f841d0))
+* more renovate related work ([465dc67](https://github.com/szpaczyna/rpi-k3s/commit/465dc670cd30411ed1cd690085376e5fc06027af))
+* removed comment with tag ([87d0d64](https://github.com/szpaczyna/rpi-k3s/commit/87d0d64a82e71220a78142e8ff952c96499df6db))
+
+
+### Miscellaneous
+
+* **deps:** update ghcr.io/unpoller/unpoller docker tag to v3.3.3 ([00af972](https://github.com/szpaczyna/rpi-k3s/commit/00af9725fa8ee769ccbc298dc6cdd2df58d3189c))
+* **deps:** update ghcr.io/unpoller/unpoller docker tag to v3.3.3 ([fb4b4e6](https://github.com/szpaczyna/rpi-k3s/commit/fb4b4e6d47e5af08567eef269c5af4f6ba8f2102))
+* **deps:** update gitea/gitea docker tag to v1.27.0 ([2403016](https://github.com/szpaczyna/rpi-k3s/commit/24030164f66be3be6af2429b21569dd69e3ad9ec))
+* **deps:** update nginx docker tag to v1.31.3 ([3e22a49](https://github.com/szpaczyna/rpi-k3s/commit/3e22a49b0395c0e638bac61e9e9c937595f37c67))
+* **deps:** update quay.io/brancz/kube-rbac-proxy docker tag to v0.22.1 ([9b19f4c](https://github.com/szpaczyna/rpi-k3s/commit/9b19f4c9ff98323224862fb909cd68f4e91d1ab9))
+* **deps:** update quay.io/jetstack/version-checker docker tag to v0.11.0 ([17cf935](https://github.com/szpaczyna/rpi-k3s/commit/17cf935aa3d706604b57f0a9f3d497c53bcc11f9))
+* **deps:** update quay.io/prometheus-operator/prometheus-config-reloader docker tag to v0.92.1 ([08bf77c](https://github.com/szpaczyna/rpi-k3s/commit/08bf77c8a873502bfc66f4db1d9e5cc8208e081e))
+* **deps:** update quay.io/prometheus/prometheus docker tag to v3.13.1 ([51824ef](https://github.com/szpaczyna/rpi-k3s/commit/51824ef024a4f167ffae4558983a2c54a2353b95))
+* **deps:** update rancher/mirrored-coredns-coredns docker tag to v1.14.6 ([1dccbe5](https://github.com/szpaczyna/rpi-k3s/commit/1dccbe5ce0e771e78d1979f261dd34049d0936a4))
+* **deps:** update rancher/mirrored-coredns-coredns docker tag to v1.14.6 ([1e81c25](https://github.com/szpaczyna/rpi-k3s/commit/1e81c254434e37f1fb6d6351949f4005a598d241))
+* **deps:** update rancher/mirrored-library-traefik docker tag to v3.7.8 ([92ca5f0](https://github.com/szpaczyna/rpi-k3s/commit/92ca5f0c7748850d35c682e11fb7d6961292e975))
+* **deps:** update rancher/mirrored-library-traefik docker tag to v3.7.8 ([b45ddd7](https://github.com/szpaczyna/rpi-k3s/commit/b45ddd79d74c08965d6163d9d6c587dea6bec1d1))
+* include dependency updates ([c447e01](https://github.com/szpaczyna/rpi-k3s/commit/c447e011bc9d277aecafabe440ba22d42e9b14cd))
+* updated readme ([671f188](https://github.com/szpaczyna/rpi-k3s/commit/671f188ecc8a74dde72a68fdd7422369fe0b5c9f))
+
 ## [0.6.0](https://github.com/szpaczyna/rpi-k3s/compare/v0.5.4...v0.6.0) (2026-07-22)
 
 
