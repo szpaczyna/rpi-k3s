@@ -1,0 +1,23 @@
+renovate.json
+  s_0250e307fe3abb::t_c73a7cce15862f 9,13-22
+  s_0250e307fe3abb::t_cc9e9696a0070d 5
+  s_0250e307fe3abb::t_0e8600f498c760 23
+cluster/helm/grafana/values.yaml
+  s_0250e307fe3abb::t_fc7a92bcd4a303 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.17",
+  "base_commit_sha": "332b41563179fc13944b1d659e070bbb7d79960f",
+  "prompts": {},
+  "sessions": {
+    "s_0250e307fe3abb": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_ee4aea33-37a0-44cc-bb06-d25257032183",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
