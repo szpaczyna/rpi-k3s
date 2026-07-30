@@ -2,14 +2,24 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
 
-  "enabledManagers": ["helm-values", "kubernetes"],
+  "enabledManagers": ["helm-values", "kubernetes", "custom.regex"],
 
   "helm-values": {
     "fileMatch": [
-      "(^|/)values\\.yaml$",
-      "(^|/)values-public\\.yaml$"
+      "(^|/).*values.*\\.yaml$"
     ]
   },
+
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/).*values.*\\.yaml$"],
+      "matchStrings": [
+        "repository:\\s*[\"']?(?<depName>[^\"'\\s]+)[\"']?\\s*\\n\\s*(?:#.*\\n\\s*)*tag:\\s*[\"']?(?<currentValue>[^\"'\\s]+)[\"']?"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ],
 
   "kubernetes": {
     "fileMatch": ["\\.ya?ml$"]
