@@ -4,7 +4,7 @@
 image:
   repository: kanboard/kanboard
   pullPolicy: IfNotPresent
-  tag: v1.2.52
+  tag: v1.2.53
 
 imagePullSecrets: []
 nameOverride: ""
