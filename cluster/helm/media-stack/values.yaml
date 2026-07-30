@@ -94,7 +94,7 @@ images:
     tag: "6.0.4"
   sonarr:
     repository: "lscr.io/linuxserver/sonarr"
-    tag: "4.0.16"
+    tag: "4.0.19"
   lidarr:
     repository: "lscr.io/linuxserver/lidarr"
     # tag: "2.14.5"
