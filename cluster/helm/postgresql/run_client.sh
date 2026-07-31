@@ -5,9 +5,9 @@ kubectl run morphine-postgresql-client \
     --rm --tty -i \
     --restart='Never' \
     --namespace apps \
-    --image docker.io/postgres:16.6 \
+    --image docker.io/postgres:18.4 \
     --env="PGPASSWORD=$POSTGRES_PASSWORD" \
     --command -- psql \
-    --host morphine-postgresql-read \
+    --host morphine-postgresql \
     --username postgres \
     --port 5432

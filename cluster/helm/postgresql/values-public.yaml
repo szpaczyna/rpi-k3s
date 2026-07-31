@@ -1,257 +1,251 @@
 ---
-nameOverride: ""
-fullnameOverride: ""
-clusterDomain: cluster.local
+## groundhog2k/postgres - public values
+## Release name: morphine
+## Namespace: apps
 
-global:
-  security:
-    allowInsecureImages: true
-  storageClass: longhorn
-  postgresql:
-    service:
-      ports:
-        postgresql: 5432
-
+## PostgreSQL official docker image
 image:
-  registry: docker.io
-  repository: bitnamilegacy/postgresql
-  tag: 16.6.0
+  registry: "docker.io"
+  repository: "postgres"
+  tag: "18.4"
   pullPolicy: IfNotPresent
-  debug: false
 
-diagnosticMode:
-  enabled: false
+## Clean naming without bitnami's "primary" suffix
+## Service name: morphine-postgresql
+## Apps need to update their connection strings to: morphine-postgresql
+fullnameOverride: "morphine-postgresql"
 
-containerPorts:
-  postgresql: 5432
-
-audit:
-  logHostname: true
-  logConnections: true
-  logDisconnections: false
-  pgAuditLog: ""
-  pgAuditLogCatalog: "off"
-  clientMinMessages: error
-  logLinePrefix: ""
-  logTimezone: ""
-
-ldap:
-  enabled: false
-
-architecture: replication
-
-replication:
-  synchronousCommit: "on"
-  numSynchronousReplicas: 1
-  applicationName: morphine
-
-postgresqlDataDir: /postgresql/data
-postgresqlSharedPreloadLibraries: pgaudit
-
-shmVolume:
-  enabled: true
-  sizeLimit: 500Mi
-
-primary:
-  resources:
-    requests:
-      memory: 512Mi
-      cpu: 250m
-    limits:
-      memory: 1Gi
-      cpu: 1500m
-  extendedConfiguration: []
-  standby:
-    enabled: false
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 1
-    failureThreshold: 15
-    successThreshold: 1
-  hostNetwork: false
-  hostIPC: false
-  labels: {}
-  annotations: {}
-  podLabels: {}
-  podAnnotations: {}
-  podAffinityPreset: ""
-  podAntiAffinityPreset: soft
-  nodeAffinityPreset:
-    type: ""
-    key: ""
-    values: []
-  affinity: {}
-
-  nodeSelector:
-    kubernetes.io/role: worker
-  tolerations: []
-  topologySpreadConstraints: []
-  priorityClassName: ""
-  schedulerName: ""
-  terminationGracePeriodSeconds: "30"
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate: {}
-  extraVolumeMounts: []
-  extraVolumes: []
-  sidecars: []
-  initContainers: []
-  #    - name: init-copy-config
-  #    image: busybox:1.32.0
-  #    imagePullPolicy: IfNotPresent
-  #    command:
-  #      - /bin/sh
-  #    args:
-  #      - -c
-  #      - cp /bitnami/postgresql/conf/*.conf /postgresql/conf/
-  #    volumeMounts:
-  #      - mountPath: /postgresql
-  #        name: data
-  #      - mountPath: /bitnami/postgresql/conf
-  #        name: postgresql-config
-  extraPodSpec: {}
-  service:
-    type: LoadBalancer
-    ports:
-        postgresql: 5432
-    annotations: {}
-    loadBalancerIP: 10.0.0.42
-    # loadBalancerIP: 10.1.0.3
-    externalTrafficPolicy: Cluster
-  persistence:
-    enabled: true
-    mountPath: /postgresql
-    storageClass: longhorn
-    accessModes:
-      - ReadWriteOnce
-    size: 6Gi
-
-readReplicas:
-    name: read
-    replicaCount: 0
-    extendedConfiguration: ""
-    resources:
-        requests:
-            memory: 256Mi
-            cpu: "0.2"
-        limits:
-            memory: 1Gi
-            cpu: "1.5"
-    podSecurityContext:
-        enabled: true
-        fsGroup: 1001
-    containerSecurityContext:
-        enabled: true
-        runAsUser: 1001
-    hostAliases: []
-    hostNetwork: false
-    hostIPC: false
-    labels: {}
-    annotations: {}
-    podLabels: {}
-    podAnnotations: {}
-    podAffinityPreset: ""
-    podAntiAffinityPreset: soft
-    nodeAffinityPreset:
-        type: ""
-        key: ""
-        values: []
-    affinity: {}
-    nodeSelector:
-        kubernetes.io/role: worker
-    tolerations: []
-    topologySpreadConstraints: []
-    priorityClassName: ""
-    schedulerName: ""
-    terminationGracePeriodSeconds: "10"
-    updateStrategy:
-        type: RollingUpdate
-        rollingUpdate: {}
-    extraVolumeMounts: []
-    extraVolumes: []
-    sidecars: []
-    service:
-        type: ClusterIP
-        ports:
-            postgresql: 5432
-    persistence:
-        enabled: true
-        existingClaim: ""
-        mountPath: /postgresql
-        subPath: ""
-        storageClass: longhorbn
-        accessModes:
-            - ReadWriteOnce
-        size: 6Gi
-        annotations: {}
-        labels: {}
-        selector: {}
-        dataSource: {}
-
+## Service account
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+  annotations: {}
+  name: ""
 
-rbac:
-  create: false
-psp:
-  create: false
+## Pod security context (official postgres image runs as uid/gid 999)
+podSecurityContext:
+  fsGroup: 999
+  supplementalGroups:
+    - 999
 
-metrics:
+## Container security context
+securityContext:
+  allowPrivilegeEscalation: false
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsGroup: 999
+  runAsUser: 999
+  capabilities:
+    drop:
+      - ALL
+
+## Service configuration
+## LoadBalancer with same IP as current setup
+service:
+  type: LoadBalancer
+  port: 5432
+  loadBalancerIP: "10.0.0.42"
+  annotations: {}
+  labels: {}
+
+## Resources - tuned based on actual usage metrics:
+## - Current pod uses ~753Mi RAM, ~75m CPU
+## - Node rpi-k3s-worker-00 has 8GB RAM total
+## - Only ~11 active connections at any time
+resources:
+  requests:
+    memory: 768Mi
+    cpu: 250m
+  limits:
+    memory: 2Gi
+    cpu: 2000m
+
+## Node placement
+nodeSelector:
+  kubernetes.io/role: worker
+
+tolerations: []
+affinity: {}
+
+## Pod management
+podManagementPolicy: OrderedReady
+updateStrategyType: RollingUpdate
+
+## Pod annotations for Prometheus kubernetes-pods job discovery
+## This eliminates the need for a separate metrics Service
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9187"
+  prometheus.io/path: "/metrics"
+
+## PostgreSQL settings (non-sensitive)
+settings:
+  ## Authentication method
+  authMethod: "scram-sha-256"
+  ## Init DB arguments
+  initDbArgs: "--auth-local=trust --auth-host=scram-sha-256 --encoding=UTF8 --locale=en_US.UTF-8"
+  ## Data directory
+  dataDir: "/var/lib/postgresql/data"
+  pgDir: "pg"
+
+## PostgreSQL configuration
+## Tuned based on actual metrics:
+## - 99.96% cache hit ratio (excellent - can reduce shared_buffers)
+## - Only 11 backends active (max_connections=200 is overkill)
+## - 0 deadlocks, 0 conflicts
+## - Gitea dominates with ~632MB data, rest are tiny
+## - Pod runs on 8GB node, container limited to 2GB
+## - Very low write load (~23k inserts total in 31 days)
+customConfig: |
+  # Connection
+  listen_addresses = '*'
+  port = 5432
+  max_connections = 50
+  password_encryption = 'scram-sha-256'
+
+  # Memory - tuned for 2GB container limit
+  # 25% of container RAM for shared_buffers
+  shared_buffers = 512MB
+  # 75% of container RAM for planner estimate
+  effective_cache_size = 1536MB
+  # Conservative work_mem: 50 connections * 16MB = 800MB worst case
+  work_mem = 16MB
+  maintenance_work_mem = 256MB
+  temp_buffers = 8MB
+  max_stack_depth = 4MB
+  wal_buffers = 16MB
+  huge_pages = off
+
+  # WAL - single node, no replication needed
+  wal_level = minimal
+  max_wal_senders = 0
+  max_wal_size = 512MB
+  min_wal_size = 128MB
+  fsync = on
+  synchronous_commit = off
+  full_page_writes = on
+  wal_compression = on
+  checkpoint_timeout = 10min
+  checkpoint_completion_target = 0.9
+
+  # Query planner - Longhorn SSD storage
+  random_page_cost = 1.5
+  seq_page_cost = 1.0
+  effective_io_concurrency = 200
+  default_statistics_target = 100
+  enable_partitionwise_join = on
+  enable_partitionwise_aggregate = on
+
+  # Autovacuum - important for gitea's large tables
+  autovacuum = on
+  autovacuum_max_workers = 2
+  autovacuum_naptime = 30s
+  autovacuum_vacuum_threshold = 50
+  autovacuum_vacuum_scale_factor = 0.1
+  autovacuum_analyze_threshold = 50
+  autovacuum_analyze_scale_factor = 0.05
+
+  # Logging - stderr for Kubernetes log collection
+  log_destination = 'stderr'
+  logging_collector = off
+  log_min_messages = warning
+  log_min_error_statement = error
+  log_min_duration_statement = 1000
+  log_line_prefix = '%m [%p] %u@%d '
+  log_lock_waits = on
+  log_statement = 'ddl'
+  log_connections = off
+  log_disconnections = off
+  log_hostname = off
+  log_timezone = 'UTC'
+
+  # Misc
+  shared_memory_type = mmap
+  dynamic_shared_memory_type = posix
+  max_prepared_transactions = 0
+  hot_standby = off
+  timezone = 'UTC'
+  datestyle = 'iso, mdy'
+  lc_messages = 'en_US.UTF-8'
+  lc_monetary = 'en_US.UTF-8'
+  lc_numeric = 'en_US.UTF-8'
+  lc_time = 'en_US.UTF-8'
+
+## Probes
+startupProbe:
   enabled: true
-  image:
-    registry: docker.io
-    repository: prometheuscommunity/postgres-exporter
-    tag: v0.18.1
-    pullPolicy: IfNotPresent
-  containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
-    runAsNonRoot: true
-  livenessProbe: {}
-  readinessProbe: {}
-  startupProbe: {}
-  containerPorts:
-    metrics: 9187
-  service:
+  initialDelaySeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 30
+  periodSeconds: 10
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 6
+  periodSeconds: 10
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 6
+  periodSeconds: 10
+
+## Metrics exporter as sidecar
+extraContainers:
+  - name: metrics
+    image: prometheuscommunity/postgres-exporter:v0.18.1
+    command: ["sh", "-c", "echo '{}' > /tmp/postgres_exporter.yml && exec postgres_exporter --config.file=/tmp/postgres_exporter.yml"]
     ports:
-      metrics: 9187
-    clusterIP: ""
-    sessionAffinity: None
-    annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: '{{ .Values.metrics.service.ports.metrics }}'
+      - name: metrics
+        containerPort: 9187
+        protocol: TCP
+    env:
+      - name: PG_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: morphine-postgresql
+            key: POSTGRES_PASSWORD
+      - name: DATA_SOURCE_NAME
+        value: "postgresql://postgres:$(PG_PASSWORD)@127.0.0.1:5432/postgres?sslmode=disable"
+    resources:
+      requests:
+        cpu: 30m
+        memory: 48Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
+    livenessProbe:
+      httpGet:
+        path: /metrics
+        port: 9187
+      initialDelaySeconds: 15
+      periodSeconds: 30
+      timeoutSeconds: 5
+    readinessProbe:
+      httpGet:
+        path: /metrics
+        port: 9187
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
 
-networkPolicy:
-  enabled: false
-  metrics:
-    enabled: false
-    namespaceSelector:
-      label: monitoring
-    podSelector: {}
+## Storage - Longhorn SSD
+storage:
+  requestedSize: "6Gi"
+  className: "longhorn"
+  accessModes:
+    - ReadWriteOnce
+  annotations: {}
+  labels: {}
 
-volumePermissions:
-  enabled: true
-  image:
-    registry: docker.io
-    repository: busybox
-    tag: 1.37.0
-    pullPolicy: IfNotPresent
-  containerSecurityContext:
-    runAsUser: 0
+## Extra init container not needed
+extraInitContainers: []
+
+## Additional environment variables
+env: []
+
+## Network policy - disabled (prometheus needs access)
+networkPolicy: {}

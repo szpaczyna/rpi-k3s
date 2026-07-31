@@ -3,6 +3,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: postgres-full-backup
+  namespace: apps
 spec:
   schedule: "0 1 * * *"
   concurrencyPolicy: Forbid
@@ -14,9 +15,20 @@ spec:
         spec:
           containers:
           - name: postgres-full-backup
-            image: postgres:16.6
+            image: postgres:18.4
             command: ["/bin/sh"]
-            args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && pg_dumpall -U postgres -h morphine-postgresql-primary | gzip > /var/backups/full/morphine-postgresql-$(date +"%Y%m%d-%H%M").sql.gz']
+            args:
+              - "-c"
+              - |
+                echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass
+                echo "Starting full backup..."
+                pg_dumpall -U postgres -h morphine-postgresql | gzip > /var/backups/full/morphine-postgresql-$(date +"%Y%m%d-%H%M").sql.gz
+                if [ $? -eq 0 ]; then
+                  echo "Full backup completed successfully"
+                else
+                  echo "Full backup FAILED" >&2
+                  exit 1
+                fi
             env:
             - name: PGPASS
               valueFrom:

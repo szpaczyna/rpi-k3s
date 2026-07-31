@@ -3,6 +3,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: postgres-backup
+  namespace: apps
 spec:
   schedule: "0 2 * * *"
   concurrencyPolicy: Forbid
@@ -14,9 +15,21 @@ spec:
         spec:
           containers:
           - name: postgres-backup
-            image: postgres:16.6
+            image: postgres:18.4
             command: ["/bin/sh"]
-            args: ["-c", 'echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass && for DB in grafana bitwarden gitea kanboard nextcloud keycloak; do pg_dump -U postgres -h morphine-postgresql-primary "$DB" |gzip > /var/backups/"$DB"/"$DB"-$(date +"%Y%m%d-%H%M").sql.gz; done']
+            args:
+              - "-c"
+              - |
+                echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass
+                for DB in grafana bitwarden gitea kanboard nextcloud keycloak whoops; do
+                  echo "Backing up ${DB}..."
+                  pg_dump -U postgres -h morphine-postgresql "${DB}" | gzip > /var/backups/"${DB}"/"${DB}"-$(date +"%Y%m%d-%H%M").sql.gz
+                  if [ $? -eq 0 ]; then
+                    echo "  OK: ${DB}"
+                  else
+                    echo "  FAILED: ${DB}" >&2
+                  fi
+                done
             env:
             - name: PGPASS
               valueFrom:
