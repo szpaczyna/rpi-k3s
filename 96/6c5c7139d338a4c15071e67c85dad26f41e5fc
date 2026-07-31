@@ -1,0 +1,25 @@
+cluster/helm/prometheus/values.yaml
+  s_836f8015aad2c8::t_97c2bc4c50504c 606-614,616,618,621-623,625-626,628-629,631-634
+  s_836f8015aad2c8::t_b9edd5cfecb201 615
+  s_836f8015aad2c8::t_15575dffc3a33b 617,619-620,624,627,630
+  s_836f8015aad2c8::t_9c2eec4b69e4d9 752
+  s_836f8015aad2c8::t_448aaca1d56b1c 395-414
+cluster/helm/metallb/values.yaml
+  s_836f8015aad2c8::t_0c7e1919542f3c 51-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.18",
+  "base_commit_sha": "966c5c7139d338a4c15071e67c85dad26f41e5fc",
+  "prompts": {},
+  "sessions": {
+    "s_836f8015aad2c8": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_49662825-34d7-4eab-9236-17267c9ac743",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
