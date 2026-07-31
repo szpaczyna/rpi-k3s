@@ -1,4 +1,23 @@
 # Changelog
+## [0.6.2](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.1...v0.6.2) (2026-07-31)
+
+
+### Features
+
+* metallb metrics in prom ([8bc8ea5](https://github.com/szpaczyna/rpi-k3s/commit/8bc8ea526f51015785cd36755bc2cd946c2441b4))
+* migrated postgresql from bitnami chart to groundhog2k chart ([432398a](https://github.com/szpaczyna/rpi-k3s/commit/432398a456bc22bd4535df401aea7f3310a4db35))
+
+
+### Miscellaneous
+
+* **deps:** update lscr.io/linuxserver/sonarr docker tag to v4.0.19 ([b61493b](https://github.com/szpaczyna/rpi-k3s/commit/b61493bde054cddbf007e1b3a232acbb5f01078e))
+* **deps:** update quay.io/frrouting/frr docker tag to v9.1.3 ([9c46626](https://github.com/szpaczyna/rpi-k3s/commit/9c46626e733e847700e13d6237fba8ab62daeaeb))
+
+
+### Documentation
+
+* readme ([232fc5b](https://github.com/szpaczyna/rpi-k3s/commit/232fc5bd9eeff01e7fe6290116e5882afbd7f638))
+
 ## [0.6.1](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.0...v0.6.1) (2026-07-30)
 
 
