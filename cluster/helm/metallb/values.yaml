@@ -48,9 +48,10 @@ prometheus:
   # for a corresponding Prometheus configuration. Alternatively, you
   # may want to use the Prometheus Operator
   # (https://github.com/coreos/prometheus-operator) for more powerful
-  # monitoring configuration. If you use the Prometheus operator, this
-  # can be left at false.
-  scrapeAnnotations: true
+  # monitoring configuration
+  # Disabled: metallb HTTPS metrics with self-signed cert (valid only for 127.0.0.1)
+  # are scraped by a dedicated prometheus job with insecure_skip_verify: true
+  scrapeAnnotations: false
 
   # port both controller and speaker will listen on for metrics
   metricsPort: 7472

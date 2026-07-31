@@ -392,23 +392,26 @@ serverFiles:
           regex: (.+)
           target_label: kubernetes_namespace
 
-      - job_name: 'kubernetes-cadvisor'
-        scheme: https
-        tls_config:
-          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-          insecure_skip_verify: true
-        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-        kubernetes_sd_configs:
-          - role: node
-        relabel_configs:
-          - action: labelmap
-            regex: __meta_kubernetes_node_label_(.+)
-          - target_label: __address__
-            replacement: kubernetes.default.svc:443
-          - source_labels: [__meta_kubernetes_node_name]
-            regex: (.+)
-            target_label: __metrics_path__
-            replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
+      # REMOVED: kubernetes-cadvisor via API proxy - k3s blocks /proxy endpoint (403)
+      # cadvisor metrics are collected via built-in kubernetes-nodes-cadvisor job
+      # which connects directly to kubelet on :10250
+      # - job_name: 'kubernetes-cadvisor'
+      #   scheme: https
+      #   tls_config:
+      #     ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      #     insecure_skip_verify: true
+      #   bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      #   kubernetes_sd_configs:
+      #     - role: node
+      #   relabel_configs:
+      #     - action: labelmap
+      #       regex: __meta_kubernetes_node_label_(.+)
+      #     - target_label: __address__
+      #       replacement: kubernetes.default.svc:443
+      #     - source_labels: [__meta_kubernetes_node_name]
+      #       regex: (.+)
+      #       target_label: __metrics_path__
+      #       replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
 
       # - job_name: 'kubernetes-service-endpoints'
       #   honor_labels: true
@@ -600,6 +603,35 @@ serverFiles:
       #       action: drop
 
 extraScrapeConfigs: |
+  - job_name: 'metallb'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - metallb-system
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
+        action: keep
+        regex: metallb
+      - source_labels: [__meta_kubernetes_pod_ip]
+        action: replace
+        target_label: __address__
+        regex: (.+)
+        replacement: $1:7472
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: pod
+      - source_labels: [__meta_kubernetes_pod_node_name]
+        action: replace
+        target_label: node
+      - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_component]
+        action: replace
+        target_label: component
+
   - job_name: 'speedtest'
     scrape_interval: 29m
     scrape_timeout: 90s
@@ -717,7 +749,7 @@ prometheus-node-exporter:
   fullNameOverride: node-exporter
 
   image:
-    repository: quay.io/prometheus/node-exporter
+    repository: prometheus/node-exporter
     tag: v1.10.2
     pullPolicy: IfNotPresent
 
