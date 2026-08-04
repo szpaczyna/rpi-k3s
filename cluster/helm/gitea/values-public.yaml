@@ -97,16 +97,31 @@ service:
     # annotations:
     # metallb.universe.tf/allow-shared-ip: "false"
 
-ingress:
+httpRoute:
   enabled: true
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - gitea.shpaq.org
+  # Restricts /api to the local network only, equivalent to the previous
+  # nginx.ingress.kubernetes.io/whitelist-source-range annotation.
+  apiAllowedSourceRange:
+    - 10.0.0.0/8
+  parentRefs:
+    - name: traefik-gateway
+      namespace: kube-system
+      kind: Gateway
+      sectionName: websecure
+
+# ingress.enabled is intentionally NOT read anymore for creating an actual
+# Ingress resource (templates/gitea/ingress.yaml and ingress-api.yaml were
+# removed in favor of the HTTPRoute above). This block only remains because
+# templates/gitea/config.yaml still reads ingress.hosts/tls to compute
+# gitea.config.server.DOMAIN and ROOT_URL.
+ingress:
+  enabled: false
   hosts:
     - gitea.shpaq.org
   tls:
-    - secretName: gitea-shpaq-org-tls
-      hosts:
+    - hosts:
         - gitea.shpaq.org
 
 resources:
