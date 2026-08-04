@@ -1,0 +1,64 @@
+cluster/helm/traefik/values.yaml
+  s_7dc08f49d3a906::t_856a0666aac766 4-8
+cluster/helm/booklore/values.yaml
+  s_7dc08f49d3a906::t_b96ab96a1e273d 41
+  s_7dc08f49d3a906::t_009e50e940bf6a 53-58,64
+  s_7dc08f49d3a906::t_5ff4a280a86054 59-63,65-72
+cluster/helm/media-stack/templates/transmission-deployment.yaml
+  s_7dc08f49d3a906::t_03858fa931697d 101-114
+  s_7dc08f49d3a906::t_41c0dcf7f4d416 128
+  s_7dc08f49d3a906::t_c954177e0252e6 144-159,161
+cluster/helm/media-stack/templates/calibre-web-deployment.yaml
+  s_7dc08f49d3a906::t_6d3b82aecee91c 83
+  s_7dc08f49d3a906::t_6e2f52d3a3fcba 56-69
+cluster/helm/gitea/values-public.yaml
+  s_7dc08f49d3a906::t_7397966be50013 62-63,67-72
+cluster/helm/media-stack/templates/_helpers.tpl
+  s_7dc08f49d3a906::t_48644dd87367a3 10-25
+cluster/helm/event-exporter/templates/role.yaml
+  s_7dc08f49d3a906::t_0939357b142846 8-12
+cluster/helm/media-stack/templates/generic-deployment.yaml
+  s_7dc08f49d3a906::t_aa688a45e8c29a 63-76
+  s_7dc08f49d3a906::t_750b564894dfdc 116
+  s_7dc08f49d3a906::t_ba1530cd9d4cd3 162-177,179
+cluster/helm/cert-manager/values.yaml
+  s_7dc08f49d3a906::t_f4bad4d4e98c2e 34-37
+cluster/helm/kanboard/templates/serviceaccount.yaml
+  s_7dc08f49d3a906::t_77a8c9128a712b 13
+cluster/helm/media-stack/values.yaml
+  s_7dc08f49d3a906::t_62a262f776034e 8,19-58,62,69,76,83,90,97,123
+cluster/helm/unifipoller/values-public.yaml
+  s_7dc08f49d3a906::t_fc718352177c88 17
+cluster/helm/kanboard/values-public.yaml
+  s_7dc08f49d3a906::t_8452c354c28329 33-34
+cluster/helm/nextcloud/values.yaml
+  s_7dc08f49d3a906::t_15707b717d26e6 211-212
+cluster/helm/local-path-provisioner/values.yaml
+  s_7dc08f49d3a906::t_99e75f4f74dc7e 13
+cluster/helm/media-stack/templates/serviceaccount.yaml
+  s_7dc08f49d3a906::t_d240f4557add7a 7
+cluster/helm/loki/fluentbit-values.yaml
+  s_7dc08f49d3a906::t_5bfb263c37c64f 76-80
+cluster/helm/gitea/templates/gitea/statefulset.yaml
+  s_7dc08f49d3a906::t_647f031eecd5c9 31
+cluster/helm/postgresql/backup-full-job.yaml
+  s_7dc08f49d3a906::t_120be8a888b043 24-25,43-49
+cluster/helm/postgresql/backup-job.yaml
+  s_7dc08f49d3a906::t_6e8b5e99401826 25-26,44-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "be09198f7a96b7f177d8916a9ed6c379ea49c346",
+  "prompts": {},
+  "sessions": {
+    "s_7dc08f49d3a906": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_033e3aa21ffeOShYktC6CNmKIN",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
