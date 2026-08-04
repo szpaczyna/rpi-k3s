@@ -1,0 +1,27 @@
+cluster/helm/prometheus/deploy
+  s_94037661b46416::t_c39e29ee1c6912 15-20
+  s_94037661b46416::t_2ddda9c110676d 21
+cluster/helm/prometheus/certificate.yaml
+  s_94037661b46416::t_19b12f3ddb65bc 1-17
+cluster/helm/prometheus/values.yaml
+  s_94037661b46416::t_b451f0d5875b47 678-679
+  s_94037661b46416::t_7b0893265f65e9 133-137
+  s_94037661b46416::t_34258f4707fe17 677,680-686
+  s_94037661b46416::t_57468ddafdca10 143-149,151-156
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "d446f5186beb6b53ac50e427c2dbc9b06b9711ed",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
