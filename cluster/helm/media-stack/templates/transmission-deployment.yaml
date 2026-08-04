@@ -98,6 +98,20 @@ spec:
         - name: utpudp
           containerPort: {{ .Values.transmission.loadbalancer.port }}
           protocol: UDP
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.transmission.service.port }}
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 6
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.transmission.service.port }}
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
         volumeMounts:
         {{- if $.Values.configStorage.enabled }}
         - mountPath: /config
@@ -111,12 +125,7 @@ spec:
           name: media
           subPath: downloads/transmission
         resources:
-          requests:
-            cpu: {{ .Values.global.resources.requests.cpu }}
-            memory: {{ .Values.global.resources.requests.memory }}
-          limits:
-            cpu: {{ .Values.global.resources.limits.cpu }}
-            memory: {{ .Values.global.resources.limits.memory }}
+          {{- include "media-stack.resources" (dict "profile" "transmission" "root" $) | nindent 10 }}
       - name: exporter
         image: "{{ printf "%s:%s" .Values.images.transmissionExporter.repository .Values.images.transmissionExporter.tag }}"
         imagePullPolicy: IfNotPresent
@@ -132,13 +141,24 @@ spec:
           value: "/metrics"
         - name: WEB_ADDR
           value: ":9190"
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: exporter
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 3
+          failureThreshold: 6
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: exporter
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
         resources:
-          requests:
-            cpu: {{ .Values.global.resources.requests.cpu }}
-            memory: {{ .Values.global.resources.requests.memory }}
-          limits:
-            cpu: {{ .Values.global.resources.limits.cpu }}
-            memory: {{ .Values.global.resources.limits.memory }}
+          {{- include "media-stack.resources" (dict "profile" "exportarr" "root" $) | nindent 10 }}
       volumes:
       - name: media
         persistentVolumeClaim:

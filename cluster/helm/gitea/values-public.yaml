@@ -59,11 +59,17 @@ podSecurityContext:
   fsGroupChangePolicy: OnRootMismatch
 
 securityContext:
-  allowPrivilegeEscalation: true
+  allowPrivilegeEscalation: false
+  privileged: false
   capabilities:
     drop:
       - ALL
-  privileged: true
+    add:
+      - NET_BIND_SERVICE
+      - SETUID
+      - SETGID
+      - CHOWN
+      - DAC_OVERRIDE
   #  readOnlyRootFilesystem: true
   #  runAsGroup: 1000
   #  runAsNonRoot: true

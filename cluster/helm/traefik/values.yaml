@@ -1,6 +1,11 @@
 # Default values for Traefik
 # This is a YAML-formatted file.
 # Declare variables to be passed into templates
+#
+# STATUS: Work in progress / not the active ingress path.
+# All cluster traffic currently routes through ingress-nginx
+# (see cluster/helm/ingress-nginx). This release is kept installed for
+# future evaluation but should not be treated as production-serving.
 
 image:  # @schema additionalProperties: false
   # -- Traefik image repository

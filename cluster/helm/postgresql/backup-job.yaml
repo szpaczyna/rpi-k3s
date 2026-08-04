@@ -22,6 +22,8 @@ spec:
               - |
                 echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass
                 for DB in grafana bitwarden gitea kanboard nextcloud keycloak whoops; do
+                  echo "Cleaning up ${DB} backups older than 14 days"
+                  find /var/backups/"${DB}" -name "*.sql.gz" -type f -mtime +14 -delete
                   echo "Backing up ${DB}..."
                   pg_dump -U postgres -h morphine-postgresql "${DB}" | gzip > /var/backups/"${DB}"/"${DB}"-$(date +"%Y%m%d-%H%M").sql.gz
                   if [ $? -eq 0 ]; then
@@ -39,6 +41,13 @@ spec:
             volumeMounts:
             - mountPath: /var/backups
               name: postgres-storage
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
           restartPolicy: Never
           volumes:
           - name: postgres-storage

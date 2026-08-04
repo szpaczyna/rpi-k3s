@@ -21,6 +21,8 @@ spec:
               - "-c"
               - |
                 echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass
+                echo "Cleaning up full backups older than 14 days"
+                find /var/backups/full -name "*.sql.gz" -type f -mtime +14 -delete
                 echo "Starting full backup..."
                 pg_dumpall -U postgres -h morphine-postgresql | gzip > /var/backups/full/morphine-postgresql-$(date +"%Y%m%d-%H%M").sql.gz
                 if [ $? -eq 0 ]; then
@@ -38,6 +40,13 @@ spec:
             volumeMounts:
             - mountPath: /var/backups
               name: postgres-storage
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
           restartPolicy: Never
           volumes:
           - name: postgres-storage

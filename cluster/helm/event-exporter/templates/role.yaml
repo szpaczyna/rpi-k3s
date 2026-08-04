@@ -5,7 +5,10 @@ kind: ClusterRole
 metadata:
   name: {{ include "kubernetes-event-exporter.fullname" . }}
 rules:
-  - apiGroups: ["*"]
-    resources: ["*"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: ["events.k8s.io"]
+    resources: ["events"]
     verbs: ["get", "watch", "list"]
 {{- end -}}

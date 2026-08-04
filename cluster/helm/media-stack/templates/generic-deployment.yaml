@@ -60,6 +60,20 @@ spec:
         - name: {{ $name }}
           containerPort: {{ $svc.service.port }}
           protocol: TCP
+        readinessProbe:
+          tcpSocket:
+            port: {{ $svc.service.port }}
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 6
+        livenessProbe:
+          tcpSocket:
+            port: {{ $svc.service.port }}
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
         volumeMounts:
         {{- if $.Values.configStorage.enabled }}
         - mountPath: /config
@@ -99,12 +113,7 @@ spec:
           subPath: library/movies
         {{- end }}
         resources:
-          requests:
-            cpu: {{ $.Values.global.resources.requests.cpu }}
-            memory: {{ $.Values.global.resources.requests.memory }}
-          limits:
-            cpu: {{ $.Values.global.resources.limits.cpu }}
-            memory: {{ $.Values.global.resources.limits.memory }}
+          {{- include "media-stack.resources" (dict "profile" $svc.resourceProfile "root" $) | nindent 10 }}
       - name: {{ printf "%s-exporter" $name }}
         image: "{{ include "media-stack.image" (dict "name" "exportarr" "root" $) }}"
         imagePullPolicy: IfNotPresent
@@ -150,13 +159,24 @@ spec:
         ports:
         - name: monitoring
           containerPort: {{ $.Values.exportarr.service.port }}
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: monitoring
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 3
+          failureThreshold: 6
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: monitoring
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
         resources:
-          requests:
-            cpu: {{ $.Values.global.resources.requests.cpu }}
-            memory: {{ $.Values.global.resources.requests.memory }}
-          limits:
-            cpu: {{ $.Values.global.resources.limits.cpu }}
-            memory: {{ $.Values.global.resources.limits.memory }}
+          {{- include "media-stack.resources" (dict "profile" "exportarr" "root" $) | nindent 10 }}
       volumes:
       - name: media
         persistentVolumeClaim:

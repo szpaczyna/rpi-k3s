@@ -53,6 +53,20 @@ spec:
             - name: calibre-web
               containerPort: {{ .Values.calibreWeb.service.port }}
               protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.calibreWeb.service.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.calibreWeb.service.port }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
           volumeMounts:
             {{- if $.Values.configStorage.enabled }}
             - mountPath: /config
@@ -66,12 +80,7 @@ spec:
               name: media
               subPath: library/books
           resources:
-            requests:
-              cpu: {{ .Values.global.resources.requests.cpu }}
-              memory: {{ .Values.global.resources.requests.memory }}
-            limits:
-              cpu: {{ .Values.global.resources.limits.cpu }}
-              memory: {{ .Values.global.resources.limits.memory }}
+            {{- include "media-stack.resources" (dict "profile" .Values.calibreWeb.resourceProfile "root" $) | nindent 12 }}
       volumes:
       - name: media
         persistentVolumeClaim:

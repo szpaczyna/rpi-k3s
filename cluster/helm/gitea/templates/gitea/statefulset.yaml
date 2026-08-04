@@ -28,6 +28,7 @@ spec:
         {{- toYaml .Values.statefulset.labels | nindent 8 }}
         {{- end }}
     spec:
+      automountServiceAccountToken: false
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}

@@ -208,7 +208,8 @@ persistence:
     subpath:
     annotations: {}
     existingClaim: cloud
-    accessMode: ReadWriteMany
+    storageClass: local-path
+    accessMode: ReadWriteOnce
     size: 300Gi
 
 resources:

@@ -10,7 +10,7 @@ image:
 
 helperImage:
   repository: busybox
-  tag: latest
+  tag: "1.37.0"
 
 defaultSettings:
   registrySecret: ~

@@ -5,6 +5,7 @@ global:
   timezone: Europe/Warsaw
   runAsUser: 568
   runAsGroup: 568
+  # Fallback profile used if an app doesn't set resourceProfile.
   resources:
     requests:
       cpu: 0.1
@@ -15,39 +16,85 @@ global:
   nodeSelector:
     kubernetes.io/role: worker
 
+# Sized from real usage observed via `kubectl top pods -n media --containers`
+# (bazarr/radarr ~40-50m CPU / ~230Mi mem, sonarr/lidarr/prowlarr ~150-190Mi,
+# readarr ~10m/130Mi, exportarr sidecars ~1-2m/10Mi, transmission idle ~12Mi).
+resourceProfiles:
+  heavy:
+    requests:
+      cpu: 150m
+      memory: 256Mi
+    limits:
+      cpu: 750m
+      memory: 512Mi
+  medium:
+    requests:
+      cpu: 75m
+      memory: 192Mi
+    limits:
+      cpu: 500m
+      memory: 384Mi
+  light:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+  exportarr:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+  transmission:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
 media:
   bazarr:
     enable: true
+    resourceProfile: heavy
     service:
       port: 6767
     storageSize: 1Gi
 
   lidarr:
     enable: true
+    resourceProfile: medium
     service:
       port: 8686
     storageSize: 1Gi
 
   prowlarr:
     enable: true
+    resourceProfile: medium
     service:
       port: 9696
     storageSize: 1Gi
 
   radarr:
     enable: true
+    resourceProfile: heavy
     service:
       port: 7878
     storageSize: 1Gi
 
   readarr:
     enable: true
+    resourceProfile: light
     service:
       port: 8787
     storageSize: 1Gi
 
   sonarr:
     enable: true
+    resourceProfile: medium
     service:
       port: 8989
     storageSize: 1Gi
@@ -73,6 +120,7 @@ exportarr:
 
 calibreWeb:
   enable: false
+  resourceProfile: light
   storageSize: 1Gi
   service:
     port: 8083

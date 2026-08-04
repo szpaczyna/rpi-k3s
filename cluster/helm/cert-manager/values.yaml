@@ -31,6 +31,10 @@ podAnnotations:
 extraArgs:
   - --acme-http01-solver-nameservers=10.0.0.2:53
 
+ingressShim:
+  defaultIssuerName: letsencrypt-prod
+  defaultIssuerKind: ClusterIssuer
+
 prometheus:
   enabled: true
 
