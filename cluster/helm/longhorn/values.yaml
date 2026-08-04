@@ -197,17 +197,43 @@ longhornRecoveryBackend:
 
 ingress:
   enabled: false
-  ingressClassName: nginx
   host: longhorn.shpaq.org
-  tls: true
-  tlsSecret: longhorn-shpaq-org-tls
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/auth-type: basic
-    nginx.ingress.kubernetes.io/auth-secret: longhorn-auth
-    nginx.ingress.kubernetes.io/auth-realm: Authentication Required
   secrets: null
+
+# Gateway API equivalent of the (disabled) nginx ingress above.
+# Kept disabled to match the previous state: longhorn.shpaq.org has no
+# public DNS record, so enabling this would only produce a stuck ACME
+# HTTP-01 order (self-check fails: NXDOMAIN) hammering Let's Encrypt.
+# Flip to true once DNS for longhorn.shpaq.org exists, and also apply
+# certificate.yaml in this same directory.
+#
+# KNOWN LIMITATION: the upstream chart's httproute.yaml template has no
+# filters/ExtensionRef hook, so the basicAuth Middleware defined below
+# (via extraObjects) cannot be attached to this HTTPRoute through values
+# alone. Longhorn's dashboard would be reachable *without* the basic-auth
+# protection ingress-nginx used to provide. Before enabling in production,
+# either patch templates/httproute.yaml locally to add a filters block, or
+# front it with a hand-written HTTPRoute (see other charts in this repo for
+# the pattern) instead of the native httproute.enabled toggle.
+httproute:
+  enabled: false
+  hostnames:
+    - longhorn.shpaq.org
+  parentRefs:
+    - name: traefik-gateway
+      namespace: kube-system
+      kind: Gateway
+      sectionName: websecure
+
+extraObjects:
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: longhorn-auth
+      namespace: longhorn-system
+    spec:
+      basicAuth:
+        secret: longhorn-auth
 
 enablePSP: false
 namespaceOverride: ""
