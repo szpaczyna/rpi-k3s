@@ -1,0 +1,23 @@
+README.md
+  s_94037661b46416::t_c5e0635fcb06f5 86-89
+  s_94037661b46416::t_0d244b58dd8f8f 60-67
+  s_94037661b46416::t_b98c86000378cf 68
+docs/index.md
+  s_94037661b46416::t_4a2d521b8e09c4 28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "10c3f92e7dcc93dd5791062c78ef5f9b57760663",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
