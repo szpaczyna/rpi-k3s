@@ -1,0 +1,21 @@
+cluster/helm/longhorn/values.yaml
+  s_94037661b46416::t_652bb9c823a426 203-206,218-219,222-226
+  s_94037661b46416::t_6118c7f4bc37d9 207-217,220-221,227-236
+  s_94037661b46416::t_937814271cbf4d 237
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "eb0017011059c9c5923d2f171033885cc5478373",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
