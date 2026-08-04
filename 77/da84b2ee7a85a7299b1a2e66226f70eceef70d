@@ -1,0 +1,21 @@
+cluster/apps/pihole/service.yaml
+  s_94037661b46416::t_7779493ab5359c 2-5,12,15-26
+cluster/apps/pihole/httproute.yaml
+  s_94037661b46416::t_ea0f35d0c60fb5 1-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "77da84b2ee7a85a7299b1a2e66226f70eceef70d",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
