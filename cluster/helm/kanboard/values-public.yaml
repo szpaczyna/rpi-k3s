@@ -22,16 +22,15 @@ service:
   type: ClusterIP
   port: 80
 
-ingress:
+httpRoute:
   enabled: true
-  classname: nginx
   hosts:
     - name: kanboard.shpaq.org
-      tls: true
-      tlsSecret: kanboard-shpaq-org-tls
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  parentRefs:
+    - name: traefik-gateway
+      namespace: kube-system
+      kind: Gateway
+      sectionName: websecure
 
 serviceAccount:
   create: true
