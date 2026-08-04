@@ -1,0 +1,42 @@
+cluster/helm/traefik/README.md
+  s_94037661b46416::t_05918f097b9e27 1-80
+cluster/helm/traefik/referencegrants.yaml
+  s_94037661b46416::t_e889813ec50109 1-61
+cluster/helm/traefik/deploy
+  s_94037661b46416::t_c9527abd17dc25 7,16-17
+cluster/helm/traefik/values.yaml
+  s_94037661b46416::t_c4de01ee582de0 829-832
+  s_94037661b46416::t_9611a905a66af4 1005,1007
+  s_94037661b46416::t_9425bbfe238956 162-163
+  s_94037661b46416::t_8e658ff72b479e 773-787
+  s_94037661b46416::t_0d72e4b6b8159a 892-894
+  s_94037661b46416::t_b46150cdad3c27 1055-1056
+  s_94037661b46416::t_f024a1c5514b0d 27-31
+  s_94037661b46416::t_0fc0c222da46c0 151,169-177,180-214,220
+  s_94037661b46416::t_3f7eb2ca53ce11 693-705
+  s_94037661b46416::t_c20493386d0e24 224-232
+  s_94037661b46416::t_902d4a3d3956da 667-671,673
+  s_94037661b46416::t_8c5743626efb6f 401-439
+  s_94037661b46416::t_48f5875e5ef8ad 351
+  s_94037661b46416::t_e6df25510a15e0 815-817
+  s_94037661b46416::t_3b4fb325bb9bf0 5-9,12-17
+  s_94037661b46416::t_0e00429d1e3125 178-179
+  s_94037661b46416::t_f62c36b346e608 358
+  s_94037661b46416::t_71e7ea8ab6e9dd 377-378
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "567ce3a7cf973fa3cca9d140a29197ae7d606949",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
