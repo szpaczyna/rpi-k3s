@@ -1,0 +1,20 @@
+cluster/helm/grafana/values.yaml
+  s_94037661b46416::t_104937d8e328e1 192,199
+  s_94037661b46416::t_8600b2ccc3003c 51-53,56-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "7f1e923f995baa73e70c72d7beddf0d3445be6e0",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
