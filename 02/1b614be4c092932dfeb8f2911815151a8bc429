@@ -1,0 +1,24 @@
+cluster/helm/cert-manager/values.yaml
+  s_94037661b46416::t_b0b802943ea940 17,19
+  s_94037661b46416::t_7aa9bc54e099c4 18
+cluster/helm/cert-manager/letsencrypt-staging.yaml
+  s_94037661b46416::t_80b9ff2d1b02c8 15-19
+cluster/helm/cert-manager/letsencrypt-production.yaml
+  s_94037661b46416::t_f6b57429df68a5 15-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "021b614be4c092932dfeb8f2911815151a8bc429",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
