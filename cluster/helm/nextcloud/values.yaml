@@ -10,56 +10,63 @@ fullnameOverride: cloud
 replicas: 1
 
 ingress:
-  enabled: true
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/server-snippet: |-
-      server_tokens off;
-      proxy_hide_header X-Powered-By;
+  enabled: false
 
-      client_max_body_size 500m;
-      fastcgi_buffers 64 4K;
-
-      rewrite ^/\.well-known/carddav https://$server_name/remote.php/dav/ redirect;
-      rewrite ^/\.well-known/caldav https://$server_name/remote.php/dav/ redirect;
-      rewrite ^/.well-known/webfinger /public.php?service=webfinger last;
-      rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
-      rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json;
-
-      location = /robots.txt {
-        allow all;
-        log_not_found off;
-        access_log off;
-      }
-      location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/ {
-        deny all;
-      }
-      location ~ ^/(?:autotest|occ|issue|indie|db_|console) {
-        deny all;
-      }
-      location ^~ /.well-known {
-
-        location = /.well-known/carddav { return 301 /remote.php/dav/; }
-        location = /.well-known/caldav  { return 301 /remote.php/dav/; }
-
-        location /.well-known/acme-challenge    { try_files $uri $uri/ =404; }
-        location /.well-known/pki-validation    { try_files $uri $uri/ =404; }
-
-        return 301 /index.php$request_uri;
-      }
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: "500m"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "360"
-    nginx.ingress.kubernetes.io/proxy-buffering: "on"
-    nginx.ingress.kubernetes.io/default-backend: shpaq-org
-      #    nginx.ingress.kubernetes.io/modsecurity-snippet: |
-      #SecRuleEngine On
-  tls:
-  - secretName: cloud-shpaq-org-tls
-    hosts:
+# Gateway API equivalent of the (disabled) nginx ingress above.
+# Kept disabled: nextcloud has never actually been deployed (no live
+# release found on cluster), so there's no traffic to migrate yet.
+# Flip to true when ready to deploy for real, and review the caveats below
+# first.
+#
+# Ported 1:1 via the chart's native wellKnown option:
+#   - /.well-known/carddav, /.well-known/caldav redirects -> RequestRedirect
+#     (chart handles this natively, see httpRoute.wellKnown.enabled below)
+#
+# NOT ported (no clean Gateway API / Traefik equivalent, needs manual
+# follow-up before going live):
+#   - deny-all on /build, /tests, /config, /lib, /3rdparty, /templates,
+#     /data, /autotest, /occ, /issue, /indie, /db_, /console
+#     (nginx returned 403; Gateway API/Traefik has no "deny" primitive -
+#     would need a dedicated 403-responding backend Service, or leaving
+#     these paths unrouted so they simply 404 instead of 403)
+#   - server_tokens off / proxy_hide_header X-Powered-By
+#     (needs a Traefik `headers` Middleware with response header removal)
+#   - client_max_body_size 500m / proxy-body-size
+#     (no direct Traefik equivalent; closest is the `buffering` middleware's
+#     maxRequestBodyBytes, semantics differ slightly from nginx)
+#   - proxy-read-timeout 360 / proxy-buffering on
+#     (needs a Traefik ServersTransport CRD, not configurable via HTTPRoute)
+#   - nginx.ingress.kubernetes.io/default-backend: shpaq-org
+#     (nginx-specific fallback-on-no-endpoints behavior; no Gateway API
+#     equivalent, would need a catch-all HTTPRoute rule instead)
+httpRoute:
+  enabled: false
+  parentRefs:
+    - name: traefik-gateway
+      namespace: kube-system
+      kind: Gateway
+      sectionName: websecure
+  hostnames:
     - cloud.shpaq.org
-  labels:
-    app.kubernetes.io/name: cloud
+  wellKnown:
+    enabled: true
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/"
+
+extraManifests:
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: nextcloud-strip-headers
+      namespace: apps
+    spec:
+      headers:
+        customResponseHeaders:
+          X-Powered-By: ""
+          Server: ""
 
 lifecycle: {}
 # postStartCommand: []
