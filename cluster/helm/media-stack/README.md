@@ -75,6 +75,22 @@ helm uninstall <release-name>
 ## Notes
 
 - Ensure that your Kubernetes cluster has sufficient resources to run all the applications.
-- You may need to configure your Ingress controller to handle external traffic properly.
 
 For more information on each application, refer to their respective documentation.
+
+## Ingress / Routing
+
+Routing is exposed via a Gateway API `HTTPRoute` (see
+`templates/httproute.yaml`), attached to the shared `traefik-gateway` (see
+[`cluster/helm/traefik`](../traefik)). All app paths (`/transmission`,
+`/bazarr`, `/lidarr`, `/prowlarr`, `/radarr`, `/readarr`, `/sonarr`) are
+protected by a Traefik `BasicAuth` Middleware referencing the
+`media-auth` Secret — same secret/mechanism as the previous
+`nginx.ingress.kubernetes.io/auth-secret` annotation.
+
+A bare request to `https://media.shpaq.org/` (no app path) has no
+backend of its own; it's redirected (302) to `https://shpaq.org/` instead
+of falling through to a 404.
+
+`calibre-web` (when `calibreWeb.enable: true`) gets its own separate
+`HTTPRoute` on `calibre.shpaq.org`, no auth.

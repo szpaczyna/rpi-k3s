@@ -172,7 +172,10 @@ images:
     repository: "busybox"
     tag: "1.37.0"
 
-ingress:
-  className: nginx
-  host: media.shpaq.org
-  secretName: media-shpaq-org-tls
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: traefik-gateway
+      namespace: kube-system
+      kind: Gateway
+      sectionName: websecure

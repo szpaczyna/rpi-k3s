@@ -1,0 +1,96 @@
+{{- if .Values.httpRoute.enabled }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: media-auth
+  namespace: media
+spec:
+  basicAuth:
+    secret: media-auth
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: media
+  namespace: media
+  labels:
+    app.kubernetes.io/name: media
+spec:
+  parentRefs:
+    {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
+  hostnames:
+    - "media.shpaq.org"
+  rules:
+    # Bare root (no app suffix) has no backend of its own; redirect to the
+    # main landing page instead of falling through to a 404.
+    - matches:
+        - path:
+            type: Exact
+            value: /
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: shpaq.org
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /
+            statusCode: 302
+{{- if .Values.transmission.enable }}
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/transmission"
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: media-auth
+      backendRefs:
+        - name: transmission-http
+          port: {{ .Values.transmission.service.port }}
+{{- end }}
+{{- range $name, $svc := .Values.media }}
+{{- if $svc.enable }}
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/{{ $name }}"
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: media-auth
+      backendRefs:
+        - name: "{{ $name }}"
+          port: {{ $svc.service.port }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.calibreWeb.enable }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: calibre-web
+  namespace: media
+  labels:
+    app.kubernetes.io/instance: calibre-web
+spec:
+  parentRefs:
+    {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
+  hostnames:
+    - "calibre.shpaq.org"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: calibre-web
+          port: {{ .Values.calibreWeb.service.port }}
+{{- end }}
+{{- end }}
