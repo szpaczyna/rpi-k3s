@@ -43,8 +43,6 @@
 | [bitwarden](cluster/helm/bitwarden) | Password management (Vaultwarden) |
 | [booklore](cluster/helm/booklore) | Book library management |
 | [gitea](cluster/helm/gitea) | Self-hosted Git service |
-| [kanboard](cluster/helm/kanboard) | Kanban project management |
-| [nextcloud](cluster/helm/nextcloud) | Personal cloud service |
 | [media-stack](cluster/helm/media-stack) | Radarr, Sonarr, Lidarr, Prowlarr, Readarr, Bazarr, Transmission |
 | [shpaq-org](cluster/helm/shpaq-org) | Personal website |
 | [whoops](cluster/helm/whoops) | Whoop fitness data dashboards |
@@ -58,6 +56,15 @@
 | [gentoo](cluster/apps/gentoo) | Cross-compiler and playground |
 | [pihole](cluster/apps/pihole) | DNS ad-blocker (ingress proxy) |
 | [speedtest](cluster/apps/speedtest) | Prometheus speedtest exporter |
+
+### Not Currently Deployed
+
+Charts kept in the repo for future use but not installed on the cluster right now.
+
+| App | Description |
+|-----|-------------|
+| [nextcloud](cluster/helm/nextcloud) | Personal cloud service |
+| [kanboard](cluster/helm/kanboard) | Kanban project management |
 
 ### Monitoring & Observability
 
@@ -76,9 +83,10 @@
 
 | Component | Description |
 |-----------|-------------|
-| [cert-manager](cluster/helm/cert-manager) | Automated Let's Encrypt certificates |
-| [metallb](cluster/helm/metallb) | Bare-metal load balancer (BGP) |
-| [ingress-nginx](cluster/helm/ingress-nginx) | Ingress controller |
+| [cert-manager](cluster/helm/cert-manager) | Automated Let's Encrypt certificates (ACME HTTP-01 via Gateway API) |
+| [metallb](cluster/helm/metallb) | Bare-metal load balancer (L2) |
+| [traefik](cluster/helm/traefik) | Ingress controller (Gateway API / HTTPRoute) |
+| [gateway-api](cluster/core/gateway-api) | Kubernetes Gateway API CRDs |
 | [longhorn](cluster/helm/longhorn) | Distributed block storage |
 | [local-path-provisioner](cluster/helm/local-path-provisioner) | Local HostPath storage provisioner |
 | [system-upgrade-controller](cluster/core/system-upgrade-controller) | Automated K3s upgrades |

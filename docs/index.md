@@ -25,7 +25,7 @@ layout: default
   - [cert-manager](cluster/helm/cert-manager) - Automated letsencrypt broker
   - [metallb](cluster/core/networking) - Load-balancer for bare-metal with BGP
   - [longhorn](cluster/helm/longhorn) - Distributed storage system
-  - [ingress-nginx](cluster/helm/ingress-nginx) - Ingress controller
+  - [traefik](cluster/helm/traefik) - Ingress controller (Gateway API / HTTPRoute)
   - [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) - Certificates monitoring
   - [openweather-exporter](cluster/helm/openweather) - OpenWeather API exporter
   - [loki](cluster/helm/loki) - Log aggregation system
