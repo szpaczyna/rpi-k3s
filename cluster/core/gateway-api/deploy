@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Installs the Kubernetes Gateway API CRDs (standard channel).
+# These CRDs are required by Traefik's kubernetesGateway provider
+# and by cert-manager's gatewayHTTPRoute ACME solver.
+#
+# Ref: https://gateway-api.sigs.k8s.io/guides/getting-started/#installing-gateway-api
+
+GATEWAY_API_VERSION="v1.6.1"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MANIFEST_FILE="${SCRIPT_DIR}/standard-install-${GATEWAY_API_VERSION}.yaml"
+MANIFEST_URL="https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml"
+
+echo "==> Fetching Gateway API CRDs (${GATEWAY_API_VERSION}, standard channel)"
+curl -fsSL -o "${MANIFEST_FILE}" "${MANIFEST_URL}"
+
+echo "--> Applying ${MANIFEST_FILE}"
+# --force-conflicts: the existing CRDs on cluster were previously installed by a
+# different field manager ("helm"), so we must take ownership of the fields we manage.
+kubectl apply --server-side --force-conflicts -f "${MANIFEST_FILE}"
+
+echo "==> Done"
