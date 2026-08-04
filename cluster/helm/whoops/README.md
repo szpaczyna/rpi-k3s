@@ -42,20 +42,18 @@ service:
   type: ClusterIP
   port: 5000
 
-ingress:
-  enabled: true
-  className: "nginx"
-  host: whoops.shpaq.org
-  tls: true
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/auth-realm: Authentication Required
-    nginx.ingress.kubernetes.io/auth-type: basic
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/auth-secret: whoops-auth
 auth:
   secretName: whoops-auth
   data: "user:password"
+
+httpRoute:
+  enabled: true
+  host: whoops.shpaq.org
+  parentRefs:
+    - name: traefik-gateway
+      namespace: kube-system
+      kind: Gateway
+      sectionName: websecure
 
 env:
   CLIENT_ID: ""
