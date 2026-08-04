@@ -1,0 +1,25 @@
+cluster/helm/gitea/templates/gitea/httproute.yaml
+  s_94037661b46416::t_14b9eac4b2da25 1-53
+cluster/helm/gitea/values-public.yaml
+  s_94037661b46416::t_b13530bf87c6b8 114-120,124
+  s_94037661b46416::t_eadf219bb8de0b 100,102-112
+  s_94037661b46416::t_127b679192338a 113
+cluster/helm/gitea/templates/NOTES.txt
+  s_94037661b46416::t_8f0ac9e7dc20e8 2-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "b51f7bedf8eb4265aa94127fea02b422e36f5f23",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
