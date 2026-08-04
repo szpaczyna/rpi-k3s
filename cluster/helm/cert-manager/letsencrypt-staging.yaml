@@ -12,6 +12,9 @@ spec:
     http01: {}
     solvers:
       - http01:
-          ingress:
-            ingressClassName: nginx
+          gatewayHTTPRoute:
+            parentRefs:
+              - name: traefik-gateway
+                namespace: kube-system
+                kind: Gateway
         selector: {}

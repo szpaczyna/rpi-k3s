@@ -9,11 +9,13 @@ global:
   logLevel: 2
   leaderElection:
     namespace: "cert-manager"
-    #namespace: "kube-system"
 
 crds:
   enabled: true
   keep: true
+
+config:
+  enableGatewayAPI: true
 
 replicaCount: 1
 
