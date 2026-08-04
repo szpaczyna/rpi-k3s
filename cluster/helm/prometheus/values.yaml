@@ -125,33 +125,35 @@ server:
 
   ingress:
     enabled: false
-    ingressClassName: nginx
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/auth-type: basic
-      nginx.ingress.kubernetes.io/auth-secret: prometheus-auth
-      nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
     hosts:
       - prometheus.shpaq.org
-    path: /
-    pathType: Prefix
-    tls:
-      - secretName: prometheus-shpaq-org-tls
-        hosts:
-          - prometheus.shpaq.org
 
   route:
     main:
+      # Gateway API equivalent of the (disabled) nginx ingress above.
+      # Kept disabled to match the previous state: prometheus.shpaq.org has
+      # no public DNS record, so enabling this would only produce a stuck
+      # ACME HTTP-01 order (self-check fails: NXDOMAIN) hammering Let's
+      # Encrypt. Flip to true once DNS for prometheus.shpaq.org exists.
       enabled: false
       apiVersion: ""
       kind: ""
       annotations: {}
       labels: {}
-      parentRefs: []
-      hostnames: []
+      parentRefs:
+        - name: traefik-gateway
+          namespace: kube-system
+          kind: Gateway
+          sectionName: websecure
+      hostnames:
+        - prometheus.shpaq.org
       additionalRules: []
-      filters: []
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: prometheus-auth
       matches:
         - path:
             type: PathPrefix
@@ -672,7 +674,16 @@ networkPolicy:
   enabled: false
 forceNamespace: ""
 
-extraManifests: []
+extraManifests:
+  - |
+    apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: prometheus-auth
+      namespace: monitoring
+    spec:
+      basicAuth:
+        secret: prometheus-auth
 
 alertmanager:
   enabled: false
