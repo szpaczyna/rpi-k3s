@@ -48,20 +48,26 @@ service:
   port: 3000
 
 ingress:
-  enabled: true
-  ingressClassName: nginx
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-  path: /
-  pathType: Prefix
+  enabled: false
+  # hosts is kept populated (ingress disabled) because grafana.ini below
+  # still reads .Values.ingress.hosts to template server.domain / instance_name.
   hosts:
     - grafana.shpaq.org
-  tls:
-    - secretName: grafana-tls
-      hosts:
-        - grafana.shpaq.org
-  extraPaths: []
+
+route:
+  main:
+    enabled: true
+    parentRefs:
+      - name: traefik-gateway
+        namespace: kube-system
+        kind: Gateway
+        sectionName: websecure
+    hostnames:
+      - grafana.shpaq.org
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
 
 resources:
   limits:
@@ -183,14 +189,14 @@ datasources:
 
 grafana.ini:
   app_mode: production
-  instance_name: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ tpl (.Values.ingress.hosts | first) . }}{{ else }}''{{ end }}"
+  instance_name: grafana.shpaq.org
 
   paths:
     logs: /var/lib/grafana/log
     provisioning: /var/lib/grafana/provisioning
 
   server:
-    domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ tpl (.Values.ingress.hosts | first) . }}{{ else }}''{{ end }}"
+    domain: grafana.shpaq.org
     enable_gzip: true
     socket: /tmp/grafana.sock
 
