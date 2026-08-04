@@ -1,0 +1,24 @@
+cluster/helm/media-stack/templates/httproute.yaml
+  s_94037661b46416::t_bed566477f2532 1-24,40-96
+  s_94037661b46416::t_47ef00b1a15f3c 25-39
+cluster/helm/media-stack/values.yaml
+  s_94037661b46416::t_2062e77de423be 175-181
+cluster/helm/media-stack/README.md
+  s_94037661b46416::t_7ea9e5dbd88e4d 80-96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "694bcecbeaa6d2df63a98ef2dd498813a7bc23dc",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
