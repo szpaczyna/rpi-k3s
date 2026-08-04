@@ -1,4 +1,37 @@
 # Changelog
+## [0.6.3](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.2...v0.6.3) (2026-08-04)
+
+
+### Features
+
+* addressed security concerns in gitea and booklore | disable ([be09198](https://github.com/szpaczyna/rpi-k3s/commit/be09198f7a96b7f177d8916a9ed6c379ea49c346))
+* adjust longhorn for traefik ([eb00170](https://github.com/szpaczyna/rpi-k3s/commit/eb0017011059c9c5923d2f171033885cc5478373))
+* adjust nextcloud for traefik ([733c004](https://github.com/szpaczyna/rpi-k3s/commit/733c0042589152bc25c30e6d0a86df56367cbc0a))
+* adjust prometheus for traefik ([d446f51](https://github.com/szpaczyna/rpi-k3s/commit/d446f5186beb6b53ac50e427c2dbc9b06b9711ed))
+* cert-manager configuration update for traefik ([021b614](https://github.com/szpaczyna/rpi-k3s/commit/021b614be4c092932dfeb8f2911815151a8bc429))
+* gateway-api CRDs ([7abc28f](https://github.com/szpaczyna/rpi-k3s/commit/7abc28f36417567ea9b6c510916d7a1816288fe2))
+* move bitwarden to traefik ([91fa375](https://github.com/szpaczyna/rpi-k3s/commit/91fa375197d09e04417ef9e45d5f863652e57d84))
+* move default website to traefik ([ac8e6c9](https://github.com/szpaczyna/rpi-k3s/commit/ac8e6c9d973232b2f43e54c4a8543af1cce38355))
+* move media-stack to traefik ([694bcec](https://github.com/szpaczyna/rpi-k3s/commit/694bcecbeaa6d2df63a98ef2dd498813a7bc23dc))
+* move pihole to traefik ([77da84b](https://github.com/szpaczyna/rpi-k3s/commit/77da84b2ee7a85a7299b1a2e66226f70eceef70d))
+* move whoops to traefik ([b2936f3](https://github.com/szpaczyna/rpi-k3s/commit/b2936f3444e111a19d0ca243372b8e455c6b6965))
+* moved booklore to traefik ([21c757e](https://github.com/szpaczyna/rpi-k3s/commit/21c757ea2421492f6787e571e8bf1ef14df5b3a3))
+* moved gitea to traefik ([b51f7be](https://github.com/szpaczyna/rpi-k3s/commit/b51f7bedf8eb4265aa94127fea02b422e36f5f23))
+* moved grafana to traefik ([7f1e923](https://github.com/szpaczyna/rpi-k3s/commit/7f1e923f995baa73e70c72d7beddf0d3445be6e0))
+* moved kanboard to traefik ([8e8f547](https://github.com/szpaczyna/rpi-k3s/commit/8e8f5474848516a2596635523eff418a7ff00546))
+* removed velero ([2dc3ff0](https://github.com/szpaczyna/rpi-k3s/commit/2dc3ff0596bd00dbab1b651c1acf091b2873575e))
+* traefik replacement for ingress nginx ([567ce3a](https://github.com/szpaczyna/rpi-k3s/commit/567ce3a7cf973fa3cca9d140a29197ae7d606949))
+
+
+### Bug Fixes
+
+* removed stale ingressClass ([225567b](https://github.com/szpaczyna/rpi-k3s/commit/225567b9e808a5d62e56ac7a220318eaeb0757a7))
+
+
+### Documentation
+
+* documentation update ([10c3f92](https://github.com/szpaczyna/rpi-k3s/commit/10c3f92e7dcc93dd5791062c78ef5f9b57760663))
+
 ## [0.6.2](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.1...v0.6.2) (2026-07-31)
 
 
