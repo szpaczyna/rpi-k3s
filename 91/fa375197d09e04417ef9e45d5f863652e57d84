@@ -1,0 +1,23 @@
+cluster/helm/bitwarden/templates/NOTES.txt
+  s_94037661b46416::t_3502c172701de0 2-4
+cluster/helm/bitwarden/values-public.yaml
+  s_94037661b46416::t_05051a80677c62 16,21-25
+cluster/helm/bitwarden/templates/httproute.yaml
+  s_94037661b46416::t_a1d5db4a3b1e18 1-28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "91fa375197d09e04417ef9e45d5f863652e57d84",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
