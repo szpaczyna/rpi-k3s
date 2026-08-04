@@ -80,24 +80,18 @@ service:
   port: 6060
   targetPort: http
 
-ingress:
+httpRoute:
   enabled: true
-  className: nginx
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    kubernetes.io/tls-acme: "true"
   hosts:
     - host: booklore.shpaq.org
       paths:
         - path: /
-          pathType: Prefix
-  tls:
-    - hosts:
-        - booklore.shpaq.org
-      secretName: booklore-shpaq-org-tls
-  extraPaths: []
+          pathType: PathPrefix
+  parentRefs:
+    - name: traefik-gateway
+      namespace: kube-system
+      kind: Gateway
+      sectionName: websecure
 
 resources:
   limits:
