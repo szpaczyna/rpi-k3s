@@ -1,0 +1,21 @@
+cluster/helm/booklore/values.yaml
+  s_94037661b46416::t_362552b34b2f05 83,89-94
+cluster/helm/booklore/templates/httproute.yaml
+  s_94037661b46416::t_a644ec7771efcb 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "21c757ea2421492f6787e571e8bf1ef14df5b3a3",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
