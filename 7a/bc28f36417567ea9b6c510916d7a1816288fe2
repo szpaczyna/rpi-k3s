@@ -1,0 +1,22 @@
+cluster/core/gateway-api/README.md
+  s_94037661b46416::t_ae33bca9333ded 1-33
+cluster/core/gateway-api/deploy
+  s_94037661b46416::t_9ab6c928f509df 19-21
+  s_94037661b46416::t_a11940ace055bd 1-18,22-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "7abc28f36417567ea9b6c510916d7a1816288fe2",
+  "prompts": {},
+  "sessions": {
+    "s_94037661b46416": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0333e7d6bffeNf681q88o7yTky",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
