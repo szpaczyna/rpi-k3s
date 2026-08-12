@@ -196,8 +196,18 @@ readinessProbe:
 ## Metrics exporter as sidecar
 extraContainers:
   - name: metrics
-    image: prometheuscommunity/postgres-exporter:v0.18.1
-    command: ["sh", "-c", "echo '{}' > /tmp/postgres_exporter.yml && exec postgres_exporter --config.file=/tmp/postgres_exporter.yml"]
+    image: prometheuscommunity/postgres-exporter:v0.20.1
+    command:
+      - sh
+      - -c
+      - |
+        echo '{}' > /tmp/postgres_exporter.yml && exec postgres_exporter \
+          --config.file=/tmp/postgres_exporter.yml \
+          --collector.stat_checkpointer \
+          --collector.postmaster \
+          --collector.stat_activity_autovacuum \
+          --collector.stat_wal_receiver \
+          --no-collector.replication
     ports:
       - name: metrics
         containerPort: 9187

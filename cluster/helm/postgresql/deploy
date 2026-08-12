@@ -21,4 +21,4 @@ kubectl apply -f backup-job.yaml -n "${NAMESPACE}"
 kubectl apply -f backup-full-job.yaml -n "${NAMESPACE}"
 
 # Apply pgpass secret for backup jobs
-kubectl apply -f <(sops -d ../../secrets/postgresql-pgpass.yaml) -n "${NAMESPACE}"
+# kubectl apply -f <(sops -d ../../secrets/postgresql-pgpass.yaml) -n "${NAMESPACE}"
