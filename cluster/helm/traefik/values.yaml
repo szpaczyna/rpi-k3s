@@ -411,9 +411,9 @@ log:
 
 accessLog:
   # -- To enable access logs
-  enabled: false
+  enabled: true
   # -- Set [access log format](https://doc.traefik.io/traefik/observability/access-logs/#format)
-  format:  # @schema enum:["common", "json", null]; type:[string, null]; default: "common"
+  format: json # @schema enum:["common", "json", null]; type:[string, null]; default: "common"
   # filePath: "/var/log/traefik/access.log
   # -- Set [bufferingSize](https://doc.traefik.io/traefik/observability/access-logs/#bufferingsize)
   bufferingSize:  # @schema type:[integer, null]
@@ -436,7 +436,9 @@ accessLog:
     headers:
       # -- Set default mode for fields.headers
       defaultMode: drop  # @schema enum:[keep, drop, redact]; default: drop
-      names: {}
+      names:
+        User-Agent: keep
+        Referer: keep
 
 metrics:
   ## -- Enable metrics for internal resources. Default: false
@@ -830,6 +832,11 @@ service:
   # changes were needed during cutover.
   spec:
     loadBalancerIP: "10.0.0.40"
+    # Preserve the real client IP. With the default `Cluster` policy kube-proxy
+    # SNATs every connection, so Traefik access logs only saw the node's pod
+    # network gateway (10.42.x.1) instead of the client address. `Local` works
+    # here because Traefik runs as a DaemonSet (a local backend on every node).
+    externalTrafficPolicy: Local
   # externalTrafficPolicy: Cluster
   # clusterIP: "2.3.4.5"
   loadBalancerSourceRanges: []
