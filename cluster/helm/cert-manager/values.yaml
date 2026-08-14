@@ -1,6 +1,6 @@
 global:
   nodeSelector:
-    kubernetes.io/os: linux
+    kubernetes.io/role: worker
   rbac:
     create: true
     aggregateClusterRoles: true
