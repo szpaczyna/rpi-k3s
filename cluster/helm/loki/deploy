@@ -10,6 +10,9 @@ helm repo add grafana https://grafana.github.io/helm-charts 2>/dev/null || true
 helm repo add fluent https://fluent.github.io/helm-charts 2>/dev/null || true
 helm repo update
 
+kubectl apply -f <(sops -d ../../secrets/maxmind-geoip-secret.yaml) -n "${NAMESPACE}"
+kubectl apply -f geolite2-cronjob.yaml
+
 # Install loki
 helm upgrade --install loki grafana/loki \
   --namespace "${NAMESPACE}" \

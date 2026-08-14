@@ -1,0 +1,151 @@
+# GeoLite2 database refresh for the fluent-bit `geoip2` access-log enrichment.
+#
+# Every two weeks this CronJob downloads a fresh MaxMind GeoLite2 City
+# database into the shared `geolite2-data` PVC and then rolls the fluent-bit
+# DaemonSet so the running pods re-open the updated .mmdb file. This is the
+# only place the database is ever downloaded -- fluent-bit pods just read it
+# from the volume.
+#
+# Storage: a static hostPath PV on top of the NFS share exported by
+# rpi-k3s-worker-00 (`/data/nfs/geolite2`, same pattern as media-stack's
+# `/data/media`). Each node reaches the same data either locally (worker-00)
+# or over NFS (the other nodes), so all fluent-bit DaemonSet pods can read it.
+#
+# If the volume is ever empty (e.g. first deploy on a fresh PVC), bootstrap it
+# with a one-off run before the fluent-bit chart rolls out:
+#   kubectl create job --from=cronjob/geolite2-updater geolite2-bootstrap -n logging
+#
+# Apply order (once, before `./deploy`):
+#   1. sops -e -i maxmind-geoip-secret.yaml && kubectl apply -f maxmind-geoip-secret.yaml
+#   2. kubectl apply -f geolite2-cronjob.yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: geolite2-updater
+  namespace: logging
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: geolite2-updater
+  namespace: logging
+rules:
+  # restart the fluent-bit DaemonSet after a DB update
+  - apiGroups: ["apps"]
+    resources: ["daemonsets"]
+    verbs: ["get", "patch"]
+  # allow one-off bootstrap via `kubectl create job --from=cronjob/geolite2-updater`
+  - apiGroups: ["batch"]
+    resources: ["cronjobs", "jobs"]
+    verbs: ["get", "create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: geolite2-updater
+  namespace: logging
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: geolite2-updater
+subjects:
+  - kind: ServiceAccount
+    name: geolite2-updater
+    namespace: logging
+---
+# Static PV/PVC pair on the NFS share exported by rpi-k3s-worker-00.
+# `volumeName` pins the claim to this PV so the local-path provisioner
+# cannot race us with a dynamic volume. Mirrors media-stack's
+# templates/local-storage.yaml.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: geolite2
+  labels:
+    app.kubernetes.io/name: geolite2
+    type: "hostpath"
+spec:
+  storageClassName: local-path
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /data/nfs/geolite2
+    type: Directory
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: geolite2-data
+  namespace: logging
+spec:
+  storageClassName: local-path
+  accessModes: [ReadWriteMany]
+  volumeName: geolite2
+  resources:
+    requests:
+      storage: 200Mi
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: geolite2-updater
+  namespace: logging
+spec:
+  # Day-of-month 14 and 28 (~every 14 days) at 03:00 UTC
+  schedule: "0 3 */14 * *"
+  concurrencyPolicy: Replace
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      ttlSecondsAfterFinished: 604800
+      template:
+        spec:
+          serviceAccountName: geolite2-updater
+          restartPolicy: Never
+          initContainers:
+            - name: update-geolite2
+              image: ghcr.io/maxmind/geoipupdate
+              env:
+                - name: GEOIPUPDATE_ACCOUNT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: maxmind-geoip
+                      key: account_id
+                - name: GEOIPUPDATE_LICENSE_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: maxmind-geoip
+                      key: license_key
+                - name: GEOIPUPDATE_EDITION_IDS
+                  value: "GeoLite2-City"
+                - name: GEOIPUPDATE_DB_DIR
+                  value: /geoip
+              volumeMounts:
+                - name: geolite2-data
+                  mountPath: /geoip
+            # Roll the DaemonSet so pods reload the updated .mmdb (the geoip2
+            # filter opens the database once at startup).
+            - name: restart-fluentbit
+              image: bitnami/kubectl:latest
+              command: ["kubectl"]
+              args:
+                - rollout
+                - restart
+                - daemonset/fluent-bit
+                - --namespace
+                - logging
+          containers:
+            - name: done
+              image: busybox:1.36
+              command: ["/bin/sh", "-c", "echo geoip update finished"]
+          volumes:
+            - name: geolite2-data
+              persistentVolumeClaim:
+                claimName: geolite2-data

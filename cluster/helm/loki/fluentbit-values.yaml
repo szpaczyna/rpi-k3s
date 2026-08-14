@@ -342,9 +342,21 @@ extraPorts: []
 #     name: tcp
 #     nodePort: 30517
 
-extraVolumes: []
+# Shared RWX volume holding the MaxMind GeoLite2 database. Single source of
+# truth for the `geoip2` access-log enrichment: every fluent-bit DaemonSet pod
+# (one per node) mounts it read-only, while the `geolite2-updater` CronJob
+# refreshes it every two weeks (see geolite2-cronjob.yaml). Longhorn provides
+# ReadWriteMany via its NFS share-manager. The PVC itself is declared in
+# geolite2-cronjob.yaml and must exist before this chart is upgraded.
+extraVolumes:
+  - name: geoip
+    persistentVolumeClaim:
+      claimName: geolite2-data
 
-extraVolumeMounts: []
+extraVolumeMounts:
+  - name: geoip
+    mountPath: /geoip
+    readOnly: true
 
 updateStrategy: {}
 #   type: RollingUpdate
@@ -403,6 +415,27 @@ config:
         K8S-Logging.Exclude On
         Labels On
         Annotations On
+
+    [FILTER]
+        # Enrich Traefik access logs with the client's geolocation (MaxMind
+        # GeoLite2). Runs on the already-merged `ClientHost` field, so every
+        # access log line gets `country_name`/`country_code` (and city +
+        # lat/lon for Grafana geo maps). Limited to traefik-* pods; other
+        # cluster logs skip the lookup entirely.
+        # The tag is `kube.var.log.containers.<pod>_...` (fluent-bit expands
+        # the tail `Tag kube.*` with the full path), hence the long prefix.
+        # `Log_Level error` suppresses warnings for records without
+        # `ClientHost` and for private/LAN IPs (no country in GeoLite2).
+        Name geoip2
+        Match_Regex kube\.var\.log\.containers\.traefik-.*
+        Database /geoip/GeoLite2-City.mmdb
+        Lookup_Key ClientHost
+        Record country_name ClientHost %{country.names.en}
+        Record country_code ClientHost %{country.iso_code}
+        Record city_name ClientHost %{city.names.en}
+        Record latitude ClientHost %{location.latitude}
+        Record longitude ClientHost %{location.longitude}
+        Log_Level error
 
   ## https://docs.fluentbit.io/manual/pipeline/outputs
   outputs: |
@@ -498,6 +531,8 @@ args:
   - --config=/fluent-bit/etc/conf/fluent-bit.conf
 
 # This supports either a structured array or a templatable string
+# The GeoLite2 database is owned exclusively by the geolite2-updater CronJob
+# (see geolite2-cronjob.yaml); fluent-bit never downloads it on pod start.
 initContainers: []
 
 # Array mode
