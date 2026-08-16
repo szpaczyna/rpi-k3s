@@ -71,12 +71,33 @@ deployment:
   #     - name: dsdsocket
   #       mountPath: /socket
   # -- Additional volumes available for use with initContainers and additionalContainers
-  additionalVolumes: []
+  additionalVolumes:
+    # Holds the IP2Location LITE database for the geoblock plugin.
+    # Populated by the `geodb` initContainer (see initContainers below) so the
+    # geoblock middleware gets a stable, predictable path regardless of the
+    # random gop-* hash Traefik gives plugin sources in /plugins-storage.
+    - name: geodb
+      emptyDir: {}
   # - name: dsdsocket
   #   hostPath:
   #     path: /var/run/statsd-exporter
   # -- Additional initContainers (e.g. for setting file permission as shown below)
-  initContainers: []
+  initContainers:
+    # Fetch the IP2Location LITE DB1 (country-level, IPv6) database shipped with
+    # the geoblock plugin at the pinned version. raw.githubusercontent.com is
+    # reachable from the cluster (Traefik itself pulls plugin modules from GitHub).
+    - name: geodb
+      image: busybox:1.36
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          set -eu
+          wget -q -O /geodb/IP2LOCATION-LITE-DB1.IPV6.BIN \
+            https://raw.githubusercontent.com/nscuro/traefik-plugin-geoblock/v0.14.0/IP2LOCATION-LITE-DB1.IPV6.BIN
+          test -s /geodb/IP2LOCATION-LITE-DB1.IPV6.BIN
+      volumeMounts:
+        - name: geodb
+          mountPath: /geodb
   # The "volume-permissions" init container is required if you run into permission issues.
   # Related issue: https://github.com/traefik/traefik-helm-chart/issues/396
   # - name: volume-permissions
@@ -139,7 +160,13 @@ experimental:
     # -- Enable traefik experimental GatewayClass CRD
     enabled: false
   # -- Enable traefik experimental plugins
-  plugins: {}
+  plugins:
+    geoblock:
+      moduleName: github.com/nscuro/traefik-plugin-geoblock
+      version: v0.14.0
+    fail2ban:
+      moduleName: github.com/tomMoulard/fail2ban
+      version: v0.9.0
   # demo:
   #   moduleName: github.com/traefik/plugindemo
   #   version: v0.2.1
@@ -393,7 +420,11 @@ volumes: []
 #   type: configMap
 
 # -- Additional volumeMounts to add to the Traefik container
-additionalVolumeMounts: []
+additionalVolumeMounts:
+  # Make the geoblock database (populated by the `geodb` initContainer)
+  # visible to the geoblock plugin at a stable path.
+  - name: geodb
+    mountPath: /data/geodb
 # -- For instance when using a logshipper for access logs
 # - name: traefik-logs
 #   mountPath: /var/log/traefik
@@ -786,7 +817,18 @@ ports:
       # It follows the provider naming convention: https://doc.traefik.io/traefik/providers/overview/#provider-namespace
       #   - namespace-name1@kubernetescrd
       #   - namespace-name2@kubernetescrd
-      middlewares: []
+      #
+      # Global security chain applied to every HTTPRoute on websecure:
+      #   1. ratelimit-global  -> per-IP throttle, returns 429 on bursts
+      #   2. geoblock          -> only Poland (+private/LAN via allowPrivate), 403 otherwise
+      #   3. fail2ban          -> bans IPs after repeated 4xx/5xx status codes
+      # The 429s from ratelimit and 403s from geoblock are counted by fail2ban,
+      # giving defense in depth. ACME (port 80), dashboard (8080) and healthchecks
+      # do NOT traverse websecure and are unaffected.
+      middlewares:
+        - kube-system-ratelimit-global@kubernetescrd
+        - kube-system-geoblock@kubernetescrd
+        - kube-system-fail2ban@kubernetescrd
   metrics:
     # -- When using hostNetwork, use another port to avoid conflict with node exporter:
     # https://github.com/prometheus/prometheus/wiki/Default-port-allocations
@@ -1061,3 +1103,61 @@ hub:
 global:
   checkNewVersion: true
   sendAnonymousUsage: false
+
+# -- Extra manifests rendered alongside the chart. Holds the global security
+# Middlewares referenced by ports.websecure.http.middlewares above.
+extraObjects:
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: ratelimit-global
+      namespace: kube-system
+    spec:
+      rateLimit:
+        average: 30
+        burst: 60
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: geoblock
+      namespace: kube-system
+    spec:
+      plugin:
+        geoblock:
+          # Enable this plugin?
+          enabled: true
+          # Path to ip2location database file, fetched to a stable path by the
+          # `geodb` initContainer from the plugin's GitHub raw URL at the pinned
+          # version. Bumping experimental.plugins.geoblock.version refreshes the
+          # database (keep the initContainer URL in sync with the pin).
+          databaseFilePath: /data/geodb/IP2LOCATION-LITE-DB1.IPV6.BIN
+          # Allowlist of countries to allow (ISO 3166-1 alpha-2)
+          allowedCountries:
+            - PL
+          # Default allow indicates that if an IP is in neither block list nor allow lists, it should be allowed.
+          defaultAllow: false
+          # Allow requests from private / internal networks?
+          allowPrivate: true
+          # HTTP status code to return for disallowed requests
+          disallowedStatusCode: 403
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: fail2ban
+      namespace: kube-system
+    spec:
+      plugin:
+        fail2ban:
+          logLevel: INFO
+          allowlist:
+            ip:
+              # LAN + MetalLB pool + k3s pod/service CIDRs are all under 10.0.0.0/8.
+              # This exempts internal traffic from fail2ban tracking entirely.
+              - "10.0.0.0/8"
+          rules:
+            enabled: true
+            findtime: "10m"
+            maxretry: 5
+            bantime: "1h"
+            statuscode: "400,401,403-499"
+          enableBlockLogs: true

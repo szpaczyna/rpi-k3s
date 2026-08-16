@@ -42,6 +42,41 @@ When enabling a currently-disabled app (prometheus, longhorn, nextcloud —
 see their respective `values.yaml`), add its TLS secret to
 `gateway.listeners.websecure.certificateRefs` here.
 
+## Global security chain (websecure)
+
+Every `HTTPRoute` on `websecure` passes through three Middlewares, applied
+globally via `ports.websecure.http.middlewares`. The Middlewares themselves
+are defined in `extraObjects` (values.yaml), all in namespace `kube-system`:
+
+1. **`ratelimit-global`** — per-source-IP throttle (`average: 30`, `burst:
+   60`), returns `429` on bursts.
+2. **`geoblock`** — Poland-only allowlist (`allowedCountries: [PL]`,
+   `defaultAllow: false`). Private/LAN traffic is always allowed via
+   `allowPrivate: true`; everything else gets `403`.
+3. **`fail2ban`** (`tomMoulard/fail2ban` plugin) — bans source IPs after
+   repeated failures (`findtime: 10m`, `maxretry: 5`, `bantime: 1h`,
+   `statuscode: 400,401,403-499`). `10.0.0.0/8` is allowlisted, which
+   exempts the LAN, the MetalLB pool and the k3s pod/service CIDRs. The
+   `429`s from the ratelimit and the `403`s from the geoblock feed the
+   failure counter too, so the layers back each other up.
+
+Client IPs are reliable because the Service is `externalTrafficPolicy:
+Local` — real source IPs reach Traefik instead of being SNATed. With
+MetalLB in L2 mode all external traffic is handled by the single node
+owning the VIP, so the plugin's per-pod in-memory ban state sees every
+request. Bans reset when the pod restarts.
+
+The geoblock plugin reads an IP2Location LITE DB1 database. The path
+Traefik gives plugin sources (`/plugins-storage/sources/gop-*/...`)
+contains a random hash, so the `geodb` initContainer downloads the `.BIN`
+file from the plugin's GitHub repo into a stable path (`/data/geodb/`).
+Keep the download URL in `deployment.initContainers` in sync with
+`experimental.plugins.geoblock.version` when bumping the plugin.
+
+Not affected by the chain: ACME/Let's Encrypt HTTP-01 challenges (port 80,
+`web` entrypoint), the dashboard/API (`traefik` entrypoint, port 8080) and
+kubelet healthchecks.
+
 ## Migration from ingress-nginx — annotation mapping
 
 | nginx annotation | Gateway API / Traefik equivalent |
