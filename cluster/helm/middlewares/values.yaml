@@ -1,0 +1,5 @@
+# Namespaces that need shared middlewares (security-chain, authelia).
+namespaces:
+  - apps
+  - media
+  - monitoring
