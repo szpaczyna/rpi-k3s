@@ -1,0 +1,30 @@
+image:
+  repository: ksmanis/gentoo-distcc
+  tag: "tcp"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 3632
+  loadBalancerIP: 10.0.0.44
+
+ports:
+  - name: distcc-tcp
+    containerPort: 3632
+    protocol: TCP
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 3000m
+    memory: 2048Mi
+
+storage:
+  className: longhorn
+  size: 8Gi
+  mountPath: /mnt
+
+nodeSelector:
+  kubernetes.io/role: worker

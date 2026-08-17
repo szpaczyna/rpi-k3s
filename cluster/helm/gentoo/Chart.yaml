@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: gentoo
+description: Helm chart for Gentoo distcc build node
+type: application
+version: 0.1.0
+appVersion: "latest"
