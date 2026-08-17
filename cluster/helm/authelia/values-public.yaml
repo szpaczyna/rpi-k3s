@@ -1,0 +1,65 @@
+---
+## Default values for Authelia. 
+image:
+  tag: "4.39.20"
+
+pod:
+  kind: Deployment
+  securityContext:
+    pod:
+      runAsUser: 8000
+      runAsGroup: 8000
+      fsGroup: 8000
+  initContainers:
+    - name: seed-users
+      image: ghcr.io/authelia/authelia:4.39.20
+      command:
+        - sh
+        - -c
+        - 'if [ ! -f /config/users_database.yml ]; then cp /seed/users_database.yml /config/users_database.yml; fi'
+      volumeMounts:
+        - name: seed-users
+          mountPath: /seed
+          readOnly: true
+        - name: authelia
+          mountPath: /config
+  extraVolumes:
+    - name: seed-users
+      secret:
+        secretName: authelia-users
+
+secret:
+  existingSecret: authelia
+
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: local-path
+
+ingress:
+  enabled: true
+  gatewayAPI:
+    enabled: true
+    parentRefs:
+      - name: traefik-gateway
+        namespace: traefik
+        sectionName: websecure
+    hostnamesOverride:
+      - auth.shpaq.org
+
+configMap:
+  theme: dark
+
+  ntp:
+    disable_startup_check: true
+    disable_failure: true
+
+  authentication_backend:
+    file:
+      enabled: true
+      path: /config/users_database.yml
+
+  storage:
+    local:
+      enabled: true
+      path: /config/db.sqlite3
