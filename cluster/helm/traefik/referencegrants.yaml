@@ -1,4 +1,4 @@
-# ReferenceGrants allow the traefik-gateway (namespace kube-system) to
+# ReferenceGrants allow the traefik-gateway (namespace traefik) to
 # terminate TLS using Secrets that live in other namespaces. Without these,
 # cross-namespace certificateRefs on the Gateway are rejected and the
 # Gateway's Programmed/Accepted status never resolves.
@@ -13,7 +13,7 @@ spec:
   from:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      namespace: kube-system
+      namespace: traefik
   to:
     - group: ""
       kind: Secret
@@ -27,7 +27,7 @@ spec:
   from:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      namespace: kube-system
+      namespace: traefik
   to:
     - group: ""
       kind: Secret
@@ -41,7 +41,7 @@ spec:
   from:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      namespace: kube-system
+      namespace: traefik
   to:
     - group: ""
       kind: Secret
@@ -55,7 +55,21 @@ spec:
   from:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      namespace: kube-system
+      namespace: traefik
+  to:
+    - group: ""
+      kind: Secret
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: allow-traefik-gateway-tls-secrets
+  namespace: auth
+spec:
+  from:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      namespace: traefik
   to:
     - group: ""
       kind: Secret

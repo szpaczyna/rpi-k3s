@@ -26,10 +26,10 @@ deployment:
   enabled: true
   # -- Deployment or DaemonSet. DaemonSet gives one Traefik pod per node,
   # matching the HA topology of the previous ingress-nginx DaemonSet.
-  kind: DaemonSet
+  kind: Deployment
   # -- Number of pods of the deployment (only applies when kind == Deployment).
   # Ignored for DaemonSet (one pod per matching node).
-  replicas: 1
+  replicas: 2
   # -- Number of old history to retain to allow rollback (If not set, default Kubernetes value is set to 10)
   revisionHistoryLimit:  # @schema type:[integer, null];minimum:0
   # -- Amount of time (in seconds) before Kubernetes will send the SIGKILL signal if Traefik does not shut down
@@ -179,7 +179,8 @@ gateway:
   # -- By default, Gateway is created in the same `Namespace` than Traefik.
   namespace: ""
   # -- Additional gateway annotations (e.g. for cert-manager.io/issuer)
-  annotations: {}
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   # -- [Infrastructure](https://kubernetes.io/blog/2023/11/28/gateway-api-ga/#gateway-infrastructure-labels)
   infrastructure: {}
   # -- Define listeners
@@ -198,8 +199,8 @@ gateway:
         from: All
     # HTTPS listener. certificateRefs lists every existing TLS Secret so the
     # single Gateway can terminate TLS for all hostnames currently served.
-    # cert-manager keeps renewing these same Secrets via the ACME
-    # gatewayHTTPRoute solver (see cluster/helm/cert-manager).
+    # cert-manager.io/cluster-issuer annotation auto-creates Certificate
+    # resources for each HTTPRoute hostname and keeps secrets renewed.
     websecure:
       # -- Port is the network port. Multiple listeners may use the same port, subject to the Listener compatibility rules.
       # The port must match a port declared in ports section (ports.websecure.port below).
@@ -232,7 +233,9 @@ gateway:
           namespace: media
         - name: grafana-tls
           namespace: monitoring
-        # Currently-disabled ingresses; certs don't exist yet, add once enabled:
+        - name: authelia-tls
+          namespace: auth
+        # Currently-disabled ingresses; add once enabled:
         # - name: prometheus-shpaq-org-tls
         #   namespace: monitoring
         # - name: longhorn-shpaq-org-tls
@@ -253,7 +256,7 @@ api:
   dashboard: true
   # -- Enable the insecure API (HTTP) on the internal `traefik` entrypoint
   # (port 8080, not exposed by the Service). Reach it locally via
-  # `kubectl port-forward -n kube-system <pod> 8080:8080` then browse
+  # `kubectl port-forward -n traefik <pod> 8080:8080` then browse
   # http://localhost:8080/dashboard/.
   insecure: true
 
@@ -724,18 +727,9 @@ ports:
     # -- See [upstream documentation](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport)
     nodePort:  # @schema type:[integer, null]; minimum:0
     http:
-      redirections:
-        # -- Port Redirections
-        # Added in 2.2, one can make permanent redirects via entrypoints.
-        # Same sets of parameters: to, scheme, permanent and priority.
-        # https://doc.traefik.io/traefik/reference/install-configuration/entrypoints/#configuration-example
-        # Global HTTP -> HTTPS redirect, equivalent to the per-Ingress
-        # nginx.ingress.kubernetes.io/ssl-redirect: "true" annotation used
-        # previously on every Ingress.
-        entryPoint:
-          to: websecure
-          scheme: https
-          permanent: true
+      # -- Global HTTP -> HTTPS redirect removed; now applied per-route via
+      # security-chain middleware so ACME HTTP-01 challenges (which need port
+      # 80 without redirect) can succeed.
     forwardedHeaders:
       # -- Trust forwarded headers information (X-Forwarded-*).
       trustedIPs: []
@@ -818,17 +812,12 @@ ports:
       #   - namespace-name1@kubernetescrd
       #   - namespace-name2@kubernetescrd
       #
-      # Global security chain applied to every HTTPRoute on websecure:
-      #   1. ratelimit-global  -> per-IP throttle, returns 429 on bursts
-      #   2. geoblock          -> only Poland (+private/LAN via allowPrivate), 403 otherwise
-      #   3. fail2ban          -> bans IPs after repeated 4xx/5xx status codes
-      # The 429s from ratelimit and 403s from geoblock are counted by fail2ban,
-      # giving defense in depth. ACME (port 80), dashboard (8080) and healthchecks
-      # do NOT traverse websecure and are unaffected.
+      # ratelimit-global + fail2ban are entrypoint-wide for defence in depth.
+      # geoblock is per-route (extensionRef) because entrypoint-level geoblock
+      # blocks ACME HTTP-01 challenges from non-PL Let's Encrypt servers.
       middlewares:
-        - kube-system-ratelimit-global@kubernetescrd
-        - kube-system-geoblock@kubernetescrd
-        - kube-system-fail2ban@kubernetescrd
+        - traefik-ratelimit-global@kubernetescrd
+        - traefik-fail2ban@kubernetescrd
   metrics:
     # -- When using hostNetwork, use another port to avoid conflict with node exporter:
     # https://github.com/prometheus/prometheus/wiki/Default-port-allocations
@@ -911,7 +900,9 @@ service:
 autoscaling:
   # -- Create HorizontalPodAutoscaler object.
   # See EXAMPLES.md for more details.
-  enabled: false
+  enabled: true
+  maxReplicas: 5
+  minReplicas: 2
 
 persistence:
   # -- Enable persistence using Persistent Volume Claims
@@ -987,23 +978,24 @@ affinity: {}
 #        topologyKey: kubernetes.io/hostname
 
 # -- nodeSelector is the simplest recommended form of node selection constraint.
-nodeSelector: {}
+nodeSelector:
+  kubernetes.io/role: worker
 # -- Tolerations allow the scheduler to schedule pods with matching taints.
 tolerations: []
 # -- You can use topology spread constraints to control
 # how Pods are spread across your cluster among failure-domains.
-topologySpreadConstraints: []
+topologySpreadConstraints:
 # This example topologySpreadConstraints forces the scheduler to put traefik pods
 # on nodes where no other traefik pods are scheduled.
-#  - labelSelector:
-#      matchLabels:
-#        app.kubernetes.io/name: '{{ template "traefik.name" . }}'
-#    maxSkew: 1
-#    topologyKey: kubernetes.io/hostname
-#    whenUnsatisfiable: DoNotSchedule
+  - labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: '{{ template "traefik.name" . }}'
+    maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: DoNotSchedule
 
 # -- [Pod Priority and Preemption](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/)
-priorityClassName: ""
+priorityClassName: "system-cluster-critical"
 
 # -- [SecurityContext](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
 # @default -- See _values.yaml_
@@ -1104,23 +1096,24 @@ global:
   checkNewVersion: true
   sendAnonymousUsage: false
 
-# -- Extra manifests rendered alongside the chart. Holds the global security
-# Middlewares referenced by ports.websecure.http.middlewares above.
+# -- Extra manifests rendered alongside the chart. geoblock is per-route
+# (referenced via extensionRef on each HTTPRoute) so that ACME HTTP-01
+# challenges from non-PL Let's Encrypt servers are not blocked.
 extraObjects:
   - apiVersion: traefik.io/v1alpha1
     kind: Middleware
     metadata:
       name: ratelimit-global
-      namespace: kube-system
+      namespace: traefik
     spec:
       rateLimit:
-        average: 30
-        burst: 60
+        average: 100
+        burst: 300
   - apiVersion: traefik.io/v1alpha1
     kind: Middleware
     metadata:
       name: geoblock
-      namespace: kube-system
+      namespace: traefik
     spec:
       plugin:
         geoblock:
@@ -1139,12 +1132,12 @@ extraObjects:
           # Allow requests from private / internal networks?
           allowPrivate: true
           # HTTP status code to return for disallowed requests
-          disallowedStatusCode: 403
+          disallowedStatusCode: 418
   - apiVersion: traefik.io/v1alpha1
     kind: Middleware
     metadata:
       name: fail2ban
-      namespace: kube-system
+      namespace: traefik
     spec:
       plugin:
         fail2ban:
@@ -1161,3 +1154,67 @@ extraObjects:
             bantime: "1h"
             statuscode: "400,401,403-499"
           enableBlockLogs: true
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: security-chain
+      namespace: traefik
+    spec:
+      chain:
+        middlewares:
+          - name: redirect-https
+            namespace: traefik
+          - name: geoblock
+            namespace: traefik
+          - name: hsts
+            namespace: traefik
+          - name: compress
+            namespace: traefik
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: redirect-https
+      namespace: traefik
+    spec:
+      redirectScheme:
+        scheme: https
+        permanent: true
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: hsts
+      namespace: traefik
+    spec:
+      headers:
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: compress
+      namespace: traefik
+    spec:
+      compress:
+        excludedContentTypes:
+          - text/event-stream
+  # Catch-all: redirect any *.shpaq.org subdomain not routed elsewhere → shpaq.org
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: catch-all-subdomains
+      namespace: traefik
+    spec:
+      parentRefs:
+        - name: traefik-gateway
+          namespace: traefik
+          sectionName: websecure
+      hostnames:
+        - "*.shpaq.org"
+      rules:
+        - filters:
+            - type: RequestRedirect
+              requestRedirect:
+                scheme: https
+                hostname: shpaq.org
+                statusCode: 302
