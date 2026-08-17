@@ -12,14 +12,11 @@ service:
   type: ClusterIP
   port: 5000
 
-auth:
-  secretName: whoops-auth
-
 httpRoute:
   enabled: true
   host: whoops.shpaq.org
   parentRefs:
     - name: traefik-gateway
-      namespace: kube-system
+      namespace: traefik
       kind: Gateway
       sectionName: websecure
