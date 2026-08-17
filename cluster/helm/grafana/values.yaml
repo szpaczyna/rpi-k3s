@@ -59,7 +59,7 @@ route:
     enabled: true
     parentRefs:
       - name: traefik-gateway
-        namespace: kube-system
+        namespace: traefik
         kind: Gateway
         sectionName: websecure
     hostnames:
@@ -68,6 +68,12 @@ route:
       - path:
           type: PathPrefix
           value: /
+    filters:
+      - type: ExtensionRef
+        extensionRef:
+          group: traefik.io
+          kind: Middleware
+          name: security-chain
 
 resources:
   limits:

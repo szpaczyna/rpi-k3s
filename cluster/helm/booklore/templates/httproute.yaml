@@ -19,6 +19,12 @@ spec:
         - path:
             type: {{ .pathType | default "PathPrefix" }}
             value: {{ .path }}
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: security-chain
       backendRefs:
         - name: {{ include "booklore.fullname" $ }}
           port: {{ $.Values.service.port }}

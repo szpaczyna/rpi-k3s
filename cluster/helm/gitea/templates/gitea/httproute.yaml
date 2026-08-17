@@ -39,6 +39,11 @@ spec:
           extensionRef:
             group: traefik.io
             kind: Middleware
+            name: security-chain
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
             name: {{ $fullName }}-api-allowlist
       backendRefs:
         - name: {{ $fullName }}-http
@@ -47,6 +52,12 @@ spec:
         - path:
             type: PathPrefix
             value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: security-chain
       backendRefs:
         - name: {{ $fullName }}-http
           port: {{ $httpPort }}

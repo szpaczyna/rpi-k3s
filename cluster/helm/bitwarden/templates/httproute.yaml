@@ -22,6 +22,12 @@ spec:
         - path:
             type: PathPrefix
             value: {{ .Values.httpRoute.path }}
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: security-chain
       backendRefs:
         - name: {{ $fullName }}
           port: 80

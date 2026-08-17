@@ -89,7 +89,7 @@ httpRoute:
           pathType: PathPrefix
   parentRefs:
     - name: traefik-gateway
-      namespace: kube-system
+      namespace: traefik
       kind: Gateway
       sectionName: websecure
 

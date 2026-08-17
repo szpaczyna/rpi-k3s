@@ -17,6 +17,12 @@ spec:
         - path:
             type: PathPrefix
             value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: security-chain
       backendRefs:
         - name: {{ template "kanboard.fullname" $ }}
           port: {{ $.Values.service.port }}

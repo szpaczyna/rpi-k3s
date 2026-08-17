@@ -142,7 +142,7 @@ server:
       labels: {}
       parentRefs:
         - name: traefik-gateway
-          namespace: kube-system
+          namespace: traefik
           kind: Gateway
           sectionName: websecure
       hostnames:
@@ -153,7 +153,7 @@ server:
           extensionRef:
             group: traefik.io
             kind: Middleware
-            name: prometheus-auth
+            name: traefik-authelia@kubernetescrd
       matches:
         - path:
             type: PathPrefix
@@ -673,17 +673,6 @@ alertRelabelConfigs: {}
 networkPolicy:
   enabled: false
 forceNamespace: ""
-
-extraManifests:
-  - |
-    apiVersion: traefik.io/v1alpha1
-    kind: Middleware
-    metadata:
-      name: prometheus-auth
-      namespace: monitoring
-    spec:
-      basicAuth:
-        secret: prometheus-auth
 
 alertmanager:
   enabled: false
