@@ -1,0 +1,16 @@
+hostname: pihole.shpaq.org
+
+# External Pi-hole IP (selector-less Service + manual Endpoints)
+upstreamIP: 10.0.0.2
+upstreamPort: 80
+
+service:
+  port: 80
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+      kind: Gateway
+      sectionName: websecure
