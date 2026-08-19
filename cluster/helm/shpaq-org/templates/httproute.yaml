@@ -21,7 +21,7 @@ spec:
           extensionRef:
             group: traefik.io
             kind: Middleware
-            name: security-chain
+            name: {{ .Values.httpRoute.securityChainMiddleware | default "security-chain" }}
       backendRefs:
         - name: {{ include "shpaq-org.fullname" . }}
           port: 80

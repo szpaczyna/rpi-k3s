@@ -28,6 +28,7 @@ hpa:
 httpRoute:
   enabled: true
   host: shpaq.org
+  securityChainMiddleware: security-chain-nogeo
   parentRefs:
     - name: traefik-gateway
       namespace: traefik
