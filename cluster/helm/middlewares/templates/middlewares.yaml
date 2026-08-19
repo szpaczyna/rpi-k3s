@@ -20,12 +20,28 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
+  name: security-chain-nogeo
+  namespace: {{ . }}
+spec:
+  chain:
+    middlewares:
+      - name: redirect-https
+        namespace: traefik
+      - name: hsts
+        namespace: traefik
+      - name: compress
+        namespace: traefik
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
   name: authelia
   namespace: {{ . }}
 spec:
   forwardAuth:
     address: "http://authelia.auth.svc.cluster.local/api/authz/forward-auth"
     trustForwardHeader: true
+    maxResponseBodySize: 1048576
     authResponseHeaders:
       - Remote-User
       - Remote-Groups

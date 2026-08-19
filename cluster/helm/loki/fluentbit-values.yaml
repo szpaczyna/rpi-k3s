@@ -437,6 +437,17 @@ config:
         Record longitude ClientHost %{location.longitude}
         Log_Level error
 
+    [FILTER]
+        # Extract blocked_country from Traefik geoblock error logs. Geoblock
+        # plugin emits error-level messages (not access logs), so the geoip2
+        # filter above does not enrich them — there is no ClientHost field.
+        # The lua script regex-matches the country code from "blocked request
+        # from XX" and sets it as a structured field.
+        Name lua
+        Match kube.var.log.containers.traefik-*
+        script /fluent-bit/etc/conf/geoblock.lua
+        call geoblock_extract
+
   ## https://docs.fluentbit.io/manual/pipeline/outputs
   outputs: |
     [OUTPUT]
@@ -482,6 +493,17 @@ config:
           }
         }
       }
+    geoblock.lua: |
+      function geoblock_extract(tag, timestamp, record)
+          local log = record["log"]
+          if log ~= nil then
+              local country = string.match(log, "blocked request from (%u%u)")
+              if country then
+                  record["blocked_country"] = country
+              end
+          end
+          return 1, timestamp, record
+      end
 #     upstream.conf: |
 #       [UPSTREAM]
 #           upstream1

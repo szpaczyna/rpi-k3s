@@ -111,6 +111,32 @@ sum by (country_code) (count_over_time({job="fluentbit", namespace="kube-system"
 The `Reduce` transform turns the `country_code` label into the `Field` column
 and the request count into `Total` (used for marker size/color).
 
+#### Geoblock logs (blocked requests by country)
+
+The geoblock plugin emits error-level messages (not access logs), so the
+`geoip2` filter cannot enrich them — there is no `ClientHost` field. A
+dedicated Fluent Bit `parser` filter regex-matches the country code from
+the `blocked request from XX` text and sets `blocked_country` as a structured
+field in the log body.
+
+Geoblock logs from a specific country:
+
+```logql
+{job="fluentbit", container="traefik"} | json | blocked_country = "SG"
+```
+
+All blocked requests:
+
+```logql
+{job="fluentbit", container="traefik"} | json | blocked_country != ""
+```
+
+Blocked requests by country (last 24h):
+
+```logql
+sum by (blocked_country) (count_over_time({job="fluentbit", container="traefik"} | json | blocked_country != "" [24h]))
+```
+
 ### Dashboard panels & queries
 
 `cluster/helm/traefik/traefik-loki-dashboard.json` ("Traefik Via Loki") ships
