@@ -14,7 +14,7 @@ image:  # @schema additionalProperties: false
   repository:  # @schema type:[string, null]
   # -- Pin to the exact Traefik Proxy release. The chart's own appVersion
   # default currently lags one patch behind (v3.7.9); override explicitly.
-  tag: "v3.7.10"
+  tag: "v3.7.11"
   # -- Traefik image pull policy
   pullPolicy: IfNotPresent
 

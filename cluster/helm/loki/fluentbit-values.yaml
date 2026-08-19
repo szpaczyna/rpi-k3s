@@ -500,7 +500,13 @@ config:
               local country = string.match(log, "blocked request from (%u%u)")
               if country then
                   record["blocked_country"] = country
+                  record["responseCode"] = 418
+                  return 1, timestamp, record
               end
+          end
+          local status = record["DownstreamStatus"]
+          if status ~= nil then
+              record["responseCode"] = status
           end
           return 1, timestamp, record
       end

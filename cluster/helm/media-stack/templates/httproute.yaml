@@ -75,6 +75,25 @@ spec:
           port: {{ $svc.service.port }}
 {{- end }}
 {{- end }}
+    # Catch-all: any path not matching an app prefix redirects to the main site.
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: security-chain
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            hostname: shpaq.org
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /
+            statusCode: 302
 
 {{- if .Values.calibreWeb.enable }}
 ---
