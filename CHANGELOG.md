@@ -1,4 +1,32 @@
 # Changelog
+## [0.6.4](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.3...v0.6.4) (2026-08-20)
+
+
+### Features
+
+* added minichart with middlewares ([0d9ccc3](https://github.com/szpaczyna/rpi-k3s/commit/0d9ccc34a1565084103bb70b61b3ce2b3a4581e7))
+* additional log entry for geoblock, new chain ([c0fa548](https://github.com/szpaczyna/rpi-k3s/commit/c0fa548d0a8fea8c21aee65fec21db4a98e22e6c))
+* adjustements for new traefik configuration ([10f2f93](https://github.com/szpaczyna/rpi-k3s/commit/10f2f930d963e3fd2eb80e53fa564ed935e60871))
+* cert manager bump and small changes ([d7a51d2](https://github.com/szpaczyna/rpi-k3s/commit/d7a51d256e1f3a400e0e31bc790fd0a0127c9af6))
+* cert-manager update due to traefik changes ([9627b3b](https://github.com/szpaczyna/rpi-k3s/commit/9627b3bdf1a765745c6acb49f55ec8a20f2d1dfa))
+* deleted gentoo raw manifests ([23c8927](https://github.com/szpaczyna/rpi-k3s/commit/23c8927a5e40ab365f45ad1195b68665b8996ec4))
+* disable geoblocking on main page ([d57dcc3](https://github.com/szpaczyna/rpi-k3s/commit/d57dcc3852ed037fd0d6c4b966e35a5bef45a333))
+* gentoo distcc simple helm chart ([c73ea24](https://github.com/szpaczyna/rpi-k3s/commit/c73ea24c97d35ed60e914e7be26fc06dd0cff32b))
+* loki with maxmind geoip ([d556101](https://github.com/szpaczyna/rpi-k3s/commit/d556101ed5df7e571be694cad1a25023659bf63d))
+* move app to sso ([7279d35](https://github.com/szpaczyna/rpi-k3s/commit/7279d35b0808d7840dcc67e15a1e291ba27cae63))
+* pihole moved to simple helm chart ([9afb396](https://github.com/szpaczyna/rpi-k3s/commit/9afb3960db702f22e4a0c54733e89251aa426864))
+* postgres exporter version bump and reconfiguration ([53c55e8](https://github.com/szpaczyna/rpi-k3s/commit/53c55e8f6bc3bed3a157f05e15c7d02fdc0092c7))
+* sso/authelia deployment ([90f6149](https://github.com/szpaczyna/rpi-k3s/commit/90f614979c741334f7e9dff3a061d909abaceec5))
+* traefik changes ([2afa791](https://github.com/szpaczyna/rpi-k3s/commit/2afa791a5b5fc6420195c9b95a645f0d6ef86a13))
+* traefik logging expanded ([2b73318](https://github.com/szpaczyna/rpi-k3s/commit/2b733187e603bef2e8bab5906a90b3176cfd2cac))
+* traefik security related plugins ([a010325](https://github.com/szpaczyna/rpi-k3s/commit/a010325ee7c58da5d98fd0ecf6fcbe780834801b))
+* traefik version bump, changes in logs and media middleware ([c54d229](https://github.com/szpaczyna/rpi-k3s/commit/c54d2293084ec3db08e79b4277ee0741dd8339e1))
+
+
+### Bug Fixes
+
+* added gateway crds to chart testing ([840ec2a](https://github.com/szpaczyna/rpi-k3s/commit/840ec2aa125e2d52e094d2fc2c867600606edaf5))
+
 ## [0.6.3](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.2...v0.6.3) (2026-08-04)
 
 
