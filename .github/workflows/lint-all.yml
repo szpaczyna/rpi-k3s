@@ -115,6 +115,9 @@ jobs:
         uses: helm/kind-action@v1.14.0
         with:
           version: v0.31.0
+      - name: Install Gateway API CRDs
+        run: |
+          kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
       - name: List changed charts
         id: list
         run: |
