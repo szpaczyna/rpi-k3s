@@ -57,26 +57,6 @@ spec:
     app.kubernetes.io/name: transmission
 {{- end }}
 
-{{- /* Calibre web service (keep separate for host root path) */ -}}
-{{- if .Values.calibreWeb.enable }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: calibre-web
-  labels:
-    app.kubernetes.io/name: calibre-web
-spec:
-  type: ClusterIP
-  ports:
-    - name: calibre-web
-      port: {{ .Values.calibreWeb.service.port }}
-      protocol: TCP
-      targetPort: calibre-web
-  selector:
-    app.kubernetes.io/name: calibre-web
-{{- end }}
-
 {{- /* Generic media services */ -}}
 {{- range $name, $svc := .Values.media }}
   {{- if and $svc.enable (hasSuffix $name "arr") }}

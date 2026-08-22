@@ -21,7 +21,7 @@ spec:
               - "-c"
               - |
                 echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass
-                for DB in grafana bitwarden gitea kanboard nextcloud keycloak whoops; do
+                for DB in grafana bitwarden gitea whoops; do
                   echo "Cleaning up ${DB} backups older than 14 days"
                   find /var/backups/"${DB}" -name "*.sql.gz" -type f -mtime +14 -delete
                   echo "Backing up ${DB}..."

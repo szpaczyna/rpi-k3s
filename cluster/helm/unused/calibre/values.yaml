@@ -1,0 +1,67 @@
+---
+# Calibre-Web as a standalone chart (extracted out of media-stack so the
+# rest of the stack does not carry its templates/values anymore).
+#
+# Currently NOT deployed anywhere; the whole directory lives under
+# unused/. A single switch below gates EVERY resource (Deployment,
+# Service, PVC, HTTPRoute, Certificate) so an accidental `helm template`
+# or `helm upgrade` renders nothing until this chart is consciously
+# revived.
+#
+# Revival checklist (see also cluster/helm/traefik/README.md):
+#   1. move this directory back to cluster/helm/
+#   2. flip enabled=true, bash deploy
+#   3. uncomment `- name: calibre-shpaq-org-tls` in
+#      gateway.listeners.websecure.certificateRefs
+#      (cluster/helm/traefik/values.yaml) and re-run its deploy — but only
+#      AFTER step 2 succeeded (a missing secret makes Traefik drop the
+#      whole websecure listener)
+enabled: false
+
+global:
+  timezone: Europe/Warsaw
+  runAsUser: 568
+  runAsGroup: 568
+  nodeSelector:
+    kubernetes.io/role: worker
+
+image:
+  repository: lscr.io/linuxserver/calibre-web
+  tag: "0.6.26"
+
+# Used by the fix-permissions initContainer only.
+busybox:
+  repository: busybox
+  tag: "1.37.0"
+
+# Former resourceProfiles.light profile from media-stack.
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+service:
+  port: 8083
+
+storageSize: 1Gi
+configStorage:
+  # Dedicated Longhorn PVC for the SQLite database / app config
+  enabled: true
+  storageClass: longhorn
+
+# E-books live on the shared media-stack data volume (subPath
+# library/books), so reviving this chart requires media-stack to be up.
+mediaClaimName: media
+# Created by media-stack in namespace media.
+serviceAccountName: media
+
+httpRoute:
+  hostname: calibre.shpaq.org
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+      kind: Gateway
+      sectionName: websecure

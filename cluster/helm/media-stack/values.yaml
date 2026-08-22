@@ -118,13 +118,6 @@ exportarr:
   service:
     port: 9707
 
-calibreWeb:
-  enable: false
-  resourceProfile: light
-  storageSize: 1Gi
-  service:
-    port: 8083
-
 persistence:
   storageClass: local-path
   size: 1000Gi
@@ -165,9 +158,6 @@ images:
   transmissionExporter:
     repository: "szpaczyn/transmission_exporter-arm64"
     tag: "v0.3.0"
-  calibreWeb:
-    repository: "lscr.io/linuxserver/calibre-web"
-    tag: "0.6.26"
   busybox:
     repository: "busybox"
     tag: "1.37.0"

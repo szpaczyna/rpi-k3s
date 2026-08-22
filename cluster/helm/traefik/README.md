@@ -49,9 +49,11 @@ and renews its certificate automatically — no central file to maintain.
 The only manual step per new app is adding its secret name to
 `gateway.listeners.websecure.certificateRefs` here (see below).
 
-When enabling a currently-disabled app (prometheus, longhorn, nextcloud,
-calibre — see their respective `values.yaml`), add its secret to
-`gateway.listeners.websecure.certificateRefs` in `values.yaml`.
+When enabling a currently-disabled app (prometheus, longhorn — see their
+respective `values.yaml`), add its secret to
+`gateway.listeners.websecure.certificateRefs` in `values.yaml`. Retired
+apps (calibre, kanboard, nextcloud, ...) live in `cluster/helm/unused/`
+and must be moved back to `cluster/helm/` first.
 
 ## Security Middlewares
 

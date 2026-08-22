@@ -6,7 +6,7 @@
 # Routes are configured via the Kubernetes Gateway API (HTTPRoute) rather
 # than the legacy Ingress resource. See cluster/helm/*/templates/httproute.yaml
 # and the native `httpRoute`/`route` values blocks on upstream charts
-# (grafana, prometheus, longhorn, nextcloud).
+# (grafana, prometheus, longhorn).
 
 image:  # @schema additionalProperties: false
   # -- Traefik image repository. Left null so the chart resolves the official
@@ -231,11 +231,12 @@ gateway:
         - name: auth-shpaq-org-tls       # auth.shpaq.org
         # Currently-disabled ingresses; add once enabled (the chart already
         # renders their Certificates behind feature flags):
-        # - name: calibre-shpaq-org-tls   # media-stack, calibreWeb.enable
         # - name: prometheus-shpaq-org-tls
         # - name: longhorn-shpaq-org-tls
-        # - name: cloud-shpaq-org-tls
-        # - name: kanboard-shpaq-org-tls   # kanboard.shpaq.org
+        # Retired apps — their charts live in cluster/helm/unused/ and render
+        # nothing until revived:
+        # - name: calibre-shpaq-org-tls   # unused/calibre
+        # - name: cloud-shpaq-org-tls     # unused/nextcloud
 gatewayClass:  # @schema additionalProperties: false
   # -- When providers.kubernetesGateway.enabled and gateway.enabled, deploy a default gatewayClass
   enabled: true

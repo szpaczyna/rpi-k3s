@@ -1,9 +1,10 @@
-{{- if .Values.calibreWeb.enable }}
+{{- if .Values.enabled }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: calibre-web
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: calibre-web
 spec:
@@ -18,27 +19,27 @@ spec:
       labels:
         app.kubernetes.io/name: calibre-web
     spec:
-      serviceAccountName: media
+      serviceAccountName: {{ .Values.serviceAccountName }}
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
       securityContext: {}
-      {{- if $.Values.configStorage.enabled }}
+      {{- if .Values.configStorage.enabled }}
       initContainers:
         - name: fix-permissions
-          image: "{{ printf "%s:%s" .Values.images.busybox.repository .Values.images.busybox.tag }}"
+          image: "{{ printf "%s:%s" .Values.busybox.repository .Values.busybox.tag }}"
           command:
             - /bin/sh
             - -c
             - chown -R {{ .Values.global.runAsUser }}:{{ .Values.global.runAsGroup }} /config && chmod -R 755 /config
           volumeMounts:
             - mountPath: /config
-              name: calibre-web-config
+              name: config
           securityContext:
             runAsUser: 0
       {{- end }}
       containers:
         - name: calibre-web
-          image: "{{ printf "%s:%s" .Values.images.calibreWeb.repository .Values.images.calibreWeb.tag }}"
+          image: "{{ printf "%s:%s" .Values.image.repository .Values.image.tag }}"
           imagePullPolicy: Always
           env:
             - name: TZ
@@ -51,26 +52,26 @@ spec:
               value: "022"
           ports:
             - name: calibre-web
-              containerPort: {{ .Values.calibreWeb.service.port }}
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.calibreWeb.service.port }}
+              port: {{ .Values.service.port }}
             initialDelaySeconds: 15
             periodSeconds: 10
             timeoutSeconds: 3
             failureThreshold: 6
           livenessProbe:
             tcpSocket:
-              port: {{ .Values.calibreWeb.service.port }}
+              port: {{ .Values.service.port }}
             initialDelaySeconds: 60
             periodSeconds: 30
             timeoutSeconds: 5
             failureThreshold: 3
           volumeMounts:
-            {{- if $.Values.configStorage.enabled }}
+            {{- if .Values.configStorage.enabled }}
             - mountPath: /config
-              name: calibre-web-config
+              name: config
             {{- else }}
             - mountPath: /config
               name: media
@@ -80,17 +81,18 @@ spec:
               name: media
               subPath: library/books
           resources:
-            {{- include "media-stack.resources" (dict "profile" .Values.calibreWeb.resourceProfile "root" $) | nindent 12 }}
+            {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-      - name: media
-        persistentVolumeClaim:
-          claimName: media
-      {{- if $.Values.configStorage.enabled }}
-      - name: calibre-web-config
-        persistentVolumeClaim:
-          claimName: calibre-web
+        - name: media
+          persistentVolumeClaim:
+            claimName: {{ .Values.mediaClaimName }}
+        {{- if .Values.configStorage.enabled }}
+        - name: config
+          persistentVolumeClaim:
+            claimName: calibre-web
+        {{- end }}
+      {{- if .Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.global.nodeSelector | nindent 8 }}
       {{- end }}
-{{- if $.Values.global.nodeSelector }}
-{{ toYaml (dict "nodeSelector" $.Values.global.nodeSelector) | nindent 6 }}
-{{- end }}
 {{- end }}

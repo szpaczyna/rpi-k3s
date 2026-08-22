@@ -94,34 +94,4 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /
             statusCode: 302
-
-{{- if .Values.calibreWeb.enable }}
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: calibre-web
-  namespace: media
-  labels:
-    app.kubernetes.io/instance: calibre-web
-spec:
-  parentRefs:
-    {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
-  hostnames:
-    - "calibre.shpaq.org"
-  rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: security-chain
-      backendRefs:
-        - name: calibre-web
-          port: {{ .Values.calibreWeb.service.port }}
-{{- end }}
 {{- end }}

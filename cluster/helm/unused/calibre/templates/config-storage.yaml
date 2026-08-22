@@ -1,0 +1,21 @@
+{{- if .Values.enabled }}
+{{- if .Values.configStorage.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "calibre-web"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: calibre-web
+    app.kubernetes.io/component: calibre-web
+    type: "longhorn"
+spec:
+  storageClassName: "{{ .Values.configStorage.storageClass }}"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "{{ .Values.storageSize }}"
+{{- end }}
+{{- end }}

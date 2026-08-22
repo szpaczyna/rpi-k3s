@@ -53,18 +53,24 @@
 
 | App | Description |
 |-----|-------------|
-| [gentoo](cluster/apps/gentoo) | Cross-compiler and playground |
 | [pihole](cluster/apps/pihole) | DNS ad-blocker (ingress proxy) |
 | [speedtest](cluster/apps/speedtest) | Prometheus speedtest exporter |
 
-### Not Currently Deployed
+### Retired / Not Currently Deployed
 
-Charts kept in the repo for future use but not installed on the cluster right now.
+Charts kept in `cluster/helm/unused/` for future use but not installed
+on the cluster right now. Revival steps are documented in each chart's
+`values.yaml`/`deploy`.
 
 | App | Description |
 |-----|-------------|
-| [nextcloud](cluster/helm/nextcloud) | Personal cloud service |
-| [kanboard](cluster/helm/kanboard) | Kanban project management |
+| [calibre](cluster/helm/unused/calibre) | Calibre-Web e-book server (extracted from media-stack) |
+| [event-exporter](cluster/helm/unused/event-exporter) | Kubernetes events exporter |
+| [gentoo](cluster/helm/unused/gentoo) | Gentoo cross-compiler (helm chart; plain manifests in `gentoo-manifests`) |
+| [ingress-nginx](cluster/helm/unused/ingress-nginx) | Legacy ingress controller, replaced by Traefik |
+| [kanboard](cluster/helm/unused/kanboard) | Kanban project management |
+| [nextcloud](cluster/helm/unused/nextcloud) | Personal cloud service |
+| [openweather-exporter](cluster/helm/unused/openweather) | OpenWeather API metrics |
 
 ### Monitoring & Observability
 
@@ -73,9 +79,7 @@ Charts kept in the repo for future use but not installed on the cluster right no
 | [prometheus](cluster/helm/prometheus) | Monitoring and alerting |
 | [grafana](cluster/helm/grafana) | Dashboards and visualization |
 | [loki](cluster/helm/loki) | Log aggregation (+ Fluent Bit) |
-| [event-exporter](cluster/helm/event-exporter) | Kubernetes events exporter |
 | [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) | TLS certificate expiry monitoring |
-| [openweather-exporter](cluster/helm/openweather) | OpenWeather API metrics |
 | [unifipoller](cluster/helm/unifipoller) | UniFi network metrics exporter |
 | [version-checker](cluster/helm/version-checker) | Deployed image version monitoring |
 

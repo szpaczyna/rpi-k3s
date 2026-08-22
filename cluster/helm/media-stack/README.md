@@ -1,6 +1,6 @@
 # Media Stack Helm Chart
 
-This Helm chart deploys a media application stack on Kubernetes, including popular applications such as Bazarr, Calibre Web, Lidarr, Prowlarr, Radarr, Readarr, Sonarr, and Transmission.
+This Helm chart deploys a media application stack on Kubernetes, including popular applications such as Bazarr, Lidarr, Prowlarr, Radarr, Readarr, Sonarr, and Transmission.
 
 ## Prerequisites
 
@@ -36,7 +36,7 @@ To install the media stack Helm chart, follow these steps:
 
 This chart uses a simplified values structure:
 
-- `images:` central map of image repository/tag per app (radarr/sonarr/lidarr/prowlarr/readarr/bazarr/transmission/exportarr/calibreWeb).
+- `images:` central map of image repository/tag per app (radarr/sonarr/lidarr/prowlarr/readarr/bazarr/transmission/exportarr).
 - `media:` per-service blocks with `enable: true|false` and `service.port`.
 - `global:` for timezone, runAsUser/runAsGroup, resources and nodeSelector.
 
@@ -62,7 +62,10 @@ global:
 
 When `media.<name>.enable` is true and the name ends with "arr", the chart will render a Deployment + Service using the centralized `images` map.
 
-Transmission and Calibre web keep specialized templates and are enabled via `transmission.enable` and `calibreWeb.enable`.
+Transmission keeps its specialized template and is enabled via `transmission.enable`.
+
+Calibre-Web was extracted into its own standalone chart; it is currently
+retired and lives in `cluster/helm/unused/calibre`.
 
 ## Uninstallation
 
@@ -91,6 +94,3 @@ protected by a Traefik `BasicAuth` Middleware referencing the
 A bare request to `https://media.shpaq.org/` (no app path) has no
 backend of its own; it's redirected (302) to `https://shpaq.org/` instead
 of falling through to a 404.
-
-`calibre-web` (when `calibreWeb.enable: true`) gets its own separate
-`HTTPRoute` on `calibre.shpaq.org`, no auth.

@@ -7,18 +7,25 @@ layout: default
 - Apps/Helm Charts:
   - [bitwarden](cluster/helm/bitwarden) - Passwords Management
   - [gitea](cluster/helm/gitea) - Git with a cup of tea
-  - [kanboard](cluster/helm/kanboard) - Kanban project management software
-  - [nextcloud](cluster/helm/nextcloud) - Personal cloud service
+  - [pihole](cluster/helm/pihole) - DNS ad-blocker
   - [postgresql](cluster/helm/postgresql) - PostgreSQL database
   - [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
   - [influxdb](cluster/helm/influxdb) - Database for Apple Health exports
   - [shpaq-org](cluster/helm/shpaq-org) - Personal website
-  - [media-stack](cluster/helm/media-stack) - Transmission, Radarr, Lidarr, Sonarr, Bazarr, Jackett, Calibre-web
+  - [media-stack](cluster/helm/media-stack) - Transmission, Radarr, Sonarr, Lidarr, Prowlarr, Readarr, Bazarr
   - [grafana](cluster/helm/grafana) - Grafana (for dashboards)
 
 - Apps/YAML:
-  - [unifi](cluster/apps/unifi) - Unifi controller/prometheus poller
-  - [gentoo](cluster/apps/gentoo) - cross-compiler and playground
+  - [speedtest](cluster/apps/speedtest.yaml) - Prometheus speedtest exporter
+
+- Retired (`cluster/helm/unused/`):
+  - [calibre](cluster/helm/unused/calibre) - Calibre-Web e-book server (extracted from media-stack)
+  - [event-exporter](cluster/helm/unused/event-exporter) - Kubernetes events exporter
+  - [gentoo](cluster/helm/unused/gentoo) - cross-compiler (helm chart, plain manifests in [gentoo-manifests](cluster/helm/unused/gentoo-manifests))
+  - [ingress-nginx](cluster/helm/unused/ingress-nginx) - legacy ingress controller, replaced by Traefik
+  - [kanboard](cluster/helm/unused/kanboard) - Kanban project management software
+  - [nextcloud](cluster/helm/unused/nextcloud) - Personal cloud service
+  - [openweather-exporter](cluster/helm/unused/openweather) - OpenWeather API exporter
 
 - System:
   - [prometheus](cluster/helm/prometheus) - Prometheus monitoring system
@@ -27,9 +34,7 @@ layout: default
   - [longhorn](cluster/helm/longhorn) - Distributed storage system
   - [traefik](cluster/helm/traefik) - Ingress controller (Gateway API / HTTPRoute)
   - [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) - Certificates monitoring
-  - [openweather-exporter](cluster/helm/openweather) - OpenWeather API exporter
   - [loki](cluster/helm/loki) - Log aggregation system
-  - [event-exporter](cluster/helm/event-exporter) - Kubernetes events exporter
   - [local-path-provisioner](cluster/helm/local-path-provisioner) - Local storage provisioner
 
 
