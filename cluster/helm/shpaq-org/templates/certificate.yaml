@@ -1,0 +1,24 @@
+{{- if .Values.httpRoute.enabled }}
+---
+# TLS certificate for the HTTPRoute hostname. Rendered into the `traefik`
+# namespace because the Gateway's websecure listener may only reference
+# same-namespace Secrets; the secret name follows the cluster-wide
+# <hostname-dashed>-tls convention and is listed in
+# gateway.listeners.websecure.certificateRefs (cluster/helm/traefik).
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Values.httpRoute.host | replace "." "-" }}-tls
+  namespace: traefik
+spec:
+  dnsNames:
+    - {{ .Values.httpRoute.host | quote }}
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  secretName: {{ .Values.httpRoute.host | replace "." "-" }}-tls
+  usages:
+    - digital signature
+    - key encipherment
+{{- end }}

@@ -134,7 +134,18 @@ server:
       # Kept disabled to match the previous state: prometheus.shpaq.org has
       # no public DNS record, so enabling this would only produce a stuck
       # ACME HTTP-01 order (self-check fails: NXDOMAIN) hammering Let's
-      # Encrypt. Flip to true once DNS for prometheus.shpaq.org exists.
+      # Encrypt.
+      #
+      # Enable procedure (in this order — the Gateway drops its whole
+      # websecure listener while any referenced secret is missing):
+      #   1. create the public DNS record for prometheus.shpaq.org
+      #   2. kubectl apply -f certificate.yaml   (renders into ns `traefik`,
+      #      wait for `kubectl get certificate -n traefik
+      #      prometheus-shpaq-org-tls` to be Ready)
+      #   3. uncomment `- name: prometheus-shpaq-org-tls` in
+      #      gateway.listeners.websecure.certificateRefs
+      #      (cluster/helm/traefik/values.yaml)
+      #   4. set enabled=true here and `bash deploy`
       enabled: false
       apiVersion: ""
       kind: ""
@@ -153,7 +164,12 @@ server:
           extensionRef:
             group: traefik.io
             kind: Middleware
-            name: traefik-authelia@kubernetescrd
+            name: security-chain
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: authelia
       matches:
         - path:
             type: PathPrefix

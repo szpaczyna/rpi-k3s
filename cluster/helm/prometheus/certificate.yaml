@@ -1,9 +1,20 @@
+# TLS certificate for prometheus.shpaq.org, following the cluster-wide
+# pattern: rendered into the `traefik` namespace because the Gateway's
+# websecure listener may only reference same-namespace Secrets (see
+# cluster/helm/traefik/values.yaml and its commented
+# prometheus-shpaq-org-tls certificateRefs entry).
+#
+# The prometheus-community chart has no extraObjects support, so unlike
+# other apps this file is applied manually — ONLY together with
+# server.route.main.enabled=true in values.yaml: prometheus.shpaq.org has
+# no public DNS record yet, so issuing earlier would just retry forever
+# against Let's Encrypt (HTTP-01 self-check fails on NXDOMAIN).
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: prometheus-shpaq-org-tls
-  namespace: monitoring
+  namespace: traefik
 spec:
   dnsNames:
     - prometheus.shpaq.org

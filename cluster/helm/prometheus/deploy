@@ -15,9 +15,12 @@ kubectl apply -f <(sops -d ../../secrets/prometheus-secret.yaml) -n "${NAMESPACE
 # certificate.yaml (Gateway API ACME cert for prometheus.shpaq.org) is
 # intentionally NOT auto-applied: there is no public DNS record for this
 # host yet, so issuance would just retry forever against Let's Encrypt.
-# Apply it manually, together with server.route.main.enabled=true in
-# values.yaml, once DNS exists.
-# kubectl apply -f certificate.yaml -n "${NAMESPACE}"
+# It now renders into namespace `traefik` (same-namespace Gateway secret
+# reference). Apply it manually — together with
+# server.route.main.enabled=true in values.yaml and the matching
+# certificateRefs entry in cluster/helm/traefik/values.yaml — once DNS
+# exists. See values.yaml route.main comment for the full procedure.
+# kubectl apply -f certificate.yaml
 
 helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
   --namespace "${NAMESPACE}" \

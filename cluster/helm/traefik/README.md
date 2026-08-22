@@ -32,16 +32,26 @@ set `route.main.enabled` / `httpRoute.enabled` / `httproute.enabled` in
 | Listener | Port | Protocol | Notes |
 |---|---|---|---|
 | `web` | 80 | HTTP | Serves HTTP traffic. HTTP→HTTPS redirect is applied **per-route** via the `security-chain` middleware (see below), not at entrypoint level — this allows ACME HTTP-01 challenges to succeed on port 80. |
-| `websecure` | 443 | HTTPS | `certificateRefs` lists every TLS Secret currently in use across namespaces. `mode: Terminate`. `ratelimit-global` + `fail2ban` + `hsts` + `compress` are applied entrypoint-wide; `geoblock` is per-route (see below). |
+| `websecure` | 443 | HTTPS | `certificateRefs` lists every TLS Secret in use; all secrets live in this namespace (`traefik`). `mode: Terminate`. `ratelimit-global` + `fail2ban` + `hsts` + `compress` are applied entrypoint-wide; `geoblock` is per-route (see below). |
 
-`certificateRefs` cross-namespace access requires a `ReferenceGrant` in
-each target namespace — see `referencegrants.yaml` in this directory
-(applied once, covers `apps`, `media`, `monitoring`, `longhorn-system`,
-`auth`).
+TLS Secrets must live in the `traefik` namespace because Gateway listener
+`certificateRefs` may only reference same-namespace Secrets — cross-namespace
+references are deprecated in Gateway API (GEP-1748) and rejected by
+cert-manager's gateway-shim regardless of `ReferenceGrant`s.
 
-When enabling a currently-disabled app (prometheus, longhorn, nextcloud —
-see their respective `values.yaml`), add its TLS secret to
-`gateway.listeners.websecure.certificateRefs` here.
+**Each application's chart provisions its own certificate**: own charts
+render a `Certificate` resource into `traefik`
+(`templates/certificate.yaml`, derived from their HTTPRoute hostname), and
+the upstream charts (`grafana`, `authelia`) do the same via `extraObjects`.
+Secrets follow the `<hostname with dots as dashes>-tls` convention
+(e.g. `gitea.shpaq.org` → `gitea-shpaq-org-tls`). Deploying an app issues
+and renews its certificate automatically — no central file to maintain.
+The only manual step per new app is adding its secret name to
+`gateway.listeners.websecure.certificateRefs` here (see below).
+
+When enabling a currently-disabled app (prometheus, longhorn, nextcloud,
+calibre — see their respective `values.yaml`), add its secret to
+`gateway.listeners.websecure.certificateRefs` in `values.yaml`.
 
 ## Security Middlewares
 
@@ -113,40 +123,21 @@ Gateway.
 kubectl create namespace <namespace> --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-### 2. Add a ReferenceGrant (if new namespace)
+### 2. Ship the Certificate with the chart
 
-If the app lives in a namespace not yet covered by `referencegrants.yaml`
-(currently: `apps`, `media`, `monitoring`, `longhorn-system`, `auth`),
-add a new entry:
-
-```yaml
-apiVersion: gateway.networking.k8s.io/v1beta1
-kind: ReferenceGrant
-metadata:
-  name: allow-traefik-gateway-tls-secrets
-  namespace: <namespace>
-spec:
-  from:
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      namespace: traefik
-  to:
-    - group: ""
-      kind: Secret
-```
-
-Apply it: `kubectl apply -f referencegrants.yaml`
-
-### 3. Create a Certificate resource
-
-Create `certificate.yaml` in the app's chart directory:
+Own charts: add a `certificate.yaml` template rendering a `Certificate`
+into `traefik`, derived from the app's hostname (see any existing chart,
+e.g. `cluster/helm/whoops/templates/certificate.yaml`). Upstream charts:
+add the same manifest via their `extraObjects` value (see
+`grafana`/`authelia` `values*.yaml`). The secret must live in `traefik`
+(see [Gateway listeners](#gateway-listeners)):
 
 ```yaml
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: <app>-shpaq-org-tls
-  namespace: <namespace>
+  namespace: traefik
 spec:
   dnsNames:
     - <app>.shpaq.org
@@ -160,24 +151,18 @@ spec:
     - key encipherment
 ```
 
-Apply it in the deploy script: `kubectl apply -f certificate.yaml -n <namespace>`
-
-cert-manager will automatically issue and renew the certificate. The
-secret `<app>-shpaq-org-tls` will be created in the app's namespace.
-
-### 4. Add the TLS secret to the Gateway
+### 3. Add the TLS secret to the Gateway
 
 Add the new secret to `gateway.listeners.websecure.certificateRefs` in
-`values.yaml`:
+`values.yaml` (no `namespace:` field — same-namespace reference):
 
 ```yaml
 certificateRefs:
   # ... existing entries ...
   - name: <app>-shpaq-org-tls
-    namespace: <namespace>
 ```
 
-### 5. Create an HTTPRoute
+### 4. Create an HTTPRoute
 
 The HTTPRoute must reference `traefik-gateway` and include the
 `security-chain` middleware via `extensionRef` on every rule. If the app
@@ -234,27 +219,24 @@ httpRoute:
       sectionName: websecure
 ```
 
-### 6. Deploy
+### 5. Deploy
 
 ```bash
-# Apply referencegrant (if new namespace)
-kubectl apply -f referencegrants.yaml
-
-# Deploy the app (creates Service, Deployment, HTTPRoute, Certificate)
+# Deploys the app (Service, Deployment, HTTPRoute) and applies the
+# Certificate resources from certificates.yaml before the chart
 bash deploy
 
 # Verify
 kubectl get gateway -n traefik traefik-gateway -o jsonpath='{.status.conditions[*].type}{"\n"}'
 kubectl get httproute -n <namespace> <app> -o jsonpath='{.status.parents[*].conditions[*].type}{"\n"}'
-kubectl get certificate -n <namespace> <app>-shpaq-org-tls
+kubectl get certificate -n traefik <app>-shpaq-org-tls
 ```
 
 ### Checklist
 
 - [ ] Namespace exists
-- [ ] ReferenceGrant in `referencegrants.yaml` for the namespace
-- [ ] Certificate resource created (cert-manager issues the secret)
-- [ ] TLS secret added to `gateway.listeners.websecure.certificateRefs`
+- [ ] `Certificate` shipped with the app's chart (renders into namespace `traefik`)
+- [ ] TLS secret added to `gateway.listeners.websecure.certificateRefs` (no `namespace:` field)
 - [ ] HTTPRoute with `security-chain` extensionRef on every rule
 - [ ] HTTPRoute with `<namespace>-authelia` extensionRef (if auth needed)
 - [ ] HTTPRoute `parentRefs` points to `traefik-gateway` in `traefik` namespace
@@ -337,6 +319,20 @@ Both `letsencrypt-prod` and `letsencrypt-stage` `ClusterIssuer`s use the
 at `traefik-gateway` in the `traefik` namespace. See
 [`cluster/helm/cert-manager`](../cert-manager).
 
-Certificate resources are created per-application (not via Gateway
-annotations) because the Gateway uses `hostname: ""` on all listeners,
-which prevents cert-manager from auto-determining hostnames.
+Certificate resources are shipped **with each application's chart**, not
+managed centrally or via Gateway annotations. Every chart renders its own
+`Certificate` (own charts: `templates/certificate.yaml`; upstream
+`grafana`/`authelia`: `extraObjects`) into the `traefik` namespace, named
+after the hostname (`<hostname with dots as dashes>-tls`). Two reasons for
+this layout:
+
+1. The Gateway's `websecure` listener uses `hostname: ""`, which prevents
+   cert-manager's gateway-shim from auto-determining hostnames.
+2. Listener `certificateRefs` may only reference same-namespace Secrets:
+   cross-namespace references are deprecated in Gateway API (GEP-1748) and
+   rejected by cert-manager's gateway-shim with `BadConfig`
+   ("Skipped a listener block") events regardless of `ReferenceGrant`s.
+
+The Gateway therefore carries **no** `cert-manager.io/*` annotation — the
+shim must not process it — and only the secret-name list in
+`gateway.listeners.websecure.certificateRefs` is maintained here.

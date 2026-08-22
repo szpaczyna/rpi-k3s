@@ -174,9 +174,13 @@ gateway:
   name: "traefik-gateway"
   # -- By default, Gateway is created in the same `Namespace` than Traefik.
   namespace: ""
-  # -- Additional gateway annotations (e.g. for cert-manager.io/issuer)
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+  # -- Additional gateway annotations.
+  # Deliberately NO cert-manager.io/* annotation: the gateway-shim would try
+  # to derive Certificates from the listeners and reject this Gateway
+  # (listeners without hostname / with cross-namespace certificateRefs are
+  # skipped with BadConfig events). Certificates are managed explicitly in
+  # certificates.yaml instead.
+  annotations: {}
   # -- [Infrastructure](https://kubernetes.io/blog/2023/11/28/gateway-api-ga/#gateway-infrastructure-labels)
   infrastructure: {}
   # -- Define listeners
@@ -193,10 +197,14 @@ gateway:
       # Allow HTTPRoutes from every namespace (apps, media, monitoring, longhorn-system, ...)
       namespacePolicy:
         from: All
-    # HTTPS listener. certificateRefs lists every existing TLS Secret so the
-    # single Gateway can terminate TLS for all hostnames currently served.
-    # cert-manager.io/cluster-issuer annotation auto-creates Certificate
-    # resources for each HTTPRoute hostname and keeps secrets renewed.
+    # HTTPS listener. certificateRefs lists every TLS Secret in use, all of
+    # them living in THIS namespace. Each app's Helm chart renders its own
+    # Certificate resource here (see cluster/helm/*/templates/certificate.yaml
+    # and upstream `extraObjects` for grafana/authelia), so deploying an app
+    # provisions its TLS secret automatically; only this list needs a new
+    # entry. Listener certificateRefs must be same-namespace: cross-namespace
+    # references are deprecated in Gateway API (GEP-1748) and unsupported by
+    # cert-manager's gateway-shim.
     websecure:
       # -- Port is the network port. Multiple listeners may use the same port, subject to the Listener compatibility rules.
       # The port must match a port declared in ports section (ports.websecure.port below).
@@ -210,35 +218,24 @@ gateway:
         from: All
       mode: Terminate
       # -- Add certificates for TLS or HTTPS protocols. See [GatewayTLSConfig](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io%2fv1.GatewayTLSConfig)
+      # Secret naming convention: <hostname with dots as dashes>-tls.
       certificateRefs:
-        - name: shpaq-org-tls
-          namespace: apps
-        - name: bitwarden-shpaq-org-tls
-          namespace: apps
-        - name: gitea-shpaq-org-tls
-          namespace: apps
-        - name: kanboard-shpaq-org-tls
-          namespace: apps
-        - name: pihole-shpaq-org-tls
-          namespace: apps
-        - name: whoops-tls-prod
-          namespace: apps
-        - name: booklore-shpaq-org-tls
-          namespace: media
-        - name: media-shpaq-org-tls
-          namespace: media
-        - name: grafana-tls
-          namespace: monitoring
-        - name: authelia-tls
-          namespace: auth
-        # Currently-disabled ingresses; add once enabled:
+        - name: shpaq-org-tls            # shpaq.org (shpaq-org chart)
+        - name: bitwarden-shpaq-org-tls  # bitwarden.shpaq.org
+        - name: gitea-shpaq-org-tls      # gitea.shpaq.org
+        - name: pihole-shpaq-org-tls     # pihole.shpaq.org
+        - name: whoops-shpaq-org-tls     # whoops.shpaq.org
+        - name: booklore-shpaq-org-tls   # booklore.shpaq.org
+        - name: media-shpaq-org-tls      # media.shpaq.org
+        - name: grafana-shpaq-org-tls    # grafana.shpaq.org
+        - name: auth-shpaq-org-tls       # auth.shpaq.org
+        # Currently-disabled ingresses; add once enabled (the chart already
+        # renders their Certificates behind feature flags):
+        # - name: calibre-shpaq-org-tls   # media-stack, calibreWeb.enable
         # - name: prometheus-shpaq-org-tls
-        #   namespace: monitoring
         # - name: longhorn-shpaq-org-tls
-        #   namespace: longhorn-system
         # - name: cloud-shpaq-org-tls
-        #   namespace: apps
-
+        # - name: kanboard-shpaq-org-tls   # kanboard.shpaq.org
 gatewayClass:  # @schema additionalProperties: false
   # -- When providers.kubernetesGateway.enabled and gateway.enabled, deploy a default gatewayClass
   enabled: true

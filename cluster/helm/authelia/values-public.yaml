@@ -1,5 +1,5 @@
 ---
-## Default values for Authelia. 
+## Default values for Authelia.
 image:
   tag: "4.39.20"
 
@@ -46,6 +46,30 @@ ingress:
         sectionName: websecure
     hostnamesOverride:
       - auth.shpaq.org
+
+# TLS certificate for the gatewayAPI hostname, rendered by the upstream
+# chart via extraObjects. It lives in the `traefik` namespace because the
+# Gateway's websecure listener may only reference same-namespace Secrets;
+# the secret name follows the cluster-wide <hostname-dashed>-tls convention
+# and is listed in gateway.listeners.websecure.certificateRefs
+# (cluster/helm/traefik).
+extraObjects:
+  - apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: auth-shpaq-org-tls
+      namespace: traefik
+    spec:
+      dnsNames:
+        - auth.shpaq.org
+      issuerRef:
+        group: cert-manager.io
+        kind: ClusterIssuer
+        name: letsencrypt-prod
+      secretName: auth-shpaq-org-tls
+      usages:
+        - digital signature
+        - key encipherment
 
 configMap:
   theme: dark

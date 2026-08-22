@@ -1,0 +1,45 @@
+{{- if .Values.httpRoute.enabled }}
+---
+# TLS certificate for the HTTPRoute hostname. Rendered into the `traefik`
+# namespace because the Gateway's websecure listener may only reference
+# same-namespace Secrets; the secret name follows the cluster-wide
+# <hostname-dashed>-tls convention and is listed in
+# gateway.listeners.websecure.certificateRefs (cluster/helm/traefik).
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: media-shpaq-org-tls
+  namespace: traefik
+spec:
+  dnsNames:
+    - "media.shpaq.org"
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  secretName: media-shpaq-org-tls
+  usages:
+    - digital signature
+    - key encipherment
+{{- end }}
+{{- if and .Values.httpRoute.enabled .Values.calibreWeb.enable }}
+---
+# Companion certificate for the optional Calibre-Web vhost; kept in sync
+# with the `calibre-web` HTTPRoute (templates/httproute.yaml) conditions.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: calibre-shpaq-org-tls
+  namespace: traefik
+spec:
+  dnsNames:
+    - "calibre.shpaq.org"
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  secretName: calibre-shpaq-org-tls
+  usages:
+    - digital signature
+    - key encipherment
+{{- end }}

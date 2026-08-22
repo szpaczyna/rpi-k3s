@@ -75,6 +75,30 @@ route:
           kind: Middleware
           name: security-chain
 
+# TLS certificate for route.main.hostnames[0], rendered by the upstream
+# chart via extraObjects. It lives in the `traefik` namespace because the
+# Gateway's websecure listener may only reference same-namespace Secrets;
+# the secret name follows the cluster-wide <hostname-dashed>-tls convention
+# and is listed in gateway.listeners.websecure.certificateRefs
+# (cluster/helm/traefik).
+extraObjects:
+  - apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: grafana-shpaq-org-tls
+      namespace: traefik
+    spec:
+      dnsNames:
+        - grafana.shpaq.org
+      issuerRef:
+        group: cert-manager.io
+        kind: ClusterIssuer
+        name: letsencrypt-prod
+      secretName: grafana-shpaq-org-tls
+      usages:
+        - digital signature
+        - key encipherment
+
 resources:
   limits:
     cpu: 1000m
