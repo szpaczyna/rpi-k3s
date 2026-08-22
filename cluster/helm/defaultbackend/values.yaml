@@ -1,0 +1,56 @@
+# Default values for defaultbackend.
+#
+# Equivalent of ingress-nginx's `defaultBackend` for the Traefik Gateway API
+# setup: a tiny pod serving a plain 404-style page for requests that do not
+# match any HTTPRoute hostname (bare LoadBalancer IP, unknown hosts).
+# Routing works via a catch-all HTTPRoute without `hostnames` attached to both
+# gateway listeners; routes that do specify hostnames always take precedence.
+
+replicaCount: 1
+
+image:
+  repository: szpaczyn/defaultbackend-arm64
+  pullPolicy: IfNotPresent
+  tag: "v0.1.0"
+
+service:
+  type: ClusterIP
+  # Service stays on :80 so HTTPRoute backendRefs don't change;
+  # targetPort points at the unprivileged nginx listener below.
+  port: 80
+  # nginx-unprivileged listens on 8080 as uid 101 (no caps needed).
+  containerPort: 8080
+
+podSecurityContext:
+  # nginx user -> uid/gid 101, matching the nginx-unprivileged image
+  runAsNonRoot: true
+  runAsUser: 101
+  runAsGroup: 101
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: [ALL]
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 16Mi
+  limits:
+    cpu: 100m
+    memory: 32Mi
+
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+      kind: Gateway
+      sectionName: web
+    - name: traefik-gateway
+      namespace: traefik
+      kind: Gateway
+      sectionName: websecure

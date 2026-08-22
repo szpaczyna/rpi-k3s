@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: defaultbackend
+description: Default backend served by Traefik for bare-IP / unknown-host requests
+type: application
+version: 0.1.0
+appVersion: "v0.0.1"

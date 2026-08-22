@@ -1,0 +1,21 @@
+{{- if .Values.httpRoute.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  parentRefs:
+    {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
+  # No hostnames on purpose: an HTTPRoute without hostnames matches every host,
+  # so this is the catch-all for bare-IP / unknown-host requests. Routes that
+  # do declare hostnames always take precedence over this one.
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: {{ .Release.Name }}
+          port: {{ .Values.service.port }}
+{{- end }}
