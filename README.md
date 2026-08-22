@@ -28,7 +28,7 @@
 
 | | |
 |---|---|
-| **K3s** | v1.35.3+k3s1 |
+| **K3s** | v1.36.3+k3s1 |
 | **OS** | Ubuntu 24.04.4 LTS (arm64) |
 | **Nodes** | 1 master + 3 workers |
 
