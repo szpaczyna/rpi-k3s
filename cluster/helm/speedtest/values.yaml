@@ -1,0 +1,51 @@
+---
+# Converted from the former plain manifest cluster/apps/speedtest.yaml.
+#
+# The exporter runs with hostNetwork on a single pinned node and is
+# scraped by Prometheus through pod annotations (prometheus.io/*) — no
+# Service needed, same as before the conversion.
+
+image:
+  repository: szpaczyn/prometheus-speedtest-exporter
+  tag: "v1.1.0"
+  pullPolicy: IfNotPresent
+
+port: 9469
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9469"
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 65535
+
+# hostPID + hostNetwork are required by the exporter to measure the
+# node's real connectivity.
+hostPID: true
+hostNetwork: true
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 24Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/os
+              operator: In
+              values:
+                - linux
+
+tolerations:
+  - effect: NoSchedule
+    operator: Exists
+
+nodeSelector:
+  kubernetes.io/hostname: rpi-k3s-worker-01

@@ -10,8 +10,9 @@ layout: default
   - [pihole](cluster/helm/pihole) - DNS ad-blocker
   - [postgresql](cluster/helm/postgresql) - PostgreSQL database
   - [version-checker](cluster/helm/version-checker) - Checker for newest version of deployed apps
-  - [influxdb](cluster/helm/influxdb) - Database for Apple Health exports
   - [shpaq-org](cluster/helm/shpaq-org) - Personal website
+  - [pihole](cluster/helm/pihole) - DNS ad-blocker
+  - [speedtest](cluster/helm/speedtest) - Prometheus speedtest exporter
   - [media-stack](cluster/helm/media-stack) - Transmission, Radarr, Sonarr, Lidarr, Prowlarr, Readarr, Bazarr
   - [grafana](cluster/helm/grafana) - Grafana (for dashboards)
 
@@ -23,6 +24,7 @@ layout: default
   - [event-exporter](cluster/helm/unused/event-exporter) - Kubernetes events exporter
   - [gentoo](cluster/helm/unused/gentoo) - cross-compiler (helm chart, plain manifests in [gentoo-manifests](cluster/helm/unused/gentoo-manifests))
   - [ingress-nginx](cluster/helm/unused/ingress-nginx) - legacy ingress controller, replaced by Traefik
+  - [influxdb](cluster/helm/unused/influxdb) - Database for Apple Health exports
   - [kanboard](cluster/helm/unused/kanboard) - Kanban project management software
   - [nextcloud](cluster/helm/unused/nextcloud) - Personal cloud service
   - [openweather-exporter](cluster/helm/unused/openweather) - OpenWeather API exporter

@@ -44,17 +44,11 @@
 | [booklore](cluster/helm/booklore) | Book library management |
 | [gitea](cluster/helm/gitea) | Self-hosted Git service |
 | [media-stack](cluster/helm/media-stack) | Radarr, Sonarr, Lidarr, Prowlarr, Readarr, Bazarr, Transmission |
+| [pihole](cluster/helm/pihole) | DNS ad-blocker |
 | [shpaq-org](cluster/helm/shpaq-org) | Personal website |
+| [speedtest](cluster/helm/speedtest) | Prometheus speedtest exporter |
 | [whoops](cluster/helm/whoops) | Whoop fitness data dashboards |
-| [influxdb](cluster/helm/influxdb) | Time-series DB (Apple Health exports) |
 | [postgresql](cluster/helm/postgresql) | PostgreSQL database (HA) |
-
-### Apps (YAML/Kustomize)
-
-| App | Description |
-|-----|-------------|
-| [pihole](cluster/apps/pihole) | DNS ad-blocker (ingress proxy) |
-| [speedtest](cluster/apps/speedtest) | Prometheus speedtest exporter |
 
 ### Retired / Not Currently Deployed
 
@@ -68,6 +62,7 @@ on the cluster right now. Revival steps are documented in each chart's
 | [event-exporter](cluster/helm/unused/event-exporter) | Kubernetes events exporter |
 | [gentoo](cluster/helm/unused/gentoo) | Gentoo cross-compiler (helm chart; plain manifests in `gentoo-manifests`) |
 | [ingress-nginx](cluster/helm/unused/ingress-nginx) | Legacy ingress controller, replaced by Traefik |
+| [influxdb](cluster/helm/unused/influxdb) | Time-series DB (Apple Health exports) |
 | [kanboard](cluster/helm/unused/kanboard) | Kanban project management |
 | [nextcloud](cluster/helm/unused/nextcloud) | Personal cloud service |
 | [openweather-exporter](cluster/helm/unused/openweather) | OpenWeather API metrics |

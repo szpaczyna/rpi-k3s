@@ -1,4 +1,4 @@
 #!/bin/bash
 set -euo pipefail
 
-sops -d --output values.yaml ../../secrets/kanboard-values.yaml
+sops -d --output values.yaml ./kanboard-values.yaml

@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+
+NAMESPACE="monitoring"
+RELEASE_NAME="speedtest"
+CHART="."
+
+# Converted from the former plain manifest (cluster/apps/speedtest.yaml).
+# NOTE: the old manifest-applied Deployment must be deleted first if it is
+# still running — helm cannot adopt resources it does not own:
+#   kubectl delete deployment speedtest -n "${NAMESPACE}"
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  "$@"

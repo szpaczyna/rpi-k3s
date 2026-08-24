@@ -1,0 +1,6 @@
+apiVersion: v2
+name: speedtest
+description: Prometheus speedtest exporter (single pinned worker, hostNetwork)
+type: application
+version: 0.1.0
+appVersion: "v1.1.0"
