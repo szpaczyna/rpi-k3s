@@ -83,7 +83,7 @@ deployment:
     # the geoblock plugin at the pinned version. raw.githubusercontent.com is
     # reachable from the cluster (Traefik itself pulls plugin modules from GitHub).
     - name: geodb
-      image: busybox:1.36
+      image: busybox:1.38
       command: ["/bin/sh", "-c"]
       args:
         - |

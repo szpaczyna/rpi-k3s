@@ -160,7 +160,7 @@ images:
     tag: "v0.3.0"
   busybox:
     repository: "busybox"
-    tag: "1.37.0"
+    tag: "1.38.0"
 
 httpRoute:
   enabled: true

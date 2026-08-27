@@ -32,7 +32,7 @@ image:
 # Used by the fix-permissions initContainer only.
 busybox:
   repository: busybox
-  tag: "1.37.0"
+  tag: "1.38.0"
 
 # Former resourceProfiles.light profile from media-stack.
 resources:
