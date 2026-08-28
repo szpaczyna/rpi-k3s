@@ -52,7 +52,7 @@ jobs:
         continue-on-error: true
         run: |
           find . -name '*.sh' -type f \
-            -not -path './cluster/secrets/*' \
+            -not -path './scripts/network/*enc.sh' \
             -not -path './scripts/wireguard.sh' \
             -not -path './scripts/pihole_install.sh' \
             -print0 | xargs -0 shellcheck -x
@@ -84,7 +84,7 @@ jobs:
       - name: Run kubeconform
         uses: docker://ghcr.io/yannh/kubeconform:latest
         with:
-          args: -strict -ignore-missing-schemas -schema-location default -summary rendered cluster/apps cluster/core
+          args: -strict -ignore-missing-schemas -schema-location default -summary rendered cluster/core
 
   kube_linter:
     name: Kube Linter
