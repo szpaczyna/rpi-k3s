@@ -10,6 +10,7 @@ ignore: |
   cluster/secrets/
   cluster/unused/
   *-crds.yaml
+  *.enc*.yaml
   *.asc.yaml
 
 rules:

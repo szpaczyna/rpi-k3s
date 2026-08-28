@@ -10,8 +10,6 @@ VERSION="29.13.0"
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts 2>/dev/null || true
 helm repo update
 
-kubectl apply -f <(sops -d ../../secrets/prometheus-secret.yaml) -n "${NAMESPACE}"
-
 # certificate.yaml (Gateway API ACME cert for prometheus.shpaq.org) is
 # intentionally NOT auto-applied: there is no public DNS record for this
 # host yet, so issuance would just retry forever against Let's Encrypt.

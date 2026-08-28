@@ -1,4 +1,4 @@
 #!/bin/bash
 set -euo pipefail
 
-sops -d --output longhorn-auth.yaml ../../secrets/longhorn-auth.yaml
+sops -d --output longhorn-auth.yaml ./auth.enc.yaml

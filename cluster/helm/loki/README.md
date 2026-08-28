@@ -38,7 +38,7 @@ for records without a `ClientHost` and for private/LAN IPs.
 | File | Role |
 |---|---|
 | `fluentbit-values.yaml` | `geoip2` filter, read-only mount of the shared DB volume |
-| `maxmind-geoip-secret.yaml` | SOPS-encrypted MaxMind credentials (`account_id`, `license_key`) |
+| `maxmind-geoip.enc.yaml` | SOPS-encrypted MaxMind credentials (`account_id`, `license_key`) |
 | `geolite2-cronjob.yaml` | Static PV/PVC on NFS (`/data/nfs/geolite2`, like media-stack) + `geolite2-updater` CronJob refreshing the DB every two weeks and rolling the DaemonSet so pods reload it |
 
 The GeoLite2 **City** database is used (country + city + coordinates). The
@@ -52,9 +52,9 @@ A free MaxMind account (for the license key): https://www.maxmind.com/en/geolite
 ### Setup (first time)
 
 ```bash
-# 1. Fill in account_id / license_key in maxmind-geoip-secret.yaml, then:
-sops -e -i maxmind-geoip-secret.yaml
-kubectl apply -f maxmind-geoip-secret.yaml
+# 1. Fill in account_id / license_key in maxmind-geoip.enc.yaml, then:
+sops -e -i maxmind-geoip.enc.yaml
+kubectl apply -f maxmind-geoip.enc.yaml
 
 # 2. PVC + CronJob (must exist before the fluent-bit chart upgrade)
 kubectl apply -f geolite2-cronjob.yaml

@@ -86,10 +86,10 @@ For more information on each application, refer to their respective documentatio
 Routing is exposed via a Gateway API `HTTPRoute` (see
 `templates/httproute.yaml`), attached to the shared `traefik-gateway` (see
 [`cluster/helm/traefik`](../traefik)). All app paths (`/transmission`,
-`/bazarr`, `/lidarr`, `/prowlarr`, `/radarr`, `/readarr`, `/sonarr`) are
-protected by a Traefik `BasicAuth` Middleware referencing the
-`media-auth` Secret — same secret/mechanism as the previous
-`nginx.ingress.kubernetes.io/auth-secret` annotation.
+`/bazarr`, `/lidarr`, `/prowlarr`, `/radarr`, `/readarr`, `/sonarr`) run
+through the shared `security-chain` and `authelia` middlewares (see
+[`cluster/helm/middlewares`](../middlewares)) — the old nginx-ingress
+`media-auth` basic-auth Secret has been removed.
 
 A bare request to `https://media.shpaq.org/` (no app path) has no
 backend of its own; it's redirected (302) to `https://shpaq.org/` instead

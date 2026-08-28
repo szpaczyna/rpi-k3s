@@ -10,8 +10,8 @@ VERSION="10.3.0"
 helm repo add grafana https://grafana.github.io/helm-charts 2>/dev/null || true
 helm repo update
 
-kubectl apply -f <(sops -d ../../secrets/grafana-admin-creds.yaml) -n "${NAMESPACE}"
-kubectl apply -f <(sops -d ../../secrets/grafana-backup-secret.yaml) -n "${NAMESPACE}"
+kubectl apply -f <(sops -d ./admin-creds.enc.yaml) -n "${NAMESPACE}"
+kubectl apply -f <(sops -d ./backup-secret.enc.yaml) -n "${NAMESPACE}"
 kubectl apply -f backup-cronjob.yaml -n "${NAMESPACE}"
 
 helm upgrade --install "${RELEASE_NAME}" "${CHART}" \

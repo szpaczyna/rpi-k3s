@@ -43,10 +43,13 @@
   },
 
   "ignorePaths": [
-    "cluster/secrets/**",
     "**/*.enc",
     "**/*.enc.*",
     "**/*.md.*",
+    "**/*-secret*",
+    "**/*-creds*",
+    "**/*pgpass*",
+    "**/*-auth*",
     "cluster/helm/postgresql/**"
   ],
 

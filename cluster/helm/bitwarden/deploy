@@ -8,4 +8,4 @@ helm upgrade --install "${RELEASE_NAME}" . \
   --namespace "${NAMESPACE}" \
   --create-namespace \
   --values values-public.yaml \
-  --values <(sops -d ../../secrets/bitwarden-values.yaml)
+  --values <(sops -d ./values.enc.yaml)

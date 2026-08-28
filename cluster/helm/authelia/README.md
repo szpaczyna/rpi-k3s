@@ -10,8 +10,8 @@ the upstream chart `authelia/authelia` (0.11.6, appVersion 4.39.20) from
 |---|---|
 | `values-public.yaml` | Non-sensitive chart config (image, pod, ingress, storage, initContainer) |
 | `deploy` | Deploy script (repo + secrets + `helm upgrade --install`) |
-| `../../secrets/authelia-values.yaml` | Sensitive config (session, access_control, TOTP, WebAuthn, password policy) — SOPS encrypted |
-| `../../secrets/authelia-secrets.yaml` | Kubernetes Secrets (JWT/session/storage keys + `users_database.yml`) — SOPS encrypted |
+| `./values.enc.yaml` | Sensitive config (session, access_control, TOTP, WebAuthn, password policy) — SOPS encrypted |
+| `./secrets.enc.yaml` | Kubernetes Secrets (JWT/session/storage keys + `users_database.yml`) — SOPS encrypted |
 
 ## Architecture
 
@@ -39,9 +39,9 @@ the upstream chart `authelia/authelia` (0.11.6, appVersion 4.39.20) from
 
 The script:
 1. Adds the `authelia` Helm repo
-2. Applies Kubernetes Secrets from `../../secrets/authelia-secrets.yaml` (via `sops -d`)
+2. Applies Kubernetes Secrets from `./secrets.enc.yaml` (via `sops -d`)
 3. Runs `helm upgrade --install` with both `values-public.yaml` and
-   `../../secrets/authelia-values.yaml` (via `sops -d`)
+   `./values.enc.yaml` (via `sops -d`)
 
 **Important**: deploy Traefik first if middleware references have changed,
 as the `authelia` forwardAuth middleware is created per-namespace by
@@ -49,27 +49,28 @@ application charts.
 
 ## Secrets
 
-Both files in `../../secrets/` are SOPS-encrypted. To edit:
+Both secrets live next to the chart (this directory, SOPS-encrypted).
+To edit:
 
-    sops ../../secrets/authelia-values.yaml
-    sops ../../secrets/authelia-secrets.yaml
+    sops ./values.enc.yaml
+    sops ./secrets.enc.yaml
 
 To view without editing:
 
-    sops -d ../../secrets/authelia-values.yaml
-    sops -d ../../secrets/authelia-secrets.yaml
+    sops -d ./values.enc.yaml
+    sops -d ./secrets.enc.yaml
 
 ## First login
 
 1. Open `https://auth.shpaq.org`
-2. Log in with the temporary password (see `authelia-secrets.yaml`)
+2. Log in with the temporary password (see `secrets.enc.yaml`)
 3. **Change password** in the portal (Settings → Change Password) — written to
    `/config/users_database.yml` on PVC
 4. Register 2FA (TOTP)
 
 ## Secret rotation
 
-1. Update values in `../../secrets/authelia-values.yaml` (or `authelia-secrets.yaml` for keys)
+1. Update values in `./values.enc.yaml` (or `secrets.enc.yaml` for keys)
 2. Apply: `./deploy`
 3. Restart deployment (chart does not auto-restart on `existingSecret` change):
    ```

@@ -16,7 +16,7 @@
 #   kubectl create job --from=cronjob/geolite2-updater geolite2-bootstrap -n logging
 #
 # Apply order (once, before `./deploy`):
-#   1. sops -e -i maxmind-geoip-secret.yaml && kubectl apply -f maxmind-geoip-secret.yaml
+#   1. sops -e -i maxmind-geoip.enc.yaml && kubectl apply -f maxmind-geoip.enc.yaml
 #   2. kubectl apply -f geolite2-cronjob.yaml
 ---
 apiVersion: v1

@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
-SECRET_FILE="${REPO_ROOT}/cluster/secrets/renovate-secret.yaml"
+SECRET_FILE="${REPO_ROOT}/cluster/core/renovate/secret.enc.yaml"
 
 echo "==> Deploying renovate secret and cronjob"
 

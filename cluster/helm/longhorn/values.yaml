@@ -105,9 +105,6 @@ csi:
   snapshotterReplicaCount: 1
 
 defaultSettings:
-  backupTarget: null
-  #backupTarget: nfs://10.0.10.12:/data/nfs/longhorn
-  backupTargetCredentialSecret: longhorn-s3-secret
   allowRecurringJobWhileVolumeDetached: null
   createDefaultDiskLabeledNodes: false
   defaultDataPath: /k3s/storage

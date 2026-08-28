@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOPS_FILE="${SOPS_FILE:-../../secrets/media-exporter-secret.yaml}"
+SOPS_FILE="${SOPS_FILE:-./exporter-secret.enc.yaml}"
 NAMESPACE="${NAMESPACE:-media}"
 
 require() {

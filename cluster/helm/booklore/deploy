@@ -4,7 +4,7 @@ set -euo pipefail
 NAMESPACE="media"
 RELEASE_NAME="booklore"
 
-kubectl apply -f <(sops -d ../../secrets/booklore-db-secret.yaml) -n "${NAMESPACE}"
+kubectl apply -f <(sops -d ./db-secret.enc.yaml) -n "${NAMESPACE}"
 
 helm upgrade --install "${RELEASE_NAME}" . \
   --namespace "${NAMESPACE}" \

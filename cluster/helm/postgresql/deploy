@@ -14,11 +14,11 @@ helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
   --namespace "${NAMESPACE}" \
   --create-namespace \
   --values values-public.yaml \
-  --values <(sops -d ../../secrets/postgresql-values.yaml)
+  --values <(sops -d ./values.enc.yaml)
 
 # Apply backup cronjobs
 kubectl apply -f backup-job.yaml -n "${NAMESPACE}"
 kubectl apply -f backup-full-job.yaml -n "${NAMESPACE}"
 
 # Apply pgpass secret for backup jobs
-# kubectl apply -f <(sops -d ../../secrets/postgresql-pgpass.yaml) -n "${NAMESPACE}"
+# kubectl apply -f <(sops -d ./pgpass.enc.yaml) -n "${NAMESPACE}"

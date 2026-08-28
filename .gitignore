@@ -2,8 +2,6 @@ wip/*
 .idea/*
 .vscode
 gitconfig
-## apple health export
-scripts/apple_health/app.py
 scripts/gitea/config.yaml
 ### sops
 .sops.yaml

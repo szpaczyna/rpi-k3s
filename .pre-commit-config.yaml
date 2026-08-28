@@ -11,6 +11,13 @@ repos:
   - id: end-of-file-fixer
   - id: check-json
   - id: check-symlinks
+- repo: local
+  hooks:
+  - id: ensure-sops
+    name: Ensure .enc.* files are SOPS-encrypted
+    entry: scripts/sops-check.sh
+    language: system
+    files: '\.enc\.'
 - repo: https://github.com/adrienverge/yamllint.git
   rev: v1.35.1
   hooks:
@@ -18,6 +25,9 @@ repos:
     args:
     - -c
     - .github/.yamllint.config.yaml
+    # sops-encrypted files are ciphertext, not styleable YAML (and some are
+    # multi-document). Skip *.enc.* — they are guarded by ensure-sops.
+    exclude: '\.enc\.'
 - repo: https://github.com/sirosen/fix-smartquotes
   rev: 0.2.0
   hooks:
@@ -27,3 +37,11 @@ repos:
   hooks:
   - id: forbid-crlf
   - id: remove-crlf
+- repo: https://github.com/Yelp/detect-secrets
+  rev: v1.5.0
+  hooks:
+  - id: detect-secrets
+    args: ['--baseline', '.secrets.baseline', '--exclude-files', '\.enc\.']
+    # sops files (already encrypted, covered by ensure-sops) and the
+    # baseline itself are not scanned.
+    exclude: '^\.secrets\.baseline$|\.enc\.'
