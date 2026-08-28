@@ -12,6 +12,7 @@ checks:
     - unset-memory-requirements
     - job-ttl-seconds-after-finished
     - non-existent-service-account
+    - dangling-service
 
 config:
   discover:
