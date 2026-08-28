@@ -1,6 +1,6 @@
 {
   "name": "rpi-k3s",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "Szpacze Gniazdo k3s",
   "main": "index.js",
   "repository": {

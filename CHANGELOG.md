@@ -1,4 +1,48 @@
 # Changelog
+## [0.6.5](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.4...v0.6.5) (2026-08-28)
+
+
+### Features
+
+* added default www backend ([9317aba](https://github.com/szpaczyna/rpi-k3s/commit/9317abad72f729c3a9824152c6fa1ff7b333ee48))
+* make linter happy, moved kubectl images from bitnami to alpine ([44ca39a](https://github.com/szpaczyna/rpi-k3s/commit/44ca39a697bffdec1f078d16a5fabd10debf356e))
+* secrets reorganization, yamllint update ([3000bf0](https://github.com/szpaczyna/rpi-k3s/commit/3000bf037b751a367a9f9a02a380226dd49c1d1b))
+* speedtest helm chart, removed influxdb ([fdb7efa](https://github.com/szpaczyna/rpi-k3s/commit/fdb7efac2724730b51ef40ad47b5b35196b12247))
+* upgraded k3s to 1.36 ([0552553](https://github.com/szpaczyna/rpi-k3s/commit/05525539085f253d65cdded532dc5093ef14658f))
+
+
+### Bug Fixes
+
+* authelia configuration fix ([836ca0e](https://github.com/szpaczyna/rpi-k3s/commit/836ca0e3dad33383ebb4f75015b99ed43219a4be))
+* Certificates issues, rewritten ([7b9ea19](https://github.com/szpaczyna/rpi-k3s/commit/7b9ea191f7ce6b5fca5b30179a605574563c7a10))
+* nodeSelector for upgrade ([4b35f13](https://github.com/szpaczyna/rpi-k3s/commit/4b35f13cbe683d4fd60158b4d87d12ac88be2b42))
+* reorganization along with readmes ([5d8e42e](https://github.com/szpaczyna/rpi-k3s/commit/5d8e42e9faf388f3f379bf8a52ce7f17e9c6ac5c))
+* updated linter ([7336f82](https://github.com/szpaczyna/rpi-k3s/commit/7336f82371baf3d408bdde0557a505a22321d660))
+
+
+### Miscellaneous
+
+* **deps:** update busybox docker tag ([4c0a9f0](https://github.com/szpaczyna/rpi-k3s/commit/4c0a9f0756ab6ea3c79bce850db01d48ae55c754))
+* **deps:** update busybox docker tag ([26550eb](https://github.com/szpaczyna/rpi-k3s/commit/26550ebba381b01244dedcc26b8d9a9b1745849e))
+* **deps:** update gitea/gitea docker tag to v1.27.2 ([f8bd4b4](https://github.com/szpaczyna/rpi-k3s/commit/f8bd4b4199113aa20b8c623fc70bd31e7c64fcbb))
+* **deps:** update lscr.io/linuxserver/calibre-web docker tag to v0.6.27 ([2f4be4f](https://github.com/szpaczyna/rpi-k3s/commit/2f4be4ff89c75cc9a40dd653ed398b405f7c8701))
+* **deps:** update lscr.io/linuxserver/calibre-web docker tag to v0.6.27 ([2d1542c](https://github.com/szpaczyna/rpi-k3s/commit/2d1542c6a742877986f02e4c7f0c9fc379dcc994))
+* **deps:** update nginx docker tag to v1.31.4 ([7282117](https://github.com/szpaczyna/rpi-k3s/commit/72821173f4b6a99fa1fae81c0e1cc5029912d134))
+* **deps:** update quay.io/prometheus-operator/prometheus-config-reloader docker tag to v0.93.1 ([629e4e8](https://github.com/szpaczyna/rpi-k3s/commit/629e4e808b6e12fee9ba3c83c76f6b047d814c61))
+* **deps:** update quay.io/prometheus/prometheus docker tag to v3.14.0 ([525f7c8](https://github.com/szpaczyna/rpi-k3s/commit/525f7c8077dbe280d432b6dee4bfbdea402e928b))
+* **deps:** update rancher/local-path-provisioner docker tag to v0.0.37 ([7aee1d0](https://github.com/szpaczyna/rpi-k3s/commit/7aee1d023f243876f59d4505bf78b6e674e22de8))
+* **deps:** update rancher/mirrored-coredns-coredns docker tag to v1.14.7 ([d77bd4f](https://github.com/szpaczyna/rpi-k3s/commit/d77bd4f2f877866c1394884f018c10ff42dfb9f5))
+* **deps:** update rancher/mirrored-coredns-coredns docker tag to v1.14.7 ([8f49ee2](https://github.com/szpaczyna/rpi-k3s/commit/8f49ee28bd85247bfec581bfeed3b0c2eb619a9f))
+* **deps:** update redis docker tag to v7.4.11 ([5fdacd5](https://github.com/szpaczyna/rpi-k3s/commit/5fdacd584ab053ede4f064b3bfa0eced804aed9e))
+* **deps:** update redis docker tag to v7.4.11 ([8d8dd57](https://github.com/szpaczyna/rpi-k3s/commit/8d8dd578ec0d034a62f67f8485402d3b4598e1b3))
+* **deps:** update vaultwarden/server docker tag to v1.37.2 ([e3bf9a3](https://github.com/szpaczyna/rpi-k3s/commit/e3bf9a34314b2b179238cd69bbeb1d48b55cb3e4))
+* **deps:** update vaultwarden/server docker tag to v1.37.2 ([d4fa093](https://github.com/szpaczyna/rpi-k3s/commit/d4fa093d24827c52298b234998bd68e57f112c93))
+
+
+### Documentation
+
+* readme updates ([824b730](https://github.com/szpaczyna/rpi-k3s/commit/824b730201f8e54572e232765cdcf31920b911f0))
+
 ## [0.6.4](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.3...v0.6.4) (2026-08-20)
 
 
