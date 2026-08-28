@@ -22,7 +22,7 @@ access-log line gains `country_name`, `country_code` (plus `city_name`,
 
 ### Data flow
 
-```
+```text
 client ─▶ Traefik (access log JSON, ClientHost = real IP)
         ─▶ Fluent Bit ─▶ geoip2 filter (Match_Regex kube\.var\.log\.containers\.traefik-.*)
         ─▶ + country_code / country_name / city_name / latitude / longitude
@@ -42,12 +42,23 @@ for records without a `ClientHost` and for private/LAN IPs.
 | `geolite2-cronjob.yaml` | Static PV/PVC on NFS (`/data/nfs/geolite2`, like media-stack) + `geolite2-updater` CronJob refreshing the DB every two weeks and rolling the DaemonSet so pods reload it |
 
 The GeoLite2 **City** database is used (country + city + coordinates). The
-official `ghcr.io/maxmind/geoipupdate` client downloads it; the free GeoLite2
-tier is enough.
+official `ghcr.io/maxmind/geoipupdate` client (pinned to `v8.0.0`) downloads
+it; the free GeoLite2 tier is enough. The CronJob restarts the fluent-bit
+DaemonSet with an `alpine/kubectl` image (pinned to `1.36.4`) so the running
+pods re-open the updated `.mmdb`.
+
+### Images
+
+The CronJob uses pinned images (no `latest`, no floating tags):
+
+| Container | Image |
+|---|---|
+| `update-geolite2` | `ghcr.io/maxmind/geoipupdate:v8.0.0` |
+| `restart-fluentbit` | `alpine/kubectl:1.36.4` |
 
 ### Prerequisites
 
-A free MaxMind account (for the license key): https://www.maxmind.com/en/geolite2/signup
+A free MaxMind account (for the license key): <https://www.maxmind.com/en/geolite2/signup>
 
 ### Setup (first time)
 

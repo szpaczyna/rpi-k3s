@@ -106,6 +106,20 @@ assets/          # Logos and images
 .github/         # CI workflows (lint-all, release-please)
 ```
 
+### Secrets
+
+Sensitive values are SOPS-encrypted and live **next to each application** in
+its own chart directory (e.g. `cluster/helm/<app>/*.enc.yaml`) rather than in
+a central location. Each chart's `deploy` script decrypts and applies its own
+secrets (`sops -d ./<file>.enc.yaml`) before running the Helm upgrade. To work
+with a secret, decrypt/encrypt in place with `sops` inside that directory:
+
+```bash
+cd cluster/helm/<app>
+sops ./<file>.enc.yaml        # edit
+sops -d ./<file>.enc.yaml     # view without editing
+```
+
 * * *
 
 ## CI/CD
