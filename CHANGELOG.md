@@ -1,4 +1,16 @@
 # Changelog
+## [0.6.6](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.5...v0.6.6) (2026-09-15)
+
+
+### Miscellaneous
+
+* **deps:** update ghcr.io/authelia/authelia docker tag to v4.39.25 ([453d52a](https://github.com/szpaczyna/rpi-k3s/commit/453d52a86600ce6ac4651b1b454edca7b65e3697))
+* **deps:** update ghcr.io/authelia/authelia docker tag to v4.39.25 ([2182bab](https://github.com/szpaczyna/rpi-k3s/commit/2182bab23a42cb4b8063f1e950542a19562fc675))
+* **deps:** update kanboard/kanboard docker tag to v1.2.54 ([7c365b5](https://github.com/szpaczyna/rpi-k3s/commit/7c365b5f66938697ef1fbbc0919b3f20ee2a8b88))
+* **deps:** update kanboard/kanboard docker tag to v1.2.54 ([fad0f94](https://github.com/szpaczyna/rpi-k3s/commit/fad0f9418cc7cdf640ccab0cb7d55185ec14340f))
+* **deps:** update nginx docker tag to v1.31.5 ([a6812c4](https://github.com/szpaczyna/rpi-k3s/commit/a6812c49f1979cf5b0fe63683872092e444e45c9))
+* **deps:** update nginx docker tag to v1.31.5 ([99cc7ab](https://github.com/szpaczyna/rpi-k3s/commit/99cc7ab73332879692c781e5ec28f296980ab6b3))
+
 ## [0.6.5](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.4...v0.6.5) (2026-08-28)
 
 
