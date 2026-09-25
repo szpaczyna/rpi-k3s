@@ -151,8 +151,12 @@ jobs:
           if [ -z "$eligible" ]; then
             echo "No eligible charts with values.yaml to test."; exit 0; fi
           echo "Eligible charts: $eligible"
-          # Create test namespace
+          # Create test namespace(s). "traefik" is required because some charts
+          # (e.g. shpaq-org) render resources like Certificate into that
+          # namespace on purpose (Gateway websecure listener same-namespace
+          # Secret requirement), independent of the release namespace.
           kubectl create namespace chart-test || true
+          kubectl create namespace traefik || true
           for c in $eligible; do
             echo "Processing $c";
             helm dependency update "$c" || true
