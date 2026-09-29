@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
             - name: backup
-              image: alpine:3.24.1
+              image: alpine:3.24.2
               command: ["/bin/sh", "-c"]
               args:
                 - apk add --no-cache rsync && cd /data && rsync -Paz /data/[ma]* /data/backup
