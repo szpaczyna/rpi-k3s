@@ -1,0 +1,19 @@
+docs/index.md
+  s_8cf9bfd6b647d8::t_8573b7a7771bc1 7-11,15-16,18,21-24,26-38,40-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f156d867d2710c0be958f37737c87bd6623ea01d",
+  "prompts": {},
+  "sessions": {
+    "s_8cf9bfd6b647d8": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f0965f768ffegBSrwWhsnm4Vot",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
