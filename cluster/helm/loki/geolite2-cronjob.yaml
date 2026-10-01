@@ -133,7 +133,7 @@ spec:
             # Roll the DaemonSet so pods reload the updated .mmdb (the geoip2
             # filter opens the database once at startup).
             - name: restart-fluentbit
-              image: alpine/kubectl:1.36.4
+              image: alpine/kubectl:1.37.1
               command: ["kubectl"]
               args:
                 - rollout
