@@ -1,4 +1,32 @@
 # Changelog
+## [0.6.6](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.5...v0.6.6) (2026-09-29)
+
+
+### Miscellaneous
+
+* **deps:** update alpine docker tag to v3.24.2 ([29892e1](https://github.com/szpaczyna/rpi-k3s/commit/29892e10852fe845b43c5cffa51c239eb5737fb4))
+* **deps:** update alpine docker tag to v3.24.2 ([f5c56ce](https://github.com/szpaczyna/rpi-k3s/commit/f5c56ce3dd3b88c2f3d0df5a3802795ab2e96e84))
+* **deps:** update ghcr.io/authelia/authelia docker tag to v4.39.25 ([453d52a](https://github.com/szpaczyna/rpi-k3s/commit/453d52a86600ce6ac4651b1b454edca7b65e3697))
+* **deps:** update ghcr.io/authelia/authelia docker tag to v4.39.25 ([2182bab](https://github.com/szpaczyna/rpi-k3s/commit/2182bab23a42cb4b8063f1e950542a19562fc675))
+* **deps:** update ghcr.io/authelia/authelia docker tag to v4.39.28 ([5380724](https://github.com/szpaczyna/rpi-k3s/commit/53807240b29daaaa42300f06fed41e609f5ab3d6))
+* **deps:** update ghcr.io/authelia/authelia docker tag to v4.39.28 ([603644f](https://github.com/szpaczyna/rpi-k3s/commit/603644ff1f5d1c409bb10e95c497649311515be8))
+* **deps:** update gitea/gitea docker tag to v1.27.3 ([fd83e63](https://github.com/szpaczyna/rpi-k3s/commit/fd83e63ae2af66df558b28c8e713b78a6eadbd62))
+* **deps:** update gitea/gitea docker tag to v1.27.3 ([72403a5](https://github.com/szpaczyna/rpi-k3s/commit/72403a569ceb108f2107429712df8b62bbab54f9))
+* **deps:** update kanboard/kanboard docker tag to v1.2.54 ([7c365b5](https://github.com/szpaczyna/rpi-k3s/commit/7c365b5f66938697ef1fbbc0919b3f20ee2a8b88))
+* **deps:** update kanboard/kanboard docker tag to v1.2.54 ([fad0f94](https://github.com/szpaczyna/rpi-k3s/commit/fad0f9418cc7cdf640ccab0cb7d55185ec14340f))
+* **deps:** update lscr.io/linuxserver/sonarr docker tag to v4.0.20 ([fb75786](https://github.com/szpaczyna/rpi-k3s/commit/fb75786ff1204f0baf036bc52db01fa0af079d25))
+* **deps:** update nginx docker tag to v1.31.5 ([a6812c4](https://github.com/szpaczyna/rpi-k3s/commit/a6812c49f1979cf5b0fe63683872092e444e45c9))
+* **deps:** update nginx docker tag to v1.31.5 ([99cc7ab](https://github.com/szpaczyna/rpi-k3s/commit/99cc7ab73332879692c781e5ec28f296980ab6b3))
+* **deps:** update nginx docker tag to v1.31.6 ([3d8d90e](https://github.com/szpaczyna/rpi-k3s/commit/3d8d90e2700cf6a0d68ed98ddd9b23537b68267e))
+* **deps:** update nginx docker tag to v1.31.6 ([dda36fa](https://github.com/szpaczyna/rpi-k3s/commit/dda36fa49ed92f899697edd5fe570f645e78adb1))
+
+
+### CI/CD
+
+* create traefik namespace in chart-testing job ([2beaf09](https://github.com/szpaczyna/rpi-k3s/commit/2beaf098f825b43036bef3c7fe822e7405faa1cd))
+* create traefik namespace in chart-testing job ([700129e](https://github.com/szpaczyna/rpi-k3s/commit/700129e0c50748b67acb382f58bda4ef08d8e63e))
+* install cert-manager CRDs before chart tests ([38aa07e](https://github.com/szpaczyna/rpi-k3s/commit/38aa07ec130344d7555e5fb03c8fed749453ab63))
+
 ## [0.6.5](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.4...v0.6.5) (2026-08-28)
 
 
