@@ -1,4 +1,19 @@
 # Changelog
+## [0.6.7](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.6...v0.6.7) (2026-10-03)
+
+
+### Miscellaneous
+
+* **deps:** update alpine/kubectl docker tag to v1.37.1 ([#162](https://github.com/szpaczyna/rpi-k3s/issues/162)) ([6f52a3c](https://github.com/szpaczyna/rpi-k3s/commit/6f52a3cc08f6cdcf2426fb0a9c58a2724d662108))
+* **deps:** update vaultwarden/server docker tag to v1.37.3 ([#161](https://github.com/szpaczyna/rpi-k3s/issues/161)) ([01e8b8c](https://github.com/szpaczyna/rpi-k3s/commit/01e8b8ceaa82b237228ddd6f659657c4e276b502))
+* **deps:** updated cluster to 1.37 ([297ad45](https://github.com/szpaczyna/rpi-k3s/commit/297ad456a7f00ada75cf5bd0527b5e3386e9091c))
+
+
+### Documentation
+
+* dedupe merge-commit entries in CHANGELOG for 0.6.5 and 0.6.6 ([bac7dc4](https://github.com/szpaczyna/rpi-k3s/commit/bac7dc413c0f8c258c03a5405ea7bc5f2a4813e2))
+* sync GH Pages index with README workloads list ([f156d86](https://github.com/szpaczyna/rpi-k3s/commit/f156d867d2710c0be958f37737c87bd6623ea01d))
+
 ## [0.6.6](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.5...v0.6.6) (2026-09-29)
 
 
