@@ -254,7 +254,7 @@ kubectl get certificate -n traefik <app>-shpaq-org-tls
 | `nginx.ingress.kubernetes.io/auth-type: basic` + `auth-secret` | Traefik `Middleware` (`traefik.io/v1alpha1`) with `forwardAuth` pointing to Authelia, attached via `HTTPRoute` `filters[].extensionRef` (see [Authelia forwardAuth](#authelia-forwardauth) section) |
 | `nginx.ingress.kubernetes.io/whitelist-source-range` | Traefik `Middleware` with `ipAllowList.sourceRange`, attached the same way |
 | `nginx.ingress.kubernetes.io/app-root` | `HTTPRoute` rule with exact-match `/` and a `RequestRedirect` filter (`ReplaceFullPath`) |
-| ExternalName Service backend | **Not supported** by Traefik's Gateway API provider (unlike its Ingress provider). Use a `ClusterIP` Service + manually managed `Endpoints` instead (see `cluster/apps/pihole`). |
+| ExternalName Service backend | **Not supported** by Traefik's Gateway API provider (unlike its Ingress provider). Use a `ClusterIP` Service + manually managed `Endpoints` instead (see [`cluster/helm/pihole`](../pihole)). |
 
 ### Known gaps (not ported, accepted)
 

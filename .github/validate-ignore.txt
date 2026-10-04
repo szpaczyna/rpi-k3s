@@ -3,8 +3,6 @@
 provision/
 ignore/
 cluster/helm/
-cluster/secrets/
-cluster/unused/
-cluster/varia/
+cluster/helm/unused/
 *-crds.yaml
 *.asc.yaml

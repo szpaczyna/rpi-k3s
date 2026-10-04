@@ -96,10 +96,8 @@ on the cluster right now. Revival steps are documented in each chart's
 
 ```text
 cluster/
-  apps/          # Raw YAML / Kustomize applications
   backup/        # Backup CronJobs and Velero config
   helm/          # Helm charts and deploy scripts
-  varia/         # Standalone manifests not owned by a chart
 scripts/         # Utility scripts (gitea mirrors, monitoring, setup)
 assets/          # Logos and images
 .github/         # CI workflows (lint-all, release-please)

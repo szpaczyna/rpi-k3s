@@ -18,15 +18,11 @@ config:
   discover:
     # Search these paths for manifests / Helm charts
     paths:
-      - cluster/apps
       - cluster/helm
     # Exclude specific patterns from discovery
     excludePaths:
-      - secrets/**
-      - cluster/secrets/**
-      - cluster/unused/**
+      - cluster/helm/unused/**
       - cluster/helm/**/charts/**
-      - cluster/varia/**
 
   helm-values:
     # Provide common value overrides if needed (none for now)
