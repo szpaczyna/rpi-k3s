@@ -31,6 +31,10 @@ spec:
         {{- end }}
     spec:
       serviceAccountName: {{ $chartname }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: {{ $chartname }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

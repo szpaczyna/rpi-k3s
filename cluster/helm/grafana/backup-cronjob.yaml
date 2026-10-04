@@ -27,6 +27,8 @@ spec:
               volumeMounts:
                 - mountPath: /opt/grafana-backup-tool/_OUTPUT_
                   name: grafana-storage
+          nodeSelector:
+            kubernetes.io/role: worker
           restartPolicy: "Never"
           containers:
             - name: grafana-backup-tool

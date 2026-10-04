@@ -47,6 +47,8 @@ spec:
               limits:
                 cpu: 500m
                 memory: 512Mi
+          nodeSelector:
+            kubernetes.io/role: worker
           restartPolicy: Never
           volumes:
           - name: postgres-storage

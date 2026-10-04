@@ -33,6 +33,9 @@ resources:
     cpu: 200m
     memory: 256Mi
 
+nodeSelector:
+  kubernetes.io/role: worker
+
 readinessProbe:
   enabled: true
   httpGet:

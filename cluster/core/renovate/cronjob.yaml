@@ -22,6 +22,8 @@ spec:
           # Renovate only needs outbound access to GitHub.
           automountServiceAccountToken: false
           restartPolicy: Never
+          nodeSelector:
+            kubernetes.io/role: worker
           containers:
             - name: renovate
               image: renovate/renovate:43.104.4
