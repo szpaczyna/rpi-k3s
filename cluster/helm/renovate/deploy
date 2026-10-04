@@ -1,0 +1,20 @@
+#!/bin/bash
+set -euo pipefail
+
+NAMESPACE="renovate"
+RELEASE_NAME="renovate"
+CHART="oci://ghcr.io/renovatebot/charts/renovate"
+VERSION="46.323.2"
+
+# The token, repository list and docker host rules live in the SOPS-encrypted
+# Secret; the chart reads it via existingSecret and never renders credentials.
+SECRET_FILE="./secret.enc.yaml"
+
+echo "--> Applying secret from ${SECRET_FILE}"
+kubectl apply -f <(sops -d "${SECRET_FILE}")
+
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml \
+  --version "${VERSION}"

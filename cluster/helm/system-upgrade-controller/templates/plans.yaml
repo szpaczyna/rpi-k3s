@@ -1,0 +1,56 @@
+{{- if not .Values.k3sVersion }}
+{{- fail "k3sVersion is required, e.g. ./deploy v1.37.1+k3s1" }}
+{{- end }}
+{{- if .Values.plan.server.enabled }}
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+  name: k3s-server-plan
+  namespace: {{ .Release.Namespace }}
+  labels:
+    k3s-upgrade: server
+spec:
+  concurrency: 1
+  channel: {{ .Values.plan.channel }}
+  cordon: true
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: In
+        values: ["true"]
+  serviceAccountName: {{ .Values.serviceAccount.name }}
+  upgrade:
+    image: rancher/k3s-upgrade
+  version: {{ .Values.k3sVersion | quote }}
+{{- end }}
+{{- if .Values.plan.agent.enabled }}
+---
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+  name: k3s-agent-plan
+  namespace: {{ .Release.Namespace }}
+  labels:
+    k3s-upgrade: agent
+spec:
+  concurrency: {{ .Values.plan.concurrency }}
+  channel: {{ .Values.plan.channel }}
+  cordon: true
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
+  prepare:
+    args:
+      - prepare
+      - k3s-server-plan
+    image: rancher/k3s-upgrade
+  {{- with .Values.plan.agent.drain }}
+  drain:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  serviceAccountName: {{ .Values.serviceAccount.name }}
+  upgrade:
+    image: rancher/k3s-upgrade
+  version: {{ .Values.k3sVersion | quote }}
+{{- end }}

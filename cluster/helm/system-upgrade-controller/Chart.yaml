@@ -1,0 +1,10 @@
+---
+apiVersion: v2
+name: system-upgrade-controller
+description: Rancher System Upgrade Controller, drives node upgrades through Plan objects
+type: application
+version: 0.1.0
+appVersion: "0.20.2"
+home: https://github.com/rancher/system-upgrade-controller
+maintainers:
+  - name: szpaczyna

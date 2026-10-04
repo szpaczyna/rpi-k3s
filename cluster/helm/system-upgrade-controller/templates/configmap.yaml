@@ -1,0 +1,25 @@
+{{- /*
+kubectl image tag tracks the k3s version passed to ./deploy, so the upgrade
+Job never runs a kubectl older than the cluster it upgrades. v1.37.1+k3s1
+becomes rancher/kubectl:v1.37.1.
+*/ -}}
+{{- $kubectlImage := .Values.configEnv.SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE -}}
+{{- if not $kubectlImage -}}
+{{- $version := .Values.k3sVersion | trimPrefix "v" -}}
+{{- if contains "+" $version -}}
+{{- $version = (splitList "+" $version) | first -}}
+{{- end -}}
+{{- if contains "-" $version -}}
+{{- $version = (splitList "-" $version) | first -}}
+{{- end -}}
+{{- $kubectlImage = printf "rancher/kubectl:v%s" $version -}}
+{{- end -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: default-controller-env
+  namespace: {{ .Release.Namespace }}
+data:
+  {{- range $key, $value := .Values.configEnv }}
+  {{ $key }}: {{ if eq $key "SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE" }}{{ $kubectlImage | quote }}{{ else }}{{ $value | quote }}{{ end }}
+  {{- end }}

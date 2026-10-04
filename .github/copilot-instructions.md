@@ -10,7 +10,7 @@ This repository is infrastructure-as-code for a Raspberry Pi k3s homelab. Treat 
 ## Repository layout
 
 - `cluster/apps`: raw Kubernetes application manifests.
-- `cluster/core`: core cluster resources and kustomizations.
+- `cluster/varia`: standalone manifests not owned by a chart.
 - `cluster/helm`: local Helm charts and chart-specific resources.
 - `cluster/secrets`: sensitive or encrypted secret material.
 - `scripts`: shell utilities and cluster automation.

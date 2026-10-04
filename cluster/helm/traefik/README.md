@@ -312,7 +312,7 @@ spec:
 
 Traefik's Helm chart no longer bundles Gateway API CRDs (removed
 upstream since chart v40.2.0). They are installed separately — see
-[`cluster/core/gateway-api`](../../core/gateway-api).
+[`gateway-api.md`](gateway-api.md), installed by this chart's `deploy` script.
 
 ## cert-manager integration
 

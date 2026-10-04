@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+
+NAMESPACE="system-upgrade"
+RELEASE_NAME="system-upgrade-controller"
+CHART="./"
+
+# k3s version the nodes should converge to, e.g. v1.37.1+k3s1
+VERSION="${1:?Usage: ./deploy <k3s-version>  e.g. ./deploy v1.37.1+k3s1}"
+
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml \
+  --set k3sVersion="${VERSION}"

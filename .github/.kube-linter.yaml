@@ -19,7 +19,6 @@ config:
     # Search these paths for manifests / Helm charts
     paths:
       - cluster/apps
-      - cluster/core
       - cluster/helm
     # Exclude specific patterns from discovery
     excludePaths:

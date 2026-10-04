@@ -84,7 +84,7 @@ jobs:
       - name: Run kubeconform
         uses: docker://ghcr.io/yannh/kubeconform:latest
         with:
-          args: -strict -ignore-missing-schemas -schema-location default -summary rendered cluster/core
+          args: -strict -ignore-missing-schemas -schema-location default -summary rendered cluster/varia
 
   kube_linter:
     name: Kube Linter

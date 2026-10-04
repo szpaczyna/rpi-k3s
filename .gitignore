@@ -123,3 +123,6 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 *.code-workspace
+
+### gateway-api downloaded manifests
+cluster/helm/traefik/standard-install-*.yaml
