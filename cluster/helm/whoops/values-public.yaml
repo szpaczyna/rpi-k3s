@@ -12,6 +12,14 @@ service:
   type: ClusterIP
   port: 5000
 
+resources:
+  limits:
+    cpu: 250m
+    memory: 192Mi
+  requests:
+    cpu: 50m
+    memory: 96Mi
+
 httpRoute:
   enabled: true
   host: whoops.shpaq.org

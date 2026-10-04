@@ -5,6 +5,13 @@ mariadb:
   # Run MariaDB inside the app pod (inline) instead of a separate StatefulSet
   inline: true
   port: 3306
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
   image:
     repository: lscr.io/linuxserver/mariadb
     tag: "11.4.12"
@@ -96,10 +103,10 @@ httpRoute:
 resources:
   limits:
     cpu: 1500m
-    memory: 768Mi
+    memory: 896Mi
   requests:
     cpu: 500m
-    memory: 256Mi
+    memory: 768Mi
 
 livenessProbe:
   tcpSocket:

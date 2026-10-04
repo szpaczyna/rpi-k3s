@@ -54,7 +54,8 @@ secretsExporter:
       cpu: 20m
       memory: 20Mi
   # -- Node selector for Pods of the TLS Secrets exporter
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/role: worker
   # -- Toleration for Pods of the TLS Secrets exporter
   tolerations: []
   # -- Affinity for Pods of the TLS Secrets exporter

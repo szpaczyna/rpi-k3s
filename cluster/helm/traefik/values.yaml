@@ -954,10 +954,10 @@ serviceAccountAnnotations: {}
 resources:
   requests:
     cpu: 100m
-    memory: 128Mi
+    memory: 224Mi
   limits:
     cpu: 500m
-    memory: 512Mi
+    memory: 384Mi
 
 # -- This example pod anti-affinity forces the scheduler to put traefik pods
 # -- on nodes where no other traefik pods are scheduled.

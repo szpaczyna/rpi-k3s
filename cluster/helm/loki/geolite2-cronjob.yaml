@@ -6,18 +6,6 @@
 # only place the database is ever downloaded -- fluent-bit pods just read it
 # from the volume.
 #
-# Storage: a static hostPath PV on top of the NFS share exported by
-# rpi-k3s-worker-00 (`/data/nfs/geolite2`, same pattern as media-stack's
-# `/data/media`). Each node reaches the same data either locally (worker-00)
-# or over NFS (the other nodes), so all fluent-bit DaemonSet pods can read it.
-#
-# If the volume is ever empty (e.g. first deploy on a fresh PVC), bootstrap it
-# with a one-off run before the fluent-bit chart rolls out:
-#   kubectl create job --from=cronjob/geolite2-updater geolite2-bootstrap -n logging
-#
-# Apply order (once, before `./deploy`):
-#   1. sops -e -i maxmind-geoip.enc.yaml && kubectl apply -f maxmind-geoip.enc.yaml
-#   2. kubectl apply -f geolite2-cronjob.yaml
 ---
 apiVersion: v1
 kind: ServiceAccount

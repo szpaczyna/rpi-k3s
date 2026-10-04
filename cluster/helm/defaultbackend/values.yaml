@@ -43,6 +43,9 @@ resources:
     cpu: 100m
     memory: 32Mi
 
+nodeSelector:
+  kubernetes.io/role: worker
+
 httpRoute:
   enabled: true
   parentRefs:

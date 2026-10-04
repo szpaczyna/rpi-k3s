@@ -27,11 +27,14 @@ selfhosted: {}
 
 resources:
   limits:
-    cpu: 200m
-    memory: 256Mi
+    cpu: 300m
+    memory: 320Mi
   requests:
     cpu: 200m
-    memory: 200Mi
+    memory: 256Mi
+
+nodeSelector:
+  kubernetes.io/role: worker
 
 readinessProbe:
   enabled: true

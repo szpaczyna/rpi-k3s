@@ -48,10 +48,7 @@ service:
   annotations: {}
   labels: {}
 
-## Resources - tuned based on actual usage metrics:
-## - Current pod uses ~753Mi RAM, ~75m CPU
-## - Node rpi-k3s-worker-00 has 8GB RAM total
-## - Only ~11 active connections at any time
+## Resources
 resources:
   requests:
     memory: 768Mi

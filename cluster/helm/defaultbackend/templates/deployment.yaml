@@ -39,6 +39,8 @@ spec:
               mountPath: /tmp
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
       volumes:
         - name: nginx-cache
           emptyDir: {}
