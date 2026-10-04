@@ -132,6 +132,19 @@
     dest: /etc/sysctl.d/99-local.conf
     mode: 0644
 
+# This file used to fight 99-local.conf over fs.file-max, vm.swappiness,
+# somaxconn and netdev_max_backlog. Its settings now live in 99-local.conf.
+- name: Retire superseded 99-network-performance.conf
+  file:
+    src: /etc/sysctl.d/99-network-performance.conf
+    dest: /etc/sysctl.d/99-network-performance.conf.disabled
+    state: absent
+
+- name: Reload sysctl so the new values take effect
+  systemd:
+    name: systemd-sysctl.service
+    state: restarted
+
 - name: Auditd configuration
   copy:
     src: auditd/{{ item }}
@@ -219,6 +232,37 @@
     src: zram-swap-config.conf.j2
     dest: /etc/zram-swap-config.conf
     mode: 0644
+
+# SWAPPINESS differs per role, and zram-swap-config.service runs at
+# sysinit.target, after systemd-sysctl, so it decides the final value.
+- name: Start zram swap with the role's swappiness
+  systemd:
+    name: zram-swap-config.service
+    state: restarted
+    enabled: true
+
+- name: Confirm zram swap is active
+  command: swapon --show=NAME --noheadings
+  register: zram_active
+  changed_when: false
+  failed_when: zram_active.stdout | trim | length == 0
+
+- name: Read effective swappiness after zram-swap-config ran
+  command: sysctl -n vm.swappiness
+  register: swappiness_check
+  changed_when: false
+
+- name: Confirm swappiness matches the role
+  assert:
+    that:
+      - (expected_swappiness | int) == (swappiness_check.stdout | trim | int)
+    fail_msg: >-
+      vm.swappiness is {{ swappiness_check.stdout | trim }} after restarting
+      zram-swap-config, expected {{ expected_swappiness }}. The service starts
+      after systemd-sysctl, so it overrides whatever 99-local.conf sets.
+    success_msg: "vm.swappiness is {{ expected_swappiness }} as intended"
+  vars:
+    expected_swappiness: "{{ 0 if 'k3s_master' in group_names else 10 }}"
 
 ## some system stuff
 - name: Create a firmware folder if it does not exist

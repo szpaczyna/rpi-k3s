@@ -1,79 +1,135 @@
 {{ ansible_managed | comment }}
 
-### KERNEL TUNING ###
+# Unified sysctl for the rpi-k3s cluster.
+# Target: Ubuntu 26.04, kernel 7.0.0-1020-raspi, rpi-k3s v1.37.1
+# Master (10.0.0.9) gets an additional role block, see 99-local.conf.master.
+#
+# Replaces the old 99-local.conf + 99-network-performance.conf pair, which
+# fought over fs.file-max, vm.swappiness, somaxconn and netdev_max_backlog.
 
-vm.dirty_writeback_centisecs = 100
-vm.dirty_expire_centisecs = 100
+### FILE HANDLES AND INOTIFY ###
 
-# Increase size of file handles and inode cache
 fs.file-max = 2097152
+fs.nr_open = 1048576
 
-# Do less swapping
-#vm.swappiness = 10
-vm.dirty_ratio = 60
-vm.dirty_background_ratio = 2
+# kubelet watches every manifest, mounted ConfigMap and projected volume
+fs.inotify.max_user_instances = 512
+fs.inotify.max_user_watches = 524288
+fs.inotify.max_queued_events = 32768
 
-# Group tasks by TTY
-#kernel.sched_autogroup_enabled = 0
+### MEMORY ###
 
-### GENERAL NETWORK SECURITY OPTIONS ###
-# Number of times SYNACKs for passive TCP connection.
+# Low swappiness keeps zram as an OOM safety net instead of a steady source
+# of compressed reclaim. The master pins this to 0 in its role block.
+vm.overcommit_memory = 1
+vm.max_map_count = 262144
+
+### DIRTY PAGES ###
+
+# Root is ext4 on an SSD (Timetec 35TTM8SSATA-256G, SATA 3.2, nobarrier,
+# commit=600). Kernel defaults already suit this medium. The old 100 ms
+# expire/writeback window forced continuous small writebacks and bought
+# nothing on a 6 Gb/s link.
+vm.dirty_background_ratio = 10
+vm.dirty_ratio = 20
+vm.dirty_writeback_centisecs = 500
+vm.dirty_expire_centisecs = 30000
+
+### NETWORK: SECURITY AND TIME-WAIT ###
+
 net.ipv4.tcp_synack_retries = 2
-
-# Allowed local port range
-net.ipv4.ip_local_port_range = 2000 65535
-
-# Protect Against TCP Time-Wait
+net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_rfc1337 = 1
 
-# Control Syncookies
-net.ipv4.tcp_syncookies = 1
+net.ipv4.ip_local_port_range = 2000 65535
 
-# Decrease the time default value for tcp_fin_timeout connection
 net.ipv4.tcp_fin_timeout = 15
-
-# Decrease the time default value for connections to keep alive
 net.ipv4.tcp_keepalive_time = 300
 net.ipv4.tcp_keepalive_probes = 5
 net.ipv4.tcp_keepalive_intvl = 15
 
-### TUNING NETWORK PERFORMANCE ###
+### NETWORK: SOCKET BUFFERS ###
 
-# Default Socket Receive Buffer
-net.core.rmem_default = 31457280
-
-# Maximum Socket Receive Buffer
+# rmem_default and wmem_default are the *initial* buffer of every socket.
+# 30 MB up front was the most expensive line in the old file on a 3.8 GB
+# node. Start at 4 MB and let auto-tuning climb to the max.
+net.core.rmem_default = 4194304
 net.core.rmem_max = 33554432
-
-# Default Socket Send Buffer
-net.core.wmem_default = 31457280
-
-# Maximum Socket Send Buffer
+net.core.wmem_default = 4194304
 net.core.wmem_max = 33554432
 
-# Increase number of incoming connections
-net.core.somaxconn = 65535
-
-# Increase number of incoming connections backlog
-net.core.netdev_max_backlog = 65536
-
-# Increase the maximum amount of option memory buffers
-net.core.optmem_max = 25165824
-
-# Increase the maximum total buffer-space allocatable
-# This is measured in units of pages (4096 bytes)
-net.ipv4.tcp_mem = 786432 1048576 26777216
-net.ipv4.udp_mem = 65536 131072 262144
-
-# Increase the read-buffer space allocatable
 net.ipv4.tcp_rmem = 8192 87380 33554432
-net.ipv4.udp_rmem_min = 16384
-
-# Increase the write-buffer-space allocatable
 net.ipv4.tcp_wmem = 8192 65536 33554432
+net.ipv4.udp_rmem_min = 16384
 net.ipv4.udp_wmem_min = 16384
 
-# Increase the tcp-time-wait buckets pool size to prevent simple DOS attacks
-net.ipv4.tcp_max_tw_buckets = 1440000
-#net.ipv4.tcp_tw_recycle = 1
+# Third value is a hard ceiling in pages. 26777216 pages was 100 GB, far
+# past RAM, so the limit never engaged.
+net.ipv4.tcp_mem = 393216 524288 786432
+net.ipv4.udp_mem = 65536 131072 262144
+net.core.optmem_max = 262144
+
+### NETWORK: QUEUES ###
+
+# 3240000 came from a generic x86 tuning guide. The listen queue is bounded
+# by the application backlog, so a saner ceiling costs nothing here.
+net.core.somaxconn = 8192
+net.core.netdev_max_backlog = 16384
+net.ipv4.tcp_max_syn_backlog = 8192
+
+# Each TIME_WAIT bucket costs about 60 bytes, 262144 is still far above the
+# observed load.
+net.ipv4.tcp_max_tw_buckets = 262144
 net.ipv4.tcp_tw_reuse = 1
+
+### NETWORK: LATENCY ###
+
+net.ipv4.tcp_fastopen = 3
+net.ipv4.tcp_slow_start_after_idle = 0
+
+# BBR is not compiled into this kernel, cubic is the only real choice.
+net.ipv4.tcp_congestion_control = cubic
+
+### NETFILTER: CONNECTION TRACKING ###
+
+# Shared baseline. The master raises the ceiling in its role block.
+net.netfilter.nf_conntrack_max = 262144
+net.netfilter.nf_conntrack_tcp_timeout_established = 86400
+net.netfilter.nf_conntrack_tcp_timeout_time_wait = 30
+
+{% if 'k3s_master' in group_names %}
+### ROLE: CONTROL PLANE ({{ inventory_hostname }}) ###
+
+# zram stays enabled here as an OOM safety net, and SWAPPINESS=0 in
+# zram-swap-config.conf keeps the kernel out of it. That file is applied by
+# zram-swap-config.service, which starts after systemd-sysctl and therefore
+# has the final say on vm.swappiness.
+#
+# etcd must never be paged out. A zram swap event on the master stalls
+# etcd fsync and shows up as leader election churn.
+vm.swappiness = 0
+
+# etcd and containerd both fsync heavily. A lower background threshold
+# starts writeback earlier and at smaller granularity, which shortens the
+# write path the apiserver competes for.
+vm.dirty_background_ratio = 5
+
+# The master runs every Service proxy path and the apiserver's own
+# watch/informer client, so it holds far more conntrack entries than a
+# worker that only talks to its kubelet.
+net.netfilter.nf_conntrack_max = 524288
+
+# More concurrent apiserver listeners and kubelet connections.
+net.core.somaxconn = 16384
+net.ipv4.tcp_max_syn_backlog = 16384
+
+{% else %}
+### ROLE: WORKER ({{ inventory_hostname }}) ###
+
+# zram stays enabled on workers as an OOM safety net. 3.7 GiB of RAM runs
+# Longhorn, Prometheus, a media stack and JVM workloads here, and 35 of 73
+# pods declare no memory limit, so a single spike has nowhere to be capped.
+# Low swappiness keeps the kernel out of zram until that spike happens.
+vm.swappiness = 10
+
+{% endif %}

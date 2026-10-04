@@ -1,9 +1,26 @@
 {{ ansible_managed | comment }}
 
+# zram stays enabled on every node as an OOM safety net: 3.7 GiB of RAM per
+# node runs Longhorn, Prometheus, a media stack and JVM workloads, and 35 of
+# 73 pods declare no memory limit at all, so the cgroup offers no ceiling.
+# An OOM event with no swap device kills whatever the kernel picks, whereas
+# with zram the kernel gets a compressed page to fall back on first.
+#
+# SWAPPINESS is the setting that matters, not the existence of zram. At 90
+# the kernel pushed cold pages into zram continuously and burned CPU on
+# compression for no gain. At 10 zram stays untouched until there is a real
+# memory shortage.
+{% if 'k3s_master' in group_names %}
+# etcd must never be paged out. A zram swap event on the master stalls
+# etcd fsync and shows up as leader election churn, so the master opts out of
+# swapping entirely and keeps zram only for the genuine OOM case.
+SWAPPINESS=0
+{% else %}
+SWAPPINESS=10
+{% endif %}
 MEM_FACTOR=40
 DRIVE_FACTOR=200
 COMP_ALG=lz4
 SWAP_DEVICES=1
 SWAP_PRI=75
 PAGE_CLUSTER=0
-SWAPPINESS=90
