@@ -304,7 +304,7 @@ rbacProxy:
     # -- kube-rbac-proxy image repository
     repository: brancz/kube-rbac-proxy
     # -- kube-rbac-proxy image version
-    tag: v0.22.1
+    tag: v0.23.0
     # -- kube-rbac-proxy image pull policy
     pullPolicy: IfNotPresent
   # -- Listen port for the exporter running inside kube-rbac-proxy exposed Pods
