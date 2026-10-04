@@ -1,3 +1,3 @@
-{{ ansible_managed | comment }}
+# Managed by Ansible.
 
 -e 2
