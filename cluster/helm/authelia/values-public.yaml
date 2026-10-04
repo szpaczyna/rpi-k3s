@@ -5,6 +5,13 @@ image:
 
 pod:
   kind: Deployment
+  resources:
+    limits:
+      cpu: 250m
+      memory: 192Mi
+    requests:
+      cpu: 50m
+      memory: 96Mi
   securityContext:
     pod:
       runAsUser: 8000

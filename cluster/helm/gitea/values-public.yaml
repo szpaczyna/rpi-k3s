@@ -127,10 +127,10 @@ ingress:
 resources:
   limits:
     cpu: 1
-    memory: 768Mi
+    memory: 384Mi
   requests:
     cpu: 0.3
-    memory: 570Mi
+    memory: 256Mi
 
 nodeSelector:
   kubernetes.io/role: worker
@@ -183,9 +183,12 @@ initPreScript: ""
 redis:
   image: redis:7.4.11
   resources:
+    limits:
+      memory: 64Mi
+      cpu: 100m
     requests:
-      memory: 128Mi
-      cpu: 50m
+      memory: 32Mi
+      cpu: 25m
   service:
       port: 6739
 

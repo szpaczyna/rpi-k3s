@@ -21,3 +21,5 @@ spec:
           envFrom:
             - secretRef:
                 name: {{ .Release.Name }}-env
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

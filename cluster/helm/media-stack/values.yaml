@@ -16,24 +16,21 @@ global:
   nodeSelector:
     kubernetes.io/role: worker
 
-# Sized from real usage observed via `kubectl top pods -n media --containers`
-# (bazarr/radarr ~40-50m CPU / ~230Mi mem, sonarr/lidarr/prowlarr ~150-190Mi,
-# readarr ~10m/130Mi, exportarr sidecars ~1-2m/10Mi, transmission idle ~12Mi).
 resourceProfiles:
   heavy:
     requests:
       cpu: 150m
-      memory: 256Mi
+      memory: 288Mi
     limits:
       cpu: 750m
-      memory: 512Mi
+      memory: 384Mi
   medium:
     requests:
       cpu: 75m
-      memory: 192Mi
+      memory: 224Mi
     limits:
       cpu: 500m
-      memory: 384Mi
+      memory: 320Mi
   light:
     requests:
       cpu: 50m
@@ -54,7 +51,7 @@ resourceProfiles:
       memory: 64Mi
     limits:
       cpu: 300m
-      memory: 256Mi
+      memory: 384Mi
 
 media:
   bazarr:

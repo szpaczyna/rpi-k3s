@@ -117,6 +117,8 @@ spec:
           volumeMounts:
             - name: mariadb-config
               mountPath: /config
+          resources:
+            {{- toYaml .Values.mariadb.resources | nindent 12 }}
         {{- end }}
       {{- if (or .Values.persistence.dataVolume.enabled .Values.persistence.booksVolume.enabled .Values.extraVolumes (and .Values.mariadb.enabled .Values.mariadb.inline .Values.mariadb.persistence.config.enabled)) }}
       volumes:
