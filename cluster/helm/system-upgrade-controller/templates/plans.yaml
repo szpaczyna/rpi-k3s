@@ -1,6 +1,3 @@
-{{- if not .Values.k3sVersion }}
-{{- fail "k3sVersion is required, e.g. ./deploy v1.37.1+k3s1" }}
-{{- end }}
 {{- if .Values.plan.server.enabled }}
 apiVersion: upgrade.cattle.io/v1
 kind: Plan

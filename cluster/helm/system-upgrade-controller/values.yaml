@@ -3,9 +3,10 @@ image:
   tag: "v0.20.2"
   pullPolicy: IfNotPresent
 
-# k3s version the plans should converge the nodes to, e.g. v1.37.1+k3s1.
-# Set by ./deploy from its first argument.
-k3sVersion: ""
+# k3s version the plans converge the nodes to. ./deploy takes it as its first
+# argument and overrides this, so the default only applies to a bare
+# `helm install`, which is what CI does.
+k3sVersion: "v1.37.1+k3s1"
 
 plan:
   # Rolling one node at a time: the cluster stays available with two workers
