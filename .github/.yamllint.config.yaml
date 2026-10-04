@@ -7,8 +7,6 @@ ignore: |
   provision/
   ignore/
   cluster/helm/
-  cluster/secrets/
-  cluster/unused/
   *-crds.yaml
   *.enc*.yaml
   *.asc.yaml

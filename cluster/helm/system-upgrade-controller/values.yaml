@@ -1,0 +1,64 @@
+image:
+  repository: rancher/system-upgrade-controller
+  tag: "v0.20.2"
+  pullPolicy: IfNotPresent
+
+# k3s version the plans converge the nodes to. ./deploy takes it as its first
+# argument and overrides this, so the default only applies to a bare
+# `helm install`, which is what CI does.
+k3sVersion: "v1.37.1+k3s1"
+
+plan:
+  # Rolling one node at a time: the cluster stays available with two workers
+  # taking an upgrade.
+  concurrency: 1
+  channel: https://update.k3s.io/v1-release/channels/stable
+  server:
+    enabled: true
+  agent:
+    enabled: true
+    # Cordon each worker before draining it, otherwise pods reschedule onto a
+    # node that is about to be upgraded.
+    drain:
+      force: true
+      skipWaitForDeleteTimeout: 60
+
+configEnv:
+  SYSTEM_UPGRADE_CONTROLLER_DEBUG: "false"
+  SYSTEM_UPGRADE_CONTROLLER_THREADS: "2"
+  SYSTEM_UPGRADE_JOB_ACTIVE_DEADLINE_SECONDS: "900"
+  SYSTEM_UPGRADE_JOB_BACKOFF_LIMIT: "99"
+  SYSTEM_UPGRADE_JOB_IMAGE_PULL_POLICY: "Always"
+  SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE: ""
+  SYSTEM_UPGRADE_JOB_PRIVILEGED: "true"
+  SYSTEM_UPGRADE_JOB_TTL_SECONDS_AFTER_FINISH: "900"
+  SYSTEM_UPGRADE_PLAN_POLLING_INTERVAL: "15m"
+
+serviceAccount:
+  create: true
+  name: system-upgrade
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 96Mi
+  limits:
+    cpu: 250m
+    memory: 192Mi
+
+tolerations:
+  - key: CriticalAddonsOnly
+    operator: Exists
+  - key: node-role.kubernetes.io/master
+    operator: Exists
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+podLabels: {}
+imagePullSecrets: []
+extraEnv: {}

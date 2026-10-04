@@ -1,0 +1,50 @@
+# Name of the SOPS-encrypted Secret applied by ./deploy, not a secret itself.
+existingSecret: renovate-env # pragma: allowlist secret
+
+renovate:
+  config: |
+    {}
+  # Container level: the chart renders .Values.securityContext into
+  # spec.securityContext, which does not accept capabilities.
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+      add:
+        - CHOWN
+
+cronjob:
+  schedule: "0 23 * * 4"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  jobBackoffLimit: 1
+
+env:
+  RENOVATE_PLATFORM: github
+  RENOVATE_ENDPOINT: https://api.github.com/
+  RENOVATE_REQUIRE_CONFIG: required
+  RENOVATE_BASE_DIR: /tmp/renovate
+  NODE_OPTIONS: --no-deprecation
+  LOG_LEVEL: info
+
+nodeSelector:
+  kubernetes.io/role: worker
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 256Mi
+  limits:
+    cpu: 750m
+    memory: 1024Mi
+
+# RENOVATE_BASE_DIR points at /tmp, so the chart needs a writable /tmp. It
+# only ships a config volume by default.
+extraVolumes:
+  - name: tmp
+    emptyDir: {}
+extraVolumeMounts:
+  - name: tmp
+    mountPath: /tmp

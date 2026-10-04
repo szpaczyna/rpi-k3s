@@ -10,6 +10,10 @@ VERSION="41.1.1"
 helm repo add traefik https://traefik.github.io/charts 2>/dev/null || true
 helm repo update
 
+# Gateway API CRDs (standard channel) come first: the chart creates
+# Gateway/HTTPRoute resources and would otherwise fail on a fresh cluster.
+./gateway-api-deploy
+
 # TLS Secrets referenced by the websecure listener live in this namespace
 # and are provisioned by each application's Helm chart (Certificate
 # resources rendered into `traefik`) — nothing extra to apply here.

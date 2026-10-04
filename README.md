@@ -85,11 +85,10 @@ on the cluster right now. Revival steps are documented in each chart's
 | [cert-manager](cluster/helm/cert-manager) | Automated Let's Encrypt certificates (ACME HTTP-01 via Gateway API) |
 | [metallb](cluster/helm/metallb) | Bare-metal load balancer (L2) |
 | [traefik](cluster/helm/traefik) | Ingress controller (Gateway API / HTTPRoute) |
-| [gateway-api](cluster/core/gateway-api) | Kubernetes Gateway API CRDs |
 | [longhorn](cluster/helm/longhorn) | Distributed block storage |
 | [local-path-provisioner](cluster/helm/local-path-provisioner) | Local HostPath storage provisioner |
-| [system-upgrade-controller](cluster/core/system-upgrade-controller) | Automated K3s upgrades |
-| [renovate](cluster/core/renovate) | Automated dependency updates (CronJob) |
+| [system-upgrade-controller](cluster/helm/system-upgrade-controller) | Automated K3s upgrades |
+| [renovate](cluster/helm/renovate) | Automated dependency updates |
 
 * * *
 
@@ -97,9 +96,7 @@ on the cluster right now. Revival steps are documented in each chart's
 
 ```text
 cluster/
-  apps/          # Raw YAML / Kustomize applications
   backup/        # Backup CronJobs and Velero config
-  core/          # Namespaces, system-upgrade-controller, renovate
   helm/          # Helm charts and deploy scripts
 scripts/         # Utility scripts (gitea mirrors, monitoring, setup)
 assets/          # Logos and images

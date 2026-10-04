@@ -9,10 +9,7 @@ This repository is infrastructure-as-code for a Raspberry Pi k3s homelab. Treat 
 
 ## Repository layout
 
-- `cluster/apps`: raw Kubernetes application manifests.
-- `cluster/core`: core cluster resources and kustomizations.
 - `cluster/helm`: local Helm charts and chart-specific resources.
-- `cluster/secrets`: sensitive or encrypted secret material.
 - `scripts`: shell utilities and cluster automation.
 - `.github/workflows/lint-all.yml`: primary CI validation workflow.
 
@@ -37,7 +34,7 @@ This repository is infrastructure-as-code for a Raspberry Pi k3s homelab. Treat 
 ## Secrets rules
 
 - Never expose, decrypt, or rewrite secrets in plaintext.
-- Treat anything under `cluster/secrets` and any file matching `*secret.yaml` as sensitive.
+- Treat any file matching `*secret.yaml` or `*.enc.yaml` as sensitive.
 - Preserve existing secret-management workflows and file boundaries.
 - Do not copy secret values into public values files, templates, README files, comments, or examples.
 - If a change depends on secret content that is not available, state the limitation instead of inventing values.
