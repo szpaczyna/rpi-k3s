@@ -119,6 +119,8 @@ defaultSettings:
   backupstorePollInterval: 0
   taintToleration: null
   systemManagedComponentsNodeSelector: null
+  systemManagedCSIComponentsResourceLimits: >-
+    {"csi-attacher":{"requests":{"memory":"80Mi"},"limits":{"memory":"128Mi"}},"csi-provisioner":{"requests":{"memory":"80Mi"},"limits":{"memory":"128Mi"}},"csi-resizer":{"requests":{"memory":"64Mi"},"limits":{"memory":"112Mi"}},"csi-snapshotter":{"requests":{"memory":"96Mi"},"limits":{"memory":"128Mi"}},"longhorn-csi-plugin":{"requests":{"memory":"64Mi"},"limits":{"memory":"112Mi"}},"node-driver-registrar":{"requests":{"memory":"32Mi"},"limits":{"memory":"48Mi"}},"longhorn-liveness-probe":{"requests":{"memory":"32Mi"},"limits":{"memory":"64Mi"}}}
   priorityClass: null
   autoSalvage: true
   autoDeletePodWhenVolumeDetachedUnexpectedly: true
@@ -153,6 +155,11 @@ longhornManager:
   log:
     ## Allowed values are `plain` or `json`.
     format: plain
+  resources:
+    requests:
+      memory: 192Mi
+    limits:
+      memory: 288Mi
   priorityClass: null
   tolerations: []
   nodeSelector: {}
@@ -168,11 +175,6 @@ longhornUI:
   priorityClass: null
   tolerations: []
   nodeSelector: {}
-
-resources:
-  requests:
-    cpu: 0.05
-    memory: 128Mi
 
 longhornConversionWebhook:
   replicas: 1
