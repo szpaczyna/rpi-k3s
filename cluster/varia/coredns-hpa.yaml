@@ -4,7 +4,7 @@ kind: HorizontalPodAutoscaler
 metadata:
   labels:
     app.kubernetes.io/name: coredns
-    k8s-app: coredns
+    k8s-app: kube-dns
     kubernetes.io/cluster-service: "true"
     kubernetes.io/name: CoreDNS
   name: coredns
@@ -16,4 +16,10 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: coredns
-  targetCPUUtilizationPercentage: 70
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
