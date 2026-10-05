@@ -2,7 +2,7 @@
 set -euo pipefail
 
 NAMESPACE="logging"
-LOKI_VERSION="6.49.0"
+LOKI_VERSION="7.3.0"
 FLUENT_BIT_VERSION="0.54.0"
 
 # Add helm repos
