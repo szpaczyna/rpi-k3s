@@ -1,4 +1,77 @@
 # Changelog
+## [0.6.7](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.6...v0.6.7) (2026-10-05)
+
+
+### Features
+
+* handoff to gitignore ([1b3a25a](https://github.com/szpaczyna/rpi-k3s/commit/1b3a25aad698c769662469fd7a2a1e017a15b576))
+* **makefile:** add per-component and make all deploy targets ([#214](https://github.com/szpaczyna/rpi-k3s/issues/214)) ([da0cba3](https://github.com/szpaczyna/rpi-k3s/commit/da0cba34aaee9c66a9f68b0688969797cd133a60))
+* **renovate:** tag PR titles with update type ([#213](https://github.com/szpaczyna/rpi-k3s/issues/213)) ([2565a20](https://github.com/szpaczyna/rpi-k3s/commit/2565a206ee08b14a4a72078c685d2847288726d9))
+
+
+### Bug Fixes
+
+* **authelia:** pin image to 4.39.24 to match chart 0.11.22 ([#218](https://github.com/szpaczyna/rpi-k3s/issues/218)) ([d487b83](https://github.com/szpaczyna/rpi-k3s/commit/d487b835fbe78cd2069ea783cf8c1f55c8741ff8))
+* **cluster:** raise CPU limits where the week of data hit the quota ([#167](https://github.com/szpaczyna/rpi-k3s/issues/167)) ([33ba6ac](https://github.com/szpaczyna/rpi-k3s/commit/33ba6acc0f317173aad9058c4b4f46eef30826a4))
+* **cluster:** size pod memory limits from Prometheus data and move workloads to workers ([#165](https://github.com/szpaczyna/rpi-k3s/issues/165)) ([ad9ac92](https://github.com/szpaczyna/rpi-k3s/commit/ad9ac922aa0af64319b5ce101e3b87867b7361dd))
+* **gitea:** add CAP_FOWNER to unblock the v28 image's startup chmod ([#222](https://github.com/szpaczyna/rpi-k3s/issues/222)) ([3d3f4cd](https://github.com/szpaczyna/rpi-k3s/commit/3d3f4cd6bcdfa2363d9a68adba2d92383f487c0f))
+* **gitea:** stop forcing admin password change after every deploy ([#220](https://github.com/szpaczyna/rpi-k3s/issues/220)) ([96eba3d](https://github.com/szpaczyna/rpi-k3s/commit/96eba3d59c0e0122037e498b8f4db7f10e8e9d12))
+* **grafana:** drop persistence.volumeName that blocks chart upgrades ([#217](https://github.com/szpaczyna/rpi-k3s/issues/217)) ([ecb81eb](https://github.com/szpaczyna/rpi-k3s/commit/ecb81eb1b4a7dcb350549ba5689270645edf23e4))
+* **longhorn:** set resources for system-managed CSI components ([#166](https://github.com/szpaczyna/rpi-k3s/issues/166)) ([4c1a332](https://github.com/szpaczyna/rpi-k3s/commit/4c1a33210e92d8136ff246bd163a06c357330ef1))
+* **media-stack:** drop hardcoded media namespace from templates ([#212](https://github.com/szpaczyna/rpi-k3s/issues/212)) ([b2a03e8](https://github.com/szpaczyna/rpi-k3s/commit/b2a03e841bccc48607e094a697413ffbddc5e300))
+* **postgres-backup:** create per-db backup directory if missing ([#221](https://github.com/szpaczyna/rpi-k3s/issues/221)) ([e449370](https://github.com/szpaczyna/rpi-k3s/commit/e449370375c841cc6259a34a8007187f24d6494e))
+* **renovate:** add custom managers for helm/*/deploy chart versions ([#210](https://github.com/szpaczyna/rpi-k3s/issues/210)) ([d8284a8](https://github.com/szpaczyna/rpi-k3s/commit/d8284a869828a59512ae6066e46ca75ce75bc929))
+* **system:** align auditd rules and sysctl with arm64 node state ([#163](https://github.com/szpaczyna/rpi-k3s/issues/163)) ([c898a67](https://github.com/szpaczyna/rpi-k3s/commit/c898a675f6a19ea48a84bcbb7161276befdfa7ac))
+* **system:** split sysctl by role and drop dead kernel 7.0 keys ([#164](https://github.com/szpaczyna/rpi-k3s/issues/164)) ([d1ea354](https://github.com/szpaczyna/rpi-k3s/commit/d1ea354c644413e6bf36037210ee2bc6fa9a2ab5))
+* **varia:** use autoscaling/v2 metrics in the coredns HPA ([#168](https://github.com/szpaczyna/rpi-k3s/issues/168)) ([a4dc7f0](https://github.com/szpaczyna/rpi-k3s/commit/a4dc7f0b42fa40cf7f6be2d886f8b6f6048f723f))
+
+
+### Miscellaneous
+
+* **deps:** update alpine/kubectl docker tag to v1.37.1 ([#162](https://github.com/szpaczyna/rpi-k3s/issues/162)) ([6f52a3c](https://github.com/szpaczyna/rpi-k3s/commit/6f52a3cc08f6cdcf2426fb0a9c58a2724d662108))
+* **deps:** update brancz/kube-rbac-proxy docker tag to v0.23.0 ([#170](https://github.com/szpaczyna/rpi-k3s/issues/170)) ([8462434](https://github.com/szpaczyna/rpi-k3s/commit/846243456234a0f3912307f0e653ed446201698c))
+* **deps:** update curlimages/curl docker tag to v8.22.0 ([#172](https://github.com/szpaczyna/rpi-k3s/issues/172)) ([fc32d15](https://github.com/szpaczyna/rpi-k3s/commit/fc32d15a46eff3b901ee4e33addf6ce66691dc50))
+* **deps:** update ghcr.io/renovatebot/charts/renovate docker tag to v46.337.0 ([#173](https://github.com/szpaczyna/rpi-k3s/issues/173)) ([7fea3a6](https://github.com/szpaczyna/rpi-k3s/commit/7fea3a6ec9fe9850e422c702629010456dc6c649))
+* **deps:** update ghcr.io/unpoller/unpoller docker tag to v3.5.0 ([#175](https://github.com/szpaczyna/rpi-k3s/issues/175)) ([9791575](https://github.com/szpaczyna/rpi-k3s/commit/9791575d47e8aa0ed3c0e1de1e49f90cb96b07d4))
+* **deps:** update grafana/grafana docker tag to v10.4.19-security-01 ([#169](https://github.com/szpaczyna/rpi-k3s/issues/169)) ([640334a](https://github.com/szpaczyna/rpi-k3s/commit/640334a448cb7e0908030c7f1a0f7e7aa9af32ea))
+* **deps:** update helm release authelia to v0.11.22 ([#174](https://github.com/szpaczyna/rpi-k3s/issues/174)) ([ba88b04](https://github.com/szpaczyna/rpi-k3s/commit/ba88b04c7215e2729f0489185a0debae0632a81b))
+* **deps:** update helm release fluent-bit to v0.58.3 ([#176](https://github.com/szpaczyna/rpi-k3s/issues/176)) ([f1dc2a0](https://github.com/szpaczyna/rpi-k3s/commit/f1dc2a0a4ebccb333dccfa47e8cb9a78c2743480))
+* **deps:** update helm release grafana to v10.5.15 ([#177](https://github.com/szpaczyna/rpi-k3s/issues/177)) ([c8f874f](https://github.com/szpaczyna/rpi-k3s/commit/c8f874f180b3671c80091b28dd4c1e27e75ceab8))
+* **deps:** update helm release loki to v6.55.0 ([#178](https://github.com/szpaczyna/rpi-k3s/issues/178)) ([81ee578](https://github.com/szpaczyna/rpi-k3s/commit/81ee57892fca9649f8b617a784ea9af6f0ab2195))
+* **deps:** update helm release prometheus to v29.35.0 ([#179](https://github.com/szpaczyna/rpi-k3s/issues/179)) ([195aa19](https://github.com/szpaczyna/rpi-k3s/commit/195aa197e28f87cee39385db7fa4d51c61ac9023))
+* **deps:** update helm release traefik to v41.6.1 ([#180](https://github.com/szpaczyna/rpi-k3s/issues/180)) ([6b81620](https://github.com/szpaczyna/rpi-k3s/commit/6b8162060802454299896bd202c2bcbe416c8bdf))
+* **deps:** update lscr.io/linuxserver/bazarr docker tag to v1.6.2 ([#182](https://github.com/szpaczyna/rpi-k3s/issues/182)) ([1c6f401](https://github.com/szpaczyna/rpi-k3s/commit/1c6f4013316d7665789b818ff32ff0c113e4c191))
+* **deps:** update lscr.io/linuxserver/mariadb docker tag to v11.8.8 ([#183](https://github.com/szpaczyna/rpi-k3s/issues/183)) ([15528dc](https://github.com/szpaczyna/rpi-k3s/commit/15528dc5494036d44b9289d11588bd28787430a4))
+* **deps:** update lscr.io/linuxserver/prowlarr docker tag to v2.6.5 ([#184](https://github.com/szpaczyna/rpi-k3s/issues/184)) ([0d787d1](https://github.com/szpaczyna/rpi-k3s/commit/0d787d177767ef48eff5820c35d720ffe5599186))
+* **deps:** update lscr.io/linuxserver/radarr docker tag to v6.4.4 ([#185](https://github.com/szpaczyna/rpi-k3s/issues/185)) ([acb1c23](https://github.com/szpaczyna/rpi-k3s/commit/acb1c2337d3177046659484499373c6aa1c7a212))
+* **deps:** update lscr.io/linuxserver/transmission docker tag to v4.1.3 ([#186](https://github.com/szpaczyna/rpi-k3s/issues/186)) ([fb913c3](https://github.com/szpaczyna/rpi-k3s/commit/fb913c350c85189d9bdc2e8354a027a2a5be88ee))
+* **deps:** update quay.io/brancz/kube-rbac-proxy docker tag to v0.23.0 ([#187](https://github.com/szpaczyna/rpi-k3s/issues/187)) ([321d73b](https://github.com/szpaczyna/rpi-k3s/commit/321d73b715b4369f10872ea9f112ba59ce8c1f3e))
+* **deps:** update quay.io/frrouting/frr docker tag to v10 ([#194](https://github.com/szpaczyna/rpi-k3s/issues/194)) ([0221a24](https://github.com/szpaczyna/rpi-k3s/commit/0221a24b08668d2ca6db72e441a3f4a3b91b551d))
+* **deps:** update quay.io/prometheus-operator/prometheus-config-reloader docker tag to v0.94.1 ([#188](https://github.com/szpaczyna/rpi-k3s/issues/188)) ([7f766e2](https://github.com/szpaczyna/rpi-k3s/commit/7f766e2af36bf93d14893365de0a95129438399f))
+* **deps:** update quay.io/prometheus/prometheus docker tag to v3.15.0 ([#189](https://github.com/szpaczyna/rpi-k3s/issues/189)) ([8f461c0](https://github.com/szpaczyna/rpi-k3s/commit/8f461c081ead85938f33a4c3c0e4f70a77cdf757))
+* **deps:** update redis docker tag to v8 ([#195](https://github.com/szpaczyna/rpi-k3s/issues/195)) ([197efcd](https://github.com/szpaczyna/rpi-k3s/commit/197efcd5396c6ce3fb50c455bfa9813ecd018446))
+* **deps:** update vaultwarden/server docker tag to v1.37.3 ([#161](https://github.com/szpaczyna/rpi-k3s/issues/161)) ([01e8b8c](https://github.com/szpaczyna/rpi-k3s/commit/01e8b8ceaa82b237228ddd6f659657c4e276b502))
+* **deps:** updated cluster to 1.37 ([297ad45](https://github.com/szpaczyna/rpi-k3s/commit/297ad456a7f00ada75cf5bd0527b5e3386e9091c))
+
+
+### CI/CD
+
+* **chart-testing:** auto-create namespaces referenced by rendered charts ([#211](https://github.com/szpaczyna/rpi-k3s/issues/211)) ([1df76b8](https://github.com/szpaczyna/rpi-k3s/commit/1df76b87e626cad697396d60e5d821e0d3323d32))
+* **chart-testing:** fake a longhorn StorageClass in the kind cluster ([#215](https://github.com/szpaczyna/rpi-k3s/issues/215)) ([633d5ec](https://github.com/szpaczyna/rpi-k3s/commit/633d5ec00a4076bfd97fe3737deb697966d75f29))
+* **chart-testing:** skip ACME certificate issuance in kind ([#216](https://github.com/szpaczyna/rpi-k3s/issues/216)) ([3955935](https://github.com/szpaczyna/rpi-k3s/commit/3955935461c8966d893a73cdc633195a7afd5df4))
+* **kubeconform:** lint encrypted-secret charts via placeholder values ([#209](https://github.com/szpaczyna/rpi-k3s/issues/209)) ([b53bb0e](https://github.com/szpaczyna/rpi-k3s/commit/b53bb0e4e7f7a0e9700340ec5470d27decefda9b))
+
+
+### Documentation
+
+* dedupe merge-commit entries in CHANGELOG for 0.6.5 and 0.6.6 ([bac7dc4](https://github.com/szpaczyna/rpi-k3s/commit/bac7dc413c0f8c258c03a5405ea7bc5f2a4813e2))
+* sync GH Pages index with README workloads list ([f156d86](https://github.com/szpaczyna/rpi-k3s/commit/f156d867d2710c0be958f37737c87bd6623ea01d))
+
+
+### Refactoring
+
+* **cluster:** move renovate, SUC and Gateway API into Helm, drop core/ ([#171](https://github.com/szpaczyna/rpi-k3s/issues/171)) ([20f7f02](https://github.com/szpaczyna/rpi-k3s/commit/20f7f02ae7f063a8efedf009785aa7d12c405fa7))
+
 ## [0.6.6](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.5...v0.6.6) (2026-09-29)
 
 
