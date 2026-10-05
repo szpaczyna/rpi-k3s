@@ -4,7 +4,7 @@ set -euo pipefail
 NAMESPACE="renovate"
 RELEASE_NAME="renovate"
 CHART="oci://ghcr.io/renovatebot/charts/renovate"
-VERSION="46.323.2"
+VERSION="46.337.0"
 
 # The token, repository list and docker host rules live in the SOPS-encrypted
 # Secret; the chart reads it via existingSecret and never renders credentials.
