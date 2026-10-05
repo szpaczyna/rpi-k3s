@@ -2,8 +2,115 @@
 existingSecret: renovate-env # pragma: allowlist secret
 
 renovate:
+  # helm/*/deploy scripts pin chart versions in shell variables (CHART +
+  # VERSION, or chart-specific *_VERSION), which built-in managers can't see.
+  # These custom regex managers extract them so Renovate can bump them.
   config: |
-    {}
+    {
+      "customManagers": [
+        {
+          "customType": "regex",
+          "description": "cert-manager chart version, registryUrl pinned to charts.jetstack.io",
+          "fileMatch": ["^cluster/helm/cert-manager/deploy$"],
+          "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
+          "depNameTemplate": "cert-manager",
+          "registryUrlTemplate": "https://charts.jetstack.io",
+          "datasourceTemplate": "helm"
+        },
+        {
+          "customType": "regex",
+          "description": "authelia chart version, registryUrl pinned to charts.authelia.com",
+          "fileMatch": ["^cluster/helm/authelia/deploy$"],
+          "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
+          "depNameTemplate": "authelia",
+          "registryUrlTemplate": "https://charts.authelia.com",
+          "datasourceTemplate": "helm"
+        },
+        {
+          "customType": "regex",
+          "description": "grafana chart version, registryUrl pinned to grafana.github.io/helm-charts",
+          "fileMatch": ["^cluster/helm/grafana/deploy$"],
+          "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
+          "depNameTemplate": "grafana",
+          "registryUrlTemplate": "https://grafana.github.io/helm-charts",
+          "datasourceTemplate": "helm"
+        },
+        {
+          "customType": "regex",
+          "description": "prometheus chart version, registryUrl pinned to prometheus-community helm-charts",
+          "fileMatch": ["^cluster/helm/prometheus/deploy$"],
+          "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
+          "depNameTemplate": "prometheus",
+          "registryUrlTemplate": "https://prometheus-community.github.io/helm-charts",
+          "datasourceTemplate": "helm"
+        },
+        {
+          "customType": "regex",
+          "description": "traefik chart version, registryUrl pinned to traefik.github.io/charts",
+          "fileMatch": ["^cluster/helm/traefik/deploy$"],
+          "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
+          "depNameTemplate": "traefik",
+          "registryUrlTemplate": "https://traefik.github.io/charts",
+          "datasourceTemplate": "helm"
+        },
+        {
+          "customType": "regex",
+          "description": "renovate's own OCI chart version pinned via CHART=\"oci://host/path\" + VERSION",
+          "fileMatch": ["^cluster/helm/renovate/deploy$"],
+          "matchStrings": [
+            "CHART=\"oci://(?<packageName>[^\"]+)\"\\nVERSION=\"(?<currentValue>[0-9][^\"]*)\""
+          ],
+          "datasourceTemplate": "docker"
+        },
+        {
+          "customType": "regex",
+          "description": "helm/loki/deploy: loki chart version, registryUrl pinned to grafana.github.io/helm-charts",
+          "fileMatch": ["^cluster/helm/loki/deploy$"],
+          "matchStrings": ["LOKI_VERSION=\"(?<currentValue>[^\"]+)\""],
+          "depNameTemplate": "loki",
+          "registryUrlTemplate": "https://grafana.github.io/helm-charts",
+          "datasourceTemplate": "helm"
+        },
+        {
+          "customType": "regex",
+          "description": "helm/loki/deploy: fluent-bit chart version, registryUrl pinned to fluent.github.io/helm-charts",
+          "fileMatch": ["^cluster/helm/loki/deploy$"],
+          "matchStrings": ["FLUENT_BIT_VERSION=\"(?<currentValue>[^\"]+)\""],
+          "depNameTemplate": "fluent-bit",
+          "registryUrlTemplate": "https://fluent.github.io/helm-charts",
+          "datasourceTemplate": "helm"
+        },
+        {
+          "customType": "regex",
+          "description": "helm/longhorn/values.yaml: chartVersion pin, deploy falls back to it when called without an argument",
+          "fileMatch": ["^cluster/helm/longhorn/values\\.yaml$"],
+          "matchStrings": ["chartVersion: \"(?<currentValue>[^\"]+)\""],
+          "depNameTemplate": "longhorn",
+          "registryUrlTemplate": "https://charts.longhorn.io",
+          "datasourceTemplate": "helm"
+        }
+      ],
+      "ignorePaths": [
+        "**/*.enc",
+        "**/*.enc.*",
+        "**/*.md.*",
+        "**/*-secret*",
+        "**/*-creds*",
+        "**/*pgpass*",
+        "**/*-auth*",
+        "cluster/helm/postgresql/**"
+      ],
+      "packageRules": [
+        {
+          "matchDatasources": ["docker"],
+          "matchPackageNames": ["brancz/kube-rbac-proxy"],
+          "registryUrls": ["https://quay.io"]
+        }
+      ],
+      "prHourlyLimit": 0,
+      "prConcurrentLimit": 0,
+      "branchConcurrentLimit": 0
+    }
   # Container level: the chart renders .Values.securityContext into
   # spec.securityContext, which does not accept capabilities.
   securityContext:

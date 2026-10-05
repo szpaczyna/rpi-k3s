@@ -4,7 +4,11 @@ set -euo pipefail
 NAMESPACE="longhorn-system"
 RELEASE_NAME="longhorn"
 CHART="longhorn/longhorn"
-VERSION="${1:?Usage: ./deploy <version>}"
+
+# Chart version to install. Defaults to the version pinned in values.yaml so
+# a bare `./deploy` reproduces the last applied release; pass an argument to
+# upgrade to a different version.
+VERSION="${1:-$(yq '.chartVersion' values.yaml)}"
 
 # Add helm repo
 helm repo add longhorn https://charts.longhorn.io 2>/dev/null || true
