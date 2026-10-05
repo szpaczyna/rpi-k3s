@@ -4,7 +4,7 @@ set -euo pipefail
 NAMESPACE="traefik"
 RELEASE_NAME="traefik"
 CHART="traefik/traefik"
-VERSION="41.1.1"
+VERSION="41.6.1"
 
 # Add helm repo
 helm repo add traefik https://traefik.github.io/charts 2>/dev/null || true
