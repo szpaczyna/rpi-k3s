@@ -3,7 +3,7 @@ set -euo pipefail
 
 NAMESPACE="logging"
 LOKI_VERSION="6.49.0"
-FLUENT_BIT_VERSION="0.54.0"
+FLUENT_BIT_VERSION="0.58.3"
 
 # Add helm repos
 helm repo add grafana https://grafana.github.io/helm-charts 2>/dev/null || true
