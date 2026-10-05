@@ -10,7 +10,7 @@ deploymentStrategy:
 
 image:
   repository: grafana/grafana
-  tag: 10.4.19-security-01
+  tag: 13.2.3
 
 livenessProbe:
   httpGet:
