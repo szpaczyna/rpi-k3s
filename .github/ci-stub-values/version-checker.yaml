@@ -1,0 +1,11 @@
+---
+# CI-only placeholder for lint/template validation (never deployed). Fills
+# in the registry-credential maps templates/{secret,serviceaccount}.yaml
+# read unconditionally, which values.enc.yaml normally provides. Contains
+# no real secrets.
+ecr: {}
+acr: {}
+docker: {}
+gcr: {}
+ghcr: {}
+quay: {}

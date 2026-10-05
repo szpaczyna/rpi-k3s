@@ -1,0 +1,15 @@
+---
+# CI-only placeholder for lint/template validation (never deployed). Fills
+# in the keys templates/gitea/{config,init}.yaml read unconditionally, which
+# values.enc.yaml normally provides. Contains no real secrets.
+gitea:
+  config:
+    database:
+      HOST: ""
+  admin: {}
+postgresql:
+  global:
+    postgresql:
+      postgresqlDatabase: gitea
+      postgresqlUsername: gitea
+      postgresqlPassword: placeholder # pragma: allowlist secret
