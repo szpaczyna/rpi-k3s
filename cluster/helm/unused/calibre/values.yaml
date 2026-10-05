@@ -27,7 +27,7 @@ global:
 
 image:
   repository: lscr.io/linuxserver/calibre-web
-  tag: "0.6.27"
+  tag: "5.33.2"
 
 # Used by the fix-permissions initContainer only.
 busybox:
