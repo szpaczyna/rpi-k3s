@@ -1,0 +1,19 @@
+cluster/helm/postgresql/backup-job.yaml
+  s_0a8ea2e5b2c5b2::t_2880aa489eba5e 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "98b03e8ea6d774646da5ffb42619d54c7c65f3b2",
+  "prompts": {},
+  "sessions": {
+    "s_0a8ea2e5b2c5b2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ef553676cffe95rdX7ibJyRyDG",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
