@@ -136,7 +136,7 @@ images:
   lidarr:
     repository: "lscr.io/linuxserver/lidarr"
     # tag: "2.14.5"
-    tag: "3.1.0"
+    tag: "8.1.2135"
   prowlarr:
     repository: "lscr.io/linuxserver/prowlarr"
     tag: "2.3.0"
