@@ -139,7 +139,7 @@ images:
     tag: "3.1.0"
   prowlarr:
     repository: "lscr.io/linuxserver/prowlarr"
-    tag: "2.3.0"
+    tag: "2.6.5"
   readarr:
     repository: "lscr.io/linuxserver/readarr"
     tag: "0.4.18-develop"
