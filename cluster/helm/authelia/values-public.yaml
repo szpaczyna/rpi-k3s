@@ -1,7 +1,7 @@
 ---
 ## Default values for Authelia.
 image:
-  tag: "4.39.20"
+  tag: "4.39.24"
 
 pod:
   kind: Deployment
