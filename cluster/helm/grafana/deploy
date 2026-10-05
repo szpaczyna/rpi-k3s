@@ -4,7 +4,7 @@ set -euo pipefail
 NAMESPACE="monitoring"
 RELEASE_NAME="grafana"
 CHART="grafana/grafana"
-VERSION="10.3.0"
+VERSION="10.5.15"
 
 # Add helm repo
 helm repo add grafana https://grafana.github.io/helm-charts 2>/dev/null || true
