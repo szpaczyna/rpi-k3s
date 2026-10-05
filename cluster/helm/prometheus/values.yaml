@@ -816,7 +816,7 @@ prometheus-node-exporter:
     enabled: false
     image:
       repository: quay.io/brancz/kube-rbac-proxy
-      tag: v0.22.1
+      tag: v0.23.0
       pullPolicy: IfNotPresent
 
 
