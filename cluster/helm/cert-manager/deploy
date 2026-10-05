@@ -5,7 +5,6 @@ NAMESPACE="cert-manager"
 RELEASE_NAME="cert-manager"
 CHART="jetstack/cert-manager"
 VERSION="1.21.1"
-#VERSION="${1:?Usage: ./deploy <version>}"
 
 # Add helm repo
 helm repo add jetstack https://charts.jetstack.io 2>/dev/null || true
