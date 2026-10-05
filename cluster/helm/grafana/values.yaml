@@ -124,13 +124,11 @@ persistence:
   type: pvc
   enabled: true
   storageClassName: longhorn
-  volumeName: "data-grafana"
   accessModes:
     - ReadWriteOnce
   size: 2Gi
   finalizers:
     - kubernetes.io/pvc-protection
-  lookupVolumeName: true
   #existingClaim: "data-grafana"
   extraPvcLabels: {}
   disableWarning: false
