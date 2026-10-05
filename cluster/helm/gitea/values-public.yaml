@@ -181,7 +181,7 @@ initPreScript: ""
 #   chmod 400 /data/git/.postgresql/postgresql.key
 
 redis:
-  image: redis:7.4.11
+  image: redis:8.10.2
   resources:
     limits:
       memory: 64Mi
