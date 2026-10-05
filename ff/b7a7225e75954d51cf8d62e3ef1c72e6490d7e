@@ -1,0 +1,19 @@
+.github/workflows/lint-all.yml
+  s_0a8ea2e5b2c5b2::t_910577b405dcb1 131-147
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ffb7a7225e75954d51cf8d62e3ef1c72e6490d7e",
+  "prompts": {},
+  "sessions": {
+    "s_0a8ea2e5b2c5b2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ef553676cffe95rdX7ibJyRyDG",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
