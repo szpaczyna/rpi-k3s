@@ -1,0 +1,26 @@
+.github/ci-stub-values/gitea.yaml
+  s_0a8ea2e5b2c5b2::t_b034054bc6c154 1-14
+  s_0a8ea2e5b2c5b2::t_b69a282fae4ea1 15
+.github/workflows/lint-all.yml
+  s_0a8ea2e5b2c5b2::t_446bfbcc864bf5 69,74-86,91
+.github/ci-stub-values/version-checker.yaml
+  s_0a8ea2e5b2c5b2::t_f40585131cdd91 1-11
+.github/ci-stub-values/unifipoller.yaml
+  s_0a8ea2e5b2c5b2::t_66b5769f8778d1 1-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "45beb9003c4a686d55e6aa8493b394d8e0c39693",
+  "prompts": {},
+  "sessions": {
+    "s_0a8ea2e5b2c5b2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ef553676cffe95rdX7ibJyRyDG",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
