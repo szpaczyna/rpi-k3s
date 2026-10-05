@@ -66,19 +66,29 @@ jobs:
         uses: azure/setup-helm@v5
         with:
           version: v3.14.0
-      - name: Render Helm charts (skip missing values/encrypted-only)
+      - name: Render Helm charts (skip charts with no values at all)
         run: |
           mkdir -p rendered
           for d in cluster/helm/*/; do
             chart="${d%/}"; name=$(basename "$chart")
-            # Skip if no standard values.yaml present and only encrypted values expected
-            if [ ! -f "$chart/values.yaml" ]; then
-              echo " skipping $name (no values.yaml present)";
+            values_args=()
+            if [ -f "$chart/values.yaml" ]; then
+              values_args+=(--values "$chart/values.yaml")
+            elif [ -f "$chart/values-public.yaml" ]; then
+              # Encrypted-secrets chart: lint structure/schema against the
+              # public values plus a placeholder for the keys values.enc.yaml
+              # would normally provide. values.enc.yaml itself is never
+              # decrypted here.
+              values_args+=(--values "$chart/values-public.yaml")
+              stub=".github/ci-stub-values/${name}.yaml"
+              [ -f "$stub" ] && values_args+=(--values "$stub")
+            else
+              echo " skipping $name (no values.yaml or values-public.yaml present)";
               continue
             fi
             echo "Rendering $name";
             helm dependency update "$chart" || true
-            helm template "$name" "$chart" > "rendered/${name}.yaml" || {
+            helm template "$name" "$chart" "${values_args[@]}" > "rendered/${name}.yaml" || {
               echo "Helm template failed for $name; skipping"; continue; }
           done
       - name: Run kubeconform

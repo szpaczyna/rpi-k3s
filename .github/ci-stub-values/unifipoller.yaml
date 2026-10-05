@@ -1,0 +1,6 @@
+---
+# CI-only placeholder for lint/template validation (never deployed). Fills
+# in upConfig, which templates/unpoller-config-secret.yaml reads
+# unconditionally and values.enc.yaml normally provides. Contains no real
+# secrets.
+upConfig: ""
