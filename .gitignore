@@ -3,6 +3,8 @@ wip/*
 .vscode
 gitconfig
 scripts/gitea/config.yaml
+### ai
+handoff*
 ### sops
 .sops.yaml
 ### ansible
