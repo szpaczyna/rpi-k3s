@@ -132,7 +132,12 @@ cronjob:
 env:
   RENOVATE_PLATFORM: github
   RENOVATE_ENDPOINT: https://api.github.com/
-  RENOVATE_REQUIRE_CONFIG: required
+  # The self-hosted config always comes from RENOVATE_CONFIG_FILE below, not
+  # from a renovate.json file in the repo. "required" checks for the latter
+  # and opens an onboarding PR when it's missing (see PR #223), fighting the
+  # single-source-of-truth config here. "ignored" stops Renovate from
+  # looking at any in-repo config file at all.
+  RENOVATE_REQUIRE_CONFIG: ignored
   RENOVATE_BASE_DIR: /tmp/renovate
   NODE_OPTIONS: --no-deprecation
   LOG_LEVEL: info
