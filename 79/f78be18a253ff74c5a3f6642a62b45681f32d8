@@ -1,0 +1,41 @@
+provision/ansible/roles/dotfiles/templates/zshenv.j2
+  s_148cdab35ce2ad::t_4ebbeb12d15253 1-33
+provision/ansible/roles/dotfiles/templates/alias.j2
+  s_148cdab35ce2ad::t_26b350595feb42 1-370
+provision/ansible/group_vars/k3s_cluster/dotfiles.yml
+  s_148cdab35ce2ad::t_29597b3cf6f807 2,5
+provision/ansible/roles/dotfiles/tasks/zsh.yml
+  s_148cdab35ce2ad::t_d18f10efda89a8 2-20,22,24-25,29,31,33,38,40,42-43,47-48
+provision/ansible/README.md
+  s_148cdab35ce2ad::t_4b3334846635b0 196-226
+provision/ansible/roles/dotfiles/templates/zshrc.j2
+  s_148cdab35ce2ad::t_41cd7c8517a8a5 1-5,7-10,12-166
+  s_148cdab35ce2ad::t_bc15c549953a2c 6,11
+provision/ansible/roles/dotfiles/tasks/packages.yml
+  s_148cdab35ce2ad::t_73f9b317d495bb 1-16
+provision/ansible/roles/dotfiles/defaults/main.yml
+  s_148cdab35ce2ad::t_a4a5bf638579ee 3,5,10,14-33
+provision/ansible/roles/dotfiles/tasks/main.yml
+  s_148cdab35ce2ad::t_de1c0489eb69d6 2-3,5
+  s_148cdab35ce2ad::t_d65fb85ce5b769 4
+provision/ansible/roles/dotfiles/files/init.vim
+  s_148cdab35ce2ad::t_f947cd10df3204 3
+  s_148cdab35ce2ad::t_3c98a437248feb 1-2
+  s_148cdab35ce2ad::t_f8ad7918d9a539 4-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "79f78be18a253ff74c5a3f6642a62b45681f32d8",
+  "prompts": {},
+  "sessions": {
+    "s_148cdab35ce2ad": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_7d5f2105-6130-4fb9-817a-c459d08f18b1",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
