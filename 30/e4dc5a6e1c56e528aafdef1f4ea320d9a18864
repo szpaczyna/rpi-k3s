@@ -1,0 +1,340 @@
+provision/ansible/roles/dotfiles/files/zsh-plugins/ls-colors.zsh
+  s_a0d6f1f9f1b4c0::t_910c3a77301742 1-186
+provision/ansible/roles/pihole/tasks/webserver-config.yml
+  s_7913aa60cf47ba::t_4e555accfcec4b 2-3,9
+  s_7913aa60cf47ba::t_c263f926a3847f 37,42
+  s_7913aa60cf47ba::t_3fd2bf50ef52f3 35-36
+  s_34d62b03565fcb::t_7e39cc97da4687 1,4-8,10-27,29-34,38-41,43
+  s_34d62b03565fcb::t_99c75b5a800374 28
+provision/ansible/playbooks/kubernetes/k3s-install.yml
+  s_3d0a11fd6e39e5::t_8e28f0c90c930c 2-3,9,13,15
+  s_3d0a11fd6e39e5::t_ed7281c0a2ff40 14,23-71,73,77,79
+provision/ansible/playbooks/gentoo_setup.yml
+  s_b31125c8f400b1::t_73f73e6580ef4d 1-16
+provision/ansible/roles/gentoo_portage/files/package.accept_keywords/old/rpi-kernel
+  s_b31125c8f400b1::t_851be9dcfb4182 1
+provision/ansible/README.md
+  s_fb64ed61bcd710::t_83b9e74bcf61a2 1-22,25-53,55-58,60-68,71-74,76-85,87-96,99-159,161-177,188-189,192-194,210-211,213-219,221-227,232,238-256
+  s_fb64ed61bcd710::t_2703a858be514d 228-231,233-237
+  s_7913aa60cf47ba::t_cb755015611916 283-296
+  s_fb64ed61bcd710::t_59db092f685da9 190-191,195-209
+  s_fb64ed61bcd710::t_5c3d196451b6a2 220
+  s_fb64ed61bcd710::t_9875496f03a727 178-187
+  s_fb64ed61bcd710::t_e85c3152ee8c0e 97-98
+  s_7913aa60cf47ba::t_590768ef198afd 23-24,54,59,69-70,75,86,160,212
+  s_7913aa60cf47ba::t_4bd7356b593725 257-282
+provision/ansible/roles/gentoo_portage/files/package.accept_keywords/old/grc
+  s_b31125c8f400b1::t_565bb804371791 1
+provision/ansible/roles/dotfiles/tasks/tmux.yml
+  s_a0d6f1f9f1b4c0::t_da993cc5dadcf8 1-8
+provision/ansible/roles/dotfiles/tasks/main.yml
+  s_a0d6f1f9f1b4c0::t_d0fcb708be20b5 1-16
+provision/ansible/roles/gentoo_portage/files/package.accept_keywords/old/filebeat
+  s_b31125c8f400b1::t_0ff4dd22f5209c 1
+provision/ansible/roles/system/tasks/hosts.yml
+  s_7913aa60cf47ba::t_3c154191ea3ecd 1-2,4-5
+  s_7913aa60cf47ba::t_a17f712e0270be 3,6
+provision/ansible/roles/gentoo_portage/tasks/package-accept-keywords.yml
+  s_b31125c8f400b1::t_ea9ca0767dcd98 1-18
+provision/ansible/roles/dotfiles/files/zshrc
+  s_a0d6f1f9f1b4c0::t_806298faa24dca 1-82,84-280,282-391
+  s_a0d6f1f9f1b4c0::t_61485b1f8d30d9 83
+  s_a0d6f1f9f1b4c0::t_49cbe225dbdbe4 281
+provision/ansible/roles/gentoo_portage/tasks/package-mask.yml
+  s_b31125c8f400b1::t_c70d890e66edaa 1-16
+provision/ansible/roles/k3s/templates/registries.yaml.j2
+  s_76e7bd1d70c5f1::t_83a8c1df165591 1-10
+provision/ansible/roles/dotfiles/files/init-gentoo.vim
+  s_b31125c8f400b1::t_f61b25459cbe31 1-36,38-67,69-140
+  s_7913aa60cf47ba::t_bc0f66b53bbf75 37,68
+provision/ansible/.ansible-lint
+  s_7913aa60cf47ba::t_871cb88ae4aaa7 1-8
+provision/ansible/roles/k3s/tasks/registries.yml
+  s_76e7bd1d70c5f1::t_2308dbead2fcaf 1-14
+provision/ansible/roles/system/tasks/kernel.yml
+  s_7913aa60cf47ba::t_5fe0c09332d8e1 13
+provision/ansible/group_vars/pihole.yml
+  s_a0d6f1f9f1b4c0::t_b05cab1b98db65 1-13
+provision/ansible/roles/system/tasks/sysctl.yml
+  s_7913aa60cf47ba::t_9033a7f1049720 3,6,9,12,17,22
+  s_7913aa60cf47ba::t_798ed401660820 18
+  s_7913aa60cf47ba::t_bd7807c8dc3888 1-2,4-5,7-8,10-11,13-16,19-21,23-24
+provision/ansible/roles/dotfiles/files/zsh-plugins/kubetail.zsh
+  s_a0d6f1f9f1b4c0::t_806298faa24dca 1-19
+provision/ansible/roles/dotfiles/files/zsh-plugins/zsh_reload.zsh
+  s_a0d6f1f9f1b4c0::t_910c3a77301742 1-22
+provision/ansible/roles/dotfiles/tasks/fastfetch.yml
+  s_a0d6f1f9f1b4c0::t_65cf48aab235da 1-16
+provision/ansible/roles/dotfiles/files/zsh-plugins/l.plugin.zsh
+  s_a0d6f1f9f1b4c0::t_910c3a77301742 1-591
+provision/ansible/roles/dotfiles/tasks/nvim.yml
+  s_7913aa60cf47ba::t_cb4082f079ec6d 36-38,47
+  s_b31125c8f400b1::t_a520d0af8e4d41 21
+  s_a0d6f1f9f1b4c0::t_183601d8125662 1-8,10-20,22-35,39-46,48-66
+  s_a0d6f1f9f1b4c0::t_11f2e2032abe3b 9
+provision/ansible/roles/dotfiles/files/zsh-plugins/kubectl.zsh
+  s_a0d6f1f9f1b4c0::t_806298faa24dca 1-254
+provision/ansible/roles/dotfiles/files/zsh-plugins/fzf-completion.zsh
+  s_a0d6f1f9f1b4c0::t_910c3a77301742 1-19,22-27,29-129,131-137,139-358
+  s_7913aa60cf47ba::t_bc0f66b53bbf75 20-21,28,130,138
+provision/ansible/roles/dotfiles/files/zsh-plugins/zsh-z.plugin.zsh
+  s_a0d6f1f9f1b4c0::t_910c3a77301742 1-1014
+provision/ansible/roles/pihole/tasks/main.yml
+  s_34d62b03565fcb::t_c6c265bb421c2e 1-16
+provision/ansible/roles/system/defaults/main.yml
+  s_7913aa60cf47ba::t_84c211fef34eac 2
+  s_55180b5bd74c18::t_9d5ae5ecba09b3 1,3-29
+  s_55180b5bd74c18::t_063abcc0cf44d3 30
+provision/ansible/roles/system/tasks/zram.yml
+  s_7913aa60cf47ba::t_cc6553be05719f 61,63
+  s_7913aa60cf47ba::t_9a3003e019245a 11,59
+  s_7913aa60cf47ba::t_01c89bf69c9a30 40-44,50,56,67
+  s_7913aa60cf47ba::t_f56b3ad75339f8 1-7,9-10,13-14,16-19,21-22,25-26,28-29,31-34,36-39,45,48,51-52,55,57-58,60,62,64-66,68-69
+  s_7913aa60cf47ba::t_69a19f939f213f 8
+  s_7913aa60cf47ba::t_9666123a3bced6 12
+  s_7913aa60cf47ba::t_3dca3cc55b005f 15
+  s_7913aa60cf47ba::t_dee3fc28fcee82 20
+  s_7913aa60cf47ba::t_6aacacc01d809c 23-24
+  s_7913aa60cf47ba::t_1f2421b14b99e8 27
+  s_7913aa60cf47ba::t_810418c8961142 30
+  s_7913aa60cf47ba::t_89e07b91374b94 35
+  s_7913aa60cf47ba::t_4fa919a05b0afd 46-47
+  s_7913aa60cf47ba::t_fee852f9fdcdd2 49
+  s_7913aa60cf47ba::t_629283465dfedf 53-54
+provision/ansible/roles/system/templates/hosts.j2
+  s_55180b5bd74c18::t_baf062c14114c1 4-9
+provision/ansible/roles/dotfiles/files/zsh-plugins/forgit.zsh
+  s_a0d6f1f9f1b4c0::t_910c3a77301742 1-262
+provision/ansible/playbooks/kubernetes/k3s-nuke.yml
+  s_7913aa60cf47ba::t_6f50c5470fadab 2-3,9,14,24
+provision/ansible/roles/gentoo_portage/files/package.accept_keywords/old/fzf
+  s_b31125c8f400b1::t_18fbf81a3d5a4c 1
+provision/ansible/roles/dotfiles/files/zsh-plugins/colorize.zsh
+  s_a0d6f1f9f1b4c0::t_806298faa24dca 1-114
+provision/ansible/roles/gentoo_portage/files/package.accept_keywords/old/zsh
+  s_b31125c8f400b1::t_b1e8f5ee80f92d 1
+provision/ansible/roles/dotfiles/files/zsh-plugins/fzf-key-bindings.zsh
+  s_a0d6f1f9f1b4c0::t_910c3a77301742 1-127
+provision/ansible/roles/system/tasks/main.yml
+  s_7913aa60cf47ba::t_1a9cb880c238fd 9,13,17,21,25,29,33,35-37,39-41,44-45,47-49,51-53,55-57,59-61
+  s_55180b5bd74c18::t_5082e7863a4c3e 7-8,11-12,15-16,19-20,23-24,27-28,31-32
+provision/ansible/roles/system/tasks/disks.yml
+  s_7913aa60cf47ba::t_12cb34726ce024 14
+provision/ansible/inventory_transform.py
+  s_7913aa60cf47ba::t_a09a4c2084235a 1-47
+provision/ansible/roles/system/tasks/hardening.yml
+  s_7913aa60cf47ba::t_b48efd026e2c33 3,6
+  s_7913aa60cf47ba::t_1cefdb01146f2c 1-2,4-5
+provision/ansible/roles/dotfiles/files/zsh-plugins/grc.zsh
+  s_a0d6f1f9f1b4c0::t_806298faa24dca 1-41
+provision/ansible/roles/dotfiles/files/zsh-plugins/git.zsh
+  s_a0d6f1f9f1b4c0::t_910c3a77301742 1-184
+provision/ansible/roles/gentoo_portage/files/package.mask/sys-kernel
+  s_b31125c8f400b1::t_68d36dfc8ba382 1
+provision/ansible/roles/gentoo_portage/files/package.use/portage
+  s_b31125c8f400b1::t_16891ea72b7916 1
+provision/ansible/roles/pihole/tasks/database-config.yml
+  s_7913aa60cf47ba::t_aeba7d2c87fc13 2-3,9
+  s_34d62b03565fcb::t_2b3fc0be878f41 1,4-8,10-21
+.pre-commit-config.yaml
+  s_7913aa60cf47ba::t_de0e0a6ea19e1f 23
+  s_7913aa60cf47ba::t_428f51f9335e18 21-22,24-27
+.gitignore
+  s_7913aa60cf47ba::t_920a70f50a5dce 18
+  s_7913aa60cf47ba::t_57474cfab20423 11-17
+provision/ansible/roles/k3s/tasks/server.yml
+  s_3d0a11fd6e39e5::t_3d3514b58ee47b 1,3,5-9,11-26
+  s_3d0a11fd6e39e5::t_3bb97f163da333 2,4,10
+provision/ansible/roles/k3s/tasks/main.yml
+  s_76e7bd1d70c5f1::t_a75ce5d223ec0e 11-14
+  s_3d0a11fd6e39e5::t_ee70f107f759f3 1-10
+provision/ansible/roles/system/tasks/network.yml
+  s_7913aa60cf47ba::t_5adb1b7559f49a 11,16,24-25,28-29,31-32
+provision/ansible/playbooks/pihole_setup.yml
+  s_7913aa60cf47ba::t_bd3170f0bc9744 3-4,12-23
+provision/ansible/roles/gentoo_portage/files/package.use/gcc
+  s_b31125c8f400b1::t_04c3e2a82f0a8c 1
+provision/ansible/roles/gentoo_portage/files/package.accept_keywords/old/mkstage4
+  s_b31125c8f400b1::t_9d6fb5736351ed 1
+provision/ansible/roles/system/tasks/chrony.yml
+  s_7913aa60cf47ba::t_6ee9839ce96ecf 3,9
+  s_7913aa60cf47ba::t_8dd4b9ab2c4b75 1-2,4-8,10-12
+provision/ansible/inventory.sh
+  s_7913aa60cf47ba::t_0dcf4e8bbdd8d6 2,10
+  s_7913aa60cf47ba::t_6341bea6a07e11 3-5,9
+  s_7913aa60cf47ba::t_b19b49816daabd 1,6-8
+provision/ansible/roles/system/tasks/packages.yml
+  s_7913aa60cf47ba::t_2dd45d1789fa68 26,36-38,46-48,55,66,71,88-89
+  s_7913aa60cf47ba::t_4cb036cfd1c459 5,20,22,32,34,45,53,64,68
+provision/ansible/roles/dotfiles/files/zsh-plugins/fzf-tab.zsh
+  s_a0d6f1f9f1b4c0::t_910c3a77301742 1-631
+provision/ansible/roles/dotfiles/tasks/zsh.yml
+  s_b31125c8f400b1::t_71335e46bb90a6 9,13
+  s_a0d6f1f9f1b4c0::t_02edf027d5739a 1-8,10-12,14-34
+provision/ansible/roles/gentoo_portage/tasks/main.yml
+  s_b31125c8f400b1::t_30748bcf7e469d 1-16
+provision/ansible/roles/system/tasks/auditd.yml
+  s_7913aa60cf47ba::t_ee90623ff1b432 3,6,9,14
+  s_7913aa60cf47ba::t_3db55904bee1a5 1-2,4-5,7-8,10-13,15-17
+provision/ansible/playbooks/apt.yaml
+  s_7913aa60cf47ba::t_d4bc4a29798aa5 3-4,9-12
+provision/ansible/roles/gentoo_portage/templates/make.conf.j2
+  s_b31125c8f400b1::t_2368c4964c860b 1-31
+provision/ansible/roles/gentoo_portage/defaults/main.yml
+  s_b31125c8f400b1::t_ff2655cc27fca5 1-15
+provision/ansible/roles/pihole/tasks/dns-config.yml
+  s_34d62b03565fcb::t_d40a2c2d28c20e 23-28,31,34,38,43,46
+  s_7913aa60cf47ba::t_2aa782265722bf 42,47
+  s_7913aa60cf47ba::t_f7e64d8750a196 40-41
+  s_34d62b03565fcb::t_09e83c28be34d6 1,29,44
+  s_34d62b03565fcb::t_a98c92bb3379ec 30,32,35-37,39,45,48
+  s_34d62b03565fcb::t_6dc52b46bb2a56 4-8,10-22
+  s_7913aa60cf47ba::t_515557517cbed6 33
+  s_34d62b03565fcb::t_2173830fb71ac2 2-3
+  s_34d62b03565fcb::t_fc6d22d8cb65a8 9
+provision/ansible/setup-venv.sh
+  s_7913aa60cf47ba::t_2ab034cc53c160 1-16
+provision/ansible/roles/pihole/defaults/main.yml
+  s_34d62b03565fcb::t_2bc91893af57bc 1-94
+provision/ansible/roles/dotfiles/defaults/main.yml
+  s_b31125c8f400b1::t_808cb549271c5f 2-3
+  s_a0d6f1f9f1b4c0::t_bcef1f52166904 1,4-18
+provision/ansible/ansible.cfg
+  s_76e7bd1d70c5f1::t_cad9c9f3127815 20-22
+  s_7913aa60cf47ba::t_42b8397172761c 4
+  s_7913aa60cf47ba::t_1d9f76c11d4fce 3
+provision/ansible/roles/apt_upgrade/tasks/main.yml
+  s_7913aa60cf47ba::t_7ea35fbb5dc23b 1-12,14
+  s_7913aa60cf47ba::t_7ccefd780e1146 13,15
+provision/ansible/roles/dotfiles/files/init.vim
+  s_7913aa60cf47ba::t_bc0f66b53bbf75 37,68,146
+  s_a0d6f1f9f1b4c0::t_2aed61d1dbd605 1-36,38-67,69-145,147
+provision/ansible/roles/dotfiles/files/tmux.conf
+  s_a0d6f1f9f1b4c0::t_2aed61d1dbd605 1-83
+provision/ansible/roles/pihole/handlers/main.yml
+  s_34d62b03565fcb::t_6481c8e6b012bc 1-5
+provision/ansible/roles/gentoo_portage/tasks/package-use.yml
+  s_b31125c8f400b1::t_394b0df361d2a4 1-17
+provision/ansible/roles/dotfiles/files/zshrc-gentoo
+  s_fb64ed61bcd710::t_04f5d7288e21e5 1-9,11-291,300-301,304-310
+  s_7913aa60cf47ba::t_bc0f66b53bbf75 292-299,302-303
+  s_b31125c8f400b1::t_c7cc13f798902e 10
+provision/ansible/roles/k3s/tasks/agent.yml
+  s_3d0a11fd6e39e5::t_ea3008a6cea8f7 1,3,5-11,13
+  s_3d0a11fd6e39e5::t_a4c107157e6bbb 2,4,12
+provision/ansible/.python-version
+  s_7913aa60cf47ba::t_6f3b09f48c9666 1
+provision/ansible/roles/system/tasks/unattended-upgrades.yml
+  s_7913aa60cf47ba::t_c626619a0378bd 5,16
+provision/ansible/roles/gentoo_portage/files/package.accept_keywords/old/nnn
+  s_b31125c8f400b1::t_7de11c17654ed0 1
+provision/ansible/roles/gentoo_portage/files/package.accept_keywords/old/node_exporter
+  s_b31125c8f400b1::t_92eadb45c0fbe2 1
+.secrets.baseline
+  s_7913aa60cf47ba::t_bc0f66b53bbf75 449,462
+provision/ansible/roles/k3s/defaults/main.yml
+  s_3d0a11fd6e39e5::t_dec0859ba1f39c 1-18
+provision/ansible/requirements.txt
+  s_7913aa60cf47ba::t_2bf66ebfebaa61 1
+  s_7913aa60cf47ba::t_f7afd4906101e0 2
+provision/ansible/roles/k3s/meta/main.yml
+  s_3d0a11fd6e39e5::t_9ef11da8ae1a98 1-9
+provision/ansible/roles/dotfiles/files/fastfetch-config.jsonc
+  s_a0d6f1f9f1b4c0::t_2aed61d1dbd605 1-71
+provision/ansible/playbooks/base_setup.yml
+  s_7913aa60cf47ba::t_41a3387a067fef 3-4,12-13,16-19
+provision/ansible/roles/pihole/vars/main.yml
+  s_34d62b03565fcb::t_aa725c5e417298 1-20,25-36
+  s_7913aa60cf47ba::t_bec95dcec67624 21-24,37
+provision/ansible/roles/gentoo_portage/files/package.use/00cpu-flags
+  s_b31125c8f400b1::t_40a81563bca7fb 1
+provision/ansible/roles/gentoo_portage/tasks/make-conf.yml
+  s_b31125c8f400b1::t_eb01b242525841 1-8
+provision/ansible/roles/dotfiles/files/zsh-plugins/helm.zsh
+  s_a0d6f1f9f1b4c0::t_910c3a77301742 1-5
+provision/ansible/roles/pihole/tasks/adlists.yml
+  s_34d62b03565fcb::t_aefd32e0dad8e9 1,9-11,13,29
+  s_34d62b03565fcb::t_fa284acaf8ad49 2-5,8,12,14-15,17-28
+  s_7913aa60cf47ba::t_e42710f8e0c02d 6-7,16
+provision/ansible/group_vars/gentoo.yml
+  s_b31125c8f400b1::t_8837e35c5917bc 1-11
+provision/ansible/roles/system/tasks/journald.yml
+  s_7913aa60cf47ba::t_d77913694e6416 1-2,4-5
+  s_7913aa60cf47ba::t_e17336ad692d1a 3,6
+provision/ansible/group_vars/k3s_cluster/dotfiles.yml
+  s_76e7bd1d70c5f1::t_9198ad33dd1ca7 1-16
+provision/ansible/inventory.enc.yaml
+  s_7913aa60cf47ba::t_e0ad7ecaea741a 1-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "30e4dc5a6e1c56e528aafdef1f4ea320d9a18864",
+  "prompts": {},
+  "sessions": {
+    "s_34d62b03565fcb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eea6b332bffea2rR0nIO4tPp9D",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    },
+    "s_3d0a11fd6e39e5": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eea716b78ffe0uojlld1WmDatX",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    },
+    "s_55180b5bd74c18": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eea845065ffeBhZHxrHuvFkMll",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    },
+    "s_76e7bd1d70c5f1": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eea5d60cbffebl7CwiDfb90hkd",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    },
+    "s_7913aa60cf47ba": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eeacc13f7ffeFwx1BfMFmTf2uH",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    },
+    "s_a0d6f1f9f1b4c0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eea6b334bffe0BfrXIJDXaMudQ",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    },
+    "s_b31125c8f400b1": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eea5d60d3ffemaf0tnKWFCmYmC",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    },
+    "s_fb64ed61bcd710": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_eea5d60c0ffeU1m7VcNcFYFCP7",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
