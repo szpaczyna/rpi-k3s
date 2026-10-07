@@ -1,0 +1,31 @@
+provision/ansible/roles/k3s/tasks/registries.yml
+  s_148cdab35ce2ad::t_23859b5ecec792 15
+provision/ansible/README.md
+  s_148cdab35ce2ad::t_811a824fa9f5a4 162-163,165-167
+  s_148cdab35ce2ad::t_6cc5b128b99a9e 75,84-85
+  s_148cdab35ce2ad::t_958a4f5ac3095e 79-83
+provision/ansible/ansible.cfg
+  s_148cdab35ce2ad::t_9bc52b7beb86fb 16
+provision/ansible/.ansible-lint
+  s_148cdab35ce2ad::t_aa37759365704f 9
+provision/ansible/roles/k3s/tasks/main.yml
+  s_148cdab35ce2ad::t_e955e816e2ea23 2-6
+provision/ansible/roles/k3s/handlers/main.yml
+  s_148cdab35ce2ad::t_9bae78d58cf19a 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8c41b692032193a817febf28df8ebeea9322e56f",
+  "prompts": {},
+  "sessions": {
+    "s_148cdab35ce2ad": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_7d5f2105-6130-4fb9-817a-c459d08f18b1",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
