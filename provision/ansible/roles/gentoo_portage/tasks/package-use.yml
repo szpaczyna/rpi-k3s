@@ -1,0 +1,17 @@
+---
+- name: Create package.use directory
+  ansible.builtin.file:
+    path: /etc/portage/package.use
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Package use files
+  ansible.builtin.copy:
+    src: "package.use/{{ item }}"
+    dest: "/etc/portage/package.use/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ gentoo_portage_package_use }}"

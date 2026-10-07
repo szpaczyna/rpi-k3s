@@ -1,0 +1,21 @@
+---
+# check_mode: false — this is a read, Ansible must still run it under
+# --check so the drift comparison below has real data to compare against.
+- name: Read current pihole-FTL database config scalars
+  ansible.builtin.command:
+    cmd: "pihole-FTL --config {{ item.key }}"
+  register: pihole_database_scalar_current
+  changed_when: false
+  check_mode: false
+  loop: "{{ pihole_database_scalars }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Set pihole-FTL database config scalars that drifted from desired value
+  ansible.builtin.command:
+    cmd: "pihole-FTL --config {{ item.item.key }} {{ item.item.value }}"
+  loop: "{{ pihole_database_scalar_current.results }}"
+  loop_control:
+    label: "{{ item.item.key }}"
+  when: item.stdout | trim != (item.item.value | string)
+  changed_when: true

@@ -1,0 +1,8 @@
+---
+profile: production
+exclude_paths:
+  # SOPS-encrypted files (repo convention: *.enc.<ext>): ciphertext lines
+  # routinely exceed the yaml line-length rule and are not meant to be
+  # read/linted as plaintext YAML.
+  - "**/*.enc.yaml"
+  - "**/*.enc.yml"

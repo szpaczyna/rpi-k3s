@@ -1,0 +1,13 @@
+---
+- name: Install k3s agent # noqa: command-instead-of-module
+  ansible.builtin.shell: >
+    set -o pipefail &&
+    curl -sfL https://get.k3s.io |
+    INSTALL_K3S_VERSION={{ k3s_version }}
+    K3S_URL="https://{{ hostvars[groups['k3s_master'][0]].inventory_hostname }}:6443"
+    K3S_TOKEN="{{ hostvars[groups['k3s_master'][0]].k3s_token }}"
+    INSTALL_K3S_EXEC="agent --data-dir {{ k3s_data_dir }} --log {{ k3s_agent_log_file }}"
+    sh -s -
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/k3s

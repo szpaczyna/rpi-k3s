@@ -1,0 +1,14 @@
+---
+- name: Create /etc/rancher/k3s directory
+  ansible.builtin.file:
+    path: /etc/rancher/k3s
+    state: directory
+    mode: "0755"
+
+- name: Deploy Docker registry credentials
+  ansible.builtin.template:
+    src: registries.yaml.j2
+    dest: /etc/rancher/k3s/registries.yaml
+    mode: "0600"
+    owner: root
+    group: root

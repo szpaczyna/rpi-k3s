@@ -1,0 +1,16 @@
+---
+- name: Create package.mask directory
+  ansible.builtin.file:
+    path: /etc/portage/package.mask
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Package mask file
+  ansible.builtin.copy:
+    src: package.mask/sys-kernel
+    dest: /etc/portage/package.mask/sys-kernel
+    owner: root
+    group: root
+    mode: "0644"

@@ -1,0 +1,16 @@
+---
+- name: Zsh configuration
+  ansible.builtin.include_tasks: zsh.yml
+  tags: ['zsh']
+
+- name: Tmux configuration
+  ansible.builtin.include_tasks: tmux.yml
+  tags: ['tmux']
+
+- name: Fastfetch configuration
+  ansible.builtin.include_tasks: fastfetch.yml
+  tags: ['fastfetch']
+
+- name: Neovim and vim configuration
+  ansible.builtin.include_tasks: nvim.yml
+  tags: ['nvim']

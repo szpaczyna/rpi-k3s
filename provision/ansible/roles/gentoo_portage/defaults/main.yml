@@ -1,0 +1,15 @@
+---
+gentoo_portage_package_use:
+  - 00cpu-flags
+  - portage
+  - gcc
+
+gentoo_portage_package_accept_keywords:
+  - mkstage4
+  - fzf
+  - rpi-kernel
+  - node_exporter
+  - zsh
+  - grc
+  - nnn
+  - filebeat

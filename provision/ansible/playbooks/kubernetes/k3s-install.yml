@@ -1,23 +1,18 @@
 ---
-- hosts: k3s_cluster
+- name: Install k3s cluster
+  hosts: k3s_cluster
   become: true
   gather_facts: true
   any_errors_fatal: true
   pre_tasks:
     - name: Pausing for 5 seconds...
-      pause:
+      ansible.builtin.pause:
         seconds: 5
   tasks:
-    - name: Check if cluster is installed
-      ansible.builtin.stat:
-        path: "/etc/rancher/k3s/config.yaml"
-      register: k3s_check_installed
-      check_mode: false
-
     - name: Install Kubernetes
-      include_role:
-        name: xanmanning.k3s
-        public: yes
+      ansible.builtin.include_role:
+        name: k3s
+        public: true
 
     - name: Copy kubeconfig locally to /tmp
       run_once: true
@@ -25,15 +20,60 @@
         src: "/etc/rancher/k3s/k3s.yaml"
         dest: "/tmp/kubeconfig"
         flat: true
-      when:
-        - k3s_control_node is defined
-        - k3s_control_node
+      when: "'k3s_master' in group_names"
 
-    - name: Update kubeconfig with the right IPv4 address
+    - name: Rewrite kubeconfig cluster name and server address
       delegate_to: localhost
       become: false
       run_once: true
-      ansible.builtin.replace:
+      ansible.builtin.command:
+        cmd: >-
+          python3 -c "
+          import yaml;
+          f = '/tmp/kubeconfig';
+          c = yaml.safe_load(open(f));
+          c['clusters'][0]['cluster']['server'] = 'https://{{ k3s_registration_address }}:6443';
+          c['clusters'][0]['name'] = 'rpi-k3s';
+          c['contexts'][0]['name'] = 'rpi-k3s';
+          c['contexts'][0]['context']['cluster'] = 'rpi-k3s';
+          c['current-context'] = 'rpi-k3s';
+          yaml.safe_dump(c, open(f, 'w'), default_flow_style=False, sort_keys=False)
+          "
+      changed_when: true
+
+    - name: Check for existing local kubeconfig
+      delegate_to: localhost
+      become: false
+      run_once: true
+      ansible.builtin.stat:
+        path: "{{ lookup('env', 'HOME') }}/.kube/config-k3s"
+      register: k3s_local_kubeconfig
+
+    - name: Backup existing local kubeconfig
+      delegate_to: localhost
+      become: false
+      run_once: true
+      ansible.builtin.copy:
+        src: "{{ lookup('env', 'HOME') }}/.kube/config-k3s"
+        dest: "{{ lookup('env', 'HOME') }}/.kube/config-k3s.bak"
+        mode: "0600"
+        remote_src: true
+      when: k3s_local_kubeconfig.stat.exists
+
+    - name: Copy processed kubeconfig to local ~/.kube/config-k3s
+      delegate_to: localhost
+      become: false
+      run_once: true
+      ansible.builtin.copy:
+        src: "/tmp/kubeconfig"
+        dest: "{{ lookup('env', 'HOME') }}/.kube/config-k3s"
+        mode: "0600"
+        remote_src: true
+
+    - name: Remove temporary kubeconfig
+      delegate_to: localhost
+      become: false
+      run_once: true
+      ansible.builtin.file:
         path: "/tmp/kubeconfig"
-        regexp: "https://127.0.0.1:6443"
-        replace: "https://{{ k3s_registration_address }}:6443"
+        state: absent

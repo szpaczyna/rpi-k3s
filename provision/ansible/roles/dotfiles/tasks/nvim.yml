@@ -1,0 +1,66 @@
+---
+- name: Install neovim package
+  ansible.builtin.apt:
+    name: neovim
+    install_recommends: false
+  register: dotfiles_apt_neovim
+  retries: 5
+  until: dotfiles_apt_neovim is success
+  when: "'gentoo' not in group_names"
+
+- name: Create nvim config directory
+  ansible.builtin.file:
+    path: "/{{ ansible_user }}/.config/nvim"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0755"
+
+- name: Neovim init.vim
+  ansible.builtin.copy:
+    src: "{{ dotfiles_nvim_init_src }}"
+    dest: "/{{ ansible_user }}/.config/nvim/init.vim"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0644"
+
+- name: Create vim-plug autoload directory
+  ansible.builtin.file:
+    path: "/{{ ansible_user }}/.local/share/nvim/site/autoload"
+    state: directory
+    recurse: true
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0755"
+
+# Under --check, the directory task above never actually creates anything,
+# so get_url below would otherwise fail against a destination that "doesn't
+# exist yet" purely because of check mode, not because the role is wrong.
+- name: Install vim-plug
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: "/{{ ansible_user }}/.local/share/nvim/site/autoload/plug.vim"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0644"
+    force: false
+  when: not ansible_check_mode
+
+- name: Check if vim-plug plugins are already installed
+  ansible.builtin.stat:
+    path: "/{{ ansible_user }}/.config/nvim/plugged"
+  register: dotfiles_nvim_plugged_dir
+
+- name: Install vim-plug plugins
+  ansible.builtin.command: nvim --headless +PlugInstall +qall
+  changed_when: not dotfiles_nvim_plugged_dir.stat.exists
+  when: not dotfiles_nvim_plugged_dir.stat.exists
+
+- name: Symlink .vimrc to nvim init.vim
+  ansible.builtin.file:
+    src: "/{{ ansible_user }}/.config/nvim/init.vim"
+    dest: "/{{ ansible_user }}/.vimrc"
+    state: link
+    force: true
+    owner: "{{ ansible_user }}"
+    group: root

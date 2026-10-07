@@ -18,6 +18,13 @@ repos:
     entry: scripts/sops-check.sh
     language: system
     files: '\.enc\.'
+  - id: ansible-lint
+    name: ansible-lint (provision/ansible)
+    entry: sh -c 'cd provision/ansible && ansible-lint --profile production .'
+    language: system
+    files: '^provision/ansible/'
+    types: [yaml]
+    pass_filenames: false
 - repo: https://github.com/adrienverge/yamllint.git
   rev: v1.35.1
   hooks:

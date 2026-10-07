@@ -1,0 +1,5 @@
+---
+- name: Reload pihole gravity
+  ansible.builtin.command:
+    cmd: pihole -g
+  changed_when: true

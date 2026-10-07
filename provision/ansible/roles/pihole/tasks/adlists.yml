@@ -1,0 +1,29 @@
+---
+# pihole-FTL has no "add adlist idempotently" subcommand in v6; adlists live in
+# gravity.db (table adlist, UNIQUE(address, type)). ON CONFLICT DO UPDATE always
+# reports a change via changes() even as a no-op, so idempotency is done the same
+# way as the config tasks: read current enabled state first, only write on drift.
+# check_mode: false — this is a read, Ansible must still run it under
+# --check so the drift comparison below has real data to compare against.
+- name: Read current enabled state of pihole adlists
+  ansible.builtin.command:
+    cmd: >-
+      sqlite3 /etc/pihole/gravity.db
+      "SELECT enabled FROM adlist WHERE address='{{ item }}' AND type=0;"
+  loop: "{{ pihole_adlists }}"
+  register: pihole_adlist_current
+  changed_when: false
+  check_mode: false
+
+- name: Upsert pihole adlists that are missing or disabled
+  ansible.builtin.command:
+    cmd: >-
+      sqlite3 /etc/pihole/gravity.db
+      "INSERT INTO adlist (address, enabled) VALUES ('{{ item.item }}', 1)
+      ON CONFLICT(address, type) DO UPDATE SET enabled=1;"
+  loop: "{{ pihole_adlist_current.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stdout | trim != '1'
+  changed_when: true
+  notify: Reload pihole gravity

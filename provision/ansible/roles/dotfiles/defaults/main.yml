@@ -1,0 +1,18 @@
+---
+dotfiles_zshrc_src: zshrc
+dotfiles_nvim_init_src: init.vim
+dotfiles_zsh_plugins:
+  - colorize.zsh
+  - forgit.zsh
+  - fzf-completion.zsh
+  - fzf-key-bindings.zsh
+  - fzf-tab.zsh
+  - git.zsh
+  - grc.zsh
+  - helm.zsh
+  - kubectl.zsh
+  - kubetail.zsh
+  - l.plugin.zsh
+  - ls-colors.zsh
+  - zsh_reload.zsh
+  - zsh-z.plugin.zsh

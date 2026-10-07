@@ -1,0 +1,6 @@
+---
+- name: Disable system modules
+  ansible.builtin.template:
+    src: modules/hardening.conf.j2
+    dest: /etc/modprobe.d/hardening.conf
+    mode: "0640"

@@ -1,0 +1,94 @@
+---
+pihole_upstreams:
+  - '1.1.1.1'
+  - '1.0.0.1'
+  - '8.8.8.8'
+  - '8.8.4.4'
+  - '208.67.222.222'
+  - '208.67.220.220'
+
+pihole_hosts:
+  - '10.0.0.1 unifi.home'
+  - '10.0.0.2 blueberry.home'
+  - '10.0.0.3 blueberry_wlan.home'
+  - '10.0.0.4 greyhound.home'
+  - '10.0.0.6 tv.home'
+  - '10.0.0.7 printer.home'
+  - '10.0.0.8 sonos.home'
+  - '10.0.0.9 rpi-k3s-master-00.home'
+  - '10.0.0.11 rpi-k3s-worker-00.home'
+  - '10.0.0.12 rpi-k3s-worker-01.home'
+  - '10.0.0.13 rpi-k3s-worker-02.home'
+  - '10.0.0.20 greypi.home'
+  - '10.0.0.21 whitepi.home'
+  - '10.0.0.22 redpi.home'
+  - '10.0.0.23 blackpi.home'
+  - '10.0.0.30 u7.home'
+  - '10.0.0.42 psql.home'
+  - '10.0.0.43 influxdb.home'
+  - '10.0.0.44 gentoo.home'
+  - '10.0.0.45 transmission.home'
+  - '10.0.0.47 prometheus.home'
+  - '10.0.0.48 longhorn.home'
+  - '10.0.0.41 gitea-ssh.home'
+  - '10.0.0.40 traefik.home'
+
+pihole_cname_records:
+  - 'grafana.shpaq.org,traefik.home'
+  - 'bitwarden.shpaq.org,traefik.home'
+  - 'cloud.shpaq.org,traefik.home'
+  - 'kanboard.shpaq.org,traefik.home'
+  - 'gitea.shpaq.org,traefik.home'
+  - 'shpaq.org,traefik.home'
+  - 'whoops.shpaq.org,traefik.home'
+  - 'booklore.shpaq.org,traefik.home'
+  - 'media.shpaq.org,traefik.home'
+  - 'auth.shpaq.org,traefik.home'
+
+pihole_rev_servers:
+  - 'true,10.0.0.0/24,10.0.0.1,home'
+
+pihole_dns_cname_deep_inspect: true
+pihole_dns_block_esni: true
+pihole_dns_show_dnssec: true
+pihole_dns_block_ttl: 2
+pihole_dns_domain_needed: true
+pihole_dns_expand_hosts: true
+pihole_dns_interface: 'eth0'
+pihole_dns_listening_mode: 'LOCAL'
+pihole_dns_query_logging: true
+pihole_dns_pihole_ptr: 'HOSTNAME'
+pihole_dns_reply_when_busy: 'ALLOW'
+pihole_dns_bogus_priv: true
+pihole_dns_dnssec: false
+pihole_dns_localise: true
+
+pihole_dns_rate_limit_count: 0
+pihole_dns_rate_limit_interval: 0
+
+pihole_database_max_db_days: 91
+pihole_database_db_import: true
+pihole_database_db_interval: 60
+
+pihole_webserver_port: '80,443s,[::]:80,[::]:443s'
+pihole_webserver_tls_cert: '/etc/pihole/tls.pem'
+pihole_webserver_interface_boxed: false
+pihole_webserver_api_exclude_domains:
+  - '\\.morphine$'
+  - '\\.localhost$'
+  - '\\.home$'
+  - '\\.localdomain$'
+
+pihole_adlists:
+  - 'https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts'
+  - 'https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.mini.txt'
+  - 'https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt'
+  - 'https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts'
+  - 'https://v.firebog.net/hosts/static/w3kbl.txt'
+  - 'https://adaway.org/hosts.txt'
+  - 'https://v.firebog.net/hosts/Admiral.txt'
+  - 'https://v.firebog.net/hosts/Easyprivacy.txt'
+  - 'https://v.firebog.net/hosts/Prigent-Ads.txt'
+  - 'https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt'
+  - 'https://big.oisd.nl'
+  - 'https://v.firebog.net/hosts/Easylist.txt'

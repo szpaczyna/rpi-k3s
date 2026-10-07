@@ -1,0 +1,31 @@
+## ---MAIN--- ##
+COMMON_FLAGS="-march=armv8-a+crc -mtune=cortex-a53 -ftree-vectorize -O2 -pipe -fomit-frame-pointer"
+CFLAGS="${COMMON_FLAGS}"
+CXXFLAGS="${COMMON_FLAGS}"
+FCFLAGS="${COMMON_FLAGS}"
+FFLAGS="${COMMON_FLAGS}"
+LDFLAGS="${LDFLAGS} -Wl,--sort-common"
+MAKEOPTS="-j10 -l4"
+
+## ---PORTAGE--- ##
+FEATURES="${FEATURES} parallel-fetch protect-owned fail-clean -parse-eapi-ebuild-head"
+PORTAGE_RSYNC_RETRIES="3"
+PORTAGE_RSYNC_EXTRA_OPTS="--progress --verbose"
+AUTOCLEAN="yes"
+CLEAN_DELAY="10"
+PORTAGE_NICENESS="19"
+ACCEPT_LICENSE='*'
+ACCEPT_KEYWORDS="~arm64"
+EMERGE_DEFAULT_OPTS="--keep-going --quiet-build=n --buildpkg"
+PORTAGE_ECLASS_WARNING_ENABLE="0"
+
+## ---PYTHON--- ##
+PYTHON_TARGETS="python3_13 python3_14"
+PYTHON_SINGLE_TARGET="python3_14"
+
+## ---LOG--- #
+PORTAGE_ELOG_SYSTEM="save"
+PORTAGE_ELOG_CLASSES="warn error info log qa"
+
+## ---MISC--- ##
+INSTALL_MASK="/usr/lib/systemd/"

@@ -1,0 +1,30 @@
+---
+system_apt_install_packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - dnsutils
+  - git
+  - gnupg2
+  - htop
+  - iputils-ping
+  - libnss-mdns
+  - neofetch
+  - net-tools
+  - nfs-common
+  - nmap
+  - psmisc
+  - python3
+  - python3-pip
+  - rsync
+  - software-properties-common
+  - mtr
+  - unattended-upgrades
+  - wget
+  - chrony
+  - pigz
+  - pv
+  - zsh
+  - util-linux
+
+system_apt_remove_packages: []

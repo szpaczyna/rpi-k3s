@@ -1,0 +1,14 @@
+---
+- name: Install and configure k3s server
+  ansible.builtin.include_tasks: server.yml
+  when: "'k3s_master' in group_names"
+  tags: ['k3s_server']
+
+- name: Install and configure k3s agent
+  ansible.builtin.include_tasks: agent.yml
+  when: "'k3s_worker' in group_names"
+  tags: ['k3s_agent']
+
+- name: Deploy Docker registry configuration
+  ansible.builtin.include_tasks: registries.yml
+  tags: ['registries']

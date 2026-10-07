@@ -1,0 +1,12 @@
+---
+- name: Restart chrony service
+  ansible.builtin.systemd:
+    name: chrony
+    enabled: true
+    state: restarted
+
+- name: Enable chrony service and assure it is started
+  ansible.builtin.systemd:
+    name: chrony
+    enabled: true
+    state: started

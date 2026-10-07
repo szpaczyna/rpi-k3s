@@ -1,0 +1,52 @@
+all:
+    children:
+        k3s_cluster:
+            children:
+                k3s_master:
+                    hosts:
+                        rpi-k3s-master-00:
+                            ansible_host: ENC[AES256_GCM,data:WYuYNeA1m24=,iv:tam8uOR8RNEtqlgpcvZAio0pVf2RvxBllX2KHvbqkhQ=,tag:DyGNA711OMaseb20Jf9lWQ==,type:str]
+                k3s_worker:
+                    hosts:
+                        rpi-k3s-worker-00:
+                            ansible_host: ENC[AES256_GCM,data:+/SLEDwHpoVC,iv:ux2GDpqKjTndLSK/QMpr25hNCBe5gAyukrXu34yuJq4=,tag:XZfK0MpD4uNHz9saou2scw==,type:str]
+                        rpi-k3s-worker-01:
+                            ansible_host: ENC[AES256_GCM,data:+BEtB3i2Swnm,iv:wmguBdM7jJPyzwJtqyCt35RpeufeHBSCQCOULCQeP1M=,tag:Jimnz+jDrgxa9B1mlpzhmg==,type:str]
+                        rpi-k3s-worker-02:
+                            ansible_host: ENC[AES256_GCM,data:8EahKY9YG/Yx,iv:plqnpastjMIgont+S5OewTwcN51F2nseh7g8oW3fflM=,tag:L6p0xMfJIJw2cvXYQEOLEg==,type:str]
+        pihole:
+            hosts:
+                blueberry:
+                    ansible_host: ENC[AES256_GCM,data:MoVPc/dbbeI=,iv:jn71WRUnuXlsf/GcE8vG4ni7HxfqA/5sXojtFE8EaRg=,tag:WR425aLAwoIV/h4MSqxtcw==,type:str]
+        gentoo:
+            hosts:
+                whitepi:
+                    ansible_host: ENC[AES256_GCM,data:N10S1JgPH1W4,iv:GEtPz/tz0+GwlUqTJVN9usmpS7ekdE5+G8ff0LcMHrs=,tag:EPKJfGK0yWJC8Nr903l/mA==,type:str]
+                redpi:
+                    ansible_host: ENC[AES256_GCM,data:d1FizD5r9L93,iv:jwuYQIa6AEELlVcVTGOKxeQRvlNXneKssBYWX91uDtU=,tag:JhM8GkzYm8ATj+DYo97tIg==,type:str]
+sops:
+    lastmodified: "2026-10-07T08:26:52Z"
+    mac: ENC[AES256_GCM,data:x63rkNkyDKT0sIAS+N3Tclj6liI7a3eL9pFnKBVe9eHHOplNUoW8AfMt5ZvjaMvsgEthxrCTZ5by7ddCdT0LfJi1PQvu9fULuUKF7huSbMrYwPVJBoRpZwpP4ngT+Tgs5FIangbwJoOdbfS6yyEgQXZbmeHD1pv6EI5RtdZ2svM=,iv:m2iOcXjvagya/b5fnRGO1PUWsgMBhWKu5DfGu45U+yk=,tag:EIyNKqgRcSxiHVgzDQRWCg==,type:str]
+    pgp:
+        - created_at: "2026-10-07T08:26:52Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hQIMA4APDMemWJ+LAQ/+MJ1ZBzD/e93zP13BK057eWIcMjJ+IJLiGH2aCWrStvxs
+            6lF9uFxmoSAzukBfvW+g+UA+XDPljoTwbe/7NXZwmD5y9FTU8+VEWJaX+OzBuDZs
+            mkhg774Hd0yHl6BPHlgwckXxqFsA74kYEAaYFC01ONxCe9pcuaHznsxmqddHaH48
+            pF5IM8BK71CLlu8a/vfk3TF0PWoZDGTxTKcvqKV72cqtyRPkiFn71nxXUD+/wHGl
+            6jJhca2giGq1I/OZpxMSIve6B3w0/QAMRefQjZo6jcDPcDurIdzgoxYnZnO+sXMq
+            PKyK17Dbpm3/8ZqrbSRYTKjQmBw3DvA55AcKOV0Nm97erfj0E+9nmcduakgUTbKH
+            TsH8GZhEBZCA6KnhsY1Lp0F9wOvggVc6Ax1UMFB6zbnXVRYTkyCZivQlpB2P6v7P
+            pgcpMsId3Gdx3zou+DIedyacA4rJXmi2ykGW9TyhzFD5ed4nanAiMiAC6D3X1hCW
+            OXNHLX8Kk/BvCCmsj88VuCoQ2Xb9hBhHS7kR8xOpeKugoQMVQLeDHhz36YwF6wp9
+            mwFslnGaPTp2dqoBMFlv+v3uyeixr/0Wsq1Q+ApNyz+Dd08wCQXhg/kQiIuX4qt0
+            +07gjbP97IHbAQd+aF5tir6yO0MgkZsj8q7WnX58JKoBSaG1yqAul0hUnT526MDS
+            XgHXEV2IS0b27q93MCiWjJ+Mq6WpPnf0BzEo4eu/i6uX88gG1+fAeXHbUUJLoeOr
+            l8l0WNwCGa8JZENHKa3R87EoxUhwxvEZ/j7qQ+Eo1gNJA12MUpIJXyK6/t/eu/4=
+            =AINg
+            -----END PGP MESSAGE-----
+          fp: D6380604E0A09E002380524F0AECB9DCA67CB14C
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3

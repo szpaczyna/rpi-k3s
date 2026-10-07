@@ -1,0 +1,16 @@
+---
+- name: Create fastfetch config directory
+  ansible.builtin.file:
+    path: "/{{ ansible_user }}/.config/fastfetch"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0755"
+
+- name: Fastfetch configuration
+  ansible.builtin.copy:
+    src: fastfetch-config.jsonc
+    dest: "/{{ ansible_user }}/.config/fastfetch/config.jsonc"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0644"
