@@ -1,0 +1,270 @@
+#compdef pyenv
+# ------------------------------------------------------------------------------
+#
+# Description
+# -----------
+#  Completion script for the pyenv command
+#  (https://github.com/pyenv/pyenv)
+#
+# Authors
+# -------
+#
+#  * Christo Kotzé <onaforeignshore@gmail.com>
+#
+# ------------------------------------------------------------------------------
+
+# pyenv currently uses compctl completion.
+# To use this file instead, you need to do the following:
+# 1. Download this file and place it in a folder
+# 2. Make sure that this folder is available on the fpath
+# > fpath=(/new/folder $fpath)
+# 3. Remove the old completion system
+# > unfunction _pyenv
+# 4. Load this completion file
+# > autoload -U _pyenv
+#
+# Note:
+# You can add steps 2-4 in your .zshrc file to automate this.
+
+typeset -A opt_args
+local state cmd
+local curcontext="$curcontext"
+
+# populate lists
+(( ${+virtualenv} )) ||
+virtualenvs=(${(f)"$(pyenv virtualenvs --bare)"})
+
+(( ${+availableVersions} )) || {
+    availableVersions=(${(f)"$(pyenv install --list)"#  })
+    shift availableVersions # remove 'Available versions:' header
+    availableVersions=( "${availableVersions[@]//((#s)[[:space:]]##|[[:space:]]##(#e))/}" ) # remove leading and trailing spaces
+}
+
+(( ${+installedVersions} )) ||
+installedVersions=(${(f)"$(pyenv versions --bare)"})
+
+
+_pyenv() {
+    local ret=1
+
+    _arguments -A "-*" \
+        '(- *)--help[Display help for a command]' \
+        '1: :_pyenv_subcommands' \
+        '*::arg:->args' \
+    && ret=0
+
+    if [[ "$state" == "args" ]]; then
+        local -a cmds=(
+            activate help install latest local shell shims uninstall
+            versions virtualenv virtualenv-delete virtualenvs whence which
+        )
+        cmds=( ${(M)cmds:#${words[1]}*} )
+        if (( ${#cmds} == 1 )) || [[ $cmds[1] = install ]]; then
+            cmd="$cmds[1]"
+            curcontext="${curcontext%:*:*}:pyenv-${cmd}:"
+            _call_function - _pyenv_${cmd//-/_} || _message 'no more arguments'
+        else
+            _message "unknown pyenv command: $words[1]"
+        fi
+    fi
+
+    return ret
+}
+
+#####
+# Helper completers
+#
+
+(( $+functions[_pyenv_subcommands] )) ||
+_pyenv_subcommands() {
+    local -a commands=(
+        '--version:Display the version of pyenv'
+        'commands:List all available pyenv commands'
+        'exec:Run an executable with the selected Python version'
+        'global:Set or show the global Python version(s)'
+        'help:Display help for a command'
+        'hooks:List hook scripts for a given pyenv command'
+        'init:Configure the shell environment for pyenv'
+        'install:Install a Python version using python-build'
+        'latest:Print the latest installed or known version with the given prefix'
+        'local:Set or show the local application-specific Python version(s)'
+        'prefix:Display prefixes for Python versions'
+        'rehash:Rehash pyenv shims (run this after installing executables)'
+        'root:Display the root directory where versions and shims are kept'
+        'shell:Set or show the shell-specific Python version'
+        'shims:List existing pyenv shims'
+        'uninstall:Uninstall Python versions'
+        'version:Show the current Python version(s) and its origin'
+        'version-file:Detect the file that sets the current pyenv version'
+        'version-name:Show the current Python version'
+        'version-origin:Explain how the current Python version is set'
+        'versions:List all Python versions available to pyenv'
+        'whence:List all Python versions that contain the given executable'
+        'which:Display the full path to an executable'
+    )
+    [[ $debug ]] && commands+="$curcontext"
+    _describe -t commands 'command' commands "$@"
+}
+
+# Add new completion functions for the added commands
+(( $+functions[_pyenv_version_name] )) ||
+_pyenv_version_name() {
+    _message 'no more arguments'
+}
+
+(( $+functions[_pyenv_version_origin] )) ||
+_pyenv_version_origin() {
+    _message 'no more arguments'
+}
+
+(( $+functions[_pyenv_versions] )) ||
+_pyenv_versions() {
+    local -a args=(
+        '--bare[List versions without prefix]'
+        '--skip-aliases[Skip aliases in the version list]'
+    )
+    _arguments -S $args[@]
+}
+
+(( $+functions[_pyenv_help] )) ||
+_pyenv_help() {
+    _arguments -A "-*" \
+    '(- *)--help[Display help for a command]' \
+    '1: :_pyenv_subcommands'
+}
+
+(( $+functions[_pyenv_activate] )) ||
+_pyenv_activate() {
+    (( $CURRENT == 3 )) && return
+    [[ "${words[2]}" == "--unset" ]] && return
+    local -a args=(
+        '--unset[Unsets the activated virtualenv]'
+    )
+    _arguments -S -A "-*" $args[@]
+    _describe -t versions 'versions' virtualenvs "$@"
+}
+
+(( $+functions[_pyenv_install] )) ||
+_pyenv_install() {
+    if  [[ "${words[2]}" == "--list" ]] || \
+        [[ "${words[2]}" == "--version" ]] || \
+        [[ "${words[2]}" == "-l" ]] ||
+        [[ "${words[2]}" == "-v" ]]; then
+            return
+    fi
+    local -a args=(
+        '(-l --list)'{-l,--list}'[List all available versions]'
+        '(-f --force)'{-f,--force}'[Install even if the version appears to be installed already]'
+        '(-s --skip-existing)'{-s,--skip-existing}'[Skip if the version appears to be installed already]'
+        '(-k --keep)'{-k,--keep}'[Keep source tree in $PYENV_BUILD_ROOT after installation (defaults to $PYENV_ROOT/sources)]'
+        '(-p --patch)'{-p,--patch}'[Apply a patch from stdin before building]'
+        '(-v --verbose)'{-v,--verbose}'[Verbose mode: print compilation status to stdout]'
+        '(-g --debug)'{-g,--debug}'[Build a debug version]'
+        '--version[Show version of python-build]'
+    )
+    _arguments -S -s $args[@]
+    _describe -t versions 'versions' availableVersions "$@"
+}
+
+(( $+functions[_pyenv_latest] )) ||
+_pyenv_latest() {
+    local -a args=(
+        '(-k --known)'{-k,--known}'[Select from all known versions instead of installed]'
+    )
+    local -a commands=(
+        '2'
+        '3'
+    )
+    _arguments -S $args[@]
+    _describe -t commands 'command' commands "$@"
+}
+
+(( $+functions[_pyenv_local] )) ||
+_pyenv_local() {
+    if [[ $words[2] != "--unset" ]]; then
+        local -a args=(
+            '(-f --force)'{-f,--force}'[Do not verify that the versions being set exist]'
+            '--unset[Unset the current version]'
+        )
+        _arguments -S $args[@]
+        _describe -t versions 'version' installedVersions "$@"
+    fi
+}
+
+(( $+functions[_pyenv_shell] )) ||
+_pyenv_shell() {
+    if [[ $words[2] != "--unset" ]]; then
+        local -a args=(
+            '-[Restore previously set version]'
+            '--unset[Unset `PYENV_VERSION` (restoring environment state to before first `pyenv shell` call)]'
+        )
+        _arguments -S $args[@]
+        _describe -t versions 'version' virtualenvs "$@"
+    fi
+}
+
+(( $+functions[_pyenv_uninstall] )) ||
+_pyenv_uninstall() {
+    local -a args=(
+        '(-f --force)'{-f,--force}'[Do not verify that the versions being set exist]'
+    )
+    _arguments -S $args[@]
+    _describe -t versions 'version' installedVersions "$@"
+}
+
+(( $+functions[_pyenv_versions] )) ||
+_pyenv_versions() {
+    local -a args=(
+        '--bare[List versions without prefix]'
+        '--skip-aliases[Skip aliases in the version list]'
+    )
+    _arguments -S $args[@]
+}
+
+(( $+functions[_pyenv_virtualenv] )) ||
+_pyenv_virtualenv() {
+    local -a args=(
+        '(-f --force)'{-f,--force}'[Install even if the version appears to be installed already. Skip prompting for confirmation]'
+        '--version[Show version of pyenv-virtualenv]'
+    )
+    _arguments -S $args[@]
+}
+
+(( $+functions[_pyenv_virtualenv_delete] )) ||
+_pyenv_virtualenv_delete() {
+    local -a args=(
+        '(-f --force)'{-f,--force}'[Attempt to remove the specified virtualenv without prompting for confirmation]'
+    )
+    _arguments -S $args[@]
+    _describe -t versions 'versions' virtualenvs "$@"
+}
+
+(( $+functions[_pyenv_virtualenvs] )) ||
+_pyenv_virtualenvs() {
+    local -a args=(
+        '--bare[Show paths only]'
+        '--skip-aliases[Do not show versions that are aliases]'
+    )
+    _arguments -S $args[@]
+}
+
+(( $+functions[_pyenv_whence] )) ||
+_pyenv_whence() {
+    local -a args=(
+        '(- *)--help[Display help for a command]'
+        '--path[List all Python versions that contain the given executable (show full path)]'
+    )
+    _arguments -S $args[@]
+}
+
+(( $+functions[_pyenv_which] )) ||
+_pyenv_which() {
+    local -a args=(
+        '(- *)--help[Display help for a command]'
+        '--nosystem[when you don''t need to search command in the
+        system environment]'
+    )
+    _arguments -S $args[@]
+}
+
+_pyenv "$@"

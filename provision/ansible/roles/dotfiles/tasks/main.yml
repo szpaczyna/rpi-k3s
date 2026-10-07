@@ -1,4 +1,8 @@
 ---
+- name: Shell tooling packages
+  ansible.builtin.include_tasks: packages.yml
+  tags: ['dotfiles-packages']
+
 - name: Zsh configuration
   ansible.builtin.include_tasks: zsh.yml
   tags: ['zsh']

@@ -1,21 +1,4 @@
 ---
-- name: Install zsh-syntax-highlighting package
-  ansible.builtin.apt:
-    name: zsh-syntax-highlighting
-    install_recommends: false
-  register: dotfiles_apt_zsh_syntax_highlighting
-  retries: 5
-  until: dotfiles_apt_zsh_syntax_highlighting is success
-  when: "'gentoo' not in group_names"
-
-- name: Zshrc
-  ansible.builtin.copy:
-    src: "{{ dotfiles_zshrc_src }}"
-    dest: "/{{ ansible_user }}/.zshrc"
-    owner: "{{ ansible_user }}"
-    group: root
-    mode: "0644"
-
 - name: Create zsh plugins directory
   ansible.builtin.file:
     path: "/{{ ansible_user }}/.zsh/plugins"
@@ -24,6 +7,18 @@
     group: root
     mode: "0755"
 
+- name: Zsh config files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "/{{ ansible_user }}/{{ item.dest }}"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0644"
+  loop:
+    - { src: zshrc.j2, dest: .zshrc }
+    - { src: zshenv.j2, dest: .zsh/zshenv }
+    - { src: alias.j2, dest: .zsh/alias }
+
 - name: Zsh plugins
   ansible.builtin.copy:
     src: "zsh-plugins/{{ item }}"
@@ -31,4 +26,23 @@
     owner: "{{ ansible_user }}"
     group: root
     mode: "0644"
-  loop: "{{ dotfiles_zsh_plugins }}"
+  loop: "{{ dotfiles_zsh_plugins + dotfiles_zsh_plugins_extra }}"
+
+- name: Create zsh completion directory
+  ansible.builtin.file:
+    path: "/{{ ansible_user }}/.zsh/plugins/completion"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0755"
+  when: "'gentoo' not in group_names"
+
+- name: Zsh completions
+  ansible.builtin.copy:
+    src: "zsh-plugins/completion/{{ item }}"
+    dest: "/{{ ansible_user }}/.zsh/plugins/completion/{{ item }}"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0644"
+  loop: "{{ dotfiles_zsh_completions }}"
+  when: "'gentoo' not in group_names"

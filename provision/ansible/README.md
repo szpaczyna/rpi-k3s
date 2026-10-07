@@ -193,29 +193,37 @@ keyword unmasks that might get added later.
 
 ### `dotfiles`
 
-Shared between `k3s_cluster`, `pihole`, and `gentoo`. Installs zsh (zshrc +
-plugins from `files/zsh-plugins/`), tmux, fastfetch, and neovim (config
-`files/init.vim` with vim-plug, headless `PlugInstall`), with `vim` aliased
-to `nvim` and `~/.vimrc` symlinked to `~/.config/nvim/init.vim`.
+Shared between `k3s_cluster`, `pihole`, and `gentoo`, with one config for
+both distros:
 
-On Debian hosts (`k3s_cluster`, `pihole`) `zsh.yml`/`nvim.yml` install
-`zsh-syntax-highlighting`/`neovim` via apt; on `gentoo` those tasks are
-skipped (`when: "'gentoo' not in group_names"`) since Portage owns package
-installation there — see `gentoo_portage` below.
+- `templates/zshrc.j2` -> `~/.zshrc` (options, completion, key bindings,
+  plugin loading, prompt). It sources `~/.zsh/zshenv` (`templates/zshenv.j2`,
+  environment and `PATH`) and `~/.zsh/alias` (`templates/alias.j2`, every
+  alias and shell function, including `dir_file_count` used by the prompt).
+  Distro differences are Jinja conditionals on `group_names`.
+- `files/init.vim` -> `~/.config/nvim/init.vim` (vim-plug, headless
+  `PlugInstall`), with `vim` aliased to `nvim` and `~/.vimrc` symlinked to it.
+- `files/tmux.conf`, `files/fastfetch-config.jsonc`.
 
-The zshrc and neovim config sources are parametrized
-(`dotfiles_zshrc_src`/`dotfiles_nvim_init_src`, default `zshrc`/`init.vim`
-in `defaults/main.yml`), so `group_vars/gentoo.yml` can point them at
-`zshrc-gentoo`/`init-gentoo.vim` instead.
+Plugins: `dotfiles_zsh_plugins` in `defaults/main.yml` is the base set for
+every host; `group_vars/k3s_cluster/dotfiles.yml` appends `kubectl`,
+`kubetail` and `helm` through `dotfiles_zsh_plugins_extra`. The zshrc
+template sources exactly the deployed list, followed by the distro's
+`zsh-syntax-highlighting` (`dotfiles_zsh_syntax_highlighting_path`).
+`k3s_cluster` vars live in a directory because `registries.enc.sops.yml`
+sits next to them.
 
-The default zsh plugin list (`dotfiles_zsh_plugins` in `defaults/main.yml`)
-includes `kubectl`/`helm`/`kubetail` plugins, which only make sense on the
-k3s cluster. `group_vars/pihole.yml` and `group_vars/gentoo.yml` each
-override the list without those plugins (and without `forgit`/`zsh_reload`/
-`zsh-z` on `gentoo`). `k3s_cluster` has its own override at
-`group_vars/k3s_cluster/dotfiles.yml` instead of a flat
-`group_vars/k3s_cluster.yml` — that group's vars live in a directory because
-`registries.enc.sops.yml` needed to sit next to it.
+Packages (`tasks/packages.yml`, tag `dotfiles-packages`): on Ubuntu the role
+installs `dotfiles_apt_packages` (`fzf`, `grc`, `neovim`, `pyenv`,
+`ripgrep`, `zsh-syntax-highlighting`) via apt. On `gentoo` it installs only
+`app-shells/zsh-syntax-highlighting` via Portage, preferring the binhost
+package (`getbinpkg`/`usepkg`); everything else there stays with Portage /
+`gentoo_portage`.
+
+Ubuntu only: the `_pyenv` and `_ripgrep` completions from
+`files/zsh-plugins/completion/` go to `~/.zsh/plugins/completion` (added to
+`fpath` before `compinit`), and `zshenv` initialises pyenv when the binary
+exists.
 
 ## Playbooks
 

@@ -1,0 +1,16 @@
+---
+- name: Install shell tooling packages (apt)
+  ansible.builtin.apt:
+    name: "{{ dotfiles_apt_packages }}"
+    install_recommends: false
+  register: dotfiles_apt_packages_result
+  retries: 5
+  until: dotfiles_apt_packages_result is success
+  when: "'gentoo' not in group_names"
+
+- name: Install zsh-syntax-highlighting (portage, binary package preferred)
+  community.general.portage:
+    package: app-shells/zsh-syntax-highlighting
+    getbinpkg: true
+    usepkg: true
+  when: "'gentoo' in group_names"

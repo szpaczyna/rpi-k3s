@@ -1,13 +1,4 @@
 ---
-- name: Install neovim package
-  ansible.builtin.apt:
-    name: neovim
-    install_recommends: false
-  register: dotfiles_apt_neovim
-  retries: 5
-  until: dotfiles_apt_neovim is success
-  when: "'gentoo' not in group_names"
-
 - name: Create nvim config directory
   ansible.builtin.file:
     path: "/{{ ansible_user }}/.config/nvim"
@@ -18,7 +9,7 @@
 
 - name: Neovim init.vim
   ansible.builtin.copy:
-    src: "{{ dotfiles_nvim_init_src }}"
+    src: init.vim
     dest: "/{{ ansible_user }}/.config/nvim/init.vim"
     owner: "{{ ansible_user }}"
     group: root

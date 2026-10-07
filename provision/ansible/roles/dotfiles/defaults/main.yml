@@ -1,18 +1,33 @@
 ---
-dotfiles_zshrc_src: zshrc
-dotfiles_nvim_init_src: init.vim
 dotfiles_zsh_plugins:
+  - grc.zsh
   - colorize.zsh
-  - forgit.zsh
+  - ls-colors.zsh
   - fzf-completion.zsh
   - fzf-key-bindings.zsh
   - fzf-tab.zsh
   - git.zsh
-  - grc.zsh
-  - helm.zsh
-  - kubectl.zsh
-  - kubetail.zsh
+  - forgit.zsh
   - l.plugin.zsh
-  - ls-colors.zsh
   - zsh_reload.zsh
   - zsh-z.plugin.zsh
+
+# Host-group specific plugins appended after the base list (kubectl & co. on k3s_cluster).
+dotfiles_zsh_plugins_extra: []
+
+dotfiles_zsh_completions:
+  - _pyenv
+  - _ripgrep
+
+dotfiles_apt_packages:
+  - fzf
+  - grc
+  - neovim
+  - pyenv
+  - ripgrep
+  - zsh-syntax-highlighting
+
+dotfiles_zsh_syntax_highlighting_path: >-
+  {{ '/usr/share/zsh/site-functions/zsh-syntax-highlighting.zsh'
+     if 'gentoo' in group_names
+     else '/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' }}
