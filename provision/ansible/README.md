@@ -72,18 +72,22 @@ sops -d inventory.enc.yaml   # decrypt to stdout only, no edit
 
 ## SOPS secrets in group_vars
 
-`group_vars/k3s_cluster/registries.enc.yml` holds the Docker registry
+`group_vars/k3s_cluster/registries.enc.sops.yml` holds the Docker registry
 credentials (`k3s_registries_docker_io_username`/`_password`) used to render
 `/etc/rancher/k3s/registries.yaml` on every cluster node (role `k3s`, task
 `registries.yml`). Unlike the inventory above, this file is decrypted
-automatically by the `community.sops` vars plugin at the `inventory` stage
-(configured in `ansible.cfg` under `[community.sops]`) — no wrapper script
-involved, it's the standard `group_vars` SOPS mechanism.
+automatically by the `community.sops` vars plugin (enabled through
+`vars_plugins_enabled` in `ansible.cfg`). Leave the plugin's stage at its
+default: with `vars_stage = inventory`, the raw ciphertext that
+`host_group_vars` loads from the same file at task time wins over the
+decrypted values. The plugin only loads files ending in `.sops.yml`,
+`.sops.yaml` or `.sops.json`, hence the `.enc.sops.yml` name: `.enc.` keeps
+it under the repo's `ensure-sops` pre-commit check.
 
 To edit:
 
 ```bash
-sops group_vars/k3s_cluster/registries.enc.yml
+sops group_vars/k3s_cluster/registries.enc.sops.yml
 ```
 
 ## Roles
@@ -155,10 +159,12 @@ longer in `requirements.yml`) with a thin role that calls the upstream
   `hostvars[groups['k3s_master'][0]].inventory_hostname`) using the token
   read via `hostvars` from the master's play facts. This DNS join relies on
   the static `/etc/hosts` deployed by the `system` role.
-- **Registries** (`tasks/registries.yml`): always runs, renders
+- **Registries** (`tasks/registries.yml`): always runs, before the
+  server/agent install because k3s reads the file only at startup. Renders
   `/etc/rancher/k3s/registries.yaml` from `templates/registries.yaml.j2`
-  using the credentials in `group_vars/k3s_cluster/registries.enc.yml`
-  (see [SOPS secrets](#sops-secrets-in-group_vars) above).
+  using the credentials in `group_vars/k3s_cluster/registries.enc.sops.yml`
+  (see [SOPS secrets](#sops-secrets-in-group_vars) above), and restarts
+  `k3s`/`k3s-agent` through the `Restart k3s` handler when the file changes.
 
 ### `pihole`
 
@@ -209,7 +215,7 @@ override the list without those plugins (and without `forgit`/`zsh_reload`/
 `zsh-z` on `gentoo`). `k3s_cluster` has its own override at
 `group_vars/k3s_cluster/dotfiles.yml` instead of a flat
 `group_vars/k3s_cluster.yml` — that group's vars live in a directory because
-`registries.enc.yml` needed to sit next to it.
+`registries.enc.sops.yml` needed to sit next to it.
 
 ## Playbooks
 

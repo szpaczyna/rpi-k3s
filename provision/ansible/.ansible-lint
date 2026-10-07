@@ -6,3 +6,4 @@ exclude_paths:
   # read/linted as plaintext YAML.
   - "**/*.enc.yaml"
   - "**/*.enc.yml"
+  - "**/*.enc.sops.yml"

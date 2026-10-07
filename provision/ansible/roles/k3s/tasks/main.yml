@@ -1,4 +1,9 @@
 ---
+# k3s reads registries.yaml only at startup, so it must exist before the installer starts the service.
+- name: Deploy Docker registry configuration
+  ansible.builtin.include_tasks: registries.yml
+  tags: ['registries']
+
 - name: Install and configure k3s server
   ansible.builtin.include_tasks: server.yml
   when: "'k3s_master' in group_names"
@@ -8,7 +13,3 @@
   ansible.builtin.include_tasks: agent.yml
   when: "'k3s_worker' in group_names"
   tags: ['k3s_agent']
-
-- name: Deploy Docker registry configuration
-  ansible.builtin.include_tasks: registries.yml
-  tags: ['registries']

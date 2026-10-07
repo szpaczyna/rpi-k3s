@@ -10,17 +10,6 @@
       APT::Get::Install-Recommends "false";
       APT::Get::Install-Suggests "false";
 
-- name: Upgrade all system packages
-  ansible.builtin.apt:
-    upgrade: full
-    update_cache: true
-    cache_valid_time: 3600
-    autoclean: true
-    autoremove: true
-  register: system_apt_upgrade
-  retries: 5
-  until: system_apt_upgrade is success
-
 - name: Install common packages
   ansible.builtin.apt:
     name: "{{ system_apt_install_packages }}"
