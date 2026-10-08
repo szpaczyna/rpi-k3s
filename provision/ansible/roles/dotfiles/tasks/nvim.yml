@@ -1,40 +1,54 @@
 ---
-- name: Create nvim config directory
+- name: Create vim and nvim directories
   ansible.builtin.file:
-    path: "/{{ ansible_user }}/.config/nvim"
-    state: directory
-    owner: "{{ ansible_user }}"
-    group: root
-    mode: "0755"
-
-- name: Neovim init.vim
-  ansible.builtin.copy:
-    src: init.vim
-    dest: "/{{ ansible_user }}/.config/nvim/init.vim"
-    owner: "{{ ansible_user }}"
-    group: root
-    mode: "0644"
-
-- name: Create vim-plug autoload directory
-  ansible.builtin.file:
-    path: "/{{ ansible_user }}/.local/share/nvim/site/autoload"
+    path: "/{{ ansible_user }}/{{ item }}"
     state: directory
     recurse: true
     owner: "{{ ansible_user }}"
     group: root
     mode: "0755"
+  loop:
+    - .config/nvim
+    # 'backup' and 'backupdir' in vimrc; without this the first write fails
+    # with E510.
+    - .vim/backup
+    - .vim/autoload
+    - .local/share/nvim/site/autoload
 
-# Under --check, the directory task above never actually creates anything,
-# so get_url below would otherwise fail against a destination that "doesn't
-# exist yet" purely because of check mode, not because the role is wrong.
+- name: Vim configuration
+  ansible.builtin.copy:
+    src: vimrc
+    dest: "/{{ ansible_user }}/.vimrc"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0644"
+  register: dotfiles_vimrc
+
+# nvim reads .config/nvim/init.vim, vim reads ~/.vimrc; the symlink keeps one
+# file authoritative.
+- name: Symlink nvim init.vim to .vimrc
+  ansible.builtin.file:
+    src: "/{{ ansible_user }}/.vimrc"
+    dest: "/{{ ansible_user }}/.config/nvim/init.vim"
+    state: link
+    force: true
+    owner: "{{ ansible_user }}"
+    group: root
+
+# Both locations are needed: nvim only searches its own site directory, vim
+# only ~/.vim/autoload. Under --check the directories above are never created,
+# so get_url would fail on a missing destination rather than a real problem.
 - name: Install vim-plug
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    dest: "/{{ ansible_user }}/.local/share/nvim/site/autoload/plug.vim"
+    dest: "/{{ ansible_user }}/{{ item }}/plug.vim"
     owner: "{{ ansible_user }}"
     group: root
     mode: "0644"
     force: false
+  loop:
+    - .local/share/nvim/site/autoload
+    - .vim/autoload
   when: not ansible_check_mode
 
 - name: Check if vim-plug plugins are already installed
@@ -44,14 +58,7 @@
 
 - name: Install vim-plug plugins
   ansible.builtin.command: nvim --headless +PlugInstall +qall
-  changed_when: not dotfiles_nvim_plugged_dir.stat.exists
-  when: not dotfiles_nvim_plugged_dir.stat.exists
-
-- name: Symlink .vimrc to nvim init.vim
-  ansible.builtin.file:
-    src: "/{{ ansible_user }}/.config/nvim/init.vim"
-    dest: "/{{ ansible_user }}/.vimrc"
-    state: link
-    force: true
-    owner: "{{ ansible_user }}"
-    group: root
+  changed_when: true
+  when:
+    - not ansible_check_mode
+    - not dotfiles_nvim_plugged_dir.stat.exists or dotfiles_vimrc.changed

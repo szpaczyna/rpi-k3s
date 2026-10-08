@@ -1,0 +1,123 @@
+" vimrc - plain vim and neovim on servers
+" by shpaq
+" Deployed by the dotfiles Ansible role; see roles/dotfiles/tasks/nvim.yml.
+" The full Lua config for workstations lives in szpaczyna/dotfiles under
+" macos/nvim.
+
+set nocompatible
+filetype plugin indent on
+syntax on
+
+set encoding=UTF-8
+set fileencoding=UTF-8
+
+" plugins
+" Guarded because plain vim without plug.vim aborts on plug#begin with E117.
+if filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim'))
+            \ || filereadable(expand('~/.vim/autoload/plug.vim'))
+    call plug#begin('~/.config/nvim/plugged')
+        Plug 'mhinz/vim-startify'                                 " Start page
+        Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }     " File tree
+        Plug 'itchyny/lightline.vim'                              " Statusline
+        Plug 'itchyny/vim-gitbranch'                              " Branch name for lightline
+        Plug 'airblade/vim-gitgutter'                             " Diff in the sign column
+        Plug 'tpope/vim-surround'                                 " Quotes, brackets, tags
+        Plug 'junegunn/fzf'                                       " Fuzzy finder, binary from the package manager
+        Plug 'nanotech/jellybeans.vim'                            " Colorscheme
+    call plug#end()
+endif
+
+" General settings
+set number
+set ruler
+set showcmd
+set showmatch
+set cursorline
+set laststatus=2
+set noshowmode
+
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+set smarttab
+set autoindent
+
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+
+set hidden
+set scrolloff=8
+set backspace=indent,eol,start
+set history=1000
+set wildmenu
+set wildmode=longest:full:full
+
+set backup
+set backupdir=~/.vim/backup
+set dir=~/.vim/backup
+
+set foldmethod=indent
+set foldminlines=6
+set foldlevelstart=99
+
+if has('clipboard')
+    set clipboard=unnamedplus
+endif
+
+" Mappings, same across every machine
+map <F2> :NERDTreeToggle<CR>
+map <F3> zi
+" % expands to the current file name in :r !, so it has to be escaped
+map <F4> :r !date +'\%Y-\%m-\%d \%H:\%M:\%S'<CR>
+map <F5> :tabnew<CR>
+map <F6> :tabnext<CR>
+map <F7> :tabprevious<CR>
+map <F8> :set number!<CR>
+map <F10> :q!<CR>
+map <C-p> :FZF<CR>
+
+set wildcharm=<C-Z>
+cnoremap <expr> <up> wildmenumode() ? "\<left>" : "\<up>"
+cnoremap <expr> <down> wildmenumode() ? "\<right>" : "\<down>"
+cnoremap <expr> <left> wildmenumode() ? "\<up>" : "\<left>"
+cnoremap <expr> <right> wildmenumode() ? " \<bs>\<C-Z>" : "\<right>"
+
+let g:lightline = {
+      \ 'colorscheme': 'powerline',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'gitbranch#name'
+      \ },
+      \ }
+
+silent! colorscheme jellybeans
+
+" Strip trailing whitespace before writing the filetypes where it matters
+let g:stripTrailingWhitespace = 1
+
+function <SID>StripTrailingWhitespaces(force, mode) range
+    if a:force != 1 && g:stripTrailingWhitespace == 0
+        return
+    endif
+    if a:force == 1 || &ft =~ 'yaml\|json\|python\|rst\|wiki\|javascript\|css\|html\|xml\|sh'
+        let _s=@/
+        let l = line(".")
+        let c = col(".")
+        if a:mode == 'v'
+            '<,'>s/\s\+$//e
+        else
+            %s/\s\+$//e
+        endif
+        let @/=_s
+        call cursor(l, c)
+    endif
+endfunction
+command -bang StripTrailingWhitespaces call <SID>StripTrailingWhitespaces(<bang>0, 'n')
+
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces(0, 'n')

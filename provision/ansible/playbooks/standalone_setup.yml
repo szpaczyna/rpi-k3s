@@ -1,0 +1,17 @@
+---
+
+- name: Standalone hosts setup
+  hosts: standalone
+  become: true
+  gather_facts: true
+
+  vars_files:
+    - ../vars.yml
+
+  tasks:
+    # No system or k3s role here: these hosts run neither the cluster nor
+    # Pi-hole, they only share the shell and editor setup.
+    - name: Dotfiles
+      ansible.builtin.include_role:
+        name: dotfiles
+      tags: ['dotfiles']

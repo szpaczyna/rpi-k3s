@@ -27,6 +27,18 @@ dotfiles_apt_packages:
   - ripgrep
   - zsh-syntax-highlighting
 
+# Gentoo equivalents of the apt list above. fzf and neovim back the vimrc that
+# the nvim task deploys; zsh-syntax-highlighting is sourced from zshrc. Portage
+# builds from source whenever no binary package is published, so each entry
+# carries a shell test the install task uses to skip what is already there.
+dotfiles_portage_packages:
+  - package: app-shells/zsh-syntax-highlighting
+    probe: "test -e {{ dotfiles_zsh_syntax_highlighting_path }}"
+  - package: app-shells/fzf
+    probe: command -v fzf
+  - package: app-editors/neovim
+    probe: command -v nvim
+
 dotfiles_zsh_syntax_highlighting_path: >-
   {{ '/usr/share/zsh/site-functions/zsh-syntax-highlighting.zsh'
      if 'gentoo' in group_names
