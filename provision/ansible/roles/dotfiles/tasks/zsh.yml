@@ -28,6 +28,18 @@
     mode: "0644"
   loop: "{{ dotfiles_zsh_plugins + dotfiles_zsh_plugins_extra }}"
 
+# Upstream fzf-tab, matching the submodule the workstation config uses. Its
+# helpers under lib/ have to stay executable, so the tree is copied with
+# directory mode rather than the flat 0644 above.
+- name: Fzf-tab plugin
+  ansible.builtin.copy:
+    src: zsh-plugins/fzf-tab/
+    dest: "/{{ ansible_user }}/.zsh/plugins/fzf-tab/"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: preserve
+    directory_mode: "0755"
+
 - name: Create zsh completion directory
   ansible.builtin.file:
     path: "/{{ ansible_user }}/.zsh/plugins/completion"

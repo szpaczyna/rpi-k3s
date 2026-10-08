@@ -1,11 +1,10 @@
 ---
+# fzf-tab is not listed here: it ships as a directory and has its own task.
 dotfiles_zsh_plugins:
   - grc.zsh
   - colorize.zsh
-  - ls-colors.zsh
   - fzf-completion.zsh
   - fzf-key-bindings.zsh
-  - fzf-tab.zsh
   - git.zsh
   - forgit.zsh
   - l.plugin.zsh

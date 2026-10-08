@@ -153,6 +153,7 @@ plugins_src=(
 {% for plugin in dotfiles_zsh_plugins + dotfiles_zsh_plugins_extra %}
     $HOME/.zsh/plugins/{{ plugin }}
 {% endfor %}
+    $HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
 )
 for f ($^plugins_src(.N)) source $f
 unset plugins_src
