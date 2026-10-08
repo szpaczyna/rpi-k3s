@@ -62,3 +62,13 @@
   when:
     - not ansible_check_mode
     - not dotfiles_nvim_plugged_dir.stat.exists or dotfiles_vimrc.changed
+
+# vim-plug leaves directories behind when a plugin drops off the list, so
+# plugged/ keeps growing across config changes. PlugClean! removes them without
+# the interactive prompt.
+- name: Remove orphaned vim-plug plugins
+  ansible.builtin.command: nvim --headless +PlugClean! +qall
+  changed_when: true
+  when:
+    - not ansible_check_mode
+    - dotfiles_vimrc.changed
