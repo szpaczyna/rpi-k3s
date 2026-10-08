@@ -1,0 +1,60 @@
+---
+- name: Create zsh plugins directory
+  ansible.builtin.file:
+    path: "/{{ ansible_user }}/.zsh/plugins"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0755"
+
+- name: Zsh config files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "/{{ ansible_user }}/{{ item.dest }}"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0644"
+  loop:
+    - { src: zshrc.j2, dest: .zshrc }
+    - { src: zshenv.j2, dest: .zsh/zshenv }
+    - { src: alias.j2, dest: .zsh/alias }
+
+- name: Zsh plugins
+  ansible.builtin.copy:
+    src: "zsh-plugins/{{ item }}"
+    dest: "/{{ ansible_user }}/.zsh/plugins/{{ item }}"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0644"
+  loop: "{{ dotfiles_zsh_plugins + dotfiles_zsh_plugins_extra }}"
+
+# Upstream fzf-tab, matching the submodule the workstation config uses. Its
+# helpers under lib/ have to stay executable, so the tree is copied with
+# directory mode rather than the flat 0644 above.
+- name: Fzf-tab plugin
+  ansible.builtin.copy:
+    src: zsh-plugins/fzf-tab/
+    dest: "/{{ ansible_user }}/.zsh/plugins/fzf-tab/"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: preserve
+    directory_mode: "0755"
+
+- name: Create zsh completion directory
+  ansible.builtin.file:
+    path: "/{{ ansible_user }}/.zsh/plugins/completion"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0755"
+  when: "'gentoo' not in group_names"
+
+- name: Zsh completions
+  ansible.builtin.copy:
+    src: "zsh-plugins/completion/{{ item }}"
+    dest: "/{{ ansible_user }}/.zsh/plugins/completion/{{ item }}"
+    owner: "{{ ansible_user }}"
+    group: root
+    mode: "0644"
+  loop: "{{ dotfiles_zsh_completions }}"
+  when: "'gentoo' not in group_names"

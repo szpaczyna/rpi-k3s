@@ -8,7 +8,14 @@ handoff*
 ### sops
 .sops.yaml
 ### ansible
-*inventory*
+# inventory.enc.yaml is SOPS-encrypted and safe to commit; inventory.sh and
+# inventory_transform.py are the decrypt/transform scripts, also safe.
+# Only guard against an accidental plaintext inventory.yaml/.ini dropped
+# next to them during local testing.
+provision/ansible/inventory.yaml
+provision/ansible/inventory.yml
+provision/ansible/inventory.ini
+provision/ansible/.ansible/
 .NOTES.md
 .Makefile
 RELEASE.md

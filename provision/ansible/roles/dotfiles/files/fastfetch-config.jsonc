@@ -1,0 +1,71 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "display": {
+        "separator": ">  ",
+        "color": {
+            "separator": "red"
+        },
+        "constants": [
+            "═══════════════════════════════════════════════════════════════════════════",
+            "║\u001b[75C║\u001b[75D"
+        ]
+    },
+    "modules": [
+        {
+            "format": "{#1}{#keys}╔{$1}╗\u001b[76D {host-name-colored} ",
+            "type": "title"
+        },
+        {
+            "format": "{#1}{#keys}╠{$1}╣",
+            "type": "custom"
+        },
+        {
+            "key": "{$2}{#31}  kernel   ",
+            "type": "kernel"
+        },
+        {
+            "key": "{$2}{#32}󰅐  uptime   ",
+            "type": "uptime"
+        },
+        {
+            "key": "{$2}{#33}󰍛  os       ",
+            "type": "loadavg"
+        },
+        {
+            "key": "{$2}{#35}󰍛  cpu      ",
+            "type": "cpu",
+            "showPeCoreCount": true,
+            "temp": true
+        },
+        {
+            "key": "{$2}{#35}󰍛  cpuusage ",
+            "type": "cpuusage"
+        },
+        {
+            "key": "{$2}{#33}󰉉  disk     ",
+            "type": "disk",
+            "folders": "/"
+        },
+        {
+            "key": "{$2}{#32}  memory   ",
+            "type": "memory"
+        },
+        {
+            "key": "{$2}{#31}󰩟  network  ",
+            "type": "localip",
+            "format": "{ipv4} ({ifname})"
+        },
+        {
+            "key": "{$2}{#31}  wifi     ",
+            "type": "wifi"
+        },
+        {
+            "format": "{#1}{#keys}╠{$1}╣",
+            "type": "custom"
+        },
+        {
+            "format": "{#1}{#keys}╚{$1}╝",
+            "type": "custom"
+        }
+    ]
+}

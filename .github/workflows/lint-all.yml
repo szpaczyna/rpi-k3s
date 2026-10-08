@@ -158,15 +158,23 @@ jobs:
       - name: List changed charts
         id: list
         run: |
-          changed=$(ct list-changed --config .github/ct.yaml || true)
-          echo "changed=$changed" >> $GITHUB_OUTPUT
-          echo "$changed"
+          changed="$(ct list-changed --config .github/ct.yaml || true)"
+          printf '%s\n' "$changed"
+          # ct prints one chart per line, and a bare `name=value` cannot carry
+          # newlines: with more than one changed chart the step failed with
+          # "Invalid format". Flatten to a space-separated list, which is what
+          # the next step word-splits anyway.
+          flattened="$(printf '%s' "$changed" | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
+          echo "changed=$flattened" >> "$GITHUB_OUTPUT"
       - name: Lint & install eligible charts (skip missing values.yaml)
         if: steps.list.outputs.changed != ''
+        env:
+          # Through the environment rather than ${{ }} interpolation, so the
+          # value cannot end up parsed as shell.
+          CHANGED_CHARTS: ${{ steps.list.outputs.changed }}
         run: |
           set -euo pipefail
-          # initialize changed from the previous step output to avoid unbound variable under 'set -u'
-          changed="${{ steps.list.outputs.changed }}"
+          changed="$CHANGED_CHARTS"
           eligible=""
           for c in ${changed}; do
             if [ ! -f "$c/Chart.yaml" ]; then

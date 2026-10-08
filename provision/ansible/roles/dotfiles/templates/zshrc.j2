@@ -1,0 +1,167 @@
+## zshrc  - ZSH Configuration file
+## created 20160307
+## updated 20201005
+## updated 20201017
+## updated 20220111
+## updated 20220127 | powerline10k
+## updated 20251015
+## updated 20260824
+## updated 20261007
+## by shpaq
+{{ ansible_managed | comment }}
+
+umask 022
+
+## env
+source ~/.zsh/zshenv
+source ~/.zsh/alias
+
+{% if 'gentoo' not in group_names %}
+fpath=($HOME/.zsh/plugins/completion $fpath)
+
+{% endif %}
+autoload -Uz compinit promptinit zcalc url-quote-magic colors zfinit
+compinit
+colors
+zfinit
+promptinit
+
+{% raw %}
+if [[ -f ~/.dir_colors ]]; then
+    eval "$(dircolors -b ~/.dir_colors)"
+elif [[ -f /etc/DIR_COLORS ]]; then
+    eval "$(dircolors -b /etc/DIR_COLORS)"
+else
+    eval "$(dircolors -b)"
+fi
+
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+zstyle ':completion:*:(rm|kill|diff):*' ignore-line yes
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+zstyle ':completion:*' completer _expand _complete
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:git-checkout:*' sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*:(all-|)files' ignored-patterns '(|*/)CVS'
+zstyle ':completion:*:cd:*' ignored-patterns '(*/)#CVS'
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*:processes' command 'ps xw -o pid,tty,time,args'
+zstyle ':completion:*' menu select=long-list select=1
+
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:(cat|less|ls|nvim|vim):*' fzf-preview 'cat $realpath 2> /dev/null || ls -1 --color=always $realpath 2> /dev/null'
+zstyle ':fzf-tab:*' use-fzf-default-opts yes
+
+zle -N url-quote-magic
+
+watch=all
+logcheck=30
+WATCHFMT="User %n has %a on tty %l at %T %W"
+
+setopt notify
+setopt autocd
+setopt short_loops
+setopt nohup
+setopt extended_history hist_ignore_dups hist_expire_dups_first
+setopt INC_APPEND_HISTORY
+setopt extendedglob
+setopt interactivecomments
+setopt hist_ignore_all_dups
+setopt auto_remove_slash
+setopt rmstarsilent
+setopt prompt_subst
+setopt complete_in_word
+setopt always_to_end
+
+# Spell correction only for `cd` (and directory stack commands).
+_accept_line_cd_only_correction() {
+    setopt localoptions nocorrect nocorrectall
+    local trimmed=${BUFFER##[[:space:]]#}
+    if [[ $trimmed == (cd|pushd|popd)(|[[:space:]]*) ]]; then
+        setopt correctall
+    fi
+    zle .accept-line
+}
+zle -N accept-line _accept_line_cd_only_correction
+
+typeset -A abbreviations
+abbreviations=(
+  "Im"    "| more"
+  "Ia"    "| awk"
+  "Ig"    "| grep"
+  "Ieg"   "| egrep"
+  "Ih"    "| head"
+  "It"    "| tail"
+  "Is"    "| sort"
+  "Iw"    "| wc"
+  "Ix"    "| xargs"
+)
+
+users=(shpaq root)
+zstyle ':completion:*' users $users
+
+if [[ -f ~/.ssh/known_hosts ]]; then
+    _myhosts=(${${${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*}#\[}/]:*/})
+    zstyle ':completion:*' hosts $_myhosts
+fi
+
+[[ -t 1 ]] || return
+
+case $TERM in
+    *xterm*|*rxvt*|*screen*|*tmux*|(dt|k|E)term)
+        precmd() {
+            print -Pn "\e]2;[%n] : [%m] : [%~]\a"
+        }
+        preexec() {
+            print -Pn "\e]2;[%n] : [%m] : [%~] : [ $1 ]\a"
+        }
+    ;;
+esac
+
+## binds
+bindtc () {
+    setopt localoptions
+    local keyval=$(echotc "$1" 2>&-)
+    [[ $keyval == "no" ]] && keyval=""
+    bindkey "${keyval:-$2}" "$3"
+}
+
+bindtc kP "^[[I" history-beginning-search-backward
+bindtc kN "^[[G" history-beginning-search-forward
+bindtc kh "^[[H" beginning-of-line
+bindtc kH "^[[F" end-of-line
+
+bindkey "\e[3~" delete-char
+bindkey '\e[1~' beginning-of-line
+bindkey '\e[4~' end-of-line
+bindkey "^[[3" backward-delete-word
+bindkey "^[OF" end-of-line
+bindkey "^[OH" beginning-of-line
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+bindkey "^[a" accept-and-hold >/dev/null 2>&1
+bindkey "^[[1;5D" backward-word
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;3D" backward-word
+bindkey "^[[1;3C" forward-word
+{% endraw %}
+
+## plugins and helpers
+plugins_src=(
+{% for plugin in dotfiles_zsh_plugins + dotfiles_zsh_plugins_extra %}
+    $HOME/.zsh/plugins/{{ plugin }}
+{% endfor %}
+    $HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
+)
+for f ($^plugins_src(.N)) source $f
+unset plugins_src
+
+# Must be sourced after every other plugin that wraps ZLE widgets.
+[[ -f {{ dotfiles_zsh_syntax_highlighting_path }} ]] && source {{ dotfiles_zsh_syntax_highlighting_path }}
+
+{% raw %}
+PROMPT='%{$fg_bold[red]%}%m%{$reset_color%}%{$fg_bold[white]%}:%{$reset_color%}%{$fg_bold[yellow]%}%10c%{$reset_color%}%{$fg_bold[white]%}:%{$fg_bold[green]%}$(dir_file_count)
+%{$fg_bold[red]%}→%{$reset_color%} '
+{% endraw %}

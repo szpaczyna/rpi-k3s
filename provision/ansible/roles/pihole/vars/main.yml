@@ -1,0 +1,37 @@
+---
+pihole_dns_scalars:
+  - { key: 'dns.CNAMEdeepInspect', value: "{{ pihole_dns_cname_deep_inspect | string | lower }}" }
+  - { key: 'dns.blockESNI', value: "{{ pihole_dns_block_esni | string | lower }}" }
+  - { key: 'dns.showDNSSEC', value: "{{ pihole_dns_show_dnssec | string | lower }}" }
+  - { key: 'dns.blockTTL', value: "{{ pihole_dns_block_ttl }}" }
+  - { key: 'dns.domainNeeded', value: "{{ pihole_dns_domain_needed | string | lower }}" }
+  - { key: 'dns.expandHosts', value: "{{ pihole_dns_expand_hosts | string | lower }}" }
+  - { key: 'dns.interface', value: "{{ pihole_dns_interface }}" }
+  - { key: 'dns.listeningMode', value: "{{ pihole_dns_listening_mode }}" }
+  - { key: 'dns.queryLogging', value: "{{ pihole_dns_query_logging | string | lower }}" }
+  - { key: 'dns.piholePTR', value: "{{ pihole_dns_pihole_ptr }}" }
+  - { key: 'dns.replyWhenBusy', value: "{{ pihole_dns_reply_when_busy }}" }
+  - { key: 'dns.bogusPriv', value: "{{ pihole_dns_bogus_priv | string | lower }}" }
+  - { key: 'dns.dnssec', value: "{{ pihole_dns_dnssec | string | lower }}" }
+  - { key: 'dns.localise', value: "{{ pihole_dns_localise | string | lower }}" }
+  - { key: 'dns.rateLimit.count', value: "{{ pihole_dns_rate_limit_count }}" }
+  - { key: 'dns.rateLimit.interval', value: "{{ pihole_dns_rate_limit_interval }}" }
+
+pihole_dns_arrays:
+  - { key: 'dns.upstreams', vals: "{{ pihole_upstreams }}" }
+  - { key: 'dns.hosts', vals: "{{ pihole_hosts }}" }
+  - { key: 'dns.cnameRecords', vals: "{{ pihole_cname_records }}" }
+  - { key: 'dns.revServers', vals: "{{ pihole_rev_servers }}" }
+
+pihole_database_scalars:
+  - { key: 'database.maxDBdays', value: "{{ pihole_database_max_db_days }}" }
+  - { key: 'database.DBimport', value: "{{ pihole_database_db_import | string | lower }}" }
+  - { key: 'database.DBinterval', value: "{{ pihole_database_db_interval }}" }
+
+pihole_webserver_scalars:
+  - { key: 'webserver.port', value: "{{ pihole_webserver_port }}" }
+  - { key: 'webserver.tls.cert', value: "{{ pihole_webserver_tls_cert }}" }
+  - { key: 'webserver.interface.boxed', value: "{{ pihole_webserver_interface_boxed | string | lower }}" }
+
+pihole_webserver_arrays:
+  - { key: 'webserver.api.excludeDomains', vals: "{{ pihole_webserver_api_exclude_domains }}" }

@@ -1,0 +1,16 @@
+---
+- name: DNS config (pihole-FTL --config dns.*)
+  ansible.builtin.include_tasks: dns-config.yml
+  tags: ['dns-config']
+
+- name: Database config (pihole-FTL --config database.*)
+  ansible.builtin.include_tasks: database-config.yml
+  tags: ['database-config']
+
+- name: Webserver config (pihole-FTL --config webserver.*)
+  ansible.builtin.include_tasks: webserver-config.yml
+  tags: ['webserver-config']
+
+- name: Adlists (gravity.db)
+  ansible.builtin.include_tasks: adlists.yml
+  tags: ['adlists']

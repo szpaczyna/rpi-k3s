@@ -1,6 +1,7 @@
 ---
 
-- hosts: pihole
+- name: Pi-hole setup
+  hosts: pihole
   become: true
   gather_facts: true
 
@@ -8,15 +9,15 @@
     - vars.yml
 
   tasks:
-#    - include_role:
-#        name: system
-#      tags: ['system']
-    - include_role:
-        name: user
-      tags: ['user']
-
-    - name: Rebooting hosts
-      reboot:
-        msg: "Pis are being rebooted"
-        reboot_timeout: 60
-      ignore_errors: true
+    - name: System
+      ansible.builtin.include_role:
+        name: system
+      tags: ['system']
+    - name: Dotfiles
+      ansible.builtin.include_role:
+        name: dotfiles
+      tags: ['dotfiles']
+    - name: Pi-hole
+      ansible.builtin.include_role:
+        name: pihole
+      tags: ['pihole']

@@ -1,0 +1,69 @@
+---
+- name: Check if zram-swap-config is already cloned
+  ansible.builtin.stat:
+    path: /opt/zram-swap-config/.git
+  register: system_zram_cloned
+
+- name: Cloning zram-swap-config from GitHub
+  ansible.builtin.git:
+    repo: https://github.com/StuartIanNaylor/zram-swap-config.git
+    dest: /opt/zram-swap-config
+    version: master
+  when: not system_zram_cloned.stat.exists
+
+- name: Changing perms of "/opt/zram-swap-config/install.sh"
+  ansible.builtin.file:
+    dest: /opt/zram-swap-config/install.sh
+    mode: a+x
+
+- name: Install zram-swap-config
+  ansible.builtin.command: /bin/sh ./install.sh
+  args:
+    chdir: "/opt/zram-swap-config"
+  register: system_zram_install
+  changed_when: '"Reboot to activate zram-swap-config" in system_zram_install.stdout'
+
+- name: Copy zram-swap-config.conf
+  ansible.builtin.template:
+    src: zram-swap-config.conf.j2
+    dest: /etc/zram-swap-config.conf
+    mode: "0644"
+
+# SWAPPINESS differs per role, and zram-swap-config.service runs at
+# sysinit.target, after systemd-sysctl, so it decides the final value.
+- name: Start zram swap with the role's swappiness
+  ansible.builtin.systemd:
+    name: zram-swap-config.service
+    state: restarted
+    enabled: true
+
+# These three tasks verify the *real* effect of the systemd restart above.
+# In --check mode that restart never actually happens, so the swappiness
+# read here would reflect whatever the kernel had before this run, not what
+# the role asserts. Skip the verification entirely under --check rather than
+# have it fail on a value this run was never allowed to set.
+- name: Confirm zram swap is active
+  ansible.builtin.command: swapon --show=NAME --noheadings
+  register: system_zram_active
+  changed_when: false
+  failed_when: system_zram_active.stdout | trim | length == 0
+  check_mode: false
+
+- name: Read effective swappiness after zram-swap-config ran
+  ansible.builtin.command: sysctl -n vm.swappiness
+  register: system_swappiness_check
+  changed_when: false
+  check_mode: false
+
+- name: Confirm swappiness matches the role
+  ansible.builtin.assert:
+    that:
+      - (expected_swappiness | int) == (system_swappiness_check.stdout | trim | int)
+    fail_msg: >-
+      vm.swappiness is {{ system_swappiness_check.stdout | trim }} after restarting
+      zram-swap-config, expected {{ expected_swappiness }}. The service starts
+      after systemd-sysctl, so it overrides whatever 99-local.conf sets.
+    success_msg: "vm.swappiness is {{ expected_swappiness }} as intended"
+  when: not ansible_check_mode
+  vars:
+    expected_swappiness: "{{ 0 if 'k3s_master' in group_names else 10 }}"

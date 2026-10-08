@@ -1,0 +1,44 @@
+---
+# fzf-tab is not listed here: it ships as a directory and has its own task.
+dotfiles_zsh_plugins:
+  - grc.zsh
+  - colorize.zsh
+  - fzf-completion.zsh
+  - fzf-key-bindings.zsh
+  - git.zsh
+  - forgit.zsh
+  - l.plugin.zsh
+  - zsh_reload.zsh
+  - zsh-z.plugin.zsh
+
+# Host-group specific plugins appended after the base list (kubectl & co. on k3s_cluster).
+dotfiles_zsh_plugins_extra: []
+
+dotfiles_zsh_completions:
+  - _pyenv
+  - _ripgrep
+
+dotfiles_apt_packages:
+  - fzf
+  - grc
+  - neovim
+  - pyenv
+  - ripgrep
+  - zsh-syntax-highlighting
+
+# Gentoo equivalents of the apt list above. fzf and neovim back the vimrc that
+# the nvim task deploys; zsh-syntax-highlighting is sourced from zshrc. Portage
+# builds from source whenever no binary package is published, so each entry
+# carries a shell test the install task uses to skip what is already there.
+dotfiles_portage_packages:
+  - package: app-shells/zsh-syntax-highlighting
+    probe: "test -e {{ dotfiles_zsh_syntax_highlighting_path }}"
+  - package: app-shells/fzf
+    probe: command -v fzf
+  - package: app-editors/neovim
+    probe: command -v nvim
+
+dotfiles_zsh_syntax_highlighting_path: >-
+  {{ '/usr/share/zsh/site-functions/zsh-syntax-highlighting.zsh'
+     if 'gentoo' in group_names
+     else '/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' }}

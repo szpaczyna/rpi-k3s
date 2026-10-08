@@ -1,0 +1,370 @@
+## aliases and functions for zsh
+{{ ansible_managed | comment }}
+{% raw %}
+
+## alias to show the date
+alias da='date "+%Y-%m-%d %A %T %Z"'
+
+## Alias's to modified commands
+alias grep='grep --color=auto'
+alias mkdir='mkdir -p'
+alias ping='ping -c 10'
+alias less='less -R'
+alias cls='clear'
+alias multitail='multitail --no-repeat -c'
+alias vim='nvim'
+alias vi='nvim'
+alias vis='nvim "+set si"'
+alias vimdiff='nvim -d'
+alias df='df -hT'
+alias jq='jq -C'
+if (( $+commands[grc] )); then
+    alias ip="grc --colour=auto ip"
+else
+    alias ip="ip -c"
+fi
+
+## Change directory aliases
+alias home='cd ~'
+alias cd..='cd ..'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
+## Alias's for multiple directory listing commands
+if (( $+commands[eza] )); then
+    alias eza='eza --group-directories-first'
+    alias ls='eza'
+    alias la='eza -lag'
+    alias lk='eza -lSr'
+    alias lc='eza -lms modified'
+    alias lu='eza -lus accessed'
+    alias lx='eza -ls extension'
+    alias lr='eza -lR'
+    alias lt='eza -lUs created'
+    alias lart='eza -lams modified'
+    alias lm='eza -al |more'
+    alias lw='eza -a'
+    alias ll='eza -l'
+    alias lfull='eza -lag@'
+    alias ldir='eza -lDag'
+    alias lf="eza -l |egrep -v '^d'"
+else
+    alias ls='ls --color=auto --classify'
+    alias la='ls -Alh'
+    alias lk='ls -lSrh'
+    alias lc='ls -lcrh'
+    alias lu='ls -lurh'
+    alias lx='ls -lXBh'
+    alias lr='ls -lRh'
+    alias lt='ls -ltrh'
+    alias lart='ls -larth'
+    alias lm='ls -alh |more'
+    alias lw='ls -xAh'
+    alias ll='ls -Flh'
+    alias labc='ls -lap'
+    alias ldir="ls -l | egrep '^d'"
+    alias lf="ls -l | egrep -v '^d'"
+fi
+
+## cd into the old directory
+alias bd='cd "$OLDPWD"'
+
+## Remove a directory and all files
+alias rmd='/bin/rm  --recursive --force --verbose '
+
+## alias chmod commands
+alias mx='chmod a+x'
+alias 000='chmod -R 000'
+alias 644='chmod -R 644'
+alias 666='chmod -R 666'
+alias 755='chmod -R 755'
+alias 777='chmod -R 777'
+
+## Global aliases
+alias -g '....'='../../..'
+alias -g M="| more"
+alias -g H="| head"
+alias -g T="| tail"
+alias -g G="| grep"
+alias -g L="| less"
+alias -g Z="| fzf"
+alias -g LL="2>&1 | less"
+alias -g CA="2>&1 | cat -A"
+alias -g NE="2> /dev/null"
+alias -g NUL="> /dev/null 2>&1"
+
+## Search running processes
+alias p="ps aux | grep "
+
+## Search files in the current folder
+alias f="find . | grep "
+
+## Count all files (recursively) in the current folder
+alias countfiles="for t in files links directories; do echo \`find . -type \${t:0:1} | wc -l\` \$t; done 2> /dev/null"
+
+## Alias to show disk space and space used in a folder
+alias folders='du -h -d 1'
+alias folderssort='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
+alias tree='tree -CAhF --dirsfirst'
+alias treed='tree -CAFd'
+
+## Alias's for archives
+alias mktar='tar -cvf'
+alias mkbz2='tar -cvjf'
+alias mkgz='tar -cvzf'
+alias untar='tar -xvf'
+alias unbz2='tar -xvjf'
+alias ungz='tar -xvzf'
+
+## SHA
+alias sha1='openssl sha1'
+alias sha256='openssl sha256'
+
+## git aliases
+alias gall='git log --graph --full-history --all --color --pretty=tformat:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s%x20%x1b[33m(%an)%x1b[0m"'
+alias glo1="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias glo2='git log --color --format=oneline --decorate'
+alias glo3='git log --all --decorate --oneline --graph'
+alias gcm="git commit -m"
+alias gcempty="git commit --allow-empty -m 'empty'"
+alias g="git"
+alias ggl='git pull'
+alias gp='git push'
+alias gpu='git push upstream'
+alias gst='git status'
+alias gup='git pull --rebase'
+alias gupv='git pull --rebase -v'
+alias gpsup='git push --set-upstream origin $(git_current_branch)'
+alias gtshow="git for-each-ref --sort=-taggerdate --format='%(refname:strip=2)' refs/tags | head -1"
+
+## Other aliases
+alias su="su -"
+
+## SSH
+alias blueberry='ssh root@blueberry'
+alias inso='ssh shpaq@insomniac.pl'
+
+## rsync usefull aliases
+alias rsync-copy="rsync -avz --progress -h"
+alias rsync-move="rsync -avz --progress -h --remove-source-files"
+alias rsync-update="rsync -avzu --progress -h"
+alias rsync-synchronize="rsync -avzu --delete --progress -h"
+
+## Some useful nmap aliases for scan modes
+alias nmap_open_ports="nmap -p-"
+alias nmap_list_interfaces="nmap --iflist"
+alias nmap_slow="sudo nmap -sS -v -T1"
+alias nmap_fin="sudo nmap -sF -v"
+alias nmap_full="sudo nmap -sS -T4 -PE -PP -PS80,443 -PY -g 53 -A -p1-65535 -v"
+alias nmap_check_for_firewall="sudo nmap -sA -p1-65535 -v -T4"
+alias nmap_ping_through_firewall="nmap -PS -PA"
+alias nmap_fast="nmap -F -T5 --version-light --top-ports 300"
+alias nmap_detect_versions="sudo nmap -sV -p1-65535 -O --osscan-guess -T4 -Pn"
+alias nmap_check_for_vulns="nmap --script=vuln"
+alias nmap_full_udp="sudo nmap -sS -sU -T4 -A -v -PE -PS22,25,80 -PA21,23,80,443,3389 "
+alias nmap_traceroute="sudo nmap -sP -PE -PS22,25,80 -PA21,23,80,3389 -PU -PO --traceroute "
+alias nmap_full_with_scripts="sudo nmap -sS -sU -T4 -A -v -PE -PP -PS21,22,23,25,80,113,31339 -PA80,113,443,10042 -PO --script all "
+alias nmap_web_safe_osscan="sudo nmap -p 80,443 -O -v --osscan-guess --fuzzy "
+alias nmap_ping_scan="nmap -n -sP"
+
+## functions
+## needed for prompt
+function dir_file_count() {
+    /bin/ls -Alh -1 | /usr/bin/wc -l
+}
+
+function zsh_alias_value() {
+    (( $+aliases[$1] )) && echo $aliases[$1]
+}
+
+## List all functions and aliases in the current shell
+function zsh_plugins() {
+    for plugin in $HOME/.zsh/plugins/*.zsh; do
+        echo "\nPlugin: $plugin" ;\
+        grep -r "^function \w*" $plugin | awk '{print $2}' | sed 's/()//'| sed ':a;N;$!ba;s/\n/, /g';\
+        grep -r "^alias" $plugin | awk '{print $2}' | sed 's/=.*//' |  sed ':a;N;$!ba;s/\n/, /g';
+    done
+}
+
+## zsh command usage statistics
+function zsh-stats() {
+  fc -l 1 | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | \
+	grep -v "./" | \
+	column -c3 -s " " -t | \
+	sort -nr | \
+	nl | \
+	head -n25
+}
+
+## check external ip address
+function myip() {
+    local ip=$(curl -s https://api.ipify.org)
+    if (( $+commands[grcat] )); then
+        echo "My public IP: $ip" | grcat /usr/share/grc/conf.ip
+    else
+        echo "My public IP: $ip"
+    fi
+}
+
+## colorful tail through grcat
+function tailc() {
+    tail "$@" | grcat /usr/share/grc/conf.log
+}
+
+## Extracts any archive(s) (if unp isn't installed)
+function extract() {
+    for archive in $*; do
+        if [ -f $archive ] ; then
+            case $archive in
+                *.tar.bz2)   tar xvjf $archive    ;;
+                *.tar.gz)    tar xvzf $archive    ;;
+                *.bz2)       bunzip2 $archive     ;;
+                *.rar)       rar x $archive       ;;
+                *.gz)        gunzip $archive      ;;
+                *.tar)       tar xvf $archive     ;;
+                *.tbz2)      tar xvjf $archive    ;;
+                *.tgz)       tar xvzf $archive    ;;
+                *.zip)       unzip $archive       ;;
+                *.Z)         uncompress $archive  ;;
+                *.7z)        7z x $archive        ;;
+                *)           echo "don't know how to extract '$archive'..." ;;
+            esac
+        else
+            echo "'$archive' is not a valid file!"
+        fi
+    done
+}
+
+## Searches for text in all files in the current folder (opens result in less)
+function ftext() {
+    grep -iIHrn --color=always "$1" . | less -r
+}
+
+## Copy file with a progress bar (via pv)
+function cpp() {
+    emulate -L zsh
+    if [[ $# -ne 2 || ! -f "$1" ]]; then
+        echo "usage: cpp <source> <destination>" >&2
+        return 1
+    fi
+    local dst="$2"
+    [[ -d "$dst" ]] && dst="${dst%/}/$1:t"
+    if [[ "${1:A}" == "${dst:A}" ]]; then
+        echo "'$1' and '$dst' are the same file" >&2
+        return 1
+    fi
+    pv -pterb -- "$1" > "$dst"
+}
+
+## Copy file and go to the target directory
+function cpg() {
+    if [ -d "$2" ];then
+        cp $1 $2 && cd $2
+    else
+        cp $1 $2
+    fi
+}
+
+## Move file and go to the target directory
+function mvg() {
+    if [ -d "$2" ];then
+        mv $1 $2 && cd $2
+    else
+        mv $1 $2
+    fi
+}
+
+## Create directory and go to it
+function mkdirg() {
+    mkdir -p $1
+    cd $1
+}
+
+## Goes up a specified number of directories (i.e. up 4)
+function up() {
+    local d=""
+    limit=$1
+    for ((i=1 ; i <= limit ; i++))
+        do
+            d=$d/..
+        done
+    d=$(echo $d | sed 's/^\///')
+    if [ -z "$d" ]; then
+        d=..
+    fi
+    cd $d
+}
+
+## Better history search: h [pattern]
+function h() {
+        if [ -z "$*" ];
+           then history 1;
+           else history 1 | egrep "$@";
+           fi;
+}
+
+## Remove all comments (and blank lines) in given file(s)
+function decomment() {
+        egrep -v '^([[:space:]]*#|$)' $@
+}
+
+## Generate random password (-f = special characters, -n <len> = length, default 32 alnum)
+function genpwd() {
+    emulate -L zsh
+    local cset="[:alnum:]" len=32 opt OPTIND=1
+
+    while getopts "h?fn:" opt; do
+        case $opt in
+            f) cset="[:graph:]" ;;
+            n) len=$OPTARG      ;;
+        esac
+    done
+    printf "%s\n" "$(LC_ALL=C tr -cd "$cset" < /dev/urandom | head -c "$len")"
+}
+
+## List only image files in current dir
+function limg() {
+    local -a images
+    images=( *.{jpg,jpeg,gif,png,JPG,JPEG,GIF,PNG}(.N) )
+    if [[ $#images -eq 0 ]] ; then
+        print "No image files found."
+    else
+        ls "$@" "$images[@]"
+    fi
+}
+
+## Create html from plain file (via vim syntax converter)
+function 2html() {
+    vim -n -c ':so $VIMRUNTIME/syntax/2html.vim' -c ':wqa' $1 > /dev/null 2> /dev/null
+}
+
+## Remove spaces in filenames (replaces with dots)
+function space_rm() {
+    for file in *; do
+        mv ${file} ${file:gs/\ /./}
+    done
+}
+
+## Rename all files in current dir to lowercase
+function lowercase_mv() {
+    for file in *; do
+        mv ${file} ${file//(#m)[A-Z]/${(L)MATCH}}
+    done
+}
+
+## DIE SATANA!
+function die() {
+    echo $1
+    return 0
+}
+
+## Trim leading and trailing spaces (for scripts), prints without newline
+function trim() {
+    local var=$@
+    var="${var##"${var%%[![:space:]]*}"}"  ## remove leading whitespace characters
+    var="${var%"${var##*[![:space:]]}"}"  ## remove trailing whitespace characters
+    echo -n "$var"
+}
+{% endraw %}

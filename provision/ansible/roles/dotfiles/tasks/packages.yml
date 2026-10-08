@@ -1,0 +1,35 @@
+---
+- name: Install shell tooling packages (apt)
+  ansible.builtin.apt:
+    name: "{{ dotfiles_apt_packages }}"
+    install_recommends: false
+  register: dotfiles_apt_packages_result
+  retries: 5
+  until: dotfiles_apt_packages_result is success
+  when: "'gentoo' not in group_names"
+
+# Portage builds from source unless a binary package happens to be available,
+# so anything already on PATH is left alone.
+- name: Check which portage packages are already present
+  ansible.builtin.shell: "{{ item.probe }}" # noqa: command-instead-of-shell
+  loop: "{{ dotfiles_portage_packages }}"
+  loop_control:
+    label: "{{ item.package }}"
+  register: dotfiles_portage_present
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  when: "'gentoo' in group_names"
+
+- name: Install missing shell tooling packages (portage, binary package preferred)
+  community.general.portage:
+    package: "{{ item.item.package }}"
+    getbinpkg: true
+    usepkg: true
+  loop: "{{ dotfiles_portage_present.results }}"
+  loop_control:
+    label: "{{ item.item.package }}"
+  when:
+    - "'gentoo' in group_names"
+    - item.rc is defined
+    - item.rc != 0

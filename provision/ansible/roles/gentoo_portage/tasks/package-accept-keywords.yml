@@ -1,0 +1,18 @@
+---
+- name: Create package.accept_keywords/old directory
+  ansible.builtin.file:
+    path: /etc/portage/package.accept_keywords/old
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Package accept_keywords files
+  ansible.builtin.copy:
+    src: "package.accept_keywords/old/{{ item }}"
+    dest: "/etc/portage/package.accept_keywords/old/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ gentoo_portage_package_accept_keywords }}"

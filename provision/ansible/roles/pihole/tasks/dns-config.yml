@@ -1,0 +1,48 @@
+---
+# check_mode: false — this is a read, Ansible must still run it under
+# --check so the drift comparison below has real data to compare against.
+- name: Read current pihole-FTL dns config scalars
+  ansible.builtin.command:
+    cmd: "pihole-FTL --config {{ item.key }}"
+  register: pihole_dns_scalar_current
+  changed_when: false
+  check_mode: false
+  loop: "{{ pihole_dns_scalars }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Set pihole-FTL dns config scalars that drifted from desired value
+  ansible.builtin.command:
+    cmd: "pihole-FTL --config {{ item.item.key }} {{ item.item.value }}"
+  loop: "{{ pihole_dns_scalar_current.results }}"
+  loop_control:
+    label: "{{ item.item.key }}"
+  when: item.stdout | trim != (item.item.value | string)
+  changed_when: true
+
+# Multi-value keys expect JSON-array-like syntax when being SET
+# (pihole-FTL --config -t dns.upstreams '[ "1.1.1.1", "1.0.0.1" ]'), but when READ
+# back they print as "[ item1, item2, ... ]" (comma-space joined, no quotes).
+# Build both representations from the same list so the idempotency check compares
+# like for like.
+- name: Read current pihole-FTL dns config arrays
+  ansible.builtin.command:
+    cmd: "pihole-FTL --config {{ item.key }}"
+  register: pihole_dns_array_current
+  changed_when: false
+  check_mode: false
+  loop: "{{ pihole_dns_arrays }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Set pihole-FTL dns config arrays that drifted from desired value
+  ansible.builtin.command:
+    cmd: >-
+      pihole-FTL --config {{ item.item.key }}
+      '[ {{ item.item.vals | map('regex_replace', '^(.*)$', '"\1"') | join(', ') }} ]'
+  loop: "{{ pihole_dns_array_current.results }}"
+  loop_control:
+    label: "{{ item.item.key }}"
+  when: >-
+    item.stdout | trim != '[ ' + (item.item.vals | join(', ')) + ' ]'
+  changed_when: true

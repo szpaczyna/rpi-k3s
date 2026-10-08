@@ -1,0 +1,9 @@
+---
+galaxy_info:
+  author: rpi-k3s
+  description: Install and configure k3s server/agent nodes via get.k3s.io installer
+  license: MIT
+  min_ansible_version: "2.14"
+  platforms:
+    - name: Debian
+dependencies: []

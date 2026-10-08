@@ -1,0 +1,26 @@
+---
+- name: Install k3s server # noqa: command-instead-of-module
+  ansible.builtin.shell: >
+    set -o pipefail &&
+    curl -sfL https://get.k3s.io |
+    INSTALL_K3S_VERSION={{ k3s_version }}
+    INSTALL_K3S_EXEC="server --data-dir {{ k3s_data_dir }} --log {{ k3s_server_log_file }} {{ k3s_server_exec_args | join(' ') }}"
+    sh -s -
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/k3s
+
+- name: Wait for k3s server token file
+  ansible.builtin.wait_for:
+    path: "{{ k3s_data_dir }}/server/token"
+    timeout: 60
+
+- name: Read k3s server token
+  ansible.builtin.slurp:
+    src: "{{ k3s_data_dir }}/server/token"
+  register: k3s_token_slurp
+
+- name: Expose k3s token to other hosts in play
+  ansible.builtin.set_fact:
+    k3s_token: "{{ k3s_token_slurp.content | b64decode | trim }}"
+    cacheable: true

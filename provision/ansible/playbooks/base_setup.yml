@@ -1,6 +1,7 @@
 ---
 
-- hosts: k3s_master
+- name: Base system setup (k3s cluster)
+  hosts: k3s_cluster
   become: true
   gather_facts: true
 
@@ -8,12 +9,14 @@
     - ../vars.yml
 
   tasks:
-    - include_role:
+    - name: System
+      ansible.builtin.include_role:
         name: system
       tags: ['system']
-    - include_role:
-        name: user
-      tags: ['user']
+    - name: Dotfiles
+      ansible.builtin.include_role:
+        name: dotfiles
+      tags: ['dotfiles']
 
 #    - name: Rebooting hosts
 #      reboot:

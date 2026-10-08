@@ -1,0 +1,5 @@
+---
+dotfiles_zsh_plugins_extra:
+  - kubectl.zsh
+  - kubetail.zsh
+  - helm.zsh

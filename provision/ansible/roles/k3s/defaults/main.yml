@@ -1,0 +1,18 @@
+---
+k3s_version: v1.37.1+k3s1
+k3s_data_dir: /k3s
+k3s_server_log_file: /var/log/k3s/server.log
+k3s_agent_log_file: /var/log/k3s/agent.log
+k3s_server_exec_args:
+  - '--flannel-backend'
+  - 'vxlan'
+  - '--flannel-iface'
+  - 'eth0'
+  - '--disable'
+  - 'traefik'
+  - '--disable'
+  - 'servicelb'
+  - '--disable'
+  - 'local-path'
+  - '--write-kubeconfig-mode'
+  - '644'

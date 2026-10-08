@@ -1,22 +1,12 @@
 ---
 
-- hosts: k3s_cluster
+- name: Full apt upgrade (opt-in, see roles/apt_upgrade)
+  hosts: k3s_cluster
   become: true
   gather_facts: true
 
   tasks:
-    - name: upgrade
-      ansible.builtin.apt:
-        upgrade: full
-        update_cache: true
-        cache_valid_time: 3600
-        autoclean: true
-        autoremove: true
-      register: apt_upgrade
-      retries: 5
-      until: apt_upgrade is success
-
-#  tasks:
-#    - include_role:
-#        name: apt
-#      tags: ['apt']
+    - name: Apt upgrade
+      ansible.builtin.include_role:
+        name: apt_upgrade
+      tags: ['apt_upgrade']

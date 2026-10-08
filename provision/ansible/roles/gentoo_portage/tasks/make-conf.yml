@@ -1,0 +1,8 @@
+---
+- name: Make.conf
+  ansible.builtin.template:
+    src: make.conf.j2
+    dest: /etc/portage/make.conf
+    owner: root
+    group: root
+    mode: "0644"

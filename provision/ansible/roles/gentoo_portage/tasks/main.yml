@@ -1,0 +1,16 @@
+---
+- name: Make.conf configuration
+  ansible.builtin.include_tasks: make-conf.yml
+  tags: ['make-conf']
+
+- name: Package use configuration
+  ansible.builtin.include_tasks: package-use.yml
+  tags: ['package-use']
+
+- name: Package accept_keywords configuration
+  ansible.builtin.include_tasks: package-accept-keywords.yml
+  tags: ['package-accept-keywords']
+
+- name: Package mask configuration
+  ansible.builtin.include_tasks: package-mask.yml
+  tags: ['package-mask']

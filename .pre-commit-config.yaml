@@ -3,12 +3,15 @@ repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v6.0.0
   hooks:
+  # fzf-tab is vendored upstream code; reformatting it would diverge the tree
+  # from the submodule the workstation config tracks.
   - id: trailing-whitespace
+    exclude: '^provision/ansible/roles/dotfiles/files/zsh-plugins/fzf-tab/'
   - id: end-of-file-fixer
+    exclude: '^provision/ansible/roles/dotfiles/files/zsh-plugins/fzf-tab/'
   - id: check-added-large-files
   - id: check-merge-conflict
   - id: detect-private-key
-  - id: end-of-file-fixer
   - id: check-json
   - id: check-symlinks
 - repo: local
@@ -18,6 +21,13 @@ repos:
     entry: scripts/sops-check.sh
     language: system
     files: '\.enc\.'
+  - id: ansible-lint
+    name: ansible-lint (provision/ansible)
+    entry: sh -c 'cd provision/ansible && ansible-lint --profile production .'
+    language: system
+    files: '^provision/ansible/'
+    types: [yaml]
+    pass_filenames: false
 - repo: https://github.com/adrienverge/yamllint.git
   rev: v1.35.1
   hooks:

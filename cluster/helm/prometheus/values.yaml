@@ -668,7 +668,7 @@ extraScrapeConfigs: |
         - 10.0.0.20:9100 #greypi
         - 10.0.0.21:9100 #whitepi
         - 10.0.0.22:9100 #redpi
-        - 10.0.0.23:9100 #greenpi
+        - 10.0.0.23:9100 #blackpi
 
   - job_name: 'pihole'
     static_configs:

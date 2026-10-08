@@ -1,0 +1,10 @@
+mirrors:
+  docker.io:
+    endpoint:
+      - "https://registry-1.docker.io"
+
+configs:
+  "registry-1.docker.io":
+    auth:
+      username: {{ k3s_registries_docker_io_username }}
+      password: {{ k3s_registries_docker_io_password }}

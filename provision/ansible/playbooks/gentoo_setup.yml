@@ -1,0 +1,16 @@
+---
+
+- name: Gentoo hosts setup
+  hosts: gentoo
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Portage
+      ansible.builtin.include_role:
+        name: gentoo_portage
+      tags: ['gentoo_portage']
+    - name: Dotfiles
+      ansible.builtin.include_role:
+        name: dotfiles
+      tags: ['dotfiles']

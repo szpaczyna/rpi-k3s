@@ -2,7 +2,7 @@
 - name: Disable APT recommends
   ansible.builtin.blockinfile:
     path: /etc/apt/apt.conf.d/02norecommends
-    mode: 0644
+    mode: "0644"
     create: true
     block: |
       APT::Install-Recommends "false";
@@ -10,45 +10,38 @@
       APT::Get::Install-Recommends "false";
       APT::Get::Install-Suggests "false";
 
-- name: Upgrade all system packages
-  ansible.builtin.apt:
-    upgrade: full
-    update_cache: true
-    cache_valid_time: 3600
-    autoclean: true
-    autoremove: true
-  register: apt_upgrade
-  retries: 5
-  until: apt_upgrade is success
-
 - name: Install common packages
   ansible.builtin.apt:
-    name: "{{ apt_install_packages }}"
+    name: "{{ system_apt_install_packages }}"
     install_recommends: false
     update_cache: true
     cache_valid_time: 3600
     autoclean: true
     autoremove: true
-  register: apt_install_common
+  register: system_apt_install_common
   retries: 5
-  until: apt_install_common is success
+  until: system_apt_install_common is success
   when:
-    - apt_install_packages is defined
-    - apt_install_packages is iterable
-    - apt_install_packages | length > 0
+    - system_apt_install_packages is defined
+    - system_apt_install_packages is iterable
+    - system_apt_install_packages | length > 0
 
 - name: Gather installed packages
   ansible.builtin.package_facts:
     manager: auto
 
 - name: Remove packages
+  when:
+    - system_apt_remove_packages is defined
+    - system_apt_remove_packages is iterable
+    - system_apt_remove_packages | length > 0
   block:
     - name: Check if snap is installed
       ansible.builtin.debug:
         msg: "snapd is installed"
-      register: snapd_check
+      register: system_snapd_check
       when:
-        - "'snapd' in apt_remove_packages"
+        - "'snapd' in system_apt_remove_packages"
         - "'snapd' in ansible_facts.packages"
     - name: Remove snap packages
       ansible.builtin.command: snap remove {{ item }}
@@ -57,13 +50,14 @@
         - core18
         - core20
         - snapd
+      changed_when: true
       when:
-        - "'snapd' in apt_remove_packages"
+        - "'snapd' in system_apt_remove_packages"
         - "'snapd' in ansible_facts.packages"
-        - snapd_check.failed is defined
+        - system_snapd_check.failed is defined
     - name: Remove packages
       ansible.builtin.apt:
-        name: "{{ apt_remove_packages }}"
+        name: "{{ system_apt_remove_packages }}"
         state: absent
         autoremove: true
     - name: Remove files
@@ -80,9 +74,5 @@
         - "/etc/cloud"
         - "/var/lib/cloud"
       when:
-        - "'snapd' in apt_remove_packages"
-        - "'cloud-init' in apt_remove_packages"
-  when:
-    - apt_remove_packages is defined
-    - apt_remove_packages is iterable
-    - apt_remove_packages | length > 0
+        - "'snapd' in system_apt_remove_packages"
+        - "'cloud-init' in system_apt_remove_packages"
