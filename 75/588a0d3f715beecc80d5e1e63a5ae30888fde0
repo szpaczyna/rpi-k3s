@@ -1,0 +1,25 @@
+provision/ansible/roles/dotfiles/tasks/zsh.yml
+  s_eaafd9b4c12212::t_16869600cb6f25 31-42
+provision/ansible/roles/dotfiles/defaults/main.yml
+  s_eaafd9b4c12212::t_131672f1127fc4 2
+provision/ansible/roles/dotfiles/templates/zshrc.j2
+  s_eaafd9b4c12212::t_2ded4d45701425 156
+.pre-commit-config.yaml
+  s_eaafd9b4c12212::t_4c8a2a42716a4d 6-7,9,11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "75588a0d3f715beecc80d5e1e63a5ae30888fde0",
+  "prompts": {},
+  "sessions": {
+    "s_eaafd9b4c12212": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ee5f2ad5effeMNxDVHI5OZDICv",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
