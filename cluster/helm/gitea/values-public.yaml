@@ -71,6 +71,8 @@ securityContext:
       - CHOWN
       - DAC_OVERRIDE
       - FOWNER
+      # sshd privsep forks a pre-auth child that chroots to /var/empty
+      - SYS_CHROOT
   #  readOnlyRootFilesystem: true
   #  runAsGroup: 1000
   #  runAsNonRoot: true

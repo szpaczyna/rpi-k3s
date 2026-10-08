@@ -9,7 +9,7 @@ set -euo pipefail
 # Environment (defaults suit Gitea Helm chart):
 #   DATA_DIR=/data
 #   APP_INI=$DATA_DIR/gitea/conf/app.ini
-#   REPO_ROOT=$DATA_DIR/git/repositories
+#   REPO_ROOT=<repository.ROOT from app.ini>
 #
 # Intended to run inside the gitea pod (e.g., gitea-0).
 
@@ -17,19 +17,38 @@ DRY_RUN=${DRY_RUN:-0}
 USE_PGPASS=${USE_PGPASS:-0}
 DATA_DIR=${DATA_DIR:-/data}
 APP_INI=${APP_INI:-$DATA_DIR/gitea/conf/app.ini}
-REPO_ROOT=${REPO_ROOT:-$DATA_DIR/git/repositories}
 
 log() { printf '%s\n' "$*"; }
 run() { if [ "$DRY_RUN" = "1" ]; then log "DRY: $*"; else eval "$*"; fi; }
 need() { command -v "$1" >/dev/null 2>&1 || { log "Missing required command: $1"; exit 1; }; }
 
 need git
-need psql
+
+# The gitea image ships no Postgres client, and this script cannot decide
+# anything without reading the mirror table, so the install runs even under
+# DRY_RUN. It lands in the ephemeral container layer, not the data volume.
+if ! command -v psql >/dev/null 2>&1; then
+  command -v apk >/dev/null 2>&1 || {
+    log "psql is missing and there is no apk to install it. Run this inside the gitea pod."
+    exit 1
+  }
+  log "Installing postgresql-client…"
+  apk add --no-cache postgresql-client
+  need psql
+fi
 
 if [ ! -f "$APP_INI" ]; then
   log "Cannot find app.ini at $APP_INI. Set APP_INI or ensure you're in the gitea pod."
   exit 1
 fi
+
+# Gitea only ever reads repositories from repository.ROOT. Writing anywhere else
+# leaves the mirrors invisible to the running instance.
+if [ -z "${REPO_ROOT:-}" ]; then
+  REPO_ROOT="$(sed -n '/^\[repository\]/,/^\[/p' "$APP_INI" | sed -n 's/^ROOT[[:space:]]*=[[:space:]]*//p' | tr -d '\r' | head -1)"
+fi
+REPO_ROOT="${REPO_ROOT:-$DATA_DIR/git/gitea-repositories}"
+log "Using REPO_ROOT=$REPO_ROOT"
 
 # Prefer environment variables injected by Helm chart; fall back to parsing app.ini with grep/sed
 # Env names follow Gitea convention: GITEA__database__HOST, NAME, USER, PASSWD
@@ -77,7 +96,9 @@ else
   export PGPASSWORD="$DB_PASS"
 fi
 
-SQL='SELECT r.id, u.name AS owner_name, r.name AS repo_name, m.remote_address
+# Gitea resolves every repository path through lower_name, so selecting name
+# here would create a second, invisible directory for any mixed-case repo.
+SQL='SELECT r.id, u.lower_name AS owner_name, r.lower_name AS repo_name, m.remote_address
      FROM mirror m
      JOIN repository r ON r.id = m.repo_id
      JOIN "user" u ON u.id = r.owner_id;'
