@@ -1,0 +1,16 @@
+scripts/ssh-test.sh
+  h_906bde6ad77cff 1-64
+scripts/ssl-expiry-date
+  h_906bde6ad77cff 1-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "87b6143128bcdbe5acace983384f2b4f9da94913",
+  "prompts": {},
+  "humans": {
+    "h_906bde6ad77cff": {
+      "author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
