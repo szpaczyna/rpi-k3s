@@ -1,0 +1,19 @@
+provision/ansible/roles/dotfiles/tasks/nvim.yml
+  s_eaafd9b4c12212::t_ad8348c9f8af69 65-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d6932c9e21f67356fc85aa9aeb99cf6ce1b49191",
+  "prompts": {},
+  "sessions": {
+    "s_eaafd9b4c12212": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ee5f2ad5effeMNxDVHI5OZDICv",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
