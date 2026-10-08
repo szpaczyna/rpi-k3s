@@ -1,5 +1,3 @@
-{{/* vim: set filetype=mustache: */}}
-
 {{- define "bitwarden.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
