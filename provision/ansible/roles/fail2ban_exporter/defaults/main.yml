@@ -1,8 +1,4 @@
 ---
-# Same switch as fail2ban itself: an exporter with no fail2ban to read has
-# nothing to collect. Set in group_vars/pihole/sshd.yml.
-fail2ban_exporter_enabled: '{{ sshd_fail2ban_enabled | default(false) | bool }}'
-
 # Pinned so a re-run is a no-op and an upstream release never lands unannounced.
 # Release page: https://gitlab.com/hectorjsmith/fail2ban-prometheus-exporter
 # GitHub mirror (no release assets): https://github.com/hctrdev/fail2ban-prometheus-exporter

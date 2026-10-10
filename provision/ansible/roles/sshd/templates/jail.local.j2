@@ -1,0 +1,51 @@
+{{ ansible_managed | comment }}
+
+[DEFAULT]
+# The home LAN and the operator's public IP arrive from the SOPS-encrypted
+# group_vars and never appear in this repository.
+ignoreip = {{ (sshd_fail2ban_ignoreip_base + sshd_fail2ban_ignoreip_host) | join(' ') }}
+
+# No reverse DNS per ban: under a brute-force flood the lookups cost more than
+# they buy.
+usedns = no
+
+bantime = {{ sshd_fail2ban_bantime }}
+
+# Repeat offenders get 2h, 4h, 8h ... instead of always the base bantime.
+bantime.increment = true
+bantime.factor = 2
+bantime.maxtime = 1w
+
+findtime = {{ sshd_fail2ban_findtime }}
+maxretry = {{ sshd_fail2ban_maxretry }}
+
+# Stated here rather than inherited on purpose: jail.d/defaults-debian.conf
+# moves between fail2ban releases, and this host bans over nftables. Plain
+# nftables rather than nftables-multiport because every jail here is single
+# port; it yields one address set per jail, as `nft list ruleset` shows.
+banaction = nftables
+banaction_allports = nftables[type=allports]
+
+[sshd]
+enabled = true
+port = ssh
+mode = normal
+
+# `auto`, stated explicitly to override the `systemd` that
+# jail.d/defaults-debian.conf sets for sshd. It resolves to pyinotify or
+# polling on these log files. Reading rsyslog's files beats the journald
+# backend because the `system` role sets Storage=volatile, which would empty
+# the journal after every reboot and take the recidive history with it.
+backend = auto
+logpath = /var/log/auth.log
+{% if sshd_fail2ban_recidive_enabled %}
+
+[recidive]
+enabled = true
+port = all
+findtime = {{ sshd_fail2ban_recidive_findtime }}
+maxretry = {{ sshd_fail2ban_recidive_maxretry }}
+bantime = {{ sshd_fail2ban_recidive_bantime }}
+backend = auto
+logpath = /var/log/fail2ban.log
+{% endif %}

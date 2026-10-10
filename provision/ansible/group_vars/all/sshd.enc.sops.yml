@@ -1,0 +1,31 @@
+sshd_password_allowed_cidrs:
+    - ENC[AES256_GCM,data:STN6BCcfY9c7fR4=,iv:wtkP5j3eWVu6z5rFJ0KVtuGFPwcXD8QGgjPQNIGpciI=,tag:R0brAhcnQ16XHKMBBtZw5A==,type:str]
+sshd_fail2ban_ignoreip_host:
+    - ENC[AES256_GCM,data:F1fRtNydsN2mD6k=,iv:tdfHpdyjPnzJS4OKfshOTA0BIoofol3zE4dx+rqLmP8=,tag:GFe7KkrfzPfaeKpApS+RNg==,type:str]
+    - ENC[AES256_GCM,data:FsI/XpxEU47Ne7JD,iv:VgjiS+vQ/6zhBQO6WgpjcU41HB2/0cXFo2kdrFcJuHY=,tag:fSHUCacxvDX7yzvbtXLubw==,type:str]
+sops:
+    lastmodified: "2026-10-10T09:54:44Z"
+    mac: ENC[AES256_GCM,data:M3XUmbOcmO2VxgoFbtKSfvHFB7472/14bzFVXl6zL48qU2tzQkBrTQboVK9bN00yv8AqhcgoNv1BWPzeWGW+mxWLnoXfqaShKB888xTYzTlWIl6pF5tPm6nE6LcfEdq8WgPIpo5TGbTGhXRiEB9vhKt2wYP1jU2wFjqYJP4hu5w=,iv:TISnsciWQJvkddsQWs/U5V4ctWBVtCSlyK1txFi52Z0=,tag:Czke14zRVt8cYwSawKPh/A==,type:str]
+    pgp:
+        - created_at: "2026-10-10T09:54:44Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hQIMA4APDMemWJ+LAQ//ZUH7QqnQCLy3aA3FzknK+1upRhHH79+fDtjSruccH6XF
+            uz/JmJLJsmqDzH0Z/QOt+S8XjCv8/1jU/B4+/YmWc1e2crNkGMkP+4qMciJuWtQq
+            sSt9BTGhEnZY5LSGqSLynYCanhW3gGbmPIQeUZ8jm6+aOaL7L9+6kDMud7bt+Sx7
+            HKc+tuccgyjDszPEnfCwljQIBHWUbxEdHvAbSxYYkqU4wyrO51Og8J8nJTULnJpl
+            9myER3529VmwYRyxMyaLtoxf27VV9h+DKuRNFgi4v8EQFl9LlGLeSztz+/QsBVJn
+            DIumqqNL/2yxyfvk1ir+aGgzxp2A9nWdjPEYfnK/rzH4KiP4Esfb0q8jCmHLKo1m
+            2pl6LYRvEqO62diuWW3CJo1doR9UnvbxstvKbDUx04xqjo82U8Fq7KROH2SgZwRR
+            PuDkdsl3c/LFcCLkpHUVE57BNoWKNZHVu66gBrfxLhUxWtzL9EyrYJjlr8BNUxHU
+            Uxbfn1H3t8OL8GfWdwrAraItgtxM6zaR0Oj+QV/MtdQCar7/m8S1U36NKlMpl4NU
+            s5yWsMSGvjQpaDUGSsTIGEFot52iPDUXAKjZuiFz5I9hJKicJCoq4Kbxc6Mxs29X
+            JxU6v0umYT66tN1IU6FgNqNmHy0nGfju/bArTtu5qgcOM9+iG5FgYVzGZVyRmGrS
+            XAGJihCQ3Q66QTp6+DHtu5HY7yy1D4nWYQ+bcW13jWLuUpoUY6mhAOvSMqVwLZXr
+            +k+9fgMBFLQtO4aV2IFzOaistE48+dCZw4KzKEu5aRTCbFz3UgrrXp3+ihxL
+            =12t7
+            -----END PGP MESSAGE-----
+          fp: D6380604E0A09E002380524F0AECB9DCA67CB14C
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3

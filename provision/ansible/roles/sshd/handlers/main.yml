@@ -1,0 +1,13 @@
+---
+# `service` rather than `systemd`: the Gentoo hosts run OpenRC, and the module
+# picks the right init per host. `reloaded` keeps existing sessions alive, which
+# matters because this role rewrites the config sshd is currently serving.
+- name: Reload sshd
+  ansible.builtin.service:
+    name: "{{ sshd_service_name }}"
+    state: reloaded
+
+- name: Restart fail2ban
+  ansible.builtin.service:
+    name: fail2ban
+    state: restarted

@@ -1,0 +1,73 @@
+---
+# The jails below read files written by rsyslog. On any other family the log
+# paths and backend would both be wrong, so stop before rendering a jail that
+# silently bans nothing.
+- name: Assert fail2ban is only enabled on Debian family
+  ansible.builtin.assert:
+    that: ansible_facts['os_family'] == 'Debian'
+    fail_msg: >-
+      sshd_fail2ban_enabled is set on a {{ ansible_facts['os_family'] }} host.
+      The jails assume Debian-style log paths; pick log paths before enabling
+      it elsewhere.
+    quiet: true
+  tags: ['sshd']
+
+- name: Install fail2ban
+  ansible.builtin.apt:
+    name: fail2ban
+    install_recommends: false
+    state: present
+  register: sshd_fail2ban_install
+  retries: 5
+  until: sshd_fail2ban_install is success
+  tags: ['sshd']
+
+# Checked before templating: a jail pointing at a log file that does not exist
+# starts, matches nothing, and reports itself as healthy.
+- name: Look up fail2ban log sources
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  loop:
+    - /var/log/auth.log
+    - /var/log/fail2ban.log
+  register: sshd_fail2ban_logs
+  tags: ['sshd']
+
+- name: Assert fail2ban log sources exist
+  ansible.builtin.assert:
+    that: item.stat.exists
+    fail_msg: >-
+      {{ item.item }} is missing. rsyslog must be installed and writing before
+      the jails can see a single log line.
+    quiet: true
+  loop: "{{ sshd_fail2ban_logs.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  tags: ['sshd']
+
+- name: Deploy fail2ban jail configuration
+  ansible.builtin.template:
+    src: jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart fail2ban
+  tags: ['sshd']
+
+- name: Verify fail2ban configuration
+  ansible.builtin.command: fail2ban-client -t
+  changed_when: false
+  tags: ['sshd']
+
+- name: Apply pending reloads and restarts
+  ansible.builtin.meta: flush_handlers
+  tags: ['sshd']
+
+# `fail2ban-client -t` only parses the files. An unusable backend or a broken
+# action passes it and still leaves the daemon dead on startup, so this asks
+# the running server instead.
+- name: Confirm fail2ban is up with its jails
+  ansible.builtin.command: fail2ban-client status
+  changed_when: false
+  tags: ['sshd']

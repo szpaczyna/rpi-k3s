@@ -1,0 +1,26 @@
+---
+# One managed file rather than a drop-in. The shipped configs disagree about
+# whether sshd_config.d is read at all (Ubuntu comments the Include out,
+# Gentoo has none), and first-obtained-value-wins means the stock
+# 50-cloud-init.conf would beat any drop-in added here anyway.
+- name: Deploy sshd configuration
+  ansible.builtin.template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: "0644"
+    # Refuses to install a config sshd cannot parse, so a typo never reaches the
+    # running daemon and never costs the existing session.
+    validate: /usr/sbin/sshd -t -f %s
+  notify: Reload sshd
+  tags: ['sshd']
+
+# Dead weight: the managed config has no Include line, so anything in this
+# directory is ignored regardless. Removed so `sshd -T` stays explainable and so
+# cloud-init does not leave a `PasswordAuthentication yes` lying around.
+- name: Remove cloud-init sshd drop-in
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d/50-cloud-init.conf
+    state: absent
+  tags: ['sshd']

@@ -13,6 +13,10 @@
       ansible.builtin.include_role:
         name: system
       tags: ['system']
+    - name: SSH
+      ansible.builtin.include_role:
+        name: sshd
+      tags: ['sshd']
     - name: Dotfiles
       ansible.builtin.include_role:
         name: dotfiles

@@ -1,0 +1,45 @@
+{{ ansible_managed | comment }}
+
+# One config for Ubuntu and Gentoo. Everything distro-specific comes from role
+# defaults, so a host change is a variable change, not a per-distro template.
+
+Port 22
+AddressFamily any
+
+# Root may log in with a password, but only from the home LAN (see the Match
+# block at the end). From anywhere else root is publickey-only, like everyone
+# else.
+PermitRootLogin prohibit-password
+PubkeyAuthentication yes
+PasswordAuthentication no
+
+# Keyboard-interactive would hand authentication to PAM and route around
+# PasswordAuthentication, so it stays off.
+KbdInteractiveAuthentication no
+AuthenticationMethods publickey
+
+UsePAM yes
+PermitEmptyPasswords no
+
+LoginGraceTime 30
+MaxAuthTries 3
+MaxStartups 10:30:30
+
+PrintMotd no
+PrintLastLog no
+X11Forwarding no
+PermitTunnel no
+
+AcceptEnv {{ sshd_accept_env | join(' ') }}
+
+Subsystem sftp {{ sshd_sftp_subsystem_path }}
+
+# Must stay last: everything after a Match block belongs to that block, so a
+# global directive here would silently apply to root from the LAN only.
+{% for cidr in sshd_password_allowed_cidrs %}
+Match Address {{ cidr }} User root
+    PermitRootLogin yes
+    PasswordAuthentication yes
+    AuthenticationMethods any
+
+{% endfor %}

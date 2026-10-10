@@ -5,6 +5,7 @@
   ansible.builtin.stat:
     path: "{{ fail2ban_exporter_socket }}"
   register: fail2ban_exporter_socket_stat
+  tags: ['fail2ban-exporter']
 
 - name: Assert fail2ban is running
   ansible.builtin.assert:
@@ -15,6 +16,7 @@
       The exporter has nothing to collect and would restart-loop on socket
       connection errors.
     quiet: true
+  tags: ['fail2ban-exporter']
 
 - name: Create download and version directories
   ansible.builtin.file:
@@ -26,6 +28,7 @@
   loop:
     - "{{ fail2ban_exporter_download_dir }}"
     - "{{ fail2ban_exporter_download_dir }}/{{ fail2ban_exporter_version }}"
+  tags: ['fail2ban-exporter']
 
 - name: Download fail2ban exporter
   ansible.builtin.get_url:
@@ -35,6 +38,7 @@
     owner: root
     group: root
     mode: "0644"
+  tags: ['fail2ban-exporter']
 
 # Extracts into a directory named after the pinned version, so bumping
 # fail2ban_exporter_version is all it takes to install a new binary and a plain
@@ -47,12 +51,14 @@
     owner: root
     group: root
     creates: "{{ fail2ban_exporter_download_dir }}/{{ fail2ban_exporter_version }}/fail2ban_exporter"
+  tags: ['fail2ban-exporter']
 
 - name: Link fail2ban exporter into PATH
   ansible.builtin.file:
     src: "{{ fail2ban_exporter_download_dir }}/{{ fail2ban_exporter_version }}/fail2ban_exporter"
     dest: "{{ fail2ban_exporter_binary }}"
     state: link
+  tags: ['fail2ban-exporter']
 
 - name: Install systemd unit
   ansible.builtin.template:
@@ -62,6 +68,7 @@
     group: root
     mode: "0644"
   notify: Restart fail2ban exporter
+  tags: ['fail2ban-exporter']
 
 - name: Enable fail2ban exporter
   ansible.builtin.systemd:
@@ -69,3 +76,4 @@
     enabled: true
     state: started
     daemon_reload: true
+  tags: ['fail2ban-exporter']
