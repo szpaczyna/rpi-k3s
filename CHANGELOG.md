@@ -1,4 +1,20 @@
 # Changelog
+## [0.6.8](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.7...v0.6.8) (2026-10-10)
+
+
+### Features
+
+* **ansible:** add fail2ban prometheus exporter role ([#229](https://github.com/szpaczyna/rpi-k3s/issues/229)) ([39cb220](https://github.com/szpaczyna/rpi-k3s/commit/39cb2200ed7223b8ef7b904de998626fa0344944))
+* **ansible:** manage sshd config and fail2ban across host groups ([#228](https://github.com/szpaczyna/rpi-k3s/issues/228)) ([fadf20f](https://github.com/szpaczyna/rpi-k3s/commit/fadf20f78fa82e25b6fb1fd52c635a8b6fb40d46))
+* **ansible:** rebuild provisioning for Ubuntu 26.04 + add gentoo/pihole/k3s roles ([#226](https://github.com/szpaczyna/rpi-k3s/issues/226)) ([e1a48d0](https://github.com/szpaczyna/rpi-k3s/commit/e1a48d01410dd2cdeaa9d8d163604552d83e4b62))
+
+
+### Bug Fixes
+
+* **gitea:** restore SSH access and repair mirror recovery script ([#227](https://github.com/szpaczyna/rpi-k3s/issues/227)) ([1d7153c](https://github.com/szpaczyna/rpi-k3s/commit/1d7153c7a4c89badaef35181eb61bc4f0fe088d1))
+* **provisioning:** pyaml version ([0bc6767](https://github.com/szpaczyna/rpi-k3s/commit/0bc676777d38077359b23a15cb188ed3d9bfe434))
+* **renovate:** stop requiring an in-repo renovate.json ([#224](https://github.com/szpaczyna/rpi-k3s/issues/224)) ([2b34bfa](https://github.com/szpaczyna/rpi-k3s/commit/2b34bfaa98838cb87774731613f32eb8c71da5fb))
+
 ## [0.6.7](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.6...v0.6.7) (2026-10-05)
 
 
