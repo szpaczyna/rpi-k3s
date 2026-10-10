@@ -675,6 +675,12 @@ extraScrapeConfigs: |
       - targets:
         - 10.0.0.2:9617
 
+  # fail2ban_exporter.service, deployed by the ansible fail2ban_exporter role.
+  - job_name: 'fail2ban'
+    static_configs:
+      - targets:
+        - 10.0.0.2:9191 #blueberry
+
   # - job_name: 'erx'
   #   static_configs:
   #     - targets:

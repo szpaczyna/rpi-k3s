@@ -1,0 +1,34 @@
+---
+# Pinned so a re-run is a no-op and an upstream release never lands unannounced.
+# Release page: https://gitlab.com/hectorjsmith/fail2ban-prometheus-exporter
+# GitHub mirror (no release assets): https://github.com/hctrdev/fail2ban-prometheus-exporter
+fail2ban_exporter_version: 0.10.3
+
+fail2ban_exporter_arch: >-
+  {{ 'arm64' if ansible_facts['architecture'] == 'aarch64' else 'amd64' }}
+
+fail2ban_exporter_base_url: >-
+  https://gitlab.com/hectorjsmith/fail2ban-prometheus-exporter/-/releases/v{{ fail2ban_exporter_version }}/downloads
+
+fail2ban_exporter_archive: >-
+  fail2ban_exporter_{{ fail2ban_exporter_version }}_linux_{{ fail2ban_exporter_arch }}.tar.gz
+
+# From fail2ban_exporter_{{ version }}_checksums.txt at the same release page.
+# Public release checksums, not credentials.
+fail2ban_exporter_sha256:
+  arm64: d7955cd0292dd0f504087b22a90cc1e9121d6150dc52076f2c6f1fbfd50e2f9e # pragma: allowlist secret
+  amd64: 85733a343048090dba169226a8ca0b59b9cfecb9eaa163014a94146f04116e34 # pragma: allowlist secret
+
+fail2ban_exporter_sha256_value: >-
+  {{ fail2ban_exporter_sha256[fail2ban_exporter_arch] }}
+
+fail2ban_exporter_binary: /usr/local/bin/fail2ban_exporter
+fail2ban_exporter_download_dir: /opt/fail2ban-exporter
+fail2ban_exporter_socket: /var/run/fail2ban/fail2ban.sock
+
+# 0.0.0.0 so Prometheus on the LAN can scrape it. Only the exporter's own /metrics
+# is exposed, and there is no basic auth, so do not forward this port from the
+# router.
+fail2ban_exporter_listen_address: 0.0.0.0:9191
+
+fail2ban_exporter_extra_args: []

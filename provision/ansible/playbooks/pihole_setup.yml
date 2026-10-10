@@ -17,6 +17,13 @@
       ansible.builtin.include_role:
         name: sshd
       tags: ['sshd']
+    - name: Fail2ban exporter
+      ansible.builtin.include_role:
+        name: fail2ban_exporter
+      tags: ['fail2ban-exporter']
+      # Read at play scope, so it has to be the switch from group_vars rather
+      # than a role default, which is not loaded yet when this evaluates.
+      when: sshd_fail2ban_enabled | default(false) | bool
     - name: Dotfiles
       ansible.builtin.include_role:
         name: dotfiles

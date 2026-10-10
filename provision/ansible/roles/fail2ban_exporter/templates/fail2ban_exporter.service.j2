@@ -1,0 +1,28 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description=Fail2Ban Prometheus exporter
+Documentation=https://gitlab.com/hectorjsmith/fail2ban-prometheus-exporter
+# fail2ban recreates the socket on every start, so the exporter has to follow.
+After=network-online.target fail2ban.service
+Wants=fail2ban.service
+
+[Service]
+Type=simple
+# Runs as root because fail2ban's socket is mode 0700 root:root and there is no
+# fail2ban group to grant access through.
+ExecStart={{ fail2ban_exporter_binary }} \
+  --collector.f2b.socket={{ fail2ban_exporter_socket }} \
+  --web.listen-address={{ fail2ban_exporter_listen_address }}{% for arg in fail2ban_exporter_extra_args %} \
+  {{ arg }}{% endfor %}
+
+Restart=on-failure
+RestartSec=5s
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+
+[Install]
+WantedBy=multi-user.target
