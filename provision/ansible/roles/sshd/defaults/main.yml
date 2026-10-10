@@ -1,9 +1,9 @@
 ---
-# Publickey-only for every host and every user, with one exception: root may
-# use a password, but only from the home LAN. A port-forwarded public session
-# arrives with the client's real source address, so it never matches.
-sshd_password_allowed_cidrs:
-  - 10.0.0.0/24
+# Which networks may log in as root with a password. Empty by default and set
+# from the SOPS-encrypted group_vars/all/sshd.enc.sops.yml, because this value
+# decides who gets password access to root. A host without that file renders no
+# Match block at all, so it stays publickey-only.
+sshd_password_allowed_cidrs: []
 
 # sftp-server sits in a different prefix on Gentoo than on Debian/Ubuntu.
 sshd_sftp_subsystem_path: >-

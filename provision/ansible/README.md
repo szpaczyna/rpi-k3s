@@ -92,15 +92,21 @@ To edit:
 sops group_vars/k3s_cluster/registries.enc.sops.yml
 ```
 
-`group_vars/pihole/ignoreips.enc.sops.yml` follows the same pattern and holds
-`sshd_fail2ban_ignoreip_host`, the home LAN and the operator's public IP that
-fail2ban must never ban (see [`sshd`](#sshd)). The non-secret switch stays in
-plaintext next to it, in `group_vars/pihole/sshd.yml`, so toggling fail2ban does
-not require the PGP key. A change of ISP means editing both, the file and the
-running config:
+`group_vars/all/sshd.enc.sops.yml` follows the same pattern and holds the two
+values that name this fleet's networks (see [`sshd`](#sshd)):
+`sshd_password_allowed_cidrs`, who may log in as root with a password, and
+`sshd_fail2ban_ignoreip_host`, the ranges fail2ban must never ban. Both are
+plaintext elsewhere by their nature: the home subnet and a public IP are network
+topology, which is exactly what the inventory is encrypted for.
+
+The non-secret fail2ban switch stays in plaintext in
+`group_vars/pihole/sshd.yml`, so toggling it does not require the PGP key. The
+LAN range appears in both variables deliberately, so a rename or a subnet change
+is one edit here rather than two lists that can drift apart. A change of ISP
+means editing this file and re-running the role:
 
 ```bash
-sops group_vars/pihole/ignoreips.enc.sops.yml
+sops group_vars/all/sshd.enc.sops.yml
 ```
 
 ## Roles
@@ -221,8 +227,13 @@ Match Address 10.0.0.0/24 User root
 A port-forwarded public session arrives with the client's real source address, so
 it never matches and root falls back to publickey. `KbdInteractiveAuthentication`
 stays off, otherwise PAM keyboard-interactive routes around
-`PasswordAuthentication`. CIDRs are a list (`sshd_password_allowed_cidrs` in
-`defaults/main.yml`).
+`PasswordAuthentication`.
+
+`sshd_password_allowed_cidrs` defaults to an empty list and comes from the
+SOPS-encrypted `group_vars/all/sshd.enc.sops.yml`. It lives there because it
+decides who gets password access to root, which is the most sensitive line in
+the whole config. Empty is the safe direction: a host without that file renders
+no `Match` block at all and stays publickey-only.
 
 Two distro differences are variables rather than separate templates:
 `sshd_sftp_subsystem_path` (`/usr/lib/openssh/sftp-server` vs
@@ -272,10 +283,8 @@ flushes handlers and then runs `fail2ban-client status` against the live server,
 which is the check that catches it.
 
 `ignoreip` combines loopback from `defaults/main.yml` with the house LAN and the
-operator's public IP from the SOPS-encrypted
-`group_vars/pihole/ignoreips.enc.sops.yml` (see
-[SOPS secrets](#sops-secrets-in-group_vars)). Those two are encrypted because
-they are network topology, same reasoning as the inventory.
+operator's public IP from the SOPS-encrypted `group_vars/all/sshd.enc.sops.yml`
+(see [SOPS secrets](#sops-secrets-in-group_vars)).
 
 ### `dotfiles`
 

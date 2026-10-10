@@ -1,0 +1,31 @@
+sshd_password_allowed_cidrs:
+    - ENC[AES256_GCM,data:Zgh/0wGYfVYo7HM=,iv:Vgf+IzqslvQFMwQNmR3pbxbDJF7k2p7nrW3Q2XtEnTU=,tag:bday7bTTtiVJrt1hR8H9Mg==,type:str]
+sshd_fail2ban_ignoreip_host:
+    - ENC[AES256_GCM,data:b9SEptJnCSZ0zwQ=,iv:6/ygT/UDRKEH8XjW8IWZ4voP0eW1OsJ5gK9f2kclRW4=,tag:3FCSq+d/PXqat3Jgq+dGtw==,type:str]
+    - ENC[AES256_GCM,data:C44P9cbqy6rFeJFv,iv:PRrZeGfJd0zYjFZRPRJhmVD9xuVt3w3Qc5yMoFsT0NY=,tag:93K9rARUiXNHTE3W0Ci0yA==,type:str]
+sops:
+    lastmodified: "2026-10-10T09:46:54Z"
+    mac: ENC[AES256_GCM,data:58Q7iHBYjOBIvmfh/e2Jj9vCUwPTwSmmUkFYo/gZMk/JYX1bxgvaFM38DuGHcY5vlw1HV4D24ihPs7tzx+4gX0LTJM5aLugpHH2KCoSmxFVxQucTDwhlye3odNj9BGys1e36br+/+TobwM5hs864n2QT0RYm+aVZKihv0EEEjEI=,iv:/OojpA7O0ZZo6QEA+kpFFsXxcju0znMbuQGZrslZKCM=,tag:uAlZT17vIAll6Bh0rm7O3g==,type:str]
+    pgp:
+        - created_at: "2026-10-10T09:46:54Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hQIMA4APDMemWJ+LARAAqyPDxU37pzAEThwHKR/+y+i0kiLYPKFBlPTSxxGjjSP/
+            T2xkjMCK5G4iJi4Ae6zvcLegfPrgwKCG+nbJqa7sKeFcEoEXii5e8XCxKQoCQOx0
+            IXl77als3c/pJKsXep8RjxXuqlgXZ8Orkr3fXRos1ckWHti51qvo9ssPgpEZYje2
+            b9TzkMLRaB1LtMhIwFAhGDWQMdRPzVcwNjyvTEUorf1PWWE+vrFLyLJQeXrIseXT
+            H9i9+HUyOWff7L26FlAxUU9o+kDIY3jfwjjLpKz7vZs36xxPc0qlT3viLs9APJCV
+            PXD8EHNeZ2d6RcHSwXlAdqYrVepwPtVbEQSPEXoBdM+uFtwtVeIQ9H4qezwniPRE
+            GsDLyWJrXTHAJE6DuTIH29FY7/RtF+lnSDZoh1QpbESG128J51cRK/lW9FS0aOZq
+            /idks2ZIceKSOB/qzFBonWiOeHiw3aW1GN4fVnhi5LxtPGuB2+euG3mVg5btsIOo
+            dvdVXz7JdcvnEowc5lqxXcOPcTmfsHW8ojb9R0Giu05VxuweUK6verqOdJQq3o07
+            i7K2SIqpP+YOCseeIpOJc2DwnuvMEBhVp5zoYr3CO18lQpZlkUrLBhzmyic/EFZP
+            u/F4awFb50GjlL+1Vesc4aM+bt2CfKz0yKYiMSoe2OAEYC5kJAPCx05O4+FJpFbS
+            XgFRWl3Z0HMqXkL1FneAMhaATGlWG3+3/Siv4ov26N7lpjZh37mh19G+3ddODVS6
+            OuyMIRoq0toZhik7Yluk1YcKf+qVeAWSWM1RB+RsxTcjNbE04AGtbJmLACn90Ow=
+            =6uU2
+            -----END PGP MESSAGE-----
+          fp: D6380604E0A09E002380524F0AECB9DCA67CB14C
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3
