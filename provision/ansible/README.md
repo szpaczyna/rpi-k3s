@@ -95,15 +95,14 @@ sops group_vars/k3s_cluster/registries.enc.sops.yml
 `group_vars/all/sshd.enc.sops.yml` follows the same pattern and holds the two
 values that name this fleet's networks (see [`sshd`](#sshd)):
 `sshd_password_allowed_cidrs`, who may log in as root with a password, and
-`sshd_fail2ban_ignoreip_host`, the ranges fail2ban must never ban. Both are
-plaintext elsewhere by their nature: the home subnet and a public IP are network
-topology, which is exactly what the inventory is encrypted for.
+`sshd_fail2ban_ignoreip_host`, the ranges fail2ban must never ban. Both name the
+home subnet, and the second also a public IP, so they are the same kind of secret
+as the inventory: network topology. They share one file on purpose, because a
+subnet change should be one edit rather than two lists that can drift apart.
 
 The non-secret fail2ban switch stays in plaintext in
-`group_vars/pihole/sshd.yml`, so toggling it does not require the PGP key. The
-LAN range appears in both variables deliberately, so a rename or a subnet change
-is one edit here rather than two lists that can drift apart. A change of ISP
-means editing this file and re-running the role:
+`group_vars/pihole/sshd.yml`, so toggling it does not require the PGP key. A
+change of ISP means editing this file and re-running the role:
 
 ```bash
 sops group_vars/all/sshd.enc.sops.yml
@@ -218,7 +217,7 @@ replaces both hand-maintained configs that used to live per distro. The policy i
 publickey-only everywhere, with one exception:
 
 ```
-Match Address 10.0.0.0/24 User root
+Match Address <cidr> User root
     PermitRootLogin yes
     PasswordAuthentication yes
     AuthenticationMethods any
@@ -232,8 +231,9 @@ stays off, otherwise PAM keyboard-interactive routes around
 `sshd_password_allowed_cidrs` defaults to an empty list and comes from the
 SOPS-encrypted `group_vars/all/sshd.enc.sops.yml`. It lives there because it
 decides who gets password access to root, which is the most sensitive line in
-the whole config. Empty is the safe direction: a host without that file renders
-no `Match` block at all and stays publickey-only.
+the whole config, and because the CIDR is network topology. Empty is the safe
+direction: a host without that file renders no `Match` block at all and stays
+publickey-only.
 
 Two distro differences are variables rather than separate templates:
 `sshd_sftp_subsystem_path` (`/usr/lib/openssh/sftp-server` vs
