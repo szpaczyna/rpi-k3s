@@ -1,0 +1,45 @@
+---
+# Publickey-only for every host and every user, with one exception: root may
+# use a password, but only from the home LAN. A port-forwarded public session
+# arrives with the client's real source address, so it never matches.
+sshd_password_allowed_cidrs:
+  - 10.0.0.0/24
+
+# sftp-server sits in a different prefix on Gentoo than on Debian/Ubuntu.
+sshd_sftp_subsystem_path: >-
+  {{ '/usr/lib64/misc/sftp-server'
+     if ansible_facts['os_family'] == 'Gentoo'
+     else '/usr/lib/openssh/sftp-server' }}
+
+sshd_service_name: >-
+  {{ 'sshd' if ansible_facts['os_family'] == 'Gentoo' else 'ssh' }}
+
+sshd_accept_env:
+  - LANG
+  - LC_*
+  - COLORTERM
+  - NO_COLOR
+
+# --- fail2ban -----------------------------------------------------------------
+# Off everywhere but the internet-facing host; see group_vars/pihole/sshd.yml.
+# The jails read Debian-style log files, so the role only supports Debian
+# family hosts and asserts as much before writing anything.
+sshd_fail2ban_enabled: false
+
+# Loopback, always ignored. The house LAN and the operator's public IP are
+# appended from the SOPS-encrypted group_vars, so they stay out of the repo.
+sshd_fail2ban_ignoreip_base:
+  - 127.0.0.1/8
+  - ::1
+sshd_fail2ban_ignoreip_host: []
+
+sshd_fail2ban_bantime: 60m
+sshd_fail2ban_findtime: 10m
+sshd_fail2ban_maxretry: 5
+
+# Re-bans anyone the other jails already banned, so a scanner that returns
+# nightly still ends up locked out.
+sshd_fail2ban_recidive_enabled: true
+sshd_fail2ban_recidive_bantime: 1w
+sshd_fail2ban_recidive_findtime: 1d
+sshd_fail2ban_recidive_maxretry: 3

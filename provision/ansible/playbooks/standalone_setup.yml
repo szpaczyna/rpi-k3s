@@ -10,7 +10,11 @@
 
   tasks:
     # No system or k3s role here: these hosts run neither the cluster nor
-    # Pi-hole, they only share the shell and editor setup.
+    # Pi-hole, they only share the shell, editor and sshd setup.
+    - name: SSH
+      ansible.builtin.include_role:
+        name: sshd
+      tags: ['sshd']
     - name: Dotfiles
       ansible.builtin.include_role:
         name: dotfiles

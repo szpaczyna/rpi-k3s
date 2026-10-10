@@ -32,16 +32,18 @@ ansible-playbook playbooks/apt.yaml
 - `ansible-core`, `ansible-lint`, and the `docker` Python package are pinned
   in `requirements.txt`.
 - Ansible Galaxy collections (`ansible.posix`, `community.docker`,
-  `community.general`, `kubernetes.core`, `community.sops`) and the
-  `mrlesmithjr.zfs` role are pinned in `requirements.yml`.
-- `sops` CLI installed locally, with access to the PGP key listed in
-  `.sops.yaml` (repo root) — needed to decrypt the inventory and any
-  SOPS-encrypted `group_vars`.
+  `community.general`, `kubernetes.core`, `community.sops`) are pinned in
+  `requirements.yml`.
+- `sops` CLI installed locally, with the private half of the PGP key in the
+  local keyring — needed to decrypt the inventory and any SOPS-encrypted
+  `group_vars`. The recipient comes from the keyring, since the repo carries no
+  `.sops.yaml`.
 
-Install everything into an already-active virtualenv:
+`setup-venv.sh` installs into whatever virtualenv is active, so it works with
+the `autoswitch_virtualenv` zsh plugin as well as a manual activation:
 
 ```bash
-python3 -m venv .venv && . .venv/bin/activate
+. .venv/bin/activate   # or cd in and let autoswitch handle it
 ./setup-venv.sh
 ```
 
@@ -90,6 +92,17 @@ To edit:
 sops group_vars/k3s_cluster/registries.enc.sops.yml
 ```
 
+`group_vars/pihole/ignoreips.enc.sops.yml` follows the same pattern and holds
+`sshd_fail2ban_ignoreip_host`, the home LAN and the operator's public IP that
+fail2ban must never ban (see [`sshd`](#sshd)). The non-secret switch stays in
+plaintext next to it, in `group_vars/pihole/sshd.yml`, so toggling fail2ban does
+not require the PGP key. A change of ISP means editing both, the file and the
+running config:
+
+```bash
+sops group_vars/pihole/ignoreips.enc.sops.yml
+```
+
 ## Roles
 
 | Role | Applies to | What it does |
@@ -100,6 +113,7 @@ sops group_vars/k3s_cluster/registries.enc.sops.yml
 | `pihole` | `pihole` | Manages only the Pi-hole v6 config *deviations* from default (via `pihole-FTL --config`), plus adlists in `gravity.db`. |
 | `gentoo_portage` | `gentoo` | Portage config for Gentoo hosts: `make.conf`, `package.use`, `package.accept_keywords/old`, `package.mask`. |
 | `dotfiles` | `k3s_cluster`, `pihole`, `gentoo` | Shared shell/editor setup: zsh (zshrc + plugins), tmux, fastfetch, neovim. |
+| `sshd` | `k3s_cluster`, `pihole`, `gentoo`, `standalone` | One managed `/etc/ssh/sshd_config` for both distros (publickey-only, root password from the LAN), plus fail2ban jails on the internet-facing host. |
 
 ### `system`
 
@@ -191,6 +205,78 @@ Manages Portage config on the Gentoo hosts (`make.conf`, `package.use/`,
 `old/` subdirectory, keeping them visually separate from any current
 keyword unmasks that might get added later.
 
+### `sshd`
+
+Runs on every host group (`k3s_cluster`, `pihole`, `gentoo`, `standalone`) and
+replaces both hand-maintained configs that used to live per distro. The policy is
+publickey-only everywhere, with one exception:
+
+```
+Match Address 10.0.0.0/24 User root
+    PermitRootLogin yes
+    PasswordAuthentication yes
+    AuthenticationMethods any
+```
+
+A port-forwarded public session arrives with the client's real source address, so
+it never matches and root falls back to publickey. `KbdInteractiveAuthentication`
+stays off, otherwise PAM keyboard-interactive routes around
+`PasswordAuthentication`. CIDRs are a list (`sshd_password_allowed_cidrs` in
+`defaults/main.yml`).
+
+Two distro differences are variables rather than separate templates:
+`sshd_sftp_subsystem_path` (`/usr/lib/openssh/sftp-server` vs
+`/usr/lib64/misc/sftp-server`) and `sshd_service_name` (`ssh` vs `sshd`).
+
+`tasks/sshd.yml` renders `/etc/ssh/sshd_config` with `validate: /usr/sbin/sshd -t
+-f %s`, so a config sshd cannot parse is never installed. The handler reloads
+rather than restarts, and the role never touches host keys. It uses the `service`
+module, not `systemd`, because the Gentoo hosts run OpenRC.
+
+Tag `sshd` runs the whole role on a host: fail2ban is gated by
+`sshd_fail2ban_enabled`, not by a second tag, since a separate
+`sshd-fail2ban` tag would make `--tags sshd` skip it silently. Inner tasks carry
+the tag explicitly, because a tag on `include_tasks` does not reach them.
+
+One file, not a drop-in. The shipped configs disagree on whether
+`sshd_config.d/` is read at all (Ubuntu comments the `Include` out, Gentoo ships
+none), and first-obtained-value-wins means the stock `50-cloud-init.conf` would
+beat any drop-in added here. Having no `Include` line makes that directory inert
+by construction, so a `50-cloud-init.conf` that cloud-init recreates cannot
+re-enable password auth; the role deletes it anyway to keep `sshd -T`
+explainable.
+
+#### fail2ban
+
+Off by default (`sshd_fail2ban_enabled`), enabled only for `pihole` via
+`group_vars/pihole/sshd.yml` — the internet-facing host. Debian family only, and
+`tasks/fail2ban.yml` asserts that before writing anything, because the jails
+hardcode Debian-style log paths. The role ships no Portage install path for
+fail2ban, because nothing enables it off `pihole`.
+
+Jails: `sshd` and `recidive` (3 bans in a day -> a week), with
+`bantime.increment` so repeat offenders get 2h, 4h, 8h instead of a flat 60m.
+`banaction = nftables` is stated in `jail.local` rather than inherited, because
+`jail.d/defaults-debian.conf` moves between fail2ban releases while the host
+bans over nftables. The backend is `auto`, stated explicitly to override the
+`systemd` that `defaults-debian.conf` sets for sshd: reading rsyslog's files
+beats the journald backend here because the `system` role sets
+`Storage=volatile`, which would empty the journal after every reboot and take
+the `recidive` history with it. The role checks both log files exist before
+templating, since a jail pointing at a missing log starts, matches nothing, and
+still reports itself healthy.
+
+`fail2ban-client -t` only parses the files: an unusable `backend` or a broken
+action passes it and still leaves the daemon dead on startup. The role therefore
+flushes handlers and then runs `fail2ban-client status` against the live server,
+which is the check that catches it.
+
+`ignoreip` combines loopback from `defaults/main.yml` with the house LAN and the
+operator's public IP from the SOPS-encrypted
+`group_vars/pihole/ignoreips.enc.sops.yml` (see
+[SOPS secrets](#sops-secrets-in-group_vars)). Those two are encrypted because
+they are network topology, same reasoning as the inventory.
+
 ### `dotfiles`
 
 Shared between `k3s_cluster`, `pihole`, and `gentoo`, with one config for
@@ -229,9 +315,10 @@ exists.
 
 | Playbook | Hosts | Roles called |
 |----------|-------|---------------|
-| `playbooks/base_setup.yml` | `k3s_cluster` | `system`, `dotfiles` |
-| `playbooks/pihole_setup.yml` | `pihole` | `system`, `dotfiles`, `pihole` |
-| `playbooks/gentoo_setup.yml` | `gentoo` | `gentoo_portage`, `dotfiles` |
+| `playbooks/base_setup.yml` | `k3s_cluster` | `system`, `sshd`, `dotfiles` |
+| `playbooks/pihole_setup.yml` | `pihole` | `system`, `sshd`, `dotfiles`, `pihole` |
+| `playbooks/gentoo_setup.yml` | `gentoo` | `gentoo_portage`, `sshd`, `dotfiles` |
+| `playbooks/standalone_setup.yml` | `standalone` | `sshd`, `dotfiles` |
 | `playbooks/apt.yaml` | `k3s_cluster` | `apt_upgrade` (opt-in, see above) |
 | `playbooks/kubernetes/k3s-install.yml` | `k3s_cluster` | `k3s` |
 | `playbooks/kubernetes/k3s-nuke.yml` | `k3s_cluster` | — (runs `k3s-killall.sh`/`k3s-uninstall.sh` directly) |

@@ -1,0 +1,12 @@
+---
+- name: SSH configuration
+  ansible.builtin.include_tasks: sshd.yml
+  tags: ['sshd']
+
+# One tag for the whole role on purpose: a second tag here would mean
+# `--tags sshd` silently skipped fail2ban, which is the opposite of what the
+# tag reads like. The switch is sshd_fail2ban_enabled, not another tag.
+- name: Fail2ban
+  ansible.builtin.include_tasks: fail2ban.yml
+  tags: ['sshd']
+  when: sshd_fail2ban_enabled | bool
