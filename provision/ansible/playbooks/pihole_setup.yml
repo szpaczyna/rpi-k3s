@@ -13,6 +13,11 @@
       ansible.builtin.include_role:
         name: system
       tags: ['system']
+    - name: Fail2ban exporter
+      ansible.builtin.include_role:
+        name: fail2ban_exporter
+      tags: ['fail2ban-exporter']
+      when: fail2ban_exporter_enabled | bool
     - name: Dotfiles
       ansible.builtin.include_role:
         name: dotfiles

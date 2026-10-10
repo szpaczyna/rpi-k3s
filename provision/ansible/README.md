@@ -100,6 +100,7 @@ sops group_vars/k3s_cluster/registries.enc.sops.yml
 | `pihole` | `pihole` | Manages only the Pi-hole v6 config *deviations* from default (via `pihole-FTL --config`), plus adlists in `gravity.db`. |
 | `gentoo_portage` | `gentoo` | Portage config for Gentoo hosts: `make.conf`, `package.use`, `package.accept_keywords/old`, `package.mask`. |
 | `dotfiles` | `k3s_cluster`, `pihole`, `gentoo` | Shared shell/editor setup: zsh (zshrc + plugins), tmux, fastfetch, neovim. |
+| `fail2ban_exporter` | `pihole` | fail2ban Prometheus exporter as a systemd service, scraped by the `fail2ban` job in the Prometheus chart. |
 
 ### `system`
 
@@ -191,6 +192,25 @@ Manages Portage config on the Gentoo hosts (`make.conf`, `package.use/`,
 `old/` subdirectory, keeping them visually separate from any current
 keyword unmasks that might get added later.
 
+### `fail2ban_exporter`
+
+Publishes fail2ban's state as Prometheus metrics, on the internet-facing `pihole`
+host only. Gated on the same `sshd_fail2ban_enabled` switch (via
+`fail2ban_exporter_enabled` in `defaults/main.yml`): an exporter with no
+fail2ban to read has nothing to collect.
+
+Upstream is a Go binary with no configuration files, only flags. The role pins
+`fail2ban_exporter_version` and verifies the download against the sha256 from
+that release's `checksums.txt`, keyed by architecture because the fleet is arm64.
+Archives land in `fail2ban_exporter_version`-named directories with a symlink at
+`/usr/local/bin/fail2ban_exporter`, so bumping the version is the whole upgrade
+and a re-run extracts nothing.
+
+The unit runs as root, unavoidably: fail2ban's socket is mode `0700 root:root`
+and there is no `fail2ban` group to grant access through. It listens on
+`0.0.0.0:9191` with no authentication, so that port must not be forwarded from
+the router. Scraped by the `fail2ban` job in `cluster/helm/prometheus`.
+
 ### `dotfiles`
 
 Shared between `k3s_cluster`, `pihole`, and `gentoo`, with one config for
@@ -230,7 +250,7 @@ exists.
 | Playbook | Hosts | Roles called |
 |----------|-------|---------------|
 | `playbooks/base_setup.yml` | `k3s_cluster` | `system`, `dotfiles` |
-| `playbooks/pihole_setup.yml` | `pihole` | `system`, `dotfiles`, `pihole` |
+| `playbooks/pihole_setup.yml` | `pihole` | `system`, `dotfiles`, `pihole`, `fail2ban_exporter` |
 | `playbooks/gentoo_setup.yml` | `gentoo` | `gentoo_portage`, `dotfiles` |
 | `playbooks/apt.yaml` | `k3s_cluster` | `apt_upgrade` (opt-in, see above) |
 | `playbooks/kubernetes/k3s-install.yml` | `k3s_cluster` | `k3s` |
@@ -308,3 +328,15 @@ clone actually happens, so the following steps have something to act on.
 This is a limitation of `--check` with any task chain of
 `clone → chmod → run`, not a bug in the role — zram-swap-config is already
 `enabled`/active on the affected host regardless.
+
+### Known issue: `--check` fails on a first-time `fail2ban_exporter` install
+
+The role creates `/opt/fail2ban-exporter` before downloading into it. Under
+`--check` that directory is never actually created, so `get_url` aborts with
+`Destination /opt/fail2ban-exporter does not exist`, and the following
+`unarchive` would fail the same way for want of a file that check mode never
+placed. A real run works, and once the version directory exists the
+`creates:` guard makes every later `--check` pass cleanly.
+
+Same class as the `zram-swap-config` limitation above, and for the same reason:
+a chain where one task creates what the next one writes into cannot be dry-run.

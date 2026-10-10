@@ -1,0 +1,71 @@
+---
+# The socket is mode 0700 owned by root and there is no fail2ban group, so the
+# exporter can only read it as root.
+- name: Check the fail2ban socket exists
+  ansible.builtin.stat:
+    path: "{{ fail2ban_exporter_socket }}"
+  register: fail2ban_exporter_socket_stat
+
+- name: Assert fail2ban is running
+  ansible.builtin.assert:
+    that:
+      - fail2ban_exporter_socket_stat.stat.exists
+    fail_msg: >-
+      {{ fail2ban_exporter_socket }} does not exist, so fail2ban is not running.
+      The exporter has nothing to collect and would restart-loop on socket
+      connection errors.
+    quiet: true
+
+- name: Create download and version directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop:
+    - "{{ fail2ban_exporter_download_dir }}"
+    - "{{ fail2ban_exporter_download_dir }}/{{ fail2ban_exporter_version }}"
+
+- name: Download fail2ban exporter
+  ansible.builtin.get_url:
+    url: "{{ fail2ban_exporter_base_url }}/{{ fail2ban_exporter_archive }}"
+    dest: "{{ fail2ban_exporter_download_dir }}/{{ fail2ban_exporter_archive }}"
+    checksum: "sha256:{{ fail2ban_exporter_sha256_value }}"
+    owner: root
+    group: root
+    mode: "0644"
+
+# Extracts into a directory named after the pinned version, so bumping
+# fail2ban_exporter_version is all it takes to install a new binary and a plain
+# re-run finds the file already there and does nothing.
+- name: Extract fail2ban exporter
+  ansible.builtin.unarchive:
+    src: "{{ fail2ban_exporter_download_dir }}/{{ fail2ban_exporter_archive }}"
+    dest: "{{ fail2ban_exporter_download_dir }}/{{ fail2ban_exporter_version }}"
+    remote_src: true
+    owner: root
+    group: root
+    creates: "{{ fail2ban_exporter_download_dir }}/{{ fail2ban_exporter_version }}/fail2ban_exporter"
+
+- name: Link fail2ban exporter into PATH
+  ansible.builtin.file:
+    src: "{{ fail2ban_exporter_download_dir }}/{{ fail2ban_exporter_version }}/fail2ban_exporter"
+    dest: "{{ fail2ban_exporter_binary }}"
+    state: link
+
+- name: Install systemd unit
+  ansible.builtin.template:
+    src: fail2ban_exporter.service.j2
+    dest: /etc/systemd/system/fail2ban_exporter.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart fail2ban exporter
+
+- name: Enable fail2ban exporter
+  ansible.builtin.systemd:
+    name: fail2ban_exporter
+    enabled: true
+    state: started
+    daemon_reload: true
