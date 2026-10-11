@@ -4,6 +4,52 @@
   ansible.builtin.include_tasks: registries.yml
   tags: ['registries']
 
+# Pick the interface carrying the default route, which on these nodes is the
+# single ethernet port. Falls back to the first non-virtual interface with a
+# global address when the host has no default route yet.
+- name: Detect flannel interface
+  ansible.builtin.shell: |
+    set -o pipefail
+    iface=$(ip route get 1.1.1.1 2>/dev/null | sed -n 's/.* dev \([^ ]*\).*/\1/p' | head -1)
+    if [ -z "$iface" ]; then
+      iface=$(ip -br -4 addr show scope global \
+        | awk '{print $1}' \
+        | grep -vE '^(lo|docker|cni|flannel|veth|virbr|tun)' \
+        | head -1)
+    fi
+    printf '%s' "$iface"
+  args:
+    executable: /bin/bash
+  register: k3s_detected_iface
+  changed_when: false
+  tags: ['k3s_server', 'k3s_agent']
+
+- name: Fail when no ethernet interface was found
+  ansible.builtin.assert:
+    that:
+      - k3s_detected_iface.stdout | length > 0
+    fail_msg: >-
+      Could not determine the flannel interface on {{ inventory_hostname }}.
+      Set k3s_flannel_iface in group_vars/k3s_cluster/k3s.yml to override.
+  tags: ['k3s_server', 'k3s_agent']
+
+- name: Set node role label and resolve addresses
+  ansible.builtin.set_fact:
+    k3s_flannel_iface: "{{ k3s_flannel_iface | default(k3s_detected_iface.stdout) }}"
+    k3s_server_node_ip: "{{ k3s_server_node_ip | default(ansible_default_ipv4.address) }}"
+  tags: ['k3s_server', 'k3s_agent']
+
+- name: Fail when the default address could not be detected
+  ansible.builtin.assert:
+    that:
+      - k3s_server_node_ip is defined
+      - k3s_server_node_ip | length > 0
+    fail_msg: >-
+      Could not determine the node IP on {{ inventory_hostname }}.
+      Set k3s_server_node_ip in group_vars/k3s_cluster/k3s.yml to override.
+  when: "'k3s_master' in group_names"
+  tags: ['k3s_server']
+
 - name: Install and configure k3s server
   ansible.builtin.include_tasks: server.yml
   when: "'k3s_master' in group_names"

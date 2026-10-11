@@ -1,6 +1,10 @@
 ---
-- name: Install k3s cluster
-  hosts: k3s_cluster
+# Two plays on purpose. Agents need the master token, and the token is only
+# readable once the master has generated it, so the master must be fully
+# configured and restarted before any agent tries to join. Running both in one
+# play would leave agents racing the master's first restart.
+- name: Install k3s control plane
+  hosts: k3s_master
   become: true
   gather_facts: true
   any_errors_fatal: true
@@ -14,18 +18,18 @@
         name: k3s
         public: true
 
+    - name: Restart k3s before agents join
+      ansible.builtin.meta: flush_handlers
+
     - name: Copy kubeconfig locally to /tmp
-      run_once: true
       ansible.builtin.fetch:
         src: "/etc/rancher/k3s/k3s.yaml"
         dest: "/tmp/kubeconfig"
         flat: true
-      when: "'k3s_master' in group_names"
 
     - name: Rewrite kubeconfig cluster name and server address
       delegate_to: localhost
       become: false
-      run_once: true
       ansible.builtin.command:
         cmd: >-
           python3 -c "
@@ -44,7 +48,6 @@
     - name: Check for existing local kubeconfig
       delegate_to: localhost
       become: false
-      run_once: true
       ansible.builtin.stat:
         path: "{{ lookup('env', 'HOME') }}/.kube/config-k3s"
       register: k3s_local_kubeconfig
@@ -52,7 +55,6 @@
     - name: Backup existing local kubeconfig
       delegate_to: localhost
       become: false
-      run_once: true
       ansible.builtin.copy:
         src: "{{ lookup('env', 'HOME') }}/.kube/config-k3s"
         dest: "{{ lookup('env', 'HOME') }}/.kube/config-k3s.bak"
@@ -63,7 +65,6 @@
     - name: Copy processed kubeconfig to local ~/.kube/config-k3s
       delegate_to: localhost
       become: false
-      run_once: true
       ansible.builtin.copy:
         src: "/tmp/kubeconfig"
         dest: "{{ lookup('env', 'HOME') }}/.kube/config-k3s"
@@ -73,7 +74,20 @@
     - name: Remove temporary kubeconfig
       delegate_to: localhost
       become: false
-      run_once: true
       ansible.builtin.file:
         path: "/tmp/kubeconfig"
         state: absent
+
+- name: Install k3s workers
+  hosts: k3s_worker
+  become: true
+  gather_facts: true
+  any_errors_fatal: true
+  tasks:
+    - name: Install Kubernetes
+      ansible.builtin.include_role:
+        name: k3s
+        public: true
+
+    - name: Restart k3s agents
+      ansible.builtin.meta: flush_handlers
