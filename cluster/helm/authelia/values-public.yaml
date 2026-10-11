@@ -5,6 +5,9 @@ image:
 
 pod:
   kind: Deployment
+  selectors:
+    nodeSelector:
+      kubernetes.io/role: worker
   resources:
     limits:
       cpu: 250m
@@ -41,7 +44,7 @@ secret:
 persistence:
   enabled: true
   size: 1Gi
-  storageClass: local-path
+  storageClass: longhorn
 
 ingress:
   enabled: true
