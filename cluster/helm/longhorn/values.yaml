@@ -109,6 +109,12 @@ csi:
   resizerReplicaCount: 1
   snapshotterReplicaCount: 1
 
+# Nodes that must not store volume replicas, applied by ./deploy. The chart has
+# no setting for per-node allowScheduling, so it cannot live under defaultSettings.
+storageNodes:
+  exclude:
+    - rpi-k3s-master-00
+
 defaultSettings:
   allowRecurringJobWhileVolumeDetached: null
   createDefaultDiskLabeledNodes: false
@@ -117,7 +123,9 @@ defaultSettings:
   replicaSoftAntiAffinity: null
   replicaAutoBalance: best-effort
   storageOverProvisioningPercentage: "200"
-  storageMinimalAvailablePercentage: null
+  # Matches the value already set on the running cluster. Without it Longhorn
+  # may schedule 2x real capacity (see the setting above) and fill a node.
+  storageMinimalAvailablePercentage: "25"
   upgradeChecker: false
   defaultReplicaCount: "2"
   defaultLonghornStaticStorageClass: longhorn-static
@@ -179,7 +187,8 @@ longhornUI:
   replicas: 1
   priorityClass: null
   tolerations: []
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/role: worker
 
 longhornConversionWebhook:
   replicas: 1

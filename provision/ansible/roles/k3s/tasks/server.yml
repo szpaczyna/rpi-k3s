@@ -4,11 +4,58 @@
     set -o pipefail &&
     curl -sfL https://get.k3s.io |
     INSTALL_K3S_VERSION={{ k3s_version }}
-    INSTALL_K3S_EXEC="server --data-dir {{ k3s_data_dir }} --log {{ k3s_server_log_file }} {{ k3s_server_exec_args | join(' ') }}"
+    INSTALL_K3S_EXEC="server"
     sh -s -
   args:
     executable: /bin/bash
     creates: /usr/local/bin/k3s
+
+# Must land before any restart: k3s rewrites its own net-conf.json on startup,
+# so a config.yaml pointing here is useless unless this file is already in place.
+- name: Ensure flannel config directory exists
+  ansible.builtin.file:
+    path: "{{ k3s_flannel_conf | dirname }}"
+    state: directory
+    mode: "0700"
+    owner: root
+    group: root
+
+- name: Deploy flannel configuration
+  ansible.builtin.template:
+    src: flannel-net-conf.json.j2
+    dest: "{{ k3s_flannel_conf }}"
+    mode: "0644"
+    owner: root
+    group: root
+  notify: Restart k3s
+
+# Runs regardless of `creates` above: an existing binary must still pick up a
+# changed config, otherwise the role silently diverges from the live cluster.
+- name: Deploy k3s server configuration
+  ansible.builtin.template:
+    src: config.yaml.j2
+    dest: /etc/rancher/k3s/config.yaml
+    mode: "0600"
+    owner: root
+    group: root
+  vars:
+    k3s_config: "{{ k3s_server_config }}"
+  notify: Restart k3s
+
+# The installer writes flags into ExecStart, and a local drop-in may override it
+# again. Both shadow config.yaml, so neither is allowed to survive the switch.
+- name: Strip server flags from ExecStart
+  ansible.builtin.replace:
+    path: /etc/systemd/system/k3s.service
+    regexp: '(?s)^ExecStart=.*$'
+    replace: 'ExecStart=/usr/local/bin/k3s server'
+  notify: Restart k3s
+
+- name: Remove k3s server drop-ins
+  ansible.builtin.file:
+    path: /etc/systemd/system/k3s.service.d
+    state: absent
+  notify: Reload systemd
 
 - name: Wait for k3s server token file
   ansible.builtin.wait_for:
@@ -23,4 +70,3 @@
 - name: Expose k3s token to other hosts in play
   ansible.builtin.set_fact:
     k3s_token: "{{ k3s_token_slurp.content | b64decode | trim }}"
-    cacheable: true

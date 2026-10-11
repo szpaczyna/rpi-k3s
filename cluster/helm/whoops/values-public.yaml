@@ -20,6 +20,9 @@ resources:
     cpu: 50m
     memory: 96Mi
 
+nodeSelector:
+  kubernetes.io/role: worker
+
 httpRoute:
   enabled: true
   host: whoops.shpaq.org

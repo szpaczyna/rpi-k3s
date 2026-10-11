@@ -1,0 +1,20 @@
+{# Rendered into /etc/rancher/k3s/config.yaml.
+
+   Managed by Ansible: local edits are lost on the next run. Secrets do not
+   belong here; the agent token and URL stay in
+   /etc/systemd/system/k3s-agent.service.env.
+
+   Requires k3s_config to be set by the calling task. It cannot be selected
+   from defaults here: both k3s_server_config and k3s_agent_config are defined
+   on every host, so `k3s_server_config is defined` would also be true on a
+   worker and render the server config there.
+#}
+{% for key, value in k3s_config.items() -%}
+{% if value is string -%}
+{{ key }}: {{ value | to_json }}
+{% else -%}
+{{ key }}:
+{% for item in value %}  - {{ item | to_json }}
+{% endfor -%}
+{% endif -%}
+{% endfor %}

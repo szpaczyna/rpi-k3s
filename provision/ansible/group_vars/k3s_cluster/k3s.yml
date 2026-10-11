@@ -1,0 +1,4 @@
+---
+# Every node sits on a /25, not a /24. Both host-gw and vxlan DirectRouting
+# require all nodes in one L2 segment, so recheck this before switching.
+k3s_node_subnet_cidr: 10.0.0.0/25

@@ -3,16 +3,38 @@ k3s_version: v1.37.1+k3s1
 k3s_data_dir: /k3s
 k3s_server_log_file: /var/log/k3s/server.log
 k3s_agent_log_file: /var/log/k3s/agent.log
-k3s_server_exec_args:
-  - '--flannel-backend'
-  - 'vxlan'
-  - '--flannel-iface'
-  - 'eth0'
-  - '--disable'
-  - 'traefik'
-  - '--disable'
-  - 'servicelb'
-  - '--disable'
-  - 'local-path'
-  - '--write-kubeconfig-mode'
-  - '644'
+k3s_write_kubeconfig_mode: "600"
+
+# k3s rewrites its generated net-conf.json on every start, so DirectRouting only
+# survives a restart if flannel-conf points at a file this role manages.
+k3s_flannel_conf: "{{ k3s_data_dir }}/agent/etc/flannel/net-conf.json"
+k3s_flannel_network: 10.42.0.0/16
+k3s_flannel_direct_routing: true
+
+# Rendered into /etc/rancher/k3s/config.yaml. Keep the quoted values quoted:
+# YAML would otherwise parse 600 as an integer and pass the wrong mode to k3s.
+#
+# flannel-iface and node-ip are resolved per host in tasks/main.yml. The charts
+# under cluster/helm select on kubernetes.io/role, which k3s does not create on
+# its own, so it is set here through kubelet-arg.
+k3s_server_config:
+  data-dir: "{{ k3s_data_dir }}"
+  log: "{{ k3s_server_log_file }}"
+  node-ip: "{{ k3s_server_node_ip }}"
+  flannel-backend: vxlan
+  flannel-iface: "{{ k3s_flannel_iface }}"
+  flannel-conf: "{{ k3s_flannel_conf }}"
+  write-kubeconfig-mode: "{{ k3s_write_kubeconfig_mode }}"
+  kubelet-arg:
+    - "node-labels=kubernetes.io/role=master"
+  disable:
+    - traefik
+    - servicelb
+    - local-storage
+
+k3s_agent_config:
+  data-dir: "{{ k3s_data_dir }}"
+  log: "{{ k3s_agent_log_file }}"
+  flannel-conf: "{{ k3s_flannel_conf }}"
+  kubelet-arg:
+    - "node-labels=kubernetes.io/role=worker"

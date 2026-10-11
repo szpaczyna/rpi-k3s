@@ -1,0 +1,19 @@
+{# Flannel subnet and backend config.
+
+   Managed by Ansible. k3s regenerates its own copy of this file on every
+   start, which is why config.yaml sets flannel-conf to point here instead.
+
+   DirectRouting routes same-subnet traffic directly over the node interface
+   instead of encapsulating it in VXLAN. All nodes must sit in one L2 segment,
+   see k3s_node_subnet_cidr in group_vars/k3s_cluster/k3s.yml.
+#}
+{
+	"Network": "{{ k3s_flannel_network }}",
+	"EnableIPv6": false,
+	"EnableIPv4": true,
+	"IPv6Network": "::/0",
+	"Backend": {
+		"Type": "vxlan",
+		"DirectRouting": {{ 'true' if k3s_flannel_direct_routing | bool else 'false' }}
+	}
+}

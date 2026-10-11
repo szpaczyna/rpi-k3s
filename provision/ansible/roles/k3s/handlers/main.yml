@@ -3,3 +3,9 @@
   ansible.builtin.systemd:
     name: "{{ 'k3s' if 'k3s_master' in group_names else 'k3s-agent' }}"
     state: restarted
+
+# Drop-in removal changes the unit, not the config, so this has to land before
+# the restart handler flushes.
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true

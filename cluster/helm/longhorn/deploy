@@ -21,3 +21,12 @@ helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
   --version "${VERSION}"
 
 kubectl apply -f <(sops -d ./auth.enc.yaml) -n "${NAMESPACE}"
+
+# The control plane runs on 3.8 GB and hosts no application workloads, so it
+# must not store volume replicas. The chart cannot express per-node
+# allowScheduling, and the setting lives on the Longhorn Node CR, so it is
+# applied here. Idempotent: the CR already exists, this only pins the field.
+for node in $(yq -r '.storageNodes.exclude[]' values.yaml); do
+  kubectl -n "${NAMESPACE}" patch "nodes.longhorn.io/${node}" \
+    --type merge -p '{"spec":{"allowScheduling":false}}'
+done
