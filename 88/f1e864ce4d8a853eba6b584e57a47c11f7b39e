@@ -1,0 +1,16 @@
+provision/ansible/roles/dotfiles/defaults/main.yml
+  h_906bde6ad77cff 20
+provision/ansible/roles/dotfiles/files/zsh-plugins/completion/_zramctl
+  h_906bde6ad77cff 1-79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "88f1e864ce4d8a853eba6b584e57a47c11f7b39e",
+  "prompts": {},
+  "humans": {
+    "h_906bde6ad77cff": {
+      "author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
