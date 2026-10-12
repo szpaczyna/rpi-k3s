@@ -17,6 +17,7 @@ dotfiles_zsh_plugins_extra: []
 dotfiles_zsh_completions:
   - _pyenv
   - _ripgrep
+  - _zramctl
 
 dotfiles_apt_packages:
   - fzf
