@@ -110,7 +110,8 @@ renovate:
       "prHourlyLimit": 0,
       "prConcurrentLimit": 0,
       "branchConcurrentLimit": 0,
-      "commitMessageSuffix": "[{{updateType}}]"
+      "commitMessageSuffix": "[{{updateType}}]",
+      "onboarding": false
     }
   # Container level: the chart renders .Values.securityContext into
   # spec.securityContext, which does not accept capabilities.
