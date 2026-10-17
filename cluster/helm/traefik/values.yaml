@@ -347,6 +347,10 @@ providers:  # @schema additionalProperties: false
     namespaces: []
     # -- Defines whether to use Native Kubernetes load-balancing mode by default.
     nativeLBByDefault: false
+    # ⚠️ Generated names switch from `<namespace>-<name>` to `<namespace>_<name>`.
+    # Every `name@kubernetescrd` reference must use the underscore form.
+    # https://doc.traefik.io/traefik/migrate/v3/#safe-naming-configuration-option
+    safeNaming: true
 
   kubernetesIngress:
     # -- Load Kubernetes Ingress provider
@@ -803,15 +807,16 @@ ports:
       # https://doc.traefik.io/traefik/routing/entrypoints/#middlewares
       # -- /!\ It introduces here a link between your static configuration and your dynamic configuration /!\
       # It follows the provider naming convention: https://doc.traefik.io/traefik/providers/overview/#provider-namespace
-      #   - namespace-name1@kubernetescrd
-      #   - namespace-name2@kubernetescrd
+      #   - namespace_name1@kubernetescrd
+      #   - namespace_name2@kubernetescrd
       #
       # ratelimit-global + fail2ban are entrypoint-wide for defence in depth.
       # geoblock is per-route (extensionRef) because entrypoint-level geoblock
       # blocks ACME HTTP-01 challenges from non-PL Let's Encrypt servers.
+      # The `<namespace>_<name>` form is required by providers.kubernetesCRD.safeNaming.
       middlewares:
-        - traefik-ratelimit-global@kubernetescrd
-        - traefik-fail2ban@kubernetescrd
+        - traefik_ratelimit-global@kubernetescrd
+        - traefik_fail2ban@kubernetescrd
   metrics:
     # -- When using hostNetwork, use another port to avoid conflict with node exporter:
     # https://github.com/prometheus/prometheus/wiki/Default-port-allocations
