@@ -7,4 +7,11 @@ set -eu
 
 cd "$(dirname "$0")"
 
-sops --decrypt --output-type yaml inventory.enc.yaml | python3 inventory_transform.py
+# PyYAML is pinned in requirements.txt, so it only exists inside the virtualenv.
+# Plain `python3` resolves to the system interpreter, which has no yaml module
+# and fails with ModuleNotFoundError. Prefer the active virtualenv's interpreter
+# and fall back to a plain python3 only when there is none.
+PYTHON="${VIRTUAL_ENV:+$VIRTUAL_ENV/bin/python3}"
+: "${PYTHON:=python3}"
+
+sops --decrypt --output-type yaml inventory.enc.yaml | "$PYTHON" inventory_transform.py
