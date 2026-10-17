@@ -1,0 +1,85 @@
+---
+# The 256 MiB boot partition cannot hold two copies of Ubuntu's default
+# initramfs (84 MiB each), which is why every package install that triggers
+# update-initramfs fails on these hosts: piboot-try stages the whole boot
+# payload into new/ and runs out of room. Shrinking the payload needs no
+# partitioning, so it goes in the system role next to the rest of the base OS
+# config.
+#
+# Every task here repeats tags: ['initramfs'] because a tag on an include_tasks
+# does not reach the tasks inside the included file, so tagging the include in
+# main.yml alone would filter out everything it pulls in.
+- name: Look up this host's additions to the initramfs module list
+  ansible.builtin.set_fact:
+    system_initramfs_modules_extra: >-
+      {{ (system_initramfs_extra_modules_by_host | default({})).get(inventory_hostname, []) }}
+  tags: ['initramfs']
+
+- name: Merge the initramfs module list for this host
+  ansible.builtin.set_fact:
+    system_initramfs_modules_effective: >-
+      {{ (system_initramfs_modules + system_initramfs_modules_extra) | unique }}
+  tags: ['initramfs']
+
+# conf.d rather than editing initramfs.conf in place: mkinitramfs sources
+# conf.d/* after initramfs.conf, so this wins without leaving a modified
+# conffile behind for dpkg to prompt about on every kernel update.
+- name: Build the initramfs around the root device instead of every module
+  ansible.builtin.copy:
+    content: |
+      # Managed by Ansible (roles/system, tasks/initramfs.yml).
+      #
+      # dep instead of Ubuntu's default most: the 256 MiB boot partition cannot
+      # hold two copies of a most-sized initramfs, and piboot-try stages one
+      # into new/ on every rebuild. The modules that still have to be there are
+      # listed in /etc/initramfs-tools/modules, which mkinitramfs honours
+      # regardless of this setting.
+      MODULES=dep
+    dest: /etc/initramfs-tools/conf.d/99-boot-partition.conf
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  tags: ['initramfs']
+
+- name: Install the initramfs module list
+  ansible.builtin.template:
+    src: initramfs-modules.j2
+    dest: /etc/initramfs-tools/modules
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  tags: ['initramfs']
+
+- name: Install the initramfs firmware pruning hook
+  ansible.builtin.template:
+    src: initramfs-prune-firmware.j2
+    dest: /etc/initramfs-tools/hooks/prune-firmware
+    owner: root
+    group: root
+    mode: "0755"
+    backup: true
+  when: system_initramfs_prune_firmware | bool
+  tags: ['initramfs']
+
+- name: Remove the initramfs firmware pruning hook
+  ansible.builtin.file:
+    path: /etc/initramfs-tools/hooks/prune-firmware
+    state: absent
+  when: not (system_initramfs_prune_firmware | bool)
+  tags: ['initramfs']
+
+# Opt-in: builds the image for real and checks it against the boot payload
+# budget, which takes a couple of minutes on these Pis.
+- name: Check the boot payload budget
+  ansible.builtin.include_tasks: initramfs_check.yml
+  when: system_initramfs_check | bool
+  tags: ['initramfs']
+
+# Opt-in: retries the dpkg configuration that has been failing, see
+# tasks/initramfs_rebuild.yml.
+- name: Rebuild and stage the boot payload
+  ansible.builtin.include_tasks: initramfs_rebuild.yml
+  when: system_initramfs_rebuild | bool
+  tags: ['initramfs']

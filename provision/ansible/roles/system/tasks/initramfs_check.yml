@@ -1,0 +1,168 @@
+---
+# Builds the initramfs the way update-initramfs would, but into a scratch image
+# from a scratch config directory, so the payload size is measured exactly and
+# nothing on the host changes. What matters is not the initramfs on its own:
+# piboot-try needs the bootloader files in the partition root plus current/ plus
+# a second copy in new/ to fit in the partition at the same time.
+- name: Create a scratch initramfs configuration directory
+  ansible.builtin.tempfile:
+    state: directory
+    prefix: initramfs-check-
+  register: system_initramfs_confdir
+  tags: ['initramfs']
+
+- name: Copy the host initramfs configuration into the scratch directory
+  ansible.builtin.copy:
+    src: /etc/initramfs-tools/
+    dest: "{{ system_initramfs_confdir.path }}/"
+    remote_src: true
+    mode: preserve
+  tags: ['initramfs']
+
+- name: Build a scratch initramfs image
+  ansible.builtin.command:
+    cmd: >-
+      mkinitramfs -d {{ system_initramfs_confdir.path }}
+      -o {{ system_initramfs_confdir.path }}/initrd.img
+      {{ ansible_kernel }}
+  register: system_initramfs_build
+  changed_when: true
+  tags: ['initramfs']
+
+- name: Fail when mkinitramfs could not resolve something
+  ansible.builtin.assert:
+    that:
+      - "'W:' not in system_initramfs_build.stderr"
+    fail_msg: >-
+      mkinitramfs on {{ inventory_hostname }} reported:
+      {{ system_initramfs_build.stderr }}
+  tags: ['initramfs']
+
+- name: List the contents of the scratch initramfs
+  ansible.builtin.command:
+    cmd: lsinitramfs {{ system_initramfs_confdir.path }}/initrd.img
+  register: system_initramfs_listing
+  changed_when: false
+  tags: ['initramfs']
+
+- name: Fail when a configured module is missing from the scratch initramfs
+  ansible.builtin.assert:
+    that:
+      - item ~ '.ko' in system_initramfs_listing.stdout
+    fail_msg: >-
+      {{ item }} is in system_initramfs_modules but not in the rebuilt
+      initramfs on {{ inventory_hostname }}. Built-in modules have no .ko in
+      the image and belong in the hardware notes, not in the module list.
+  loop: "{{ system_initramfs_modules_effective }}"
+  loop_control:
+    label: "{{ item }}"
+  tags: ['initramfs']
+
+# A pruning hook that removes the target of a symlink leaves the initramfs with
+# a link that points nowhere, and lsinitramfs lists those happily. The boot then
+# fails much later, in a boot script that calls the missing binary, which is the
+# worst place to find out. lsinitramfs has no extraction mode here, so peel the
+# compression and unpack the cpio by hand.
+- name: Look for dangling symlinks in the scratch initramfs
+  ansible.builtin.shell: |
+    set -o pipefail
+    extract_dir=$(mktemp -d /var/tmp/initramfs-verify-XXXXXX)
+    cd "${extract_dir}"
+    cp {{ system_initramfs_confdir.path }}/initrd.img ./image
+    # COMPRESS comes from initramfs.conf; peel whatever layers are there.
+    for decompressor in "zstd -d -q" "xz -dc" "gzip -dc" "lz4 -d -q" "cat"; do
+      if ${decompressor} image > cpio 2>/dev/null; then
+        break
+      fi
+    done
+    cpio -idm --quiet < cpio 2>/dev/null || true
+    find . -xtype l -printf '%p -> %l\n'
+    cd /
+    rm -rf "${extract_dir}"
+  args:
+    executable: /bin/bash
+  register: system_initramfs_dangling
+  changed_when: false
+  tags: ['initramfs']
+
+- name: Fail when the scratch initramfs has dangling symlinks
+  ansible.builtin.assert:
+    that:
+      - system_initramfs_dangling.stdout | length == 0
+    fail_msg: >-
+      {{ inventory_hostname }}: the rebuilt initramfs has symlinks pointing at
+      files that are not in it. Something the init scripts call at boot was
+      pruned along with its target:
+      {{ system_initramfs_dangling.stdout_lines }}
+  tags: ['initramfs']
+
+- name: Measure the boot payload budget
+  ansible.builtin.shell: |
+    set -o pipefail
+    boot_mnt=/boot/firmware
+    boot_dev=$(findmnt -n -o SOURCE "${boot_mnt}")
+    partition_bytes=$(lsblk -bdn -o SIZE "${boot_dev}")
+    # --output=avail prints just the numbers, no header row to skip.
+    free_bytes=$(df -B1 --output=avail "${boot_mnt}" | tail -1)
+    legacy_bytes=$(du -sb --exclude=current "${boot_mnt}" | cut -f1)
+    current_bytes=$(du -sb "${boot_mnt}/current" | cut -f1)
+    current_initrd_bytes=$(stat -c %s "${boot_mnt}/current/initrd.img")
+    scratch_initrd_bytes=$(stat -c %s {{ system_initramfs_confdir.path }}/initrd.img)
+    # Only the initramfs changes size: the kernel, the device trees, the
+    # overlays and the bootloader files are copied into new/ as they are.
+    new_payload_bytes=$((current_bytes - current_initrd_bytes + scratch_initrd_bytes))
+    peak_bytes=$((legacy_bytes + current_bytes + new_payload_bytes))
+    # One JSON object on a single line, built by concatenation.
+    json="{\"partition_bytes\":${partition_bytes}"
+    json="${json},\"free_bytes\":${free_bytes}"
+    json="${json},\"legacy_bytes\":${legacy_bytes}"
+    json="${json},\"current_bytes\":${current_bytes}"
+    json="${json},\"new_payload_bytes\":${new_payload_bytes}"
+    json="${json},\"peak_bytes\":${peak_bytes}}"
+    printf "%s\n" "${json}"
+  args:
+    executable: /bin/bash
+  register: system_initramfs_budget
+  changed_when: false
+  tags: ['initramfs']
+
+- name: Fail when the staged payload no longer fits the boot partition
+  ansible.builtin.assert:
+    that:
+      - (system_initramfs_budget.stdout | from_json).peak_bytes
+        <= ((system_initramfs_budget.stdout | from_json).partition_bytes * 0.9)
+    fail_msg: >-
+      {{ inventory_hostname }}: a kernel or initramfs rebuild needs
+      {{ ((system_initramfs_budget.stdout | from_json).peak_bytes / 1048576) | round(1) }} MiB
+      of the
+      {{ ((system_initramfs_budget.stdout | from_json).partition_bytes / 1048576) | round(1) }} MiB
+      boot partition, which leaves no room for the next payload. Grow the
+      partition before continuing with kernel updates.
+  tags: ['initramfs']
+
+- name: Measure the scratch initramfs image
+  ansible.builtin.stat:
+    path: "{{ system_initramfs_confdir.path }}/initrd.img"
+  register: system_initramfs_scratch
+  tags: ['initramfs']
+
+- name: Report the boot payload budget
+  ansible.builtin.debug:
+    msg: >-
+      {{ inventory_hostname }}:
+      partition {{ ((budget.partition_bytes / 1048576) | round(1)) }} MiB,
+      free now {{ ((budget.free_bytes / 1048576) | round(1)) }} MiB,
+      current/ {{ ((budget.current_bytes / 1048576) | round(1)) }} MiB,
+      new initramfs {{ ((system_initramfs_scratch.stat.size / 1048576) | round(1)) }} MiB,
+      new payload {{ ((budget.new_payload_bytes / 1048576) | round(1)) }} MiB,
+      peak after rebuild {{ ((budget.peak_bytes / 1048576) | round(1)) }} MiB,
+      headroom {{ (((budget.partition_bytes - budget.peak_bytes) / 1048576) | round(1)) }} MiB
+  vars:
+    budget: "{{ system_initramfs_budget.stdout | from_json }}"
+  tags: ['initramfs']
+
+- name: Remove the scratch initramfs configuration directory
+  ansible.builtin.file:
+    path: "{{ system_initramfs_confdir.path }}"
+    state: absent
+  tags: ['initramfs']

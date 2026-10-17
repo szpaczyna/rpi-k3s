@@ -1,0 +1,75 @@
+{#
+  Managed by Ansible (roles/system, tasks/initramfs.yml), local edits are lost.
+
+  mkinitramfs ships more than these hosts boot from, and piboot-try needs the
+  result to fit twice on a 256 MiB boot partition, so this hook drops what a Pi
+  never uses. Sizes are what the stock 7.0.0-raspi initramfs carries:
+
+    39.5 MiB  kernel modules   (MODULES=dep covers this)
+    20.3 MiB  coreutils-from-uutils
+     3.0 MiB  pdata_tools      (thin-provisioning-tools, nothing here is thin)
+     2.9 MiB  Mellanox/NFP firmware (x86 NICs)
+  and roughly 12 MiB of the remaining x86 NIC and HBA firmware listed in
+  system_initramfs_firmware_prune. That is 35.3 MiB down to 24.3 MiB.
+
+  Deliberately left alone:
+
+    coreutils-from-uutils  20.3 MiB, and tempting to remove, but the overlayroot
+                            hook copies /usr/bin/head and /usr/bin/sha512sum, and
+                            on Ubuntu 26.04 both are symlinks into
+                            /usr/lib/cargo/bin/coreutils. scripts/init-bottom/
+                            overlayroot calls sha512sum at boot, so deleting the
+                            directory would leave bin/sha512sum dangling.
+                            Removing sudo, su and visudo from that directory is
+                            the part that is safe.
+    udev/hwdb.bin          12.9 MiB uncompressed, 2.4 MiB compressed. It is the
+                            modalias fallback that identifies USB enclosures;
+                            not worth an unbootable node for 2.4 MiB.
+    cxgb3/cxgb4 firmware    1.7 MiB. The iscsi hook adds cxgb3i/cxgb4i via
+                            manual_add_modules, and mkinitramfs copies module
+                            firmware after running the hooks, so no hook can drop
+                            it. Listed as a known remainder rather than silently
+                            pretending otherwise.
+    /lib/firmware/{brcm,cypress,raspberrypi}, rp2.fw.zst, cs42l43.bin.zst
+                            the Pi's own blobs
+    busybox/klibc applets  what the init scripts call into
+#}
+#!/bin/sh
+
+set -e
+
+case "${1}" in
+prereqs)
+    exit 0
+    ;;
+esac
+
+# sudo, su and visudo from sudo-rs, dragged in because initramfs-tools resolves
+# them through their shared library closure. Nothing in the initramfs runs them.
+for binary in sudo su visudo; do
+    for path in \
+        "${DESTDIR}/usr/lib/cargo/bin/${binary}" \
+        "${DESTDIR}/usr/bin/${binary}" \
+        "${DESTDIR}/sbin/${binary}"
+    do
+        [ -e "${path}" ] || continue
+        rm -f "${path}"
+    done
+done
+
+# thin-provisioning-tools. The root filesystem is plain ext4 on a plain
+# partition and no LVM logical volume is thin-provisioned.
+for path in "${DESTDIR}/sbin/pdata_tools" "${DESTDIR}/usr/sbin/pdata_tools"; do
+    [ -e "${path}" ] || continue
+    rm -f "${path}"
+done
+
+# x86 NIC, HBA and accelerator firmware.
+for vendor in {% for vendor in system_initramfs_firmware_prune %}'{{ vendor }}' {% endfor %}; do
+    for firmware_dir in "${DESTDIR}/lib/firmware" "${DESTDIR}/usr/lib/firmware"; do
+        [ -d "${firmware_dir}" ] || continue
+        rm -rf "${firmware_dir}"/${vendor}*
+    done
+done
+
+exit 0
