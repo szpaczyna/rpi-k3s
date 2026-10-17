@@ -25,6 +25,9 @@ loki:
   # For quick setup, use the chart's test schema. Replace with a proper schema_config for production.
   useTestSchema: true
 
+  analytics:
+    reporting_enabled: false
+
 # Explicitly set deployment mode to SingleBinary to avoid transitional validation errors
 deploymentMode: SingleBinary
 
