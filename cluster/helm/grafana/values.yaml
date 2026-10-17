@@ -246,3 +246,7 @@ grafana.ini:
 
   date_formats:
     default_timezone: 'Europe/Warsaw'
+
+  analytics:
+    reporting_enabled: false
+    check_for_updates: false
