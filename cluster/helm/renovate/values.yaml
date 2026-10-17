@@ -105,6 +105,30 @@ renovate:
           "matchDatasources": ["docker"],
           "matchPackageNames": ["brancz/kube-rbac-proxy"],
           "registryUrls": ["https://quay.io"]
+        },
+        {
+          "description": "Grafana >= 11 breaks against this cluster's datasources and provisioned dashboards; hold at 10.x until the dashboards are ported",
+          "matchDatasources": ["docker"],
+          "matchPackageNames": ["grafana/grafana"],
+          "enabled": false
+        },
+        {
+          "description": "calibre-web 5.x tags on lscr.io are amd64-only single manifests, so they cannot run on this arm64 cluster; the chart is also parked under unused/ with enabled=false",
+          "matchDatasources": ["docker"],
+          "matchPackageNames": ["lscr.io/linuxserver/calibre-web"],
+          "enabled": false
+        },
+        {
+          "description": "InfluxDB is not deployed; the chart is parked under unused/ and 2.x is a breaking rewrite",
+          "matchDatasources": ["docker"],
+          "matchPackageNames": ["influxdb"],
+          "enabled": false
+        },
+        {
+          "description": "community.docker, kubernetes.core and the docker Python package were removed from provision/ansible as unused; keep them out until a task imports them",
+          "matchDatasources": ["ansible", "pep621", "pypi"],
+          "matchPackageNames": ["community.docker", "kubernetes.core", "docker"],
+          "enabled": false
         }
       ],
       "prHourlyLimit": 0,
