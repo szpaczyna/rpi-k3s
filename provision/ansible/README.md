@@ -29,11 +29,13 @@ ansible-playbook playbooks/apt.yaml
 
 ## Requirements
 
-- `ansible-core`, `ansible-lint`, and the `docker` Python package are pinned
-  in `requirements.txt`.
-- Ansible Galaxy collections (`ansible.posix`, `community.docker`,
-  `community.general`, `kubernetes.core`, `community.sops`) are pinned in
-  `requirements.yml`.
+- `ansible-core` and `ansible-lint` are pinned in `requirements.txt`.
+- Ansible Galaxy collections (`ansible.posix`, `community.general`,
+  `community.sops`) are pinned in `requirements.yml`. `community.general`
+  supplies `portage`, `modprobe` and `timezone`; `ansible.posix` supplies
+  `sysctl` and the `profile_tasks` callback; `community.sops` decrypts the
+  `*.enc.sops.yml` group vars. Nothing else is imported, so nothing else is
+  pinned.
 - `sops` CLI installed locally, with the private half of the PGP key in the
   local keyring — needed to decrypt the inventory and any SOPS-encrypted
   `group_vars`. The recipient comes from the keyring, since the repo carries no
@@ -422,32 +424,6 @@ ansible-playbook <playbook> --syntax-check
 Don't run `--check --diff` against the live hosts as part of this flow —
 that's a manual, deliberate step when you actually need it, not something to
 automate.
-
-### Known issue: `--check --diff` crashes under Python 3.14
-
-With `ansible-core` 2.21.5 and `community.general` 3.8.0 running on
-CPython 3.14, `ansible-playbook` crashes on startup with:
-
-```
-TypeError: function() argument 'code' must be code, not str
-```
-
-raised from `community.general`'s YAML stdout callback plugin
-(`plugins/callback/yaml.py`), triggered by `stdout_callback = yaml` in
-`ansible.cfg`. The callback's `MyDumper` subclass relies on CPython internals
-that changed between 3.12 and 3.14; `community.general` 3.8.0 predates that
-change.
-
-Workaround — run with the default callback instead of `yaml`:
-
-```bash
-ANSIBLE_STDOUT_CALLBACK=default ansible-playbook <playbook> --check --diff
-```
-
-This affects only local output formatting, not the hosts or the modules
-that run against them. The proper fix is upgrading `community.general` past
-the version that fixed this (or running the venv on Python <= 3.13), neither
-of which has been done here yet.
 
 ### Known issue: `--check` false positive on first-time `zram-swap-config` install
 
