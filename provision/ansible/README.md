@@ -29,7 +29,10 @@ ansible-playbook playbooks/apt.yaml
 
 ## Requirements
 
-- `ansible-core` and `ansible-lint` are pinned in `requirements.txt`.
+- `ansible-core`, `ansible-lint` and `PyYAML` are pinned in `requirements.txt`.
+  PyYAML is what `inventory_transform.py` imports; it is listed explicitly
+  because `ansible-lint` would otherwise pull it in only transitively, and
+  the inventory would break again if that dependency disappeared.
 - Ansible Galaxy collections (`ansible.posix`, `community.general`,
   `community.sops`) are pinned in `requirements.yml`. `community.general`
   supplies `portage`, `modprobe` and `timezone`; `ansible.posix` supplies
