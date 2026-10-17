@@ -129,6 +129,7 @@ tag:
 | Tag | File | Purpose |
 |-----|------|---------|
 | `kernel` | `kernel.yml` | Kernel modules needed by k3s/containerd |
+| `initramfs` | `initramfs.yml` | Boot payload size for the 256 MiB boot partition (see below) |
 | `disks` | `disks.yml` | smartd disk monitoring |
 | `filesystem` | `filesystem.yml` | Filesystem/inotify limits |
 | `locale` | `locale.yml` | Locale and timezone |
@@ -151,6 +152,43 @@ Zram swap runs on every host, but `swappiness` differs by role: `0` on
 `k3s_master`, `10` elsewhere, enforced via `expected_swappiness` in
 `tasks/zram.yml` (the zram service starts after `systemd-sysctl`, so it has
 the final say over the value).
+
+### `initramfs`
+
+The boot partition is 256 MiB and `piboot-try` stages a second full copy of the
+boot payload into `new/` on every `flash-kernel` run, so the payload has to fit
+twice over, on top of the bootloader files in the partition root. Ubuntu's
+default `MODULES=most` initramfs is 84 MiB, which does not: every package
+install that triggers `update-initramfs` dies with ENOSPC inside
+`cp`, which fails the postinst of `initramfs-tools` and `piboot-try`, and
+takes `unattended-upgrades` down with it.
+
+The role sets `MODULES=dep` via `conf.d/99-boot-partition.conf`, keeps an
+explicit module list in `/etc/initramfs-tools/modules` (`system_initramfs_modules`
+plus per-host extras from `system_initramfs_extra_modules_by_host`), and installs
+a pruning hook. Together that takes the initramfs from 84 MiB to 33 MiB, which
+leaves about 44 MiB of headroom on the partition.
+
+Anything left out of the initramfs is still loadable from `/lib/modules` once
+the root filesystem is mounted, so the list only has to cover what is needed
+before that point.
+
+Two opt-in steps, both off by default:
+
+```bash
+# Rebuild a scratch image and check it against the partition budget
+ansible-playbook playbooks/base_setup.yml --tags system,initramfs \
+  -e system_initramfs_check=true
+
+# Retry dpkg --configure -a and rebuild the payload for real
+ansible-playbook playbooks/base_setup.yml --tags system,initramfs \
+  -e system_initramfs_rebuild=true
+```
+
+The check builds into a scratch directory and asserts three things: every
+configured module is in the image, there are no dangling symlinks (a pruning
+hook that removes a symlink target looks fine to `lsinitramfs` and only fails
+later in a boot script), and the staged peak fits 90% of the partition.
 
 ### `apt_upgrade` (opt-in)
 

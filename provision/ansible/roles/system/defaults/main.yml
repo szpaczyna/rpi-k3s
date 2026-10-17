@@ -28,3 +28,81 @@ system_apt_install_packages:
   - util-linux
 
 system_apt_remove_packages: []
+
+### initramfs
+# The boot partition is 256 MiB and piboot-try stages a second full copy of the
+# boot payload into new/ on every flash-kernel run, so the payload has to fit
+# twice, on top of the bootloader files sitting in the partition root. Ubuntu's
+# default MODULES=most initramfs is 84 MiB, which does not fit twice.
+#
+# MODULES=dep is set instead: mkinitramfs then picks up whatever drives the
+# current root device, plus everything listed in /etc/initramfs-tools/modules,
+# which is the list below. Anything left out of the initramfs is still loadable
+# from /lib/modules once the root filesystem is mounted, so the list only has to
+# cover what is needed before that point (plus whatever the host services).
+system_initramfs_modules:
+  - br_netfilter # kube-proxy
+  - btrfs # Longhorn volumes
+  - mmc_block # rescue boots from an SD card
+  - nfs # /etc/fstab mounts the NFS exports on every node
+  - nvme # in case root ever moves off the USB SSD
+  - overlay # containerd overlayfs snapshotter
+  - rbd # Longhorn
+  - uas # SCSI-over-USB enclosure, the other root device driver next to usb-storage
+  - usb-storage # root device driver that MODULES=dep cannot know about at build time
+  - wireguard
+  - xfs # worker-00 data LVs, Longhorn
+
+# Per-host additions to the list above, e.g. a host running an NFS server:
+#   system_initramfs_extra_modules_by_host:
+#     rpi-k3s-worker-00:
+#       - nfs_acl
+#       - nfsd
+system_initramfs_extra_modules_by_host: {}
+
+# Vendor firmware to drop from the initramfs. Everything listed here is PCIe or
+# x86 NIC and accelerator firmware, which no Raspberry Pi loads. The Pi's own
+# blobs (brcm, cypress, raspberrypi, rp2.fw, cs42l43, ene-ub6250) stay.
+system_initramfs_prune_firmware: true
+system_initramfs_firmware_prune:
+  - 3com
+  - acenic
+  - adaptec
+  - advansys
+  - airoha
+  - bnx2
+  - bnx2x
+  - cadence
+  # cxgb3 and cxgb4 are deliberately absent even though they are x86 NIC
+  # firmware: the iscsi hook adds cxgb3i/cxgb4i with manual_add_modules, and
+  # mkinitramfs copies module firmware after running the hooks, so pruning them
+  # from a hook does not stick. They cost 1.7 MiB and the only way to drop them
+  # is to stop pulling in the iscsi hook.
+  - e100
+  - intel
+  - kaweth
+  - liquidio
+  - mellanox
+  - microchip
+  - myri10ge*
+  - netronome
+  - phanfw*
+  - qed
+  - ql*
+  - qlogic
+  - rtl_nic
+  - slicoss
+  - sun
+  - tehuti
+  - tigon
+
+# Rebuild the initramfs into a scratch image and check the boot payload budget
+# (tasks/initramfs_check.yml). Off by default: the build takes a while on
+# these Pis. Run with -e system_initramfs_check=true.
+system_initramfs_check: false
+
+# Retry the dpkg configuration that has been failing on the boot partition
+# (tasks/initramfs_rebuild.yml). Off by default: it writes to the boot
+# partition and leaves an untested payload in new/ for the next reboot to try.
+# Run with -e system_initramfs_rebuild=true.
+system_initramfs_rebuild: false

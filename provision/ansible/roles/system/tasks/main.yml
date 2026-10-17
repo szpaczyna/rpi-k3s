@@ -8,6 +8,10 @@
   ansible.builtin.include_tasks: kernel.yml
   tags: ['kernel']
 
+- name: Initramfs
+  ansible.builtin.include_tasks: initramfs.yml
+  tags: ['initramfs']
+
 - name: Disk monitoring (smartd)
   ansible.builtin.include_tasks: disks.yml
   tags: ['disks']

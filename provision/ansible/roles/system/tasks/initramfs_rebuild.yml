@@ -1,0 +1,111 @@
+---
+# Retries the dpkg configuration that has been failing since the boot partition
+# ran out of room: initramfs-tools' postinst rebuilds the initramfs, the
+# /etc/initramfs/post-update.d/flash-kernel hook then stages a second copy of
+# the payload into new/, and cp dies with ENOSPC, which fails the postinst of
+# both initramfs-tools and piboot-try.
+- name: Report the free space left in the boot partition
+  ansible.builtin.command:
+    cmd: df -h /boot/firmware
+  register: system_initramfs_df
+  changed_when: false
+  tags: ['initramfs']
+
+- name: Show the free space left in the boot partition
+  ansible.builtin.debug:
+    var: system_initramfs_df.stdout_lines
+  tags: ['initramfs']
+
+- name: Retry the interrupted package configuration
+  ansible.builtin.command:
+    cmd: dpkg --configure -a
+  register: system_initramfs_dpkg
+  changed_when: true
+  tags: ['initramfs']
+
+# Not -k all: a stale /boot/initrd.img-<old-version> whose /lib/modules tree is
+# already gone makes depmod fail and aborts the whole run, even though the
+# running kernel rebuilt fine. Only rebuild versions that still have modules.
+- name: Find the kernel versions that still have a module tree
+  ansible.builtin.find:
+    paths: /lib/modules
+    file_type: directory
+  register: system_initramfs_module_dirs
+  tags: ['initramfs']
+
+# dpkg --configure -a only rebuilds the initramfs when a package is actually
+# half-configured. Ask for the rebuild explicitly: this runs
+# /etc/initramfs/post-update.d/flash-kernel, which is the step that used to die
+# with ENOSPC while staging new/, and it is also what the next kernel package
+# will do, so this is the same path under test.
+- name: Rebuild the initramfs and stage the boot payload
+  ansible.builtin.command:
+    cmd: >-
+      update-initramfs -u
+      -k {{ system_initramfs_module_dirs.files | map(attribute='path')
+          | map('basename') | join(' ') }}
+  register: system_initramfs_update
+  changed_when: true
+  tags: ['initramfs']
+
+- name: Drop the untested payload staged by flash-kernel
+  # new/ only holds assets the bootloader has not validated yet. Leaving it in
+  # place would double the footprint of the partition and make the next reboot
+  # boot the same payload twice, so the next kernel update stages a fresh copy.
+  ansible.builtin.file:
+    path: /boot/firmware/new
+    state: absent
+  tags: ['initramfs']
+
+- name: Show the boot asset state
+  ansible.builtin.command:
+    cmd: piboot-try --status
+  register: system_initramfs_piboot
+  changed_when: false
+  failed_when: false
+  tags: ['initramfs']
+
+- name: Show the boot partition after the rebuild
+  ansible.builtin.debug:
+    msg: "{{ system_initramfs_piboot.stdout_lines }}"
+  tags: ['initramfs']
+
+- name: Show the remaining free space in the boot partition
+  ansible.builtin.command:
+    cmd: df -h /boot/firmware
+  register: system_initramfs_df_after
+  changed_when: false
+  tags: ['initramfs']
+
+- name: Show the free space left after the rebuild
+  ansible.builtin.debug:
+    var: system_initramfs_df_after.stdout_lines
+  tags: ['initramfs']
+
+# The whole point of the role is that a rebuild fits. A rebuild that silently
+# did nothing looks exactly like a successful one, so check the image actually
+# got smaller than the 256 MiB partition can hold twice over.
+- name: Measure the rebuilt initramfs
+  ansible.builtin.stat:
+    path: "/boot/initrd.img-{{ ansible_kernel }}"
+  register: system_initramfs_rebuilt
+  tags: ['initramfs']
+
+- name: Fail when the rebuilt initramfs is still too big to stage twice
+  ansible.builtin.assert:
+    that:
+      - (system_initramfs_rebuilt.stat.size / 1048576) < 100
+    fail_msg: >-
+      {{ inventory_hostname }}: the rebuilt initramfs is
+      {{ ((system_initramfs_rebuilt.stat.size / 1048576) | round(1)) }} MiB, so a
+      staged payload still does not fit twice on the boot partition. Check that
+      /etc/initramfs-tools/conf.d/99-boot-partition.conf and the prune hook are
+      in place before trusting this.
+  tags: ['initramfs']
+
+- name: Report the rebuilt initramfs size
+  ansible.builtin.debug:
+    msg: >-
+      {{ inventory_hostname }}: rebuilt initramfs is
+      {{ ((system_initramfs_rebuilt.stat.size / 1048576) | round(1)) }} MiB
+  tags: ['initramfs']
