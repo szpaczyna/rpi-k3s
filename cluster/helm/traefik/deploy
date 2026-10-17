@@ -12,7 +12,7 @@ helm repo update
 
 # Gateway API CRDs (standard channel) come first: the chart creates
 # Gateway/HTTPRoute resources and would otherwise fail on a fresh cluster.
-./gateway-api-deploy
+# ./gateway-api-deploy
 
 # TLS Secrets referenced by the websecure listener live in this namespace
 # and are provisioned by each application's Helm chart (Certificate

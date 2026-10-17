@@ -1,0 +1,11 @@
+{#
+  Managed by Ansible (roles/system, tasks/initramfs.yml), local edits are lost.
+
+  Kept separate from initramfs.conf because mkinitramfs honours this file
+  whatever MODULES is set to: MODULES=dep covers the current root device, this
+  file covers everything else the host needs.
+#}
+# Modules loaded in the initramfs, in this order.
+{% for module in system_initramfs_modules_effective %}
+{{ module }}
+{% endfor %}
