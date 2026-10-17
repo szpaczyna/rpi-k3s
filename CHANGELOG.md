@@ -1,4 +1,53 @@
 # Changelog
+## [0.6.8](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.7...v0.6.8) (2026-10-17)
+
+
+### Features
+
+* **ansible:** add fail2ban prometheus exporter role ([#229](https://github.com/szpaczyna/rpi-k3s/issues/229)) ([39cb220](https://github.com/szpaczyna/rpi-k3s/commit/39cb2200ed7223b8ef7b904de998626fa0344944))
+* **ansible:** manage sshd config and fail2ban across host groups ([#228](https://github.com/szpaczyna/rpi-k3s/issues/228)) ([fadf20f](https://github.com/szpaczyna/rpi-k3s/commit/fadf20f78fa82e25b6fb1fd52c635a8b6fb40d46))
+* **ansible:** rebuild provisioning for Ubuntu 26.04 + add gentoo/pihole/k3s roles ([#226](https://github.com/szpaczyna/rpi-k3s/issues/226)) ([e1a48d0](https://github.com/szpaczyna/rpi-k3s/commit/e1a48d01410dd2cdeaa9d8d163604552d83e4b62))
+* **ansible:** zramctl completion ([88f1e86](https://github.com/szpaczyna/rpi-k3s/commit/88f1e864ce4d8a853eba6b584e57a47c11f7b39e))
+* **longhorn:** upgrade to version 1.12.1 ([2260d1f](https://github.com/szpaczyna/rpi-k3s/commit/2260d1f5038bb2460bec20ce7a56b0a056061bec))
+
+
+### Bug Fixes
+
+* **ansible:** drop unused collections and the removed yaml callback ([#259](https://github.com/szpaczyna/rpi-k3s/issues/259)) ([f8929b2](https://github.com/szpaczyna/rpi-k3s/commit/f8929b2bbd7d89a5e63809c3c87289a1144481b6))
+* **ansible:** pin PyYAML for the inventory script ([#261](https://github.com/szpaczyna/rpi-k3s/issues/261)) ([b3f092e](https://github.com/szpaczyna/rpi-k3s/commit/b3f092e826cafe45091ed16b008f077432c1b1fd))
+* **ansible:** run inventory_transform with the venv interpreter ([#260](https://github.com/szpaczyna/rpi-k3s/issues/260)) ([63718da](https://github.com/szpaczyna/rpi-k3s/commit/63718daf4556ad276083f8627c7a01e27c46905d))
+* **ansible:** shrink initramfs so the boot payload fits twice ([#258](https://github.com/szpaczyna/rpi-k3s/issues/258)) ([03828e3](https://github.com/szpaczyna/rpi-k3s/commit/03828e3b37610595f8d7f8f3b93963b516b48232))
+* disable loki/grafana analytics reporting ([738a107](https://github.com/szpaczyna/rpi-k3s/commit/738a10736de3a68bef57d6017c817ec4efc062ef))
+* **gitea:** restore SSH access and repair mirror recovery script ([#227](https://github.com/szpaczyna/rpi-k3s/issues/227)) ([1d7153c](https://github.com/szpaczyna/rpi-k3s/commit/1d7153c7a4c89badaef35181eb61bc4f0fe088d1))
+* **provisioning:** pyaml version ([0bc6767](https://github.com/szpaczyna/rpi-k3s/commit/0bc676777d38077359b23a15cb188ed3d9bfe434))
+* **renovate:** stop requiring an in-repo renovate.json ([#224](https://github.com/szpaczyna/rpi-k3s/issues/224)) ([2b34bfa](https://github.com/szpaczyna/rpi-k3s/commit/2b34bfaa98838cb87774731613f32eb8c71da5fb))
+* **renovate:** stop treating this repo as disabled after onboarding PR close ([#231](https://github.com/szpaczyna/rpi-k3s/issues/231)) ([b17e81f](https://github.com/szpaczyna/rpi-k3s/commit/b17e81fc15bc960de5361adeb87e3dbafec7365c))
+* **traefik:** enable safeNaming for the CRD provider ([a541272](https://github.com/szpaczyna/rpi-k3s/commit/a5412726dc9c18a87cb74c8392ad524d220eee9a))
+
+
+### Miscellaneous
+
+* **deps:** update actions/checkout action to v7 [major] ([#240](https://github.com/szpaczyna/rpi-k3s/issues/240)) ([2180c35](https://github.com/szpaczyna/rpi-k3s/commit/2180c35bd09f9c86dbf34dc3b37dbe7406a4bbe2))
+* **deps:** update curlimages/curl docker tag to v8.23.0 [minor] ([#254](https://github.com/szpaczyna/rpi-k3s/issues/254)) ([977a9ef](https://github.com/szpaczyna/rpi-k3s/commit/977a9ef66e6855240b7a94c44111cc8c70b0f089))
+* **deps:** update dependency ansible-lint to v26.10.1 [minor] ([#232](https://github.com/szpaczyna/rpi-k3s/issues/232)) ([bc16a17](https://github.com/szpaczyna/rpi-k3s/commit/bc16a17a44a05ec710e75d4f37621fdee8fa6762))
+* **deps:** update dependency ansible.posix to v2 [major] ([#241](https://github.com/szpaczyna/rpi-k3s/issues/241)) ([65862f3](https://github.com/szpaczyna/rpi-k3s/commit/65862f3652428c851fee35624f8a465181ef22b1))
+* **deps:** update dependency community.general to v13 [major] ([#243](https://github.com/szpaczyna/rpi-k3s/issues/243)) ([c29dbde](https://github.com/szpaczyna/rpi-k3s/commit/c29dbde9ea84050c0e295050d2f7859de2efa3ed))
+* **deps:** update dependency community.sops to v2 [major] ([#244](https://github.com/szpaczyna/rpi-k3s/issues/244)) ([16bf50c](https://github.com/szpaczyna/rpi-k3s/commit/16bf50c0070c157016ea220079c7f5267efb53d9))
+* **deps:** update dependency kubernetes to v37 [major] ([#246](https://github.com/szpaczyna/rpi-k3s/issues/246)) ([48d95a7](https://github.com/szpaczyna/rpi-k3s/commit/48d95a75eebd5ef8ffc825505a9b51d25edce754))
+* **deps:** update ghcr.io/renovatebot/charts/renovate docker tag to v46.366.3 [minor] ([#235](https://github.com/szpaczyna/rpi-k3s/issues/235)) ([e68a18d](https://github.com/szpaczyna/rpi-k3s/commit/e68a18d52715562613d6295af9743960baef2e5c))
+* **deps:** update helm release loki to v7 [major] ([#256](https://github.com/szpaczyna/rpi-k3s/issues/256)) ([ed500b6](https://github.com/szpaczyna/rpi-k3s/commit/ed500b686dbad1af840ebc777a728563e37fe993))
+* **deps:** update helm release prometheus to v29.37.0 [minor] ([#255](https://github.com/szpaczyna/rpi-k3s/issues/255)) ([ed5d8b8](https://github.com/szpaczyna/rpi-k3s/commit/ed5d8b86f5a803aea83f8e093e87f7bc196d071e))
+* **deps:** update helm release traefik to v41.7.1 [minor] ([#237](https://github.com/szpaczyna/rpi-k3s/issues/237)) ([332b62a](https://github.com/szpaczyna/rpi-k3s/commit/332b62af7f91fed0bca20bb42e54373ce0f062ea))
+* **deps:** update helm release traefik to v42 [major] ([#257](https://github.com/szpaczyna/rpi-k3s/issues/257)) ([10cd2bb](https://github.com/szpaczyna/rpi-k3s/commit/10cd2bb1c9768708200972d6db8ce07bf8a1252e))
+* **deps:** update influxdb docker tag to v1.13.1 [minor] ([#238](https://github.com/szpaczyna/rpi-k3s/issues/238)) ([158165e](https://github.com/szpaczyna/rpi-k3s/commit/158165e0923bd3f92654a73a18f43cbbe6e32c53))
+* **deps:** update nextcloud docker tag to v35 [major] ([#252](https://github.com/szpaczyna/rpi-k3s/issues/252)) ([aa7844d](https://github.com/szpaczyna/rpi-k3s/commit/aa7844dc4f27a90076dbeccf79ff953e7cc14b9a))
+* **deps:** update nginx docker tag to v1.31.7 [patch] ([#253](https://github.com/szpaczyna/rpi-k3s/issues/253)) ([eeda581](https://github.com/szpaczyna/rpi-k3s/commit/eeda581b4eaba9b0f15bf019aca0c20043c41584))
+
+
+### Refactoring
+
+* **k3s:** manage cluster from config.yaml and keep workloads off the control plane ([#230](https://github.com/szpaczyna/rpi-k3s/issues/230)) ([a443d86](https://github.com/szpaczyna/rpi-k3s/commit/a443d860a66ad222d9267c6aee7375c63a1feec5))
+
 ## [0.6.7](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.6...v0.6.7) (2026-10-05)
 
 
