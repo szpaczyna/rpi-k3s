@@ -1,20 +1,14 @@
-# Hostnames covered by the wildcard-home-tls Secret.
-#
-# One name per line; `#` starts a comment; blank lines ignored.
-# This file is the source of truth: ./generate-cert reads it, and the README
-# documents what happens when you change it.
+# Hostnames for the wildcard-home-tls Secret, one per line, read by
+# ./generate-cert. Every one must be listed: `.home` is a public suffix, so
+# clients reject a wildcard matching a registrable domain.
 
-# Apex, and the wildcard itself.
 home
 *.home
-
-# The gateway's own hostname.
 traefik-internal.home
 
-# Applications. Add a line here before deploying a new `*.home` app,
-# then run ./generate-cert && ./deploy.
 media.home
 grafana.home
 prometheus.home
 longhorn.home
 loki.home
+pihole.home

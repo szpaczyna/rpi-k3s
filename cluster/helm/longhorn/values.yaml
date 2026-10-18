@@ -67,9 +67,7 @@ global:
               #tag: v2.11.0
 service:
   ui:
-    # type: ClusterIP
-    type: LoadBalancer
-    loadBalancerIP: 10.0.0.48
+    type: ClusterIP
   manager:
     type: ClusterIP
     nodePort: ""
@@ -210,30 +208,17 @@ longhornRecoveryBackend:
 
 ingress:
   enabled: false
-  host: longhorn.shpaq.org
+  host: longhorn.home
   secrets: null
 
-# Gateway API equivalent of the (disabled) nginx ingress above.
-# Kept disabled to match the previous state: longhorn.shpaq.org has no
-# public DNS record, so enabling this would only produce a stuck ACME
-# HTTP-01 order (self-check fails: NXDOMAIN) hammering Let's Encrypt.
-# Flip to true once DNS for longhorn.shpaq.org exists, and also apply
-# certificate.yaml in this same directory.
-#
-# KNOWN LIMITATION: the upstream chart's httproute.yaml template has no
-# filters/ExtensionRef hook, so the Authelia forwardAuth Middleware
-# (traefik-authelia@kubernetescrd) cannot be attached to this HTTPRoute
-# through values alone. Longhorn's dashboard would be reachable *without*
-# the auth protection. Before enabling in production, either patch
-# templates/httproute.yaml locally to add a filters block, or front it
-# with a hand-written HTTPRoute (see other charts in this repo for the
-# pattern) instead of the native httproute.enabled toggle.
+# No middleware on this route: the upstream httproute.yaml template has no
+# filters hook, not even the HTTPS redirect. Longhorn has its own login page.
 httproute:
-  enabled: false
+  enabled: true
   hostnames:
-    - longhorn.shpaq.org
+    - longhorn.home
   parentRefs:
-    - name: traefik-gateway
+    - name: traefik-internal-gateway
       namespace: traefik
       kind: Gateway
       sectionName: websecure

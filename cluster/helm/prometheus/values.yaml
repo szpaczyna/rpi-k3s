@@ -126,50 +126,29 @@ server:
   ingress:
     enabled: false
     hosts:
-      - prometheus.shpaq.org
+      - prometheus.home
 
   route:
     main:
-      # Gateway API equivalent of the (disabled) nginx ingress above.
-      # Kept disabled to match the previous state: prometheus.shpaq.org has
-      # no public DNS record, so enabling this would only produce a stuck
-      # ACME HTTP-01 order (self-check fails: NXDOMAIN) hammering Let's
-      # Encrypt.
-      #
-      # Enable procedure (in this order — the Gateway drops its whole
-      # websecure listener while any referenced secret is missing):
-      #   1. create the public DNS record for prometheus.shpaq.org
-      #   2. kubectl apply -f certificate.yaml   (renders into ns `traefik`,
-      #      wait for `kubectl get certificate -n traefik
-      #      prometheus-shpaq-org-tls` to be Ready)
-      #   3. uncomment `- name: prometheus-shpaq-org-tls` in
-      #      gateway.listeners.websecure.certificateRefs
-      #      (cluster/helm/traefik-external/values.yaml)
-      #   4. set enabled=true here and `bash deploy`
-      enabled: false
+      enabled: true
       apiVersion: ""
       kind: ""
       annotations: {}
       labels: {}
       parentRefs:
-        - name: traefik-gateway
+        - name: traefik-internal-gateway
           namespace: traefik
           kind: Gateway
           sectionName: websecure
       hostnames:
-        - prometheus.shpaq.org
+        - prometheus.home
       additionalRules: []
       filters:
         - type: ExtensionRef
           extensionRef:
             group: traefik.io
             kind: Middleware
-            name: security-chain
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: authelia
+            name: security-chain-internal
       matches:
         - path:
             type: PathPrefix
@@ -302,11 +281,10 @@ server:
     labels: {}
     clusterIP: ""
     externalIPs: []
-    loadBalancerIP: "10.0.0.47"
     loadBalancerSourceRanges: []
     servicePort: 9090
     sessionAffinity: None
-    type: LoadBalancer # ClusterIP
+    type: ClusterIP
     externalTrafficPolicy: ""
 
     gRPC:
