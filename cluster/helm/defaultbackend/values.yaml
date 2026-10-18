@@ -1,10 +1,21 @@
 # Default values for defaultbackend.
 #
 # Equivalent of ingress-nginx's `defaultBackend` for the Traefik Gateway API
-# setup: a tiny pod serving a plain 404-style page for requests that do not
-# match any HTTPRoute hostname (bare LoadBalancer IP, unknown hosts).
+# setup: a tiny pod that answers requests no hostname-specific route claims,
+# so bare LoadBalancer IP access and unknown hosts land here.
 # Routing works via a catch-all HTTPRoute without `hostnames` attached to both
 # gateway listeners; routes that do specify hostnames always take precedence.
+#
+# What it actually serves is NOT a 404 page, despite the role this chart plays.
+# The image is nginx configured as a plain static site: `location /` points at
+# /usr/share/nginx/html and `error_page 404` is commented out. Its index.html
+# is a copy of the shpaq.org landing page, so an unclaimed host gets that page
+# with a 200. Only a path matching no file gets nginx's built-in 404.
+#
+# The probes send GET / and Kubernetes accepts 200-399 as healthy, which is why
+# the 200 answer is what keeps this pod Ready. If the image is ever replaced by
+# one that answers / with 404, the probes start failing and the pod never
+# becomes Ready - check the status code before assuming a bare-IP 404.
 
 replicaCount: 1
 
