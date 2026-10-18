@@ -18,7 +18,7 @@ layout: default
 - Retired / Not Currently Deployed (`cluster/helm/unused/`):
   - [calibre](cluster/helm/unused/calibre) - Calibre-Web e-book server (extracted from media-stack)
   - [event-exporter](cluster/helm/unused/event-exporter) - Kubernetes events exporter
-  - [gentoo](cluster/helm/unused/gentoo) - Gentoo cross-compiler (helm chart; plain manifests in [gentoo-manifests](cluster/helm/unused/gentoo-manifests))
+  - [gentoo](cluster/helm/unused/gentoo) - Gentoo distcc build node (cross-compiles on behalf of other hosts)
   - [ingress-nginx](cluster/helm/unused/ingress-nginx) - Legacy ingress controller, replaced by Traefik
   - [influxdb](cluster/helm/unused/influxdb) - Time-series DB (Apple Health exports)
   - [kanboard](cluster/helm/unused/kanboard) - Kanban project management
