@@ -56,6 +56,9 @@ spec:
           value: "{{ $.Values.global.runAsGroup }}"
         - name: UMASK
           value: "022"
+        {{- with $svc.env }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         ports:
         - name: {{ $name }}
           containerPort: {{ $svc.service.port }}

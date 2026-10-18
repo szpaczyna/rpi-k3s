@@ -12,9 +12,12 @@
   ansible.builtin.include_tasks: initramfs.yml
   tags: ['initramfs']
 
+# SD-card hosts have no SMART-capable device, so smartd exits 17 and fails
+# the play. Only the k3s nodes carry real disks.
 - name: Disk monitoring (smartd)
   ansible.builtin.include_tasks: disks.yml
   tags: ['disks']
+  when: "'k3s_cluster' in group_names"
 
 - name: Filesystem limits
   ansible.builtin.include_tasks: filesystem.yml

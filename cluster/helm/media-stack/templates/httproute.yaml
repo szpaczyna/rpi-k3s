@@ -10,10 +10,8 @@ spec:
   parentRefs:
     {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
   hostnames:
-    - "media.shpaq.org"
+    - {{ .Values.httpRoute.hostname | quote }}
   rules:
-    # Bare root (no app suffix) has no backend of its own; redirect to the
-    # main landing page instead of falling through to a 404.
     - matches:
         - path:
             type: Exact
@@ -23,7 +21,12 @@ spec:
           extensionRef:
             group: traefik.io
             kind: Middleware
-            name: security-chain
+            name: security-chain-internal
+      {{- if .Values.landingPage.enabled }}
+      backendRefs:
+        - name: landingpage
+          port: 80
+      {{- else }}
         - type: RequestRedirect
           requestRedirect:
             scheme: https
@@ -32,6 +35,7 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /
             statusCode: 302
+      {{- end }}
 {{- if .Values.transmission.enable }}
     - matches:
         - path:
@@ -42,12 +46,7 @@ spec:
           extensionRef:
             group: traefik.io
             kind: Middleware
-            name: security-chain
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: authelia
+            name: security-chain-internal
       backendRefs:
         - name: transmission-http
           port: {{ .Values.transmission.service.port }}
@@ -63,18 +62,14 @@ spec:
           extensionRef:
             group: traefik.io
             kind: Middleware
-            name: security-chain
-        - type: ExtensionRef
-          extensionRef:
-            group: traefik.io
-            kind: Middleware
-            name: authelia
+            name: security-chain-internal
       backendRefs:
         - name: "{{ $name }}"
           port: {{ $svc.service.port }}
 {{- end }}
 {{- end }}
-    # Catch-all: any path not matching an app prefix redirects to the main site.
+    # Catch-all: an unknown path bounces back to the landing page rather
+    # than leaving for the public site.
     - matches:
         - path:
             type: PathPrefix
@@ -84,11 +79,11 @@ spec:
           extensionRef:
             group: traefik.io
             kind: Middleware
-            name: security-chain
+            name: security-chain-internal
         - type: RequestRedirect
           requestRedirect:
             scheme: https
-            hostname: shpaq.org
+            hostname: {{ .Values.httpRoute.hostname | quote }}
             path:
               type: ReplaceFullPath
               replaceFullPath: /

@@ -3,3 +3,10 @@ namespaces:
   - apps
   - media
   - monitoring
+# Namespaces still behind Authelia forwardAuth. `media` left this list when
+# its routes moved to media.home. Removing the middleware while routes still
+# reference it breaks them: Traefik falls through to the catch-all redirect
+# instead of serving the app, so this list may only shrink after the routes
+# that need it are gone.
+autheliaNamespaces:
+  - apps

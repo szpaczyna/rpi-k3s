@@ -1,0 +1,115 @@
+{{- if .Values.landingPage.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: landingpage
+  labels:
+    app.kubernetes.io/name: landingpage
+data:
+  index.html: |-
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>media</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 0 auto; max-width: 34rem;
+             padding: 3rem 1.5rem; line-height: 1.5; }
+      h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+      ul { list-style: none; padding: 0; }
+      li { margin: 0; }
+      a { display: block; padding: 0.7rem 1rem; border: 1px solid #ccc;
+          border-radius: 6px; margin-bottom: 0.6rem; text-decoration: none;
+          color: inherit; }
+      a:hover { border-color: #888; }
+      .meta { color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    </style>
+    </head>
+    <body>
+    <h1>media.home</h1>
+    <p class="meta">Serving from the LAN. TLS by a private CA.</p>
+    <ul>
+    {{- range $name, $svc := .Values.media }}
+    {{- if $svc.enable }}
+      <li><a href="/{{ $name }}/">{{ $name }}</a></li>
+    {{- end }}
+    {{- end }}
+    {{- if .Values.transmission.enable }}
+      <li><a href="/transmission">transmission</a></li>
+    {{- end }}
+    </ul>
+    </body>
+    </html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: landingpage
+  labels:
+    app.kubernetes.io/name: landingpage
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: landingpage
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: landingpage
+    spec:
+      containers:
+        - name: nginx
+          image: {{ .Values.landingPage.image.repository }}:{{ .Values.landingPage.image.tag }}
+          ports:
+            - containerPort: 8080
+              name: http
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+              readOnly: true
+            - name: cache
+              mountPath: /var/cache/nginx
+            - name: run
+              mountPath: /tmp
+          resources:
+            {{- include "media-stack.resources" (dict "profile" .Values.landingPage.resourceProfile "root" $) | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 101
+      volumes:
+        - name: html
+          configMap:
+            name: landingpage
+        - name: cache
+          emptyDir: {}
+        - name: run
+          emptyDir: {}
+      {{- with .Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: landingpage
+  labels:
+    app.kubernetes.io/name: landingpage
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: landingpage
+{{- end }}

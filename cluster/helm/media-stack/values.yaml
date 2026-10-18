@@ -60,6 +60,12 @@ media:
     service:
       port: 6767
     storageSize: 1Gi
+    # Persisted as base_url in bazarr's own config.yaml. It makes bazarr emit
+    # absolute URLs that already carry the /bazarr prefix, which the landing
+    # page links rely on.
+    env:
+      - name: ROOT_URL
+        value: https://media.home/bazarr
 
   lidarr:
     enable: true
@@ -159,10 +165,18 @@ images:
     repository: "busybox"
     tag: "1.38.0"
 
+landingPage:
+  enabled: true
+  image:
+    repository: nginxinc/nginx-unprivileged
+    tag: 1.29-alpine
+  resourceProfile: light
+
 httpRoute:
   enabled: true
+  hostname: media.home
   parentRefs:
-    - name: traefik-gateway
+    - name: traefik-internal-gateway
       namespace: traefik
       kind: Gateway
       sectionName: websecure
