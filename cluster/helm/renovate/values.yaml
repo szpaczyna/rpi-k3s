@@ -47,7 +47,7 @@ renovate:
         {
           "customType": "regex",
           "description": "traefik chart version, registryUrl pinned to traefik.github.io/charts",
-          "fileMatch": ["^cluster/helm/traefik-external/deploy$"],
+          "fileMatch": ["^cluster/helm/traefik-external/deploy$", "^cluster/helm/traefik-internal/deploy$"],
           "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
           "depNameTemplate": "traefik",
           "registryUrlTemplate": "https://traefik.github.io/charts",
