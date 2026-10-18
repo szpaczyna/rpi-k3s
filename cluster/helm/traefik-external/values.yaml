@@ -226,9 +226,10 @@ gateway:
         - name: pihole-shpaq-org-tls     # pihole.shpaq.org
         - name: whoops-shpaq-org-tls     # whoops.shpaq.org
         - name: booklore-shpaq-org-tls   # booklore.shpaq.org
-        - name: media-shpaq-org-tls      # media.shpaq.org
         - name: grafana-shpaq-org-tls    # grafana.shpaq.org
         - name: auth-shpaq-org-tls       # auth.shpaq.org
+        # media.shpaq.org moved to the internal gateway as media.home, which
+        # serves the wildcard-home-tls Secret instead of a per-app one.
         # Currently-disabled ingresses; add once enabled (the chart already
         # renders their Certificates behind feature flags):
         # - name: prometheus-shpaq-org-tls

@@ -35,6 +35,19 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
+  name: security-chain-internal
+  namespace: {{ . }}
+spec:
+  chain:
+    middlewares:
+      - name: redirect-https
+        namespace: traefik
+{{- end }}
+{{- range .Values.autheliaNamespaces }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
   name: authelia
   namespace: {{ . }}
 spec:

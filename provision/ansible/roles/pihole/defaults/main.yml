@@ -32,6 +32,7 @@ pihole_hosts:
   - '10.0.0.48 longhorn.home'
   - '10.0.0.41 gitea-ssh.home'
   - '10.0.0.40 traefik.home'
+  - '10.0.0.50 traefik-internal.home'
 
 pihole_cname_records:
   - 'grafana.shpaq.org,traefik.home'
@@ -42,7 +43,7 @@ pihole_cname_records:
   - 'shpaq.org,traefik.home'
   - 'whoops.shpaq.org,traefik.home'
   - 'booklore.shpaq.org,traefik.home'
-  - 'media.shpaq.org,traefik.home'
+  - 'media.home,traefik-internal.home'
   - 'auth.shpaq.org,traefik.home'
 
 pihole_rev_servers:
