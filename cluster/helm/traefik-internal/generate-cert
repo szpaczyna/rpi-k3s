@@ -1,13 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-# Regenerates the mkcert leaf certificate from hosts.txt and rewrites
-# wildcard-home-tls.enc.yaml. Run ./deploy afterwards to apply it.
-#
-# The CA under $(mkcert -CAROOT) is the durable part and is never touched here.
-# What changes is the leaf: it expires, and it has to list every hostname
-# explicitly because `.home` is a public suffix and clients reject a wildcard
-# that matches a registrable domain (see README).
+# Regenerates the mkcert leaf from hosts.txt. Run ./deploy to apply it.
+# Why every hostname is listed despite the wildcard: see README.
 
 cd "$(dirname "$0")"
 

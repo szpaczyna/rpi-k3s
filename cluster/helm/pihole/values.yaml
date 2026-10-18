@@ -1,4 +1,4 @@
-hostname: pihole.shpaq.org
+hostname: pihole.home
 
 # External Pi-hole IP (selector-less Service + manual Endpoints)
 upstreamIP: 10.0.0.2
@@ -10,7 +10,7 @@ service:
 httpRoute:
   enabled: true
   parentRefs:
-    - name: traefik-gateway
+    - name: traefik-internal-gateway
       namespace: traefik
       kind: Gateway
       sectionName: websecure

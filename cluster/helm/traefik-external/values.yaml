@@ -223,13 +223,11 @@ gateway:
         - name: shpaq-org-tls            # shpaq.org (shpaq-org chart)
         - name: bitwarden-shpaq-org-tls  # bitwarden.shpaq.org
         - name: gitea-shpaq-org-tls      # gitea.shpaq.org
-        - name: pihole-shpaq-org-tls     # pihole.shpaq.org
         - name: whoops-shpaq-org-tls     # whoops.shpaq.org
         - name: booklore-shpaq-org-tls   # booklore.shpaq.org
-        - name: grafana-shpaq-org-tls    # grafana.shpaq.org
         - name: auth-shpaq-org-tls       # auth.shpaq.org
-        # media.shpaq.org moved to the internal gateway as media.home, which
-        # serves the wildcard-home-tls Secret instead of a per-app one.
+        # Moved to the internal gateway as *.home, served there by the
+        # wildcard-home-tls Secret: media, grafana, pihole.
         # Currently-disabled ingresses; add once enabled (the chart already
         # renders their Certificates behind feature flags):
         # - name: prometheus-shpaq-org-tls

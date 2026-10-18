@@ -25,17 +25,12 @@ pihole_hosts:
   - '10.0.0.23 blackpi.home'
   - '10.0.0.30 u7.home'
   - '10.0.0.42 psql.home'
-  - '10.0.0.43 influxdb.home'
-  - '10.0.0.44 gentoo.home'
   - '10.0.0.45 transmission.home'
-  - '10.0.0.47 prometheus.home'
-  - '10.0.0.48 longhorn.home'
   - '10.0.0.41 gitea-ssh.home'
   - '10.0.0.40 traefik.home'
   - '10.0.0.50 traefik-internal.home'
 
 pihole_cname_records:
-  - 'grafana.shpaq.org,traefik.home'
   - 'bitwarden.shpaq.org,traefik.home'
   - 'cloud.shpaq.org,traefik.home'
   - 'kanboard.shpaq.org,traefik.home'
@@ -44,6 +39,11 @@ pihole_cname_records:
   - 'whoops.shpaq.org,traefik.home'
   - 'booklore.shpaq.org,traefik.home'
   - 'media.home,traefik-internal.home'
+  - 'grafana.home,traefik-internal.home'
+  - 'prometheus.home,traefik-internal.home'
+  - 'longhorn.home,traefik-internal.home'
+  - 'loki.home,traefik-internal.home'
+  - 'pihole.home,traefik-internal.home'
   - 'auth.shpaq.org,traefik.home'
 
 pihole_rev_servers:

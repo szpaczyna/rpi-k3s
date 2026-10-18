@@ -18,10 +18,8 @@ helm repo update
 # and are provisioned by each application's Helm chart (Certificate
 # resources rendered into `traefik`) — nothing extra to apply here.
 #
-# Shares the namespace with ../traefik-internal. The GatewayClass carries an
-# `ingress-role=external` label that this chart's labelSelector matches, and
-# that is the only thing keeping the two instances from claiming each other's
-# Gateway. Dropping either side breaks routing for both.
+# The ingress-role label plus the matching labelSelector are what stop this
+# instance and ../traefik-internal from claiming each other's Gateway.
 helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
   --namespace "${NAMESPACE}" \
   --create-namespace \

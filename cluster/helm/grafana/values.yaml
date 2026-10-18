@@ -52,18 +52,18 @@ ingress:
   # hosts is kept populated (ingress disabled) because grafana.ini below
   # still reads .Values.ingress.hosts to template server.domain / instance_name.
   hosts:
-    - grafana.shpaq.org
+    - grafana.home
 
 route:
   main:
     enabled: true
     parentRefs:
-      - name: traefik-gateway
+      - name: traefik-internal-gateway
         namespace: traefik
         kind: Gateway
         sectionName: websecure
     hostnames:
-      - grafana.shpaq.org
+      - grafana.home
     matches:
       - path:
           type: PathPrefix
@@ -73,31 +73,7 @@ route:
         extensionRef:
           group: traefik.io
           kind: Middleware
-          name: security-chain
-
-# TLS certificate for route.main.hostnames[0], rendered by the upstream
-# chart via extraObjects. It lives in the `traefik` namespace because the
-# Gateway's websecure listener may only reference same-namespace Secrets;
-# the secret name follows the cluster-wide <hostname-dashed>-tls convention
-# and is listed in gateway.listeners.websecure.certificateRefs
-# (cluster/helm/traefik-external).
-extraObjects:
-  - apiVersion: cert-manager.io/v1
-    kind: Certificate
-    metadata:
-      name: grafana-shpaq-org-tls
-      namespace: traefik
-    spec:
-      dnsNames:
-        - grafana.shpaq.org
-      issuerRef:
-        group: cert-manager.io
-        kind: ClusterIssuer
-        name: letsencrypt-prod
-      secretName: grafana-shpaq-org-tls
-      usages:
-        - digital signature
-        - key encipherment
+          name: security-chain-internal
 
 resources:
   limits:
@@ -205,14 +181,14 @@ datasources:
 
 grafana.ini:
   app_mode: production
-  instance_name: grafana.shpaq.org
+  instance_name: grafana.home
 
   paths:
     logs: /var/lib/grafana/log
     provisioning: /var/lib/grafana/provisioning
 
   server:
-    domain: grafana.shpaq.org
+    domain: grafana.home
     enable_gzip: true
     socket: /tmp/grafana.sock
 
