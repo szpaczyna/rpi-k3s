@@ -56,17 +56,31 @@ kubectl -n monitoring rollout restart deploy/unifipoller
 
 ## Metrics scraping
 
-The pod carries `prometheus.io/scrape: "true"`, `prometheus.io/port: "9130"` and
-`prometheus.io/path: /metrics` annotations, but nothing collects them. The
-`kubernetes-pods` discovery job in
-[`cluster/helm/prometheus/values.yaml`](../prometheus/values.yaml) is commented
-out, the active jobs are `kubernetes-apiservers`, `kubelet`, `metallb`,
-`speedtest`, `raspberries`, `pihole` and `fail2ban`, and none of them mentions
-unifipoller. The chart also renders no Service, so there is no address for a
-static target either.
+The pod is scraped by the `kubernetes-pods` job on port `9130` at `/metrics`,
+discovered through its `prometheus.io/scrape`, `prometheus.io/port` and
+`prometheus.io/path` annotations.
 
-These metrics are currently unscraped. To collect them you need either the
-`kubernetes-pods` job uncommented, or a Service plus a static job.
+That job is not written in this repository. It comes from the default config of
+the upstream [`prometheus-community/prometheus`](../prometheus) chart, which
+`../prometheus/deploy` installs at `29.37.0` with this repo's values as an
+override. The chart concatenates its own default scrape config with
+`serverFiles` and `extraScrapeConfigs`, so the rendered `prometheus.yml` holds
+three groups: the upstream defaults (`kubernetes-api-servers`, `kubernetes-nodes`,
+`kubernetes-nodes-cadvisor`, `kubernetes-pods`, `kubernetes-pods-slow`,
+`kubernetes-service-endpoints`, `kubernetes-services`, `prometheus`,
+`prometheus-pushgateway`), the jobs in this repo's `serverFiles`
+(`kubernetes-apiservers`, `kubelet`), and the static targets in
+`extraScrapeConfigs` (`metallb`, `speedtest`, `raspberries`, `pihole`,
+`fail2ban`).
+
+The commented-out `kubernetes-pods` job further down
+[`../prometheus/values.yaml`](../prometheus/values.yaml) is a leftover copy of
+what upstream already provides. Leave it commented, or you get a duplicate
+job.
+
+Note that `PodMonitor` and `ServiceMonitor` objects are not honoured here.
+There is no prometheus-operator in this cluster and the CRDs are not installed,
+so any such object rendered by another chart is inert.
 
 ## Verifying
 

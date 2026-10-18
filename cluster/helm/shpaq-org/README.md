@@ -6,9 +6,9 @@ by [`deploy`](deploy) under release `shpaq-org`.
 
 ## Where the page lives
 
-The HTML is inline in [`templates/configmap.yaml`](templates/configmap.yaml), and
-that is what the pod serves. `files/index.html` is not referenced by any template,
-so editing it changes nothing on the cluster.
+The HTML is [`files/index.html`](files/index.html). The ConfigMap reads it with
+`.Files.Get`, so editing that file is what changes the served page. `robots.txt`
+is still inline in [`templates/configmap.yaml`](templates/configmap.yaml).
 
 ## Request path
 
