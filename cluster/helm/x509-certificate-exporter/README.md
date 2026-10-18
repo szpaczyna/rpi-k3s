@@ -446,7 +446,7 @@ in the container namespace.
 | rbacProxy.enabled | bool | `false` | Should kube-rbac-proxy be used to expose exporters |
 | rbacProxy.image.registry | string | `"quay.io"` | kube-rbac-proxy image registry |
 | rbacProxy.image.repository | string | `"brancz/kube-rbac-proxy"` | kube-rbac-proxy image repository |
-| rbacProxy.image.tag | string | `"v0.13.1"` | kube-rbac-proxy image version |
+| rbacProxy.image.tag | string | `"v0.23.0"` | kube-rbac-proxy image version |
 | rbacProxy.image.pullPolicy | string | `"IfNotPresent"` | kube-rbac-proxy image pull policy |
 | rbacProxy.upstreamListenPort | int | `9091` | Listen port for the exporter running inside kube-rbac-proxy exposed Pods |
 | rbacProxy.resources | object | check `values.yaml` | ResourceRequirements for all containers of kube-rbac-proxy |
