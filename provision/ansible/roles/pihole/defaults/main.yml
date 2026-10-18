@@ -32,8 +32,6 @@ pihole_hosts:
 
 pihole_cname_records:
   - 'bitwarden.shpaq.org,traefik.home'
-  - 'cloud.shpaq.org,traefik.home'
-  - 'kanboard.shpaq.org,traefik.home'
   - 'gitea.shpaq.org,traefik.home'
   - 'shpaq.org,traefik.home'
   - 'whoops.shpaq.org,traefik.home'

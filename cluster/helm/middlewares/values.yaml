@@ -1,9 +1,18 @@
-# Namespaces that need shared middlewares (security-chain, authelia).
+# Namespaces needing `security-chain-internal` (redirect-https only). Every
+# namespace holding a `*.home` route belongs here; the internal gateway has no
+# Authelia, and a `.shpaq.org` cookie is never sent to a `.home` host.
 namespaces:
   - apps
   - logging
   - media
   - monitoring
+# Namespaces also needing the WAN chains `security-chain` and
+# `security-chain-nogeo`. These carry geoblock, which is a plugin loaded only
+# by traefik-external, so they are useless on the internal gateway. A
+# namespace belongs here only while it still has a `*.shpaq.org` route.
+externalChainNamespaces:
+  - apps
+  - media
 # Namespaces still behind Authelia forwardAuth. `media` left this list when
 # its routes moved to media.home. Removing the middleware while routes still
 # reference it breaks them: Traefik falls through to the catch-all redirect

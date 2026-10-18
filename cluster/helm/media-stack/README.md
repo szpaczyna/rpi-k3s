@@ -84,13 +84,21 @@ For more information on each application, refer to their respective documentatio
 ## Ingress / Routing
 
 Routing is exposed via a Gateway API `HTTPRoute` (see
-`templates/httproute.yaml`), attached to the shared `traefik-gateway` (see
-[`cluster/helm/traefik-external`](../traefik-external)). All app paths (`/transmission`,
-`/bazarr`, `/lidarr`, `/prowlarr`, `/radarr`, `/readarr`, `/sonarr`) run
-through the shared `security-chain` and `authelia` middlewares (see
-[`cluster/helm/middlewares`](../middlewares)) — the old nginx-ingress
-`media-auth` basic-auth Secret has been removed.
+`templates/httproute.yaml`), attached to `traefik-internal-gateway` (see
+[`cluster/helm/traefik-internal`](../traefik-internal)). This chart is LAN-only:
+it is not reachable from the WAN and carries no `Certificate` of its own, since
+`traefik-internal` terminates TLS for every `*.home` name with the single
+`wildcard-home-tls` Secret.
 
-A bare request to `https://media.shpaq.org/` (no app path) has no
-backend of its own; it's redirected (302) to `https://shpaq.org/` instead
-of falling through to a 404.
+All app paths (`/transmission`, `/bazarr`, `/lidarr`, `/prowlarr`, `/radarr`,
+`/readarr`, `/sonarr`) run through `security-chain-internal`, a `redirect-https`
+chain only. There is no Authelia on this route: `*.home` is LAN-trusted, and
+an Authelia cookie issued for `.shpaq.org` would not be sent to `media.home`.
+Booklore is unaffected and stays behind `security-chain` + Authelia on the
+external gateway.
+
+A bare request to `https://media.home/` (no app path) serves the landing page
+pod (`templates/landingpage.yaml`), which lists the enabled apps and links to
+each. The links are derived from `.Values.media`, so disabling an app removes
+it from the page without editing the template. Any other unmatched path is
+redirected (302) back to `media.home/`.

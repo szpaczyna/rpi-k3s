@@ -1,4 +1,4 @@
-{{- range .Values.namespaces }}
+{{- range .Values.externalChainNamespaces }}
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -31,6 +31,8 @@ spec:
         namespace: traefik
       - name: compress
         namespace: traefik
+{{- end }}
+{{- range .Values.namespaces }}
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware

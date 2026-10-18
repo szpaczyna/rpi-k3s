@@ -276,8 +276,11 @@ response compression and defense-in-depth headers.
 
 A wildcard HTTPRoute (`*.shpaq.org`) in `extraObjects` redirects any
 unrecognized subdomain to `https://shpaq.org` (302). Gateway API
-matches by hostname specificity — explicit routes (e.g. `media.shpaq.org`)
+matches by hostname specificity — explicit routes (e.g. `booklore.shpaq.org`)
 always take priority over the wildcard.
+
+There is deliberately no such catch-all on `traefik-internal`: an unknown
+`*.home` name gets Traefik's default 404 rather than being redirected.
 
 ## Authelia forwardAuth
 

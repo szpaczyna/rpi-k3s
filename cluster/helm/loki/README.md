@@ -197,3 +197,38 @@ line. The "World Traffic" panel uses the aggregated lookup approach instead.
 - The fluent-bit pods mount the volume read-only; only the CronJob writes.
 - GeoLite2 data by MaxMind, licensed CC BY-SA 4.0 — keep the attribution if
   this data is redistributed.
+
+## Ingress
+
+Loki's query API is reachable at `loki.home`, on the LAN only, via
+`traefik-internal-gateway`. See
+[`cluster/helm/traefik-internal`](../traefik-internal).
+
+There is **no catch-all on the internal gateway** (unlike the external one),
+so an unknown `*.home` name gets a 404 rather than a redirect.
+
+### `GET /` returns 404, and that is correct
+
+Loki serves no route at the root. A 404 on `https://loki.home/` means the
+route is working. Useful probes:
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' https://loki.home/ready        # 200
+curl -s https://loki.home/loki/api/v1/labels | head                    # 200, JSON
+```
+
+### Why the HTTPRoute is hand-written
+
+The Loki chart has no Gateway API support, unlike the Grafana and Prometheus
+charts, which expose `route.main` / `server.route.main` toggles. The
+`HTTPRoute` in `loki-values.yaml` is therefore a `extraObjects` entry rather
+than a values-driven toggle. Do not try to move it into a native values block;
+the chart has nowhere to put it and it will be silently dropped.
+
+### GeoIP enrichment covers both gateways
+
+`fluentbit-values.yaml` matches `traefik-.*` pods, which covers
+`traefik-external-*` and `traefik-internal-*` alike. Access logs for `*.home`
+appear only in the `traefik-internal` pod, and only that pod's logs are
+enriched with a country. The geoblock plugin is external-only, so LAN traffic
+has no country to look up.
