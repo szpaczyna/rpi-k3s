@@ -85,7 +85,7 @@ For more information on each application, refer to their respective documentatio
 
 Routing is exposed via a Gateway API `HTTPRoute` (see
 `templates/httproute.yaml`), attached to the shared `traefik-gateway` (see
-[`cluster/helm/traefik`](../traefik)). All app paths (`/transmission`,
+[`cluster/helm/traefik-external`](../traefik-external)). All app paths (`/transmission`,
 `/bazarr`, `/lidarr`, `/prowlarr`, `/radarr`, `/readarr`, `/sonarr`) run
 through the shared `security-chain` and `authelia` middlewares (see
 [`cluster/helm/middlewares`](../middlewares)) — the old nginx-ingress

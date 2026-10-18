@@ -144,7 +144,7 @@ server:
       #      prometheus-shpaq-org-tls` to be Ready)
       #   3. uncomment `- name: prometheus-shpaq-org-tls` in
       #      gateway.listeners.websecure.certificateRefs
-      #      (cluster/helm/traefik/values.yaml)
+      #      (cluster/helm/traefik-external/values.yaml)
       #   4. set enabled=true here and `bash deploy`
       enabled: false
       apiVersion: ""

@@ -8,7 +8,7 @@ CHART="."
 # Calibre is currently retired — the chart lives in unused/ and renders
 # nothing until enabled=true in values.yaml. See the revival checklist at
 # the top of values.yaml (including the calibre-shpaq-org-tls certificateRef
-# in cluster/helm/traefik/values.yaml).
+# in cluster/helm/traefik-external/values.yaml).
 
 # Add helm repo if needed (none required — chart is local)
 

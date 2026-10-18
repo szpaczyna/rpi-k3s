@@ -11,7 +11,7 @@
 image:  # @schema additionalProperties: false
   # -- Traefik image repository. Left null so the chart resolves the official
   repository:  # @schema type:[string, null]
-  tag: "v3.7.11"
+  tag: "v3.7.15"
   pullPolicy: IfNotPresent
 
 # -- Add additional label to all resources
@@ -243,7 +243,8 @@ gatewayClass:  # @schema additionalProperties: false
   # -- Set a custom name to GatewayClass
   name: "traefik"
   # -- Additional gatewayClass labels (e.g. for filtering gateway objects by custom labels)
-  labels: {}
+  labels:
+    ingress-role: external
 
 api:
   # -- Enable the dashboard
@@ -383,7 +384,10 @@ providers:  # @schema additionalProperties: false
     # -- Array of namespaces to watch. If left empty, Traefik watches all namespaces.
     namespaces: []
     # -- A label selector can be defined to filter on specific GatewayClass objects only.
-    labelSelector: ""
+    # Traefik 3.7 has no gatewayClass setting, so the label is the only way to
+    # scope the provider. A second instance (cluster/helm/traefik-internal)
+    # shares this namespace, so without this each one claims both Gateways.
+    labelSelector: "ingress-role=external"
     # -- Defines whether to use Native Kubernetes load-balancing mode by default.
     nativeLBByDefault: false
     statusAddress:
@@ -673,8 +677,10 @@ tracing:  # @schema additionalProperties: false
 # -- Additional arguments to be passed at Traefik's binary
 # See [CLI Reference](https://docs.traefik.io/reference/static-configuration/cli/)
 # Use curly braces to pass values: `helm install --set="additionalArguments={--providers.kubernetesingress.ingressclass=traefik-internal,--log.level=DEBUG}"`
+# Kept empty: GatewayClass scoping happens through
+# providers.kubernetesGateway.labelSelector, which is the only filter Traefik
+# 3.7 offers. There is no --providers.kubernetesgateway.gatewayclass flag.
 additionalArguments: []
-#  - "--providers.kubernetesingress.ingressclass=traefik-internal"
 #  - "--log.level=DEBUG"
 
 # -- Additional Environment variables to be passed to Traefik's binary
@@ -984,11 +990,14 @@ tolerations: []
 # -- You can use topology spread constraints to control
 # how Pods are spread across your cluster among failure-domains.
 topologySpreadConstraints:
-# This example topologySpreadConstraints forces the scheduler to put traefik pods
-# on nodes where no other traefik pods are scheduled.
+# Scoped by instance. Namespace `traefik` holds a second Traefik release
+# (../traefik-internal) and both share app.kubernetes.io/name, so an unscoped
+# DoNotSchedule selector would make each instance's pods count against the
+# other's spread.
   - labelSelector:
       matchLabels:
         app.kubernetes.io/name: '{{ template "traefik.name" . }}'
+        app.kubernetes.io/instance: '{{ template "traefik.instance-name" . }}'
     maxSkew: 1
     topologyKey: kubernetes.io/hostname
     whenUnsatisfiable: DoNotSchedule

@@ -4,7 +4,7 @@
 # namespace because the Gateway's websecure listener may only reference
 # same-namespace Secrets; the secret name follows the cluster-wide
 # <hostname-dashed>-tls convention and must be listed in
-# gateway.listeners.websecure.certificateRefs (cluster/helm/traefik).
+# gateway.listeners.websecure.certificateRefs (cluster/helm/traefik-external).
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
