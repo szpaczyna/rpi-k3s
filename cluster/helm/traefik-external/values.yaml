@@ -701,7 +701,7 @@ ports:
     #
     # Exposed on the same LoadBalancer Service/IP as web/websecure, on a
     # dedicated port. Reachable from the local network (e.g.
-    # http://10.0.0.44:8080/dashboard/) but not routed to the internet,
+    # http://10.0.0.40:8080/dashboard/) but not routed to the internet,
     # same pattern as prometheus-server/longhorn-frontend LoadBalancer
     # Services. No authentication in front of it: keep this LAN-only.
     expose:
