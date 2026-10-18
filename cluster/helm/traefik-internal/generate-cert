@@ -1,0 +1,61 @@
+#!/bin/bash
+set -euo pipefail
+
+# Regenerates the mkcert leaf certificate from hosts.txt and rewrites
+# wildcard-home-tls.enc.yaml. Run ./deploy afterwards to apply it.
+#
+# The CA under $(mkcert -CAROOT) is the durable part and is never touched here.
+# What changes is the leaf: it expires, and it has to list every hostname
+# explicitly because `.home` is a public suffix and clients reject a wildcard
+# that matches a registrable domain (see README).
+
+cd "$(dirname "$0")"
+
+if [ ! -d "$(mkcert -CAROOT)" ]; then
+  echo "mkcert has no CA yet. Run 'mkcert -install' first (needs sudo)." >&2
+  exit 1
+fi
+
+hosts=()
+# The `|| [ -n "$raw" ]` guard matters: without it, read fails on a final line
+# that has no trailing newline and the last hostname is dropped in silence.
+while IFS= read -r raw || [ -n "$raw" ]; do
+  line="${raw%%#*}"
+  line="${line//[[:space:]]/}"
+  if [ -n "$line" ]; then hosts+=("$line"); fi
+done < hosts.txt
+
+if [ "${#hosts[@]}" -eq 0 ]; then
+  echo "hosts.txt has no hostnames." >&2
+  exit 1
+fi
+
+work="$(mktemp -d "/tmp/traefik-internal-cert.XXXXXX")"
+trap 'rm -rf "$work"' EXIT
+
+mkcert -cert-file "$work/cert.pem" -key-file "$work/key.pem" "${hosts[@]}"
+
+echo "==> Certificate contents"
+openssl x509 -in "$work/cert.pem" -noout -ext subjectAltName | tail -1
+openssl x509 -in "$work/cert.pem" -noout -dates
+
+python3 - "$work" <<'EOF'
+import base64, io, os, sys
+w = sys.argv[1]
+crt = base64.b64encode(io.open(os.path.join(w, 'cert.pem'), 'rb').read()).decode()
+key = base64.b64encode(io.open(os.path.join(w, 'key.pem'), 'rb').read()).decode()
+io.open(os.path.join(w, 'secret.yaml'), 'w', encoding='utf-8').write(
+    'apiVersion: v1\n'
+    'kind: Secret\n'
+    'metadata:\n'
+    '    name: wildcard-home-tls\n'
+    '    namespace: traefik\n'
+    'type: kubernetes.io/tls\n'
+    'data:\n'
+    '    tls.crt: %s\n'
+    '    tls.key: %s\n' % (crt, key))
+EOF
+
+sops -e -i "$work/secret.yaml"
+mv "$work/secret.yaml" ./wildcard-home-tls.enc.yaml
+echo "==> Rewrote wildcard-home-tls.enc.yaml, run ./deploy to apply"

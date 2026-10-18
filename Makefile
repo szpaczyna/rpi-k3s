@@ -7,7 +7,7 @@ CLUSTER_DIR := cluster/helm
 # cert-manager + traefik (Gateway API CRDs + the websecure listener every
 # app's Certificate depends on), then everything else.
 INFRA        := metallb longhorn
-INGRESS      := cert-manager traefik
+INGRESS      := cert-manager traefik-external traefik-internal
 PLATFORM     := local-path-provisioner system-upgrade-controller renovate postgresql middlewares defaultbackend
 MONITORING   := prometheus grafana loki speedtest x509-certificate-exporter unifipoller version-checker
 APPS         := authelia bitwarden booklore gitea media-stack pihole shpaq-org whoops

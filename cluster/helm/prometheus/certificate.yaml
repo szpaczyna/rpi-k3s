@@ -1,7 +1,7 @@
 # TLS certificate for prometheus.shpaq.org, following the cluster-wide
 # pattern: rendered into the `traefik` namespace because the Gateway's
 # websecure listener may only reference same-namespace Secrets (see
-# cluster/helm/traefik/values.yaml and its commented
+# cluster/helm/traefik-external/values.yaml and its commented
 # prometheus-shpaq-org-tls certificateRefs entry).
 #
 # The prometheus-community chart has no extraObjects support, so unlike

@@ -8,12 +8,12 @@
 # or `helm upgrade` renders nothing until this chart is consciously
 # revived.
 #
-# Revival checklist (see also cluster/helm/traefik/README.md):
+# Revival checklist (see also cluster/helm/traefik-external/README.md):
 #   1. move this directory back to cluster/helm/
 #   2. flip enabled=true, bash deploy
 #   3. uncomment `- name: calibre-shpaq-org-tls` in
 #      gateway.listeners.websecure.certificateRefs
-#      (cluster/helm/traefik/values.yaml) and re-run its deploy — but only
+#      (cluster/helm/traefik-external/values.yaml) and re-run its deploy — but only
 #      AFTER step 2 succeeded (a missing secret makes Traefik drop the
 #      whole websecure listener)
 enabled: false

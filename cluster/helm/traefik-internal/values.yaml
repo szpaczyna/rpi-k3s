@@ -1,17 +1,14 @@
-# Default values for Traefik
-# This is a YAML-formatted file.
-# Declare variables to be passed into templates
+# Values for the LAN-only Traefik instance.
 #
-# Primary ingress controller for the cluster, replacing ingress-nginx.
-# Routes are configured via the Kubernetes Gateway API (HTTPRoute) rather
-# than the legacy Ingress resource. See cluster/helm/*/templates/httproute.yaml
-# and the native `httpRoute`/`route` values blocks on upstream charts
-# (grafana, prometheus, longhorn).
+# Second ingress controller sharing namespace `traefik` with the external
+# release (cluster/helm/traefik-external). Own GatewayClass and Gateway, so
+# each provider serves only the routes parented to it. Terminates TLS for
+# *.home with the mkcert wildcard cert: no ACME, no geoblock, no auth.
 
 image:  # @schema additionalProperties: false
   # -- Traefik image repository. Left null so the chart resolves the official
   repository:  # @schema type:[string, null]
-  tag: "v3.7.11"
+  tag: "v3.7.15"
   pullPolicy: IfNotPresent
 
 # -- Add additional label to all resources
@@ -67,33 +64,12 @@ deployment:
   #     - name: dsdsocket
   #       mountPath: /socket
   # -- Additional volumes available for use with initContainers and additionalContainers
-  additionalVolumes:
-    # Holds the IP2Location LITE database for the geoblock plugin.
-    # Populated by the `geodb` initContainer (see initContainers below) so the
-    # geoblock middleware gets a stable, predictable path regardless of the
-    # random gop-* hash Traefik gives plugin sources in /plugins-storage.
-    - name: geodb
-      emptyDir: {}
+  additionalVolumes: []
   # - name: dsdsocket
   #   hostPath:
   #     path: /var/run/statsd-exporter
   # -- Additional initContainers (e.g. for setting file permission as shown below)
-  initContainers:
-    # Fetch the IP2Location LITE DB1 (country-level, IPv6) database shipped with
-    # the geoblock plugin at the pinned version. raw.githubusercontent.com is
-    # reachable from the cluster (Traefik itself pulls plugin modules from GitHub).
-    - name: geodb
-      image: busybox:1.38
-      command: ["/bin/sh", "-c"]
-      args:
-        - |
-          set -eu
-          wget -q -O /geodb/IP2LOCATION-LITE-DB1.IPV6.BIN \
-            https://raw.githubusercontent.com/nscuro/traefik-plugin-geoblock/v0.14.0/IP2LOCATION-LITE-DB1.IPV6.BIN
-          test -s /geodb/IP2LOCATION-LITE-DB1.IPV6.BIN
-      volumeMounts:
-        - name: geodb
-          mountPath: /geodb
+  initContainers: []
   # The "volume-permissions" init container is required if you run into permission issues.
   # Related issue: https://github.com/traefik/traefik-helm-chart/issues/396
   # - name: volume-permissions
@@ -132,10 +108,11 @@ podDisruptionBudget:  # @schema additionalProperties: false
   maxUnavailable:  # @schema type:[string, integer, null];minimum:0
   minAvailable:    # @schema type:[string, integer, null];minimum:0
 
-# -- Create a default IngressClass for Traefik
+# The cluster routes through HTTPRoute only and the external release already
+# owns the default IngressClass, so a second one would never be selected.
 ingressClass:  # @schema additionalProperties: false
-  enabled: true
-  isDefaultClass: true
+  enabled: false
+  isDefaultClass: false
   name: ""
 
 core:  # @schema additionalProperties: false
@@ -155,23 +132,15 @@ experimental:
   kubernetesGateway:
     # -- Enable traefik experimental GatewayClass CRD
     enabled: false
-  # -- Enable traefik experimental plugins
-  plugins:
-    geoblock:
-      moduleName: github.com/nscuro/traefik-plugin-geoblock
-      version: v0.14.0
-    fail2ban:
-      moduleName: github.com/tomMoulard/fail2ban
-      version: v0.9.0
-  # demo:
-  #   moduleName: github.com/traefik/plugindemo
-  #   version: v0.2.1
+  # No plugins: a LAN-only instance has no hostile clients for geoblock and no
+  # authentication failures for fail2ban.
+  plugins: {}
 
 gateway:
   # -- When providers.kubernetesGateway.enabled, deploy a default gateway
   enabled: true
   # -- Set a custom name to gateway
-  name: "traefik-gateway"
+  name: "traefik-internal-gateway"
   # -- By default, Gateway is created in the same `Namespace` than Traefik.
   namespace: ""
   # -- Additional gateway annotations.
@@ -218,32 +187,18 @@ gateway:
         from: All
       mode: Terminate
       # -- Add certificates for TLS or HTTPS protocols. See [GatewayTLSConfig](https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io%2fv1.GatewayTLSConfig)
-      # Secret naming convention: <hostname with dots as dashes>-tls.
+      # Wildcard cert from mkcert, one entry for every *.home hostname. The
+      # Secret lives in this namespace, so no `namespace:` field is needed.
       certificateRefs:
-        - name: shpaq-org-tls            # shpaq.org (shpaq-org chart)
-        - name: bitwarden-shpaq-org-tls  # bitwarden.shpaq.org
-        - name: gitea-shpaq-org-tls      # gitea.shpaq.org
-        - name: pihole-shpaq-org-tls     # pihole.shpaq.org
-        - name: whoops-shpaq-org-tls     # whoops.shpaq.org
-        - name: booklore-shpaq-org-tls   # booklore.shpaq.org
-        - name: media-shpaq-org-tls      # media.shpaq.org
-        - name: grafana-shpaq-org-tls    # grafana.shpaq.org
-        - name: auth-shpaq-org-tls       # auth.shpaq.org
-        # Currently-disabled ingresses; add once enabled (the chart already
-        # renders their Certificates behind feature flags):
-        # - name: prometheus-shpaq-org-tls
-        # - name: longhorn-shpaq-org-tls
-        # Retired apps — their charts live in cluster/helm/unused/ and render
-        # nothing until revived:
-        # - name: calibre-shpaq-org-tls   # unused/calibre
-        # - name: cloud-shpaq-org-tls     # unused/nextcloud
+        - name: wildcard-home-tls
 gatewayClass:  # @schema additionalProperties: false
   # -- When providers.kubernetesGateway.enabled and gateway.enabled, deploy a default gatewayClass
   enabled: true
   # -- Set a custom name to GatewayClass
-  name: "traefik"
+  name: "traefik-internal"
   # -- Additional gatewayClass labels (e.g. for filtering gateway objects by custom labels)
-  labels: {}
+  labels:
+    ingress-role: internal
 
 api:
   # -- Enable the dashboard
@@ -341,7 +296,7 @@ providers:  # @schema additionalProperties: false
     # -- Allows to return 503 when there is no endpoints available
     allowEmptyServices: true
     # -- When the parameter is set, only resources containing an annotation with the same value are processed. Otherwise, resources missing the annotation, having an empty value, or the value traefik are processed. It will also set required annotation on Dashboard and Healthcheck IngressRoute when enabled.
-    ingressClass: "traefik"
+    ingressClass: "traefik-internal"
     # labelSelector: environment=production,method=traefik
     # -- Array of namespaces to watch. If left empty, Traefik watches all namespaces.
     namespaces: []
@@ -383,7 +338,10 @@ providers:  # @schema additionalProperties: false
     # -- Array of namespaces to watch. If left empty, Traefik watches all namespaces.
     namespaces: []
     # -- A label selector can be defined to filter on specific GatewayClass objects only.
-    labelSelector: ""
+    # Traefik 3.7 has no gatewayClass setting, so the label is the only way to
+    # scope the provider. Both instances watch this namespace; without it each
+    # one claims both Gateways and overwrites the other's routes and status.
+    labelSelector: "ingress-role=internal"
     # -- Defines whether to use Native Kubernetes load-balancing mode by default.
     nativeLBByDefault: false
     statusAddress:
@@ -421,11 +379,7 @@ volumes: []
 #   type: configMap
 
 # -- Additional volumeMounts to add to the Traefik container
-additionalVolumeMounts:
-  # Make the geoblock database (populated by the `geodb` initContainer)
-  # visible to the geoblock plugin at a stable path.
-  - name: geodb
-    mountPath: /data/geodb
+additionalVolumeMounts: []
 # -- For instance when using a logshipper for access logs
 # - name: traefik-logs
 #   mountPath: /var/log/traefik
@@ -673,8 +627,10 @@ tracing:  # @schema additionalProperties: false
 # -- Additional arguments to be passed at Traefik's binary
 # See [CLI Reference](https://docs.traefik.io/reference/static-configuration/cli/)
 # Use curly braces to pass values: `helm install --set="additionalArguments={--providers.kubernetesingress.ingressclass=traefik-internal,--log.level=DEBUG}"`
+# Kept empty: GatewayClass scoping happens through
+# providers.kubernetesGateway.labelSelector, which is the only filter Traefik
+# 3.7 offers. There is no --providers.kubernetesgateway.gatewayclass flag.
 additionalArguments: []
-#  - "--providers.kubernetesingress.ingressclass=traefik-internal"
 #  - "--log.level=DEBUG"
 
 # -- Additional Environment variables to be passed to Traefik's binary
@@ -699,10 +655,9 @@ ports:
     # NodePort.
     #
     # Exposed on the same LoadBalancer Service/IP as web/websecure, on a
-    # dedicated port. Reachable from the local network (e.g.
-    # http://10.0.0.44:8080/dashboard/) but not routed to the internet,
-    # same pattern as prometheus-server/longhorn-frontend LoadBalancer
-    # Services. No authentication in front of it: keep this LAN-only.
+    # dedicated port. Reachable from the local network at
+    # http://10.0.0.50:8080/dashboard/, never routed to the internet.
+    # No authentication in front of it.
     expose:
       default: true
     # -- The exposed port for this service
@@ -809,14 +764,6 @@ ports:
       # It follows the provider naming convention: https://doc.traefik.io/traefik/providers/overview/#provider-namespace
       #   - namespace_name1@kubernetescrd
       #   - namespace_name2@kubernetescrd
-      #
-      # ratelimit-global + fail2ban are entrypoint-wide for defence in depth.
-      # geoblock is per-route (extensionRef) because entrypoint-level geoblock
-      # blocks ACME HTTP-01 challenges from non-PL Let's Encrypt servers.
-      # The `<namespace>_<name>` form is required by providers.kubernetesCRD.safeNaming.
-      middlewares:
-        - traefik_ratelimit-global@kubernetescrd
-        - traefik_fail2ban@kubernetescrd
   metrics:
     # -- When using hostNetwork, use another port to avoid conflict with node exporter:
     # https://github.com/prometheus/prometheus/wiki/Default-port-allocations
@@ -858,14 +805,11 @@ service:
   labels: {}
   # -- Additional entries here will be added to the service spec.
   # -- Cannot contain type, selector or ports entries.
-  # Pinned to the IP formerly used by ingress-nginx-controller so no DNS
-  # changes were needed during cutover.
   spec:
-    loadBalancerIP: "10.0.0.40"
-    # Preserve the real client IP. With the default `Cluster` policy kube-proxy
-    # SNATs every connection, so Traefik access logs only saw the node's pod
-    # network gateway (10.42.x.1) instead of the client address. `Local` works
-    # here because Traefik runs as a DaemonSet (a local backend on every node).
+    # Last free address in the MetalLB k3s-services pool (10.0.0.40-50).
+    loadBalancerIP: "10.0.0.50"
+    # Keeps the real client IP in access logs; under `Cluster` kube-proxy
+    # SNATs every connection to the node's pod-network gateway.
     externalTrafficPolicy: Local
   # externalTrafficPolicy: Cluster
   # clusterIP: "2.3.4.5"
@@ -899,7 +843,8 @@ service:
 autoscaling:
   # -- Create HorizontalPodAutoscaler object.
   # See EXAMPLES.md for more details.
-  enabled: true
+  # LAN traffic does not burst; two fixed replicas are enough.
+  enabled: false
   maxReplicas: 5
   minReplicas: 2
 
@@ -984,11 +929,13 @@ tolerations: []
 # -- You can use topology spread constraints to control
 # how Pods are spread across your cluster among failure-domains.
 topologySpreadConstraints:
-# This example topologySpreadConstraints forces the scheduler to put traefik pods
-# on nodes where no other traefik pods are scheduled.
+  # Scoped by instance: this namespace holds two releases that share the
+  # app.kubernetes.io/name label, and an unscoped DoNotSchedule selector would
+  # make each instance's pods count against the other's spread.
   - labelSelector:
       matchLabels:
         app.kubernetes.io/name: '{{ template "traefik.name" . }}'
+        app.kubernetes.io/instance: '{{ template "traefik.instance-name" . }}'
     maxSkew: 1
     topologyKey: kubernetes.io/hostname
     whenUnsatisfiable: DoNotSchedule
@@ -1016,14 +963,13 @@ podSecurityContext:
 #
 # In some cases, it can avoid the need for additional, extended or adhoc deployments.
 # See #595 for more details and traefik/tests/values/extra.yaml for example.
-extraObjects: []
-
 # -- This field override the default Release Namespace for Helm.
 # It will not affect optional CRDs such as `ServiceMonitor` and `PrometheusRules`
 namespaceOverride: ""
 
 ## -- This field override the default app.kubernetes.io/instance label for all Objects.
-instanceLabelOverride: ""
+## Chart default would be `traefik-internal-traefik` (release name + namespace).
+instanceLabelOverride: "traefik-internal"
 
 # Traefik Hub configuration. See https://doc.traefik.io/traefik-hub/
 hub:
@@ -1095,125 +1041,9 @@ global:
   checkNewVersion: true
   sendAnonymousUsage: false
 
-# -- Extra manifests rendered alongside the chart. geoblock is per-route
-# (referenced via extensionRef on each HTTPRoute) so that ACME HTTP-01
-# challenges from non-PL Let's Encrypt servers are not blocked.
-extraObjects:
-  - apiVersion: traefik.io/v1alpha1
-    kind: Middleware
-    metadata:
-      name: ratelimit-global
-      namespace: traefik
-    spec:
-      rateLimit:
-        average: 100
-        burst: 300
-  - apiVersion: traefik.io/v1alpha1
-    kind: Middleware
-    metadata:
-      name: geoblock
-      namespace: traefik
-    spec:
-      plugin:
-        geoblock:
-          # Enable this plugin?
-          enabled: true
-          # Path to ip2location database file, fetched to a stable path by the
-          # `geodb` initContainer from the plugin's GitHub raw URL at the pinned
-          # version. Bumping experimental.plugins.geoblock.version refreshes the
-          # database (keep the initContainer URL in sync with the pin).
-          databaseFilePath: /data/geodb/IP2LOCATION-LITE-DB1.IPV6.BIN
-          # Allowlist of countries to allow (ISO 3166-1 alpha-2)
-          allowedCountries:
-            - PL
-          # Default allow indicates that if an IP is in neither block list nor allow lists, it should be allowed.
-          defaultAllow: false
-          # Allow requests from private / internal networks?
-          allowPrivate: true
-          # HTTP status code to return for disallowed requests
-          disallowedStatusCode: 418
-  - apiVersion: traefik.io/v1alpha1
-    kind: Middleware
-    metadata:
-      name: fail2ban
-      namespace: traefik
-    spec:
-      plugin:
-        fail2ban:
-          logLevel: INFO
-          allowlist:
-            ip:
-              # LAN + MetalLB pool + k3s pod/service CIDRs are all under 10.0.0.0/8.
-              # This exempts internal traffic from fail2ban tracking entirely.
-              - "10.0.0.0/8"
-          rules:
-            enabled: true
-            findtime: "10m"
-            maxretry: 5
-            bantime: "1h"
-            statuscode: "400,401,403-499"
-          enableBlockLogs: true
-  - apiVersion: traefik.io/v1alpha1
-    kind: Middleware
-    metadata:
-      name: security-chain
-      namespace: traefik
-    spec:
-      chain:
-        middlewares:
-          - name: redirect-https
-            namespace: traefik
-          - name: geoblock
-            namespace: traefik
-          - name: hsts
-            namespace: traefik
-          - name: compress
-            namespace: traefik
-  - apiVersion: traefik.io/v1alpha1
-    kind: Middleware
-    metadata:
-      name: redirect-https
-      namespace: traefik
-    spec:
-      redirectScheme:
-        scheme: https
-        permanent: true
-  - apiVersion: traefik.io/v1alpha1
-    kind: Middleware
-    metadata:
-      name: hsts
-      namespace: traefik
-    spec:
-      headers:
-        stsSeconds: 31536000
-        stsIncludeSubdomains: true
-        stsPreload: true
-  - apiVersion: traefik.io/v1alpha1
-    kind: Middleware
-    metadata:
-      name: compress
-      namespace: traefik
-    spec:
-      compress:
-        excludedContentTypes:
-          - text/event-stream
-  # Catch-all: redirect any *.shpaq.org subdomain not routed elsewhere → shpaq.org
-  - apiVersion: gateway.networking.k8s.io/v1
-    kind: HTTPRoute
-    metadata:
-      name: catch-all-subdomains
-      namespace: traefik
-    spec:
-      parentRefs:
-        - name: traefik-gateway
-          namespace: traefik
-          sectionName: websecure
-      hostnames:
-        - "*.shpaq.org"
-      rules:
-        - filters:
-            - type: RequestRedirect
-              requestRedirect:
-                scheme: https
-                hostname: shpaq.org
-                statusCode: 302
+# -- Extra manifests rendered alongside the chart.
+# Deliberately empty. This release shares its namespace with the external one,
+# and two Helm releases cannot own an object of the same name, so every
+# middleware this instance needs (redirect-https, compress, ratelimit-global)
+# is referenced rather than re-created.
+extraObjects: []

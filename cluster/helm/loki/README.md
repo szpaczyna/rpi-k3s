@@ -14,7 +14,7 @@ Deployment: `./deploy` (installs Loki first, then Fluent Bit).
 ## GeoIP enrichment of Traefik access logs
 
 Traefik's access logs (JSON, one line per request) already contain the real
-client address in `ClientHost` (see `cluster/helm/traefik` —
+client address in `ClientHost` (see `cluster/helm/traefik-external` —
 `service.externalTrafficPolicy: Local`). Fluent Bit enriches those records
 with the client's geolocation from the MaxMind **GeoLite2** database, so each
 access-log line gains `country_name`, `country_code` (plus `city_name`,
@@ -150,7 +150,7 @@ sum by (blocked_country) (count_over_time({job="fluentbit", container="traefik"}
 
 ### Dashboard panels & queries
 
-`cluster/helm/traefik/traefik-loki-dashboard.json` ("Traefik Via Loki") ships
+`cluster/helm/traefik-external/traefik-loki-dashboard.json` ("Traefik Via Loki") ships
 with the following additional panels:
 
 | Panel | Query (metric) |
@@ -164,7 +164,7 @@ with the following additional panels:
 
 The **Top User Agents**, **Top Bots** and **Top HTTP Referers** panels need the
 `User-Agent` / `Referer` request headers in the Traefik access log. Enable them
-in `cluster/helm/traefik/values.yaml` under `accessLog.fields.headers`:
+in `cluster/helm/traefik-external/values.yaml` under `accessLog.fields.headers`:
 
 ```yaml
 accessLog:

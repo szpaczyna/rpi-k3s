@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+
+NAMESPACE="traefik"
+RELEASE_NAME="traefik-internal"
+CHART="traefik/traefik"
+VERSION="42.0.0"
+
+# Add helm repo
+helm repo add traefik https://traefik.github.io/charts 2>/dev/null || true
+helm repo update
+
+# The wildcard Secret must exist before the Gateway declares a certificateRefs
+# entry: a missing Secret drops the whole websecure listener, not one route.
+kubectl apply -f <(sops -d ./wildcard-home-tls.enc.yaml)
+
+# Shares namespace `traefik` with the external release, so this chart sets
+# extraObjects to empty and reuses its middlewares instead of re-owning them.
+helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
+  --namespace "${NAMESPACE}" \
+  --create-namespace \
+  --values values.yaml \
+  --version "${VERSION}"

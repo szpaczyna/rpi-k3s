@@ -16,7 +16,7 @@ helm repo update
 # It now renders into namespace `traefik` (same-namespace Gateway secret
 # reference). Apply it manually — together with
 # server.route.main.enabled=true in values.yaml and the matching
-# certificateRefs entry in cluster/helm/traefik/values.yaml — once DNS
+# certificateRefs entry in cluster/helm/traefik-external/values.yaml — once DNS
 # exists. See values.yaml route.main comment for the full procedure.
 # kubectl apply -f certificate.yaml
 

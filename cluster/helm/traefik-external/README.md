@@ -1,6 +1,6 @@
-# Traefik
+# Traefik (external)
 
-Primary ingress controller for the cluster. Replaces `ingress-nginx`
+Public ingress controller for the cluster. Replaces `ingress-nginx`
 (retired by the Kubernetes project, best-effort maintenance only until
 March 2026, no releases/patches afterwards).
 
@@ -12,15 +12,23 @@ declare an `HTTPRoute` (or, for upstream charts that support it natively,
 set `route.main.enabled` / `httpRoute.enabled` / `httproute.enabled` in
 `values.yaml`).
 
+A second instance serves `*.home` on the LAN only, from the same namespace,
+under [`../traefik-internal`](../traefik-internal). The two are kept apart by
+an `ingress-role` label on their `GatewayClass`, which each chart's
+`providers.kubernetesGateway.labelSelector` matches. That README covers the
+constraints a shared namespace imposes.
+
 ## Topology
 
 - **Deployment** with 2 replicas (scaled to 2-5 by HPA) and
-  `topologySpreadConstraints` for HA across nodes.
+  `topologySpreadConstraints` for HA across nodes, scoped by
+  `app.kubernetes.io/instance` so the LAN instance's pods are not counted
+  against this one's spread.
 - **Service type `LoadBalancer`**, pinned to `10.0.0.40` via
   `service.spec.loadBalancerIP` — this is the same IP `ingress-nginx`
   used, transferred during cutover with zero DNS/router changes.
-- Chart: `traefik/traefik` v41.1.1, image pinned to `v3.7.10` (chart's own
-  `appVersion` default lags one patch behind).
+- Chart: `traefik/traefik` 42.0.0, image pinned to `v3.7.15`. The pin is
+  deliberate and moves independently of the chart's `appVersion`.
 - Dashboard/API exposed on port `8080` on the same LoadBalancer Service —
   reachable from the local network (e.g. `http://10.0.0.40:8080/dashboard/`)
   but **not** routed to the internet and **not** protected by
