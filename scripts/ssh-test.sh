@@ -39,26 +39,32 @@ if [ $# -ne 1 ]; then
     usage_and_exit
 fi
 
+# Read hosts into an array so we can iterate safely line by line.
+mapfile -t hosts < "$1"
+
 # Calculate the longest hostname, to align columns if we can.
 longest_hostname=0
-for line in $(cat "$1"); do
+for line in "${hosts[@]}"; do
+    [ -z "$line" ] && continue
     length=${#line}
-    [ $length -gt $longest_hostname ] && longest_hostname=$length
+    [ "$length" -gt "$longest_hostname" ] && longest_hostname=$length
 done
 
 RED='\033[1;31m'
 NC='\033[0m' # No Color
 
-for line in $(cat "$1"); do
+for line in "${hosts[@]}"; do
+    [ -z "$line" ] && continue
     host=${line%:*}
     port=${line#*:}
-    if [ ! -z "${port##*[!0-9]*}" ]; then
-        portarg="-p $port"
+    portarg=()
+    if [ -n "${port##*[!0-9]*}" ]; then
+        portarg=(-p "$port")
     fi
-    printf "%${longest_hostname}s ... " $line
-    if ssh -q -o BatchMode=yes -o ConnectTimeout=3 $portarg $host exit 2>/dev/null; then
+    printf "%${longest_hostname}s ... " "$line"
+    if ssh -q -o BatchMode=yes -o ConnectTimeout=3 "${portarg[@]}" "$host" exit 2>/dev/null; then
         echo "OK"
     else
-        printf "${RED}FAIL${NC}\n"
+        printf '%bFAIL%b\n' "$RED" "$NC"
     fi
 done
