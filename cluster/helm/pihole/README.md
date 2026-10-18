@@ -28,11 +28,6 @@ match `pihole.home`, so it cannot be used here. TLS terminates at Traefik
 using the shared `wildcard-home-tls` Secret, and the hop to `10.0.0.2` is
 plain HTTP inside the LAN.
 
-This chart is a revival. A `cluster/helm/pihole/` existed from 2019 until
-commit `3676c68` (November 2021, "feat: reorganization") removed it, and
-Pi-hole was reachable by IP only after that. The current chart shares the
-name but shares nothing else with the old one.
-
 ## Route shape
 
 - `/` redirects (302) to `/admin/`, which is where Pi-hole's UI lives.

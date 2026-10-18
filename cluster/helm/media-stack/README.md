@@ -83,22 +83,20 @@ For more information on each application, refer to their respective documentatio
 
 ## Ingress / Routing
 
-Routing is exposed via a Gateway API `HTTPRoute` (see
-`templates/httproute.yaml`), attached to `traefik-internal-gateway` (see
-[`cluster/helm/traefik-internal`](../traefik-internal)). This chart is LAN-only:
-it is not reachable from the WAN and carries no `Certificate` of its own, since
-`traefik-internal` terminates TLS for every `*.home` name with the single
-`wildcard-home-tls` Secret.
+The chart exposes `media.home` through an `HTTPRoute` in `templates/httproute.yaml`,
+attached to `traefik-internal-gateway`. The chart has no `Certificate`; TLS comes
+from the shared `wildcard-home-tls` Secret (see
+[`cluster/helm/traefik-internal`](../traefik-internal)).
 
-All app paths (`/transmission`, `/bazarr`, `/lidarr`, `/prowlarr`, `/radarr`,
-`/readarr`, `/sonarr`) run through `security-chain-internal`, a `redirect-https`
-chain only. There is no Authelia on this route: `*.home` is LAN-trusted, and
-an Authelia cookie issued for `.shpaq.org` would not be sent to `media.home`.
-Booklore is unaffected and stays behind `security-chain` + Authelia on the
-external gateway.
+| Path | Target |
+|---|---|
+| `/` (exact) | `landingpage` pod (`templates/landingpage.yaml`) when `landingPage.enabled`, otherwise a 302 to `https://shpaq.org/` |
+| `/transmission`, `/<app>` for each enabled `media.<app>` | the app's Service, `PathPrefix` match |
+| anything else | 302 back to `https://media.home/` |
 
-A bare request to `https://media.home/` (no app path) serves the landing page
-pod (`templates/landingpage.yaml`), which lists the enabled apps and links to
-each. The links are derived from `.Values.media`, so disabling an app removes
-it from the page without editing the template. Any other unmatched path is
-redirected (302) back to `media.home/`.
+Every route carries `security-chain-internal`, a `redirect-https` chain with no
+Authelia. An Authelia cookie is scoped to `.shpaq.org`, so it never reaches
+`media.home`.
+
+The landing page links are generated from `.Values.media`. Disabling an app
+removes its link without a template change.

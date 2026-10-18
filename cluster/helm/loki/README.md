@@ -204,9 +204,6 @@ Loki's query API is reachable at `loki.home`, on the LAN only, via
 `traefik-internal-gateway`. See
 [`cluster/helm/traefik-internal`](../traefik-internal).
 
-There is **no catch-all on the internal gateway** (unlike the external one),
-so an unknown `*.home` name gets a 404 rather than a redirect.
-
 ### `GET /` returns 404, and that is correct
 
 Loki serves no route at the root. A 404 on `https://loki.home/` means the
@@ -228,7 +225,6 @@ the chart has nowhere to put it and it will be silently dropped.
 ### GeoIP enrichment covers both gateways
 
 `fluentbit-values.yaml` matches `traefik-.*` pods, which covers
-`traefik-external-*` and `traefik-internal-*` alike. Access logs for `*.home`
-appear only in the `traefik-internal` pod, and only that pod's logs are
-enriched with a country. The geoblock plugin is external-only, so LAN traffic
-has no country to look up.
+`traefik-external-*` and `traefik-internal-*` alike, so both instances are
+collected. `*.home` requests are only present in the `traefik-internal` pod's
+logs, since the external gateway serves only `*.shpaq.org`.

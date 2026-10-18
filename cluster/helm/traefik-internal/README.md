@@ -29,7 +29,7 @@ http://10.0.0.50:8080/dashboard/
 
 | Listener | Port | Protocol | Notes |
 |---|---|---|---|
-| `web` | 80 | HTTP | Nothing routes to it yet. The `redirect-https` middleware that would send traffic to `websecure` is not wired up (see [middlewares](#middlewares)). |
+| `web` | 80 | HTTP | Nothing routes to it. `redirect-https` is attached to `websecure` routes rather than to this listener, so no request needs it (see [middlewares](#middlewares)). |
 | `websecure` | 443 | HTTPS | `mode: Terminate`, `certificateRefs: [wildcard-home-tls]`, `namespacePolicy: All`. |
 
 There is no catch-all HTTPRoute, unlike the external instance. An unrecognised
@@ -59,6 +59,7 @@ starts a comment. Current list:
 ```
 home  *.home  traefik-internal.home
 media.home  grafana.home  prometheus.home  longhorn.home  loki.home
+pihole.home
 ```
 
 ### Regenerating the certificate
@@ -83,17 +84,14 @@ running `./deploy`.
 Two hostnames are not covered by a wildcard under any circumstance: apex
 `home`, and anything two levels deep such as `a.b.home`.
 
-Verify after applying:
+Check the SANs after applying:
 
 ```sh
 openssl s_client -connect 10.0.0.50:443 -servername media.home </dev/null \
   | openssl x509 -noout -ext subjectAltName
-curl -sI --cacert "$(mkcert -CAROOT)/rootCA.pem" \
-  --resolve media.home:443:10.0.0.50 https://media.home/
 ```
 
-A `404` is the expected answer for a hostname that has no route yet. A TLS
-error means the certificate was not reissued.
+The full TLS check is under [Verifying TLS](#verifying-tls).
 
 ### Trusting the CA on clients
 
@@ -149,10 +147,14 @@ against the other's spread.
 
 ## Middlewares
 
-No `*.home` route has middleware attached yet. Per-route middleware has to
-live in the route's own namespace, because `HTTPRoute` `extensionRef` carries
-`group`, `kind` and `name` but no namespace field. The cluster convention for
-crossing that boundary is a `Chain` middleware, which does take a namespace:
+The `*.home` routes for media, loki, pihole, grafana and prometheus attach
+`security-chain-internal`. `longhorn.home` has none: the upstream Longhorn
+chart's `httproute.yaml` has no `filters` hook, so the route cannot take one.
+
+Per-route middleware has to live in the route's own namespace, because
+`HTTPRoute` `extensionRef` carries `group`, `kind` and `name` but no namespace
+field. The convention for crossing that boundary is a `Chain` middleware, which
+does take a namespace:
 
 ```yaml
 apiVersion: traefik.io/v1alpha1
@@ -167,9 +169,9 @@ spec:
 ```
 
 A plain per-namespace copy of `redirect-https` would work as well; the chain
-avoids duplicating the spec. This belongs in
-[`cluster/helm/middlewares`](../middlewares), which already renders
-`security-chain` per namespace for the external instance.
+avoids duplicating the spec. [`cluster/helm/middlewares`](../middlewares)
+renders `security-chain-internal` for each namespace listed in its values,
+next to `security-chain` for the external instance.
 
 ## Deploying
 
@@ -194,17 +196,16 @@ the whole `websecure` listener, not one route.
 
 ## Verifying TLS
 
-The gateway serves no route until an application is migrated, so TLS health is
-checked against a hostname that has none. A `404` still proves the gateway
-terminated TLS with a certificate the client accepted:
+The status code is whatever the route answers; only `ssl_verify_result`
+matters here, and it must be `0`:
 
 ```sh
 curl -s -o /dev/null -w '%{http_code} %{ssl_verify_result}\n' \
   --cacert "$(mkcert -CAROOT)/rootCA.pem" \
   --resolve media.home:443:10.0.0.50 https://media.home/
-# 404 0
+# 200 0
 ```
 
-`ssl_verify_result` must be `0`. Any other value means either that the
+Any other `ssl_verify_result` means either that the
 certificate is not being served or that the CA is not trusted, and the status
 code alone will not tell you which.
