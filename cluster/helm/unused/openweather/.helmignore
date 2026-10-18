@@ -21,5 +21,4 @@
 .vscode/
 # Deploy scripts and secrets
 deploy
-decrypt
 README.md

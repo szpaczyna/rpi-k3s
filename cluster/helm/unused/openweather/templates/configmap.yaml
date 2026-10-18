@@ -7,9 +7,9 @@ metadata:
     app: {{ .Chart.Name }}
 data:
   OW_LISTEN_ADDRESS: ":{{ .Values.ow.port }}"
-  OW_CITY: {{ .Values.ow.city }}
-  OW_DEGREES_UNIT: {{ .Values.ow.degreesUnit }}
-  OW_LANGUAGE: {{ .Values.ow.language }}
+  OW_CITY: {{ .Values.ow.city | quote }}
+  OW_DEGREES_UNIT: {{ .Values.ow.degreesUnit | quote }}
+  OW_LANGUAGE: {{ .Values.ow.language | quote }}
   OW_CACHE_TTL: "{{ .Values.ow.cacheTTL }}"
   OW_ENABLE_POL: "{{ .Values.ow.enablePol }}"
   OW_ENABLE_UV: "{{ .Values.ow.enableUv }}"

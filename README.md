@@ -53,14 +53,15 @@
 ### Retired / Not Currently Deployed
 
 Charts kept in `cluster/helm/unused/` for future use but not installed
-on the cluster right now. Revival steps are documented in each chart's
-`values.yaml`/`deploy`.
+on the cluster right now. Each still has its `deploy` script, but nothing in
+the repo records why most of them were retired, so check what a chart assumes
+before reviving it.
 
 | App | Description |
 |-----|-------------|
 | [calibre](cluster/helm/unused/calibre) | Calibre-Web e-book server (extracted from media-stack) |
 | [event-exporter](cluster/helm/unused/event-exporter) | Kubernetes events exporter |
-| [gentoo](cluster/helm/unused/gentoo) | Gentoo cross-compiler (helm chart; plain manifests in `gentoo-manifests`) |
+| [gentoo](cluster/helm/unused/gentoo) | Gentoo distcc build node (cross-compiles on behalf of other hosts) |
 | [ingress-nginx](cluster/helm/unused/ingress-nginx) | Legacy ingress controller, replaced by Traefik |
 | [influxdb](cluster/helm/unused/influxdb) | Time-series DB (Apple Health exports) |
 | [kanboard](cluster/helm/unused/kanboard) | Kanban project management |
