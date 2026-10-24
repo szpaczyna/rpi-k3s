@@ -7,7 +7,7 @@ kind: Service
 metadata:
   name: {{ $name }}
   labels:
-    app.kubernetes.io/name: {{ $name }}
+    {{- include "media-stack.labels" (dict "name" $name "root" $) | nindent 4 }}
 spec:
   type: {{ $svc.service.type | default "ClusterIP" }}
   ports:

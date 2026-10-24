@@ -5,7 +5,7 @@ kind: Deployment
 metadata:
   name: transmission
   labels:
-    app.kubernetes.io/name: transmission
+    {{- include "media-stack.labels" (dict "name" "transmission" "root" $) | nindent 4 }}
 spec:
   replicas: 1
   strategy:
@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: transmission
+        {{- include "media-stack.labels" (dict "name" "transmission" "root" $) | nindent 8 }}
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9190"
