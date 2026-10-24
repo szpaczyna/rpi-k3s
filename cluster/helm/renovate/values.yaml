@@ -12,7 +12,7 @@ renovate:
           "customType": "regex",
           "description": "cert-manager chart version, registryUrl pinned to charts.jetstack.io",
           "fileMatch": ["^cluster/helm/cert-manager/deploy$"],
-          "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
+          "matchStrings": ["VERSION=\"v?(?<currentValue>[0-9][^\"]*)\""],
           "depNameTemplate": "cert-manager",
           "registryUrlTemplate": "https://charts.jetstack.io",
           "datasourceTemplate": "helm"
@@ -42,6 +42,24 @@ renovate:
           "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
           "depNameTemplate": "prometheus",
           "registryUrlTemplate": "https://prometheus-community.github.io/helm-charts",
+          "datasourceTemplate": "helm"
+        },
+        {
+          "customType": "regex",
+          "description": "metallb chart version, registryUrl pinned to metallb.github.io/metallb",
+          "fileMatch": ["^cluster/helm/metallb/deploy$"],
+          "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
+          "depNameTemplate": "metallb",
+          "registryUrlTemplate": "https://metallb.github.io/metallb",
+          "datasourceTemplate": "helm"
+        },
+        {
+          "customType": "regex",
+          "description": "groundhog2k/postgres chart version, registryUrl pinned to groundhog2k.github.io/helm-charts",
+          "fileMatch": ["^cluster/helm/postgresql/deploy$"],
+          "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
+          "depNameTemplate": "postgres",
+          "registryUrlTemplate": "https://groundhog2k.github.io/helm-charts",
           "datasourceTemplate": "helm"
         },
         {
@@ -82,9 +100,9 @@ renovate:
         },
         {
           "customType": "regex",
-          "description": "helm/longhorn/values.yaml: chartVersion pin, deploy falls back to it when called without an argument",
-          "fileMatch": ["^cluster/helm/longhorn/values\\.yaml$"],
-          "matchStrings": ["chartVersion: \"(?<currentValue>[^\"]+)\""],
+          "description": "helm/longhorn/deploy: chart version pin, optional argument overrides it",
+          "fileMatch": ["^cluster/helm/longhorn/deploy$"],
+          "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
           "depNameTemplate": "longhorn",
           "registryUrlTemplate": "https://charts.longhorn.io",
           "datasourceTemplate": "helm"
@@ -111,6 +129,12 @@ renovate:
           "matchDatasources": ["docker"],
           "matchPackageNames": ["grafana/grafana"],
           "enabled": false
+        },
+        {
+          "description": "grafana chart 10.5.15 is deprecated upstream; hold at 10.5.14 until the chart migration is done",
+          "matchDatasources": ["helm"],
+          "matchDepNames": ["grafana"],
+          "allowedVersions": "<=10.5.14"
         },
         {
           "description": "calibre-web 5.x tags on lscr.io are amd64-only single manifests, so they cannot run on this arm64 cluster; the chart is also parked under unused/ with enabled=false",
