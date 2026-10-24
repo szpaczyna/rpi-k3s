@@ -3,5 +3,5 @@ apiVersion: v2
 name: whoops
 description: A Helm chart for Whoops
 type: application
-version: 0.2.4
+version: 0.2.5
 appVersion: "1.1.1"
