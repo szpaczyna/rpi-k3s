@@ -13,6 +13,14 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Selector labels
+*/}}
+{{- define "version-checker.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "version-checker.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "version-checker.labels" -}}
