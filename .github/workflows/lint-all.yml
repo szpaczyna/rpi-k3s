@@ -52,7 +52,6 @@ jobs:
         continue-on-error: true
         run: |
           find . -name '*.sh' -type f \
-            -not -path './scripts/network/*enc.sh' \
             -print0 | xargs -0 shellcheck -x
 
   kubeconform:
