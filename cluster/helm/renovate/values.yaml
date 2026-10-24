@@ -106,6 +106,15 @@ renovate:
           "depNameTemplate": "longhorn",
           "registryUrlTemplate": "https://charts.longhorn.io",
           "datasourceTemplate": "helm"
+        },
+        {
+          "customType": "regex",
+          "description": "x509-certificate-exporter chart version, registryUrl pinned to charts.enix.io",
+          "fileMatch": ["^cluster/helm/x509-certificate-exporter/deploy$"],
+          "matchStrings": ["VERSION=\"(?<currentValue>[0-9][^\"]*)\""],
+          "depNameTemplate": "x509-certificate-exporter",
+          "registryUrlTemplate": "https://charts.enix.io",
+          "datasourceTemplate": "helm"
         }
       ],
       "ignorePaths": [
