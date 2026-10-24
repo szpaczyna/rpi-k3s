@@ -31,16 +31,12 @@ repos:
 - repo: https://github.com/koalaman/shellcheck-precommit
   rev: v0.11.0
   hooks:
-  # These are vendored upstream scripts kept for reference: wireguard.sh and
-  # pihole_install.sh are installers, ssl-cert-check and ssl-expiry-date come
-  # from an external monitoring repo. Rewriting them would diverge them from
-  # the source, and the findings they carry are in code paths we never run.
   # scripts/network/*.enc.sh is SOPS ciphertext, not shell source, so it must be
   # skipped whatever it decodes to. The zsh-plugins tree is vendored zsh, which
   # shellcheck cannot parse at all; the trailing-whitespace and end-of-file
   # hooks already skip it.
   - id: shellcheck
-    exclude: '^scripts/(wireguard\.sh|pihole_install\.sh|ssl-cert-check|ssl-expiry-date)$|\.enc\.sh$|^provision/ansible/roles/dotfiles/files/zsh-plugins/'
+    exclude: '^provision/ansible/roles/dotfiles/files/zsh-plugins/'
 - repo: https://github.com/adrienverge/yamllint.git
   rev: v1.35.1
   hooks:
