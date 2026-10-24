@@ -1,4 +1,36 @@
 # Changelog
+## [0.6.9](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.8...v0.6.9) (2026-10-24)
+
+
+### Bug Fixes
+
+* **helm:** align appVersion with images, make files/index.html authoritative, drop dead helper ([#268](https://github.com/szpaczyna/rpi-k3s/issues/268)) ([0681a66](https://github.com/szpaczyna/rpi-k3s/commit/0681a66ffc7afbbb67891f592ad63ac4ba70e385))
+* **helm:** quote openweather values, remove duplicate gentoo manifests, fix stale doc references ([#269](https://github.com/szpaczyna/rpi-k3s/issues/269)) ([27cbf1f](https://github.com/szpaczyna/rpi-k3s/commit/27cbf1f79e1260a0717895566b2566ffc47d39b4))
+* **x509-certificate-exporter:** correct rbacProxy values keys ([#266](https://github.com/szpaczyna/rpi-k3s/issues/266)) ([0a40e59](https://github.com/szpaczyna/rpi-k3s/commit/0a40e5964b26159f23bc64acec9a9f06f62974fc))
+
+
+### Miscellaneous
+
+* clean up unused charts and dead scripts ([#281](https://github.com/szpaczyna/rpi-k3s/issues/281)) ([9f77432](https://github.com/szpaczyna/rpi-k3s/commit/9f77432866f92e63e5526a55b031c39241413b46))
+* **deps:** update ghcr.io/renovatebot/charts/renovate docker tag to v46.381.1 [minor] ([#276](https://github.com/szpaczyna/rpi-k3s/issues/276)) ([6a6794b](https://github.com/szpaczyna/rpi-k3s/commit/6a6794b07e66029b589077938354498cf28e69b4))
+* **deps:** update lscr.io/linuxserver/mariadb docker tag to v11.8.9 [patch] ([#272](https://github.com/szpaczyna/rpi-k3s/issues/272)) ([5e34547](https://github.com/szpaczyna/rpi-k3s/commit/5e3454795ec1ff42c73ef395cd952b365090e962))
+* **deps:** update nginx docker tag to v1.31.8 [patch] ([#273](https://github.com/szpaczyna/rpi-k3s/issues/273)) ([eab1f5d](https://github.com/szpaczyna/rpi-k3s/commit/eab1f5defba3ce27767f1d35342b2d3cf3bf24c8))
+* **deps:** update nginxinc/nginx-unprivileged docker tag to v1.31 [minor] ([#278](https://github.com/szpaczyna/rpi-k3s/issues/278)) ([58aaf85](https://github.com/szpaczyna/rpi-k3s/commit/58aaf85ab807ebb31a004f179a1862fe6b4583fd))
+* **deps:** update quay.io/prometheus-operator/prometheus-config-reloader docker tag to v0.94.2 [patch] ([#274](https://github.com/szpaczyna/rpi-k3s/issues/274)) ([4dd00c3](https://github.com/szpaczyna/rpi-k3s/commit/4dd00c3fcba4a0f4a07ed27438d097bf538ac44e))
+* **deps:** update quay.io/prometheus/prometheus docker tag to v3.15.1 [patch] ([#275](https://github.com/szpaczyna/rpi-k3s/issues/275)) ([8ef80d9](https://github.com/szpaczyna/rpi-k3s/commit/8ef80d9dec1e9413c393ef29f1fad8fdfe2b8f50))
+* **helm:** unify deploy scripts, chart helpers, labels and CI stubs ([#279](https://github.com/szpaczyna/rpi-k3s/issues/279)) ([b9444e2](https://github.com/szpaczyna/rpi-k3s/commit/b9444e2163ffbdb2b1c824c66c03a70287fc9624))
+* **scripts:** keep only deploy_template.sh and sops-check.sh ([#282](https://github.com/szpaczyna/rpi-k3s/issues/282)) ([8816a28](https://github.com/szpaczyna/rpi-k3s/commit/8816a2873d7b830d57aac24d9915416049848190))
+
+
+### CI/CD
+
+* label kind nodes so worker-pinned charts can schedule ([#270](https://github.com/szpaczyna/rpi-k3s/issues/270)) ([617bac3](https://github.com/szpaczyna/rpi-k3s/commit/617bac36e5591161db157ef34a208d41c1729458))
+
+
+### Documentation
+
+* **helm:** add missing chart READMEs, ignore graphify-out ([#267](https://github.com/szpaczyna/rpi-k3s/issues/267)) ([0db283b](https://github.com/szpaczyna/rpi-k3s/commit/0db283b185811abfe29e8e97594a0a2e4e98d9a2))
+
 ## [0.6.8](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.7...v0.6.8) (2026-10-18)
 
 
