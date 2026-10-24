@@ -5,7 +5,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.0.0"
+      "version": "11.1.0"
     },
     {
       "type": "panel",
@@ -438,7 +438,7 @@
       "pluginVersion": "7.4.1",
       "targets": [
         {
-          "expr": "count(x509_read_errors)",
+          "expr": "count(x509_source_errors_total)",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -502,7 +502,7 @@
       "pluginVersion": "7.4.1",
       "targets": [
         {
-          "expr": "sum(x509_read_errors)",
+          "expr": "sum(x509_source_errors_total)",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -1565,7 +1565,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "count(x509_read_errors)",
+          "expr": "count(x509_source_errors_total)",
           "interval": "",
           "legendFormat": "exporters",
           "queryType": "randomWalk",
@@ -1667,7 +1667,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum (x509_read_errors > bool 0)",
+          "expr": "sum (x509_source_errors_total > bool 0)",
           "interval": "",
           "legendFormat": "exporters with errors",
           "queryType": "randomWalk",
@@ -1770,7 +1770,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(x509_read_errors[15m]))",
+          "expr": "sum(rate(x509_source_errors_total[15m]))",
           "interval": "",
           "legendFormat": "error rate",
           "queryType": "randomWalk",
@@ -1872,7 +1872,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(x509_read_errors)",
+          "expr": "sum(x509_source_errors_total)",
           "interval": "",
           "legendFormat": "errors",
           "queryType": "randomWalk",
@@ -1980,7 +1980,7 @@
       "pluginVersion": "7.4.1",
       "targets": [
         {
-          "expr": "topk(10, rate(x509_read_errors[6h]))",
+          "expr": "topk(10, rate(x509_source_errors_total[6h]))",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2071,7 +2071,7 @@
       "pluginVersion": "7.4.1",
       "targets": [
         {
-          "expr": "topk(10, x509_read_errors)",
+          "expr": "topk(10, x509_source_errors_total)",
           "format": "table",
           "instant": true,
           "interval": "",
