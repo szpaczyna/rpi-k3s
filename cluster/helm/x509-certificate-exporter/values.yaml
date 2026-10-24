@@ -140,7 +140,7 @@ metricLabelsFilterList: null
 
 grafana:
   # -- Should the Grafana dashboard be deployed as a ConfigMap (requires Grafana sidecar)
-  createDashboard: true
+  createDashboard: false
   # -- ConfigMap label name the Grafana sidecar is looking for
   sidecarLabel: grafana_dashboard
   # -- ConfigMap label value the Grafana sidecar is looking for
