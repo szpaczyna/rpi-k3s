@@ -7,7 +7,7 @@
 image:
   registry: "docker.io"
   repository: "postgres"
-  tag: "18.4"
+  tag: "18.6"
   pullPolicy: IfNotPresent
 
 ## Clean naming without bitnami's "primary" suffix
