@@ -40,6 +40,7 @@
 
 | App | Description |
 |-----|-------------|
+| [authelia](cluster/helm/authelia) | Authentication and SSO portal |
 | [bitwarden](cluster/helm/bitwarden) | Password management (Vaultwarden) |
 | [booklore](cluster/helm/booklore) | Book library management |
 | [gitea](cluster/helm/gitea) | Self-hosted Git service |
@@ -52,21 +53,9 @@
 
 ### Retired / Not Currently Deployed
 
-Charts kept in `cluster/helm/unused/` for future use but not installed
-on the cluster right now. Each still has its `deploy` script, but nothing in
-the repo records why most of them were retired, so check what a chart assumes
-before reviving it.
-
-| App | Description |
-|-----|-------------|
-| [calibre](cluster/helm/unused/calibre) | Calibre-Web e-book server (extracted from media-stack) |
-| [event-exporter](cluster/helm/unused/event-exporter) | Kubernetes events exporter |
-| [gentoo](cluster/helm/unused/gentoo) | Gentoo distcc build node (cross-compiles on behalf of other hosts) |
-| [ingress-nginx](cluster/helm/unused/ingress-nginx) | Legacy ingress controller, replaced by Traefik |
-| [influxdb](cluster/helm/unused/influxdb) | Time-series DB (Apple Health exports) |
-| [kanboard](cluster/helm/unused/kanboard) | Kanban project management |
-| [nextcloud](cluster/helm/unused/nextcloud) | Personal cloud service |
-| [openweather-exporter](cluster/helm/unused/openweather) | OpenWeather API metrics |
+Retired charts moved to the separate repository
+[`k3s-old-stuff`](https://github.com/szpaczyna/k3s-old-stuff). `gentoo`
+(distcc build node) was promoted back to an active chart.
 
 ### Monitoring & Observability
 
@@ -84,8 +73,12 @@ before reviving it.
 | Component | Description |
 |-----------|-------------|
 | [cert-manager](cluster/helm/cert-manager) | Automated Let's Encrypt certificates (ACME HTTP-01 via Gateway API) |
+| [defaultbackend](cluster/helm/defaultbackend) | Catch-all backend for Traefik (bare-IP / unknown host) |
+| [gentoo](cluster/helm/gentoo) | Gentoo distcc build node (cross-compiles on behalf of other hosts) |
 | [metallb](cluster/helm/metallb) | Bare-metal load balancer (L2) |
+| [middlewares](cluster/helm/middlewares) | Traefik middlewares (security chain, authelia) |
 | [traefik](cluster/helm/traefik-external) | Ingress controller (Gateway API / HTTPRoute) |
+| [traefik-internal](cluster/helm/traefik-internal) | Internal Traefik instance for the *.home LAN domain |
 | [longhorn](cluster/helm/longhorn) | Distributed block storage |
 | [local-path-provisioner](cluster/helm/local-path-provisioner) | Local HostPath storage provisioner |
 | [system-upgrade-controller](cluster/helm/system-upgrade-controller) | Automated K3s upgrades |
@@ -99,7 +92,7 @@ before reviving it.
 cluster/
   backup/        # Backup CronJobs and Velero config
   helm/          # Helm charts and deploy scripts
-scripts/         # Utility scripts (gitea mirrors, monitoring, setup)
+scripts/         # Deploy template and SOPS check helper
 assets/          # Logos and images
 .github/         # CI workflows (lint-all, release-please)
 ```
