@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+
+NAMESPACE="apps"
+RELEASE_NAME="gentoo"
+CHART="."
+
+kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
+
+HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
+  --namespace "${NAMESPACE}"
+  --create-namespace
+  --values values.yaml)
+
+helm "${HELM_ARGS[@]}"

@@ -1,4 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-sops -d --output secret.yaml ./secret.enc.yaml
