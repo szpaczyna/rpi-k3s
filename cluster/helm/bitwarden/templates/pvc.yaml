@@ -6,10 +6,7 @@ apiVersion: v1
 metadata:
   name: {{ template "bitwarden.fullname" . }}
   labels:
-    app: {{ template "bitwarden.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    {{- include "bitwarden.labels" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote }}

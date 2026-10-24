@@ -5,10 +5,7 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "bitwarden.fullname" . }}-memory
   labels:
-    app.kubernetes.io/name: {{ include "bitwarden.name" . }}
-    helm.sh/chart: {{ include "bitwarden.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "bitwarden.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -29,10 +26,7 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "bitwarden.fullname" . }}-cpu
   labels:
-    app.kubernetes.io/name: {{ include "bitwarden.name" . }}
-    helm.sh/chart: {{ include "bitwarden.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "bitwarden.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
