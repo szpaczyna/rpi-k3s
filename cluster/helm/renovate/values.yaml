@@ -137,13 +137,13 @@ renovate:
           "allowedVersions": "<=10.5.14"
         },
         {
-          "description": "calibre-web 5.x tags on lscr.io are amd64-only single manifests, so they cannot run on this arm64 cluster; the chart is also parked under unused/ with enabled=false",
+          "description": "calibre-web 5.x tags on lscr.io are amd64-only single manifests, so they cannot run on this arm64 cluster; the chart is parked in ~/git/k3s-old-stuff with enabled=false",
           "matchDatasources": ["docker"],
           "matchPackageNames": ["lscr.io/linuxserver/calibre-web"],
           "enabled": false
         },
         {
-          "description": "InfluxDB is not deployed; the chart is parked under unused/ and 2.x is a breaking rewrite",
+          "description": "InfluxDB is not deployed; the chart is parked in ~/git/k3s-old-stuff and 2.x is a breaking rewrite",
           "matchDatasources": ["docker"],
           "matchPackageNames": ["influxdb"],
           "enabled": false

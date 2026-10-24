@@ -65,7 +65,7 @@ When `media.<name>.enable` is true and the name ends with "arr", the chart will 
 Transmission keeps its specialized template and is enabled via `transmission.enable`.
 
 Calibre-Web was extracted into its own standalone chart; it is currently
-retired and lives in `cluster/helm/unused/calibre`.
+moved to `~/git/k3s-old-stuff` (see that repo).
 
 ## Uninstallation
 

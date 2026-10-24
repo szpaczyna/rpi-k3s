@@ -60,7 +60,7 @@ The only manual step per new app is adding its secret name to
 When enabling a currently-disabled app (prometheus, longhorn — see their
 respective `values.yaml`), add its secret to
 `gateway.listeners.websecure.certificateRefs` in `values.yaml`. Retired
-apps (calibre, kanboard, nextcloud, ...) live in `cluster/helm/unused/`
+retired apps (calibre, kanboard, nextcloud, ...) live in `~/git/k3s-old-stuff`
 and must be moved back to `cluster/helm/` first.
 
 ## Security Middlewares

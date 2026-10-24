@@ -228,10 +228,10 @@ gateway:
         - name: auth-shpaq-org-tls       # auth.shpaq.org
         # Moved to the internal gateway as *.home, served there by the
         # wildcard-home-tls Secret: media, grafana, pihole.
-        # Retired apps — their charts live in cluster/helm/unused/ and render
+        # Retired apps — their charts live in ~/git/k3s-old-stuff and render
         # nothing until revived:
-        # - name: calibre-shpaq-org-tls   # unused/calibre
-        # - name: cloud-shpaq-org-tls     # unused/nextcloud
+        # - name: calibre-shpaq-org-tls   # k3s-old-stuff/calibre
+        # - name: cloud-shpaq-org-tls     # k3s-old-stuff/nextcloud
 gatewayClass:  # @schema additionalProperties: false
   # -- When providers.kubernetesGateway.enabled and gateway.enabled, deploy a default gatewayClass
   enabled: true
