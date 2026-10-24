@@ -36,7 +36,7 @@ repos:
   # shellcheck cannot parse at all; the trailing-whitespace and end-of-file
   # hooks already skip it.
   - id: shellcheck
-    exclude: '\.enc\.sh$|^provision/ansible/roles/dotfiles/files/zsh-plugins/'
+    exclude: '^provision/ansible/roles/dotfiles/files/zsh-plugins/'
 - repo: https://github.com/adrienverge/yamllint.git
   rev: v1.35.1
   hooks:
