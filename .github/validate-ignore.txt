@@ -1,8 +1,0 @@
-.yamllint.yml
-.github/
-provision/
-ignore/
-cluster/helm/
-cluster/helm/unused/
-*-crds.yaml
-*.asc.yaml
