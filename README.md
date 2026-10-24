@@ -64,7 +64,7 @@ Retired charts moved to the separate repository
 | [prometheus](cluster/helm/prometheus) | Monitoring and alerting |
 | [grafana](cluster/helm/grafana) | Dashboards and visualization |
 | [loki](cluster/helm/loki) | Log aggregation (+ Fluent Bit) |
-| [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) | TLS certificate expiry monitoring |
+| [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) | TLS certificate expiry monitoring (upstream chart 4.2.2) |
 | [unifipoller](cluster/helm/unifipoller) | UniFi network metrics exporter |
 | [version-checker](cluster/helm/version-checker) | Deployed image version monitoring |
 
