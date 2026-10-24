@@ -5,6 +5,11 @@ NAMESPACE="apps"
 RELEASE_NAME="pihole"
 CHART="."
 
-helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
-  --namespace "${NAMESPACE}" \
-  --values values.yaml
+kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
+
+HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
+  --namespace "${NAMESPACE}"
+  --create-namespace
+  --values values.yaml)
+
+helm "${HELM_ARGS[@]}"

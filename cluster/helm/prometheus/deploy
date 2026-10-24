@@ -4,15 +4,24 @@ set -euo pipefail
 NAMESPACE="monitoring"
 RELEASE_NAME="prometheus"
 CHART="prometheus-community/prometheus"
+
 VERSION="29.37.0"
+REPO_NAME="prometheus-community"
+REPO_URL="https://prometheus-community.github.io/helm-charts"
 
-# Add helm repo
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts 2>/dev/null || true
-helm repo update
+if [[ -n "${REPO_NAME}" ]]; then
+  if ! helm repo list -o json | jq -e --arg name "${REPO_NAME}" 'any(.[]?; .name == $name)' >/dev/null; then
+    helm repo add "${REPO_NAME}" "${REPO_URL}"
+  fi
+fi
 
+kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
 
-helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
-  --namespace "${NAMESPACE}" \
-  --create-namespace \
-  --values values.yaml \
-  --version "${VERSION}"
+HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
+  --namespace "${NAMESPACE}"
+  --create-namespace)
+
+HELM_ARGS+=(--values values.yaml)
+[[ -n "${VERSION}" ]] && HELM_ARGS+=(--version "${VERSION}")
+
+helm "${HELM_ARGS[@]}"

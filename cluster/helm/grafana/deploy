@@ -4,18 +4,28 @@ set -euo pipefail
 NAMESPACE="monitoring"
 RELEASE_NAME="grafana"
 CHART="grafana/grafana"
-VERSION="10.5.15"
 
-# Add helm repo
-helm repo add grafana https://grafana.github.io/helm-charts 2>/dev/null || true
-helm repo update
+VERSION="10.5.14"
+REPO_NAME="grafana"
+REPO_URL="https://grafana.github.io/helm-charts"
+
+if [[ -n "${REPO_NAME}" ]]; then
+  if ! helm repo list -o json | jq -e --arg name "${REPO_NAME}" 'any(.[]?; .name == $name)' >/dev/null; then
+    helm repo add "${REPO_NAME}" "${REPO_URL}"
+  fi
+fi
+
+kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
 
 kubectl apply -f <(sops -d ./admin-creds.enc.yaml) -n "${NAMESPACE}"
 kubectl apply -f <(sops -d ./backup-secret.enc.yaml) -n "${NAMESPACE}"
 kubectl apply -f backup-cronjob.yaml -n "${NAMESPACE}"
 
-helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
-  --namespace "${NAMESPACE}" \
-  --create-namespace \
-  --values values.yaml \
-  --version "${VERSION}"
+HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
+  --namespace "${NAMESPACE}"
+  --create-namespace)
+
+HELM_ARGS+=(--values values.yaml)
+[[ -n "${VERSION}" ]] && HELM_ARGS+=(--version "${VERSION}")
+
+helm "${HELM_ARGS[@]}"

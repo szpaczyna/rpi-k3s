@@ -14,12 +14,15 @@ APPS         := authelia bitwarden booklore gitea media-stack pihole shpaq-org w
 
 COMPONENTS := $(INFRA) $(INGRESS) $(PLATFORM) $(MONITORING) $(APPS)
 
-.PHONY: all $(COMPONENTS) enc yamllint jsonlint
+.PHONY: all $(COMPONENTS) helm-update enc yamllint jsonlint
 
 all: $(COMPONENTS)
 
 $(COMPONENTS):
 	cd $(CLUSTER_DIR)/$@ && ./deploy
+
+helm-update:
+	helm repo update
 
 enc:
 	find . -name "*secret.yaml" | xargs -I {} sops -e -i {}
