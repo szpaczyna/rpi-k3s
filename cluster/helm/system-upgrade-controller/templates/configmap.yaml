@@ -19,6 +19,8 @@ kind: ConfigMap
 metadata:
   name: default-controller-env
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "system-upgrade-controller.labels" . | nindent 4 }}
 data:
   {{- range $key, $value := .Values.configEnv }}
   {{ $key }}: {{ if eq $key "SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE" }}{{ $kubectlImage | quote }}{{ else }}{{ $value | quote }}{{ end }}

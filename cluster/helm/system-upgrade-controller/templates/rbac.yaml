@@ -2,6 +2,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: system-upgrade-controller
+  labels:
+    {{- include "system-upgrade-controller.labels" . | nindent 4 }}
 rules:
   - apiGroups: ["batch"]
     resources: ["jobs"]
@@ -34,6 +36,8 @@ kind: Role
 metadata:
   name: system-upgrade-controller
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "system-upgrade-controller.labels" . | nindent 4 }}
 rules:
   - apiGroups: ["batch"]
     resources: ["jobs"]
@@ -46,6 +50,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: system-upgrade-controller-drainer
+  labels:
+    {{- include "system-upgrade-controller.labels" . | nindent 4 }}
 rules:
   - apiGroups: [""]
     resources: ["pods/eviction"]
@@ -64,6 +70,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: system-upgrade
+  labels:
+    {{- include "system-upgrade-controller.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -78,6 +86,8 @@ kind: RoleBinding
 metadata:
   name: system-upgrade
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "system-upgrade-controller.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -91,6 +101,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: system-upgrade-drainer
+  labels:
+    {{- include "system-upgrade-controller.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
