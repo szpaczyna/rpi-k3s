@@ -3,6 +3,6 @@ apiVersion: v2
 name: bitwarden
 description: A Bitwarden Helm chart for Kubernetes
 type: application
-version: 0.1.17
+version: 0.1.18
 appVersion: "1.35.4"
 icon: https://github.com/bitwarden/brand/blob/master/icons/256x256.png

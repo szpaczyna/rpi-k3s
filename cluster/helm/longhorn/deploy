@@ -5,22 +5,31 @@ NAMESPACE="longhorn-system"
 RELEASE_NAME="longhorn"
 CHART="longhorn/longhorn"
 
-# Chart version to install. Defaults to the version pinned in values.yaml so
-# a bare `./deploy` reproduces the last applied release; pass an argument to
-# upgrade to a different version.
-VERSION="${1:-$(yq '.chartVersion' values.yaml)}"
+# Pass an argument to upgrade to a version other than the pinned one.
+VERSION="1.12.1"
+[[ $# -gt 0 ]] && VERSION="$1"
 
-# Add helm repo
-helm repo add longhorn https://charts.longhorn.io 2>/dev/null || true
-helm repo update
+REPO_NAME="longhorn"
+REPO_URL="https://charts.longhorn.io"
 
-helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
-  --namespace "${NAMESPACE}" \
-  --create-namespace \
-  --values values.yaml \
-  --version "${VERSION}"
+if [[ -n "${REPO_NAME}" ]]; then
+  if ! helm repo list -o json | jq -e --arg name "${REPO_NAME}" 'any(.[]?; .name == $name)' >/dev/null; then
+    helm repo add "${REPO_NAME}" "${REPO_URL}"
+  fi
+fi
+
+kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
 
 kubectl apply -f <(sops -d ./auth.enc.yaml) -n "${NAMESPACE}"
+
+HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
+  --namespace "${NAMESPACE}"
+  --create-namespace)
+
+HELM_ARGS+=(--values values.yaml)
+[[ -n "${VERSION}" ]] && HELM_ARGS+=(--version "${VERSION}")
+
+helm "${HELM_ARGS[@]}"
 
 # The control plane runs on 3.8 GB and hosts no application workloads, so it
 # must not store volume replicas. The chart cannot express per-node

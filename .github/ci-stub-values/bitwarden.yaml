@@ -1,0 +1,2 @@
+# CI-only placeholder for lint/template validation (never deployed).
+env: {}

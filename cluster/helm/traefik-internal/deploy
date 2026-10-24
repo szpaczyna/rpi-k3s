@@ -4,18 +4,28 @@ set -euo pipefail
 NAMESPACE="traefik"
 RELEASE_NAME="traefik-internal"
 CHART="traefik/traefik"
-VERSION="42.0.0"
 
-# Add helm repo
-helm repo add traefik https://traefik.github.io/charts 2>/dev/null || true
-helm repo update
+VERSION="42.0.0"
+REPO_NAME="traefik"
+REPO_URL="https://traefik.github.io/charts"
+
+if [[ -n "${REPO_NAME}" ]]; then
+  if ! helm repo list -o json | jq -e --arg name "${REPO_NAME}" 'any(.[]?; .name == $name)' >/dev/null; then
+    helm repo add "${REPO_NAME}" "${REPO_URL}"
+  fi
+fi
+
+kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
 
 # The Secret must exist before the Gateway references it: a missing one drops
 # the whole websecure listener, not one route.
 kubectl apply -f <(sops -d ./wildcard-home-tls.enc.yaml)
 
-helm upgrade --install "${RELEASE_NAME}" "${CHART}" \
-  --namespace "${NAMESPACE}" \
-  --create-namespace \
-  --values values.yaml \
-  --version "${VERSION}"
+HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
+  --namespace "${NAMESPACE}"
+  --create-namespace)
+
+HELM_ARGS+=(--values values.yaml)
+[[ -n "${VERSION}" ]] && HELM_ARGS+=(--version "${VERSION}")
+
+helm "${HELM_ARGS[@]}"

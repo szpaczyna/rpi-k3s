@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: {{ include "version-checker.name" . }}
   labels:
-    app: {{ include "version-checker.name" . }}
     {{ include "version-checker.labels" . | nindent 4 }}
     {{- if .Values.service.labels }}
     {{ toYaml .Values.service.labels | nindent 4 }}
@@ -19,4 +18,4 @@ spec:
       protocol: TCP
       name: web
   selector:
-    {{ include "version-checker.labels" . | nindent 4 }}
+    {{ include "version-checker.selectorLabels" . | nindent 4 }}

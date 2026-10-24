@@ -3,7 +3,7 @@ apiVersion: v2
 name: version-checker
 description: A Helm chart for version-checker
 type: application
-version: 0.6.1
+version: 0.6.2
 appVersion: "0.10.0"
 home: https://github.com/jetstack/version-checker
 maintainers:

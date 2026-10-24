@@ -2,27 +2,51 @@
 set -euo pipefail
 
 NAMESPACE="logging"
+RELEASE_NAME="loki"
+CHART="grafana/loki"
+
 LOKI_VERSION="7.3.0"
 FLUENT_BIT_VERSION="0.58.3"
 
-# Add helm repos
-helm repo add grafana https://grafana.github.io/helm-charts 2>/dev/null || true
-helm repo add fluent https://fluent.github.io/helm-charts 2>/dev/null || true
-helm repo update
+REPO_NAME="grafana"
+REPO_URL="https://grafana.github.io/helm-charts"
+
+if [[ -n "${REPO_NAME}" ]]; then
+  if ! helm repo list -o json | jq -e --arg name "${REPO_NAME}" 'any(.[]?; .name == $name)' >/dev/null; then
+    helm repo add "${REPO_NAME}" "${REPO_URL}"
+  fi
+fi
+
+REPO_NAME="fluent"
+REPO_URL="https://fluent.github.io/helm-charts"
+
+if [[ -n "${REPO_NAME}" ]]; then
+  if ! helm repo list -o json | jq -e --arg name "${REPO_NAME}" 'any(.[]?; .name == $name)' >/dev/null; then
+    helm repo add "${REPO_NAME}" "${REPO_URL}"
+  fi
+fi
+
+kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
 
 kubectl apply -f <(sops -d ./maxmind-geoip.enc.yaml) -n "${NAMESPACE}"
-kubectl apply -f geolite2-cronjob.yaml
+kubectl apply -f geolite2-cronjob.yaml -n "${NAMESPACE}"
 
-# Install loki
-helm upgrade --install loki grafana/loki \
-  --namespace "${NAMESPACE}" \
-  --create-namespace \
-  --values loki-values.yaml \
-  --version "${LOKI_VERSION}"
+HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
+  --namespace "${NAMESPACE}"
+  --create-namespace)
 
-# Install fluent-bit
-helm upgrade --install fluent-bit fluent/fluent-bit \
-  --namespace "${NAMESPACE}" \
-  --create-namespace \
-  --values fluentbit-values.yaml \
-  --version "${FLUENT_BIT_VERSION}"
+HELM_ARGS+=(--values loki-values.yaml)
+[[ -n "${LOKI_VERSION}" ]] && HELM_ARGS+=(--version "${LOKI_VERSION}")
+
+helm "${HELM_ARGS[@]}"
+
+# Fluent Bit reuses the same array; Helm needs the release name and chart
+# rebuilt, so the base entries are replaced rather than appended.
+HELM_ARGS=(upgrade --install fluent-bit fluent/fluent-bit
+  --namespace "${NAMESPACE}"
+  --create-namespace)
+
+HELM_ARGS+=(--values fluentbit-values.yaml)
+[[ -n "${FLUENT_BIT_VERSION}" ]] && HELM_ARGS+=(--version "${FLUENT_BIT_VERSION}")
+
+helm "${HELM_ARGS[@]}"

@@ -46,5 +46,5 @@ spec:
   version: v2.20.1
   serviceMonitorSelector:
     matchLabels:
-      app: {{ include "version-checker.name" . }}
+      app.kubernetes.io/name: {{ include "version-checker.name" . }}
 {{- end }}

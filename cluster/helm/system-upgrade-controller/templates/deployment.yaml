@@ -4,7 +4,7 @@ metadata:
   name: system-upgrade-controller
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: system-upgrade-controller
+    {{- include "system-upgrade-controller.labels" . | nindent 4 }}
     app.kubernetes.io/component: controller
 spec:
   replicas: 1
@@ -14,7 +14,7 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      upgrade.cattle.io/controller: system-upgrade-controller
+      {{- include "system-upgrade-controller.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:

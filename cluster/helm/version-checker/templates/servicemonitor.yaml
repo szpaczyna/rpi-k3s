@@ -4,14 +4,14 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "version-checker.name" . }}
   labels:
-    app: {{ include "version-checker.name" . }}
+    {{- include "version-checker.labels" . | nindent 4 }}
     {{- if .Values.serviceMonitor.additionalLabels }}
 {{- .Values.serviceMonitor.additionalLabels | toYaml | nindent 4 }}
     {{- end }}
 spec:
   selector:
     matchLabels:
-      app: {{ include "version-checker.name" . }}
+      {{- include "version-checker.selectorLabels" . | nindent 6 }}
   endpoints:
   - port: web
     path: /metrics

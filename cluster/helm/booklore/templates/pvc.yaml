@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ include "booklore.fullname" . }}-data
   labels:
-    app.kubernetes.io/name: {{ include "booklore.fullname" . }}
+    app.kubernetes.io/name: {{ include "booklore.name" . }}
   annotations:
     helm.sh/resource-policy: keep
 spec:
@@ -22,7 +22,7 @@ metadata:
   annotations:
     helm.sh/resource-policy: keep
   labels:
-    app.kubernetes.io/name: {{ include "booklore.fullname" . }}
+    app.kubernetes.io/name: {{ include "booklore.name" . }}
   name: {{ include "booklore.fullname" . }}-books
 spec:
   accessModes:

@@ -44,6 +44,14 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
+Selector labels
+*/}}
+{{- define "local-path-provisioner.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "local-path-provisioner.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use.
 */}}
 {{- define "local-path-provisioner.serviceAccountName" -}}

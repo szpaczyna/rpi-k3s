@@ -129,10 +129,10 @@ extraVolumes: []
 #  - name: data-grafana
 #    existingClaim: data-grafana
 
-plugins:
-  - vonage-status-panel
-  - novatec-sdg-panel
-  - grafana-polystat-panel
+plugins: []
+  # - vonage-status-panel
+  # - novatec-sdg-panel
+  # - grafana-polystat-panel
 
 datasources:
   datasources.yaml:
