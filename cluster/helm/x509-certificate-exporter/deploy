@@ -3,8 +3,25 @@ set -euo pipefail
 
 NAMESPACE="monitoring"
 RELEASE_NAME="x509-certificate-exporter"
+CHART="enix/x509-certificate-exporter"
 
-helm upgrade --install "${RELEASE_NAME}" . \
-  --namespace "${NAMESPACE}" \
-  --create-namespace \
-  --values values.yaml
+VERSION="4.2.2"
+REPO_NAME="enix"
+REPO_URL="https://charts.enix.io"
+
+if [[ -n "${REPO_NAME}" ]]; then
+  if ! helm repo list -o json | jq -e --arg name "${REPO_NAME}" 'any(.[]?; .name == $name)' >/dev/null; then
+    helm repo add "${REPO_NAME}" "${REPO_URL}"
+  fi
+fi
+
+kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
+
+HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
+  --namespace "${NAMESPACE}"
+  --create-namespace)
+
+HELM_ARGS+=(--values values.yaml)
+[[ -n "${VERSION}" ]] && HELM_ARGS+=(--version "${VERSION}")
+
+helm "${HELM_ARGS[@]}"

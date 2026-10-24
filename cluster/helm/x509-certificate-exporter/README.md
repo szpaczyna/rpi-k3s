@@ -19,7 +19,7 @@ The following metrics are available:
 * `x509_cert_expires_in_seconds` (optional)
 * `x509_cert_valid_since_seconds` (optional)
 * `x509_cert_error` (optional)
-* `x509_read_errors`
+* `x509_source_errors_total`
 * `x509_exporter_build_info`
 
 Best when used with the [Grafana Dashboard](https://grafana.com/grafana/dashboards/13922) ID `13922`:
