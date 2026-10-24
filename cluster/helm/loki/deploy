@@ -5,7 +5,7 @@ NAMESPACE="logging"
 RELEASE_NAME="loki"
 CHART="grafana/loki"
 
-LOKI_VERSION="7.3.0"
+LOKI_VERSION="7.5.0"
 FLUENT_BIT_VERSION="0.58.3"
 
 REPO_NAME="grafana"
