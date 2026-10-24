@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "unpoller.fullname" . }}
+  name: {{ include "unifipoller.fullname" . }}
   labels:
-    {{- include "unpoller.labels" . | nindent 4 }}
+    {{- include "unifipoller.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "unpoller.selectorLabels" . | nindent 6 }}
+      {{- include "unifipoller.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -16,7 +16,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "unpoller.labels" . | nindent 8 }}
+        {{- include "unifipoller.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -25,7 +25,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "unpoller.serviceAccountName" . }}
+      serviceAccountName: {{ include "unifipoller.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -54,7 +54,7 @@ spec:
       volumes:
         - name: config-volume
           secret:
-            secretName: {{ include "unpoller.fullname" . }}
+            secretName: {{ include "unifipoller.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
