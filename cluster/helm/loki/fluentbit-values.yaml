@@ -279,11 +279,7 @@ podDisruptionBudget:
   annotations: {}
   maxUnavailable: "30%"
 
-# Master node cannot reach CoreDNS, so its DaemonSet pod crash-loops on the
-# kubernetes filter. Exclude master; host logs there use log_shipper instead.
-nodeSelector:
-  kubernetes.io/role: worker
-
+nodeSelector: {}
 tolerations: []
 
 affinity: {}

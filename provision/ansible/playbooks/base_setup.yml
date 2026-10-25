@@ -21,15 +21,8 @@
       ansible.builtin.include_role:
         name: dotfiles
       tags: ['dotfiles']
-    # k3s nodes' container logs and host logs are normally collected by the
-    # Fluent Bit DaemonSet (cluster/helm/loki, hostPath /var/log). The master
-    # node cannot reach CoreDNS, so its DaemonSet pod crash-loops; install the
-    # host agent there instead. Workers keep the DaemonSet only.
-    - name: Log shipper (master node only)
-      ansible.builtin.include_role:
-        name: log_shipper
-      tags: ['log-shipper']
-      when: inventory_hostname == groups['k3s_master'][0]
+    # k3s nodes' container logs and host logs are collected by the Fluent Bit
+    # DaemonSet (cluster/helm/loki, hostPath /var/log). No host agent needed.
 #    - name: Rebooting hosts
 #      reboot:
 #        msg: "Pis are being rebooted"
