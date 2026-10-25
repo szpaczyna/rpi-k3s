@@ -21,7 +21,8 @@
       ansible.builtin.include_role:
         name: dotfiles
       tags: ['dotfiles']
-
+    # k3s nodes' container logs and host logs are collected by the Fluent Bit
+    # DaemonSet (cluster/helm/loki, hostPath /var/log). No host agent needed.
 #    - name: Rebooting hosts
 #      reboot:
 #        msg: "Pis are being rebooted"

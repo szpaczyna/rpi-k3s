@@ -19,3 +19,7 @@
       ansible.builtin.include_role:
         name: dotfiles
       tags: ['dotfiles']
+    - name: Log shipper
+      ansible.builtin.include_role:
+        name: log_shipper
+      tags: ['log-shipper']

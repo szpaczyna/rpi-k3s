@@ -1,0 +1,62 @@
+{{ ansible_managed | comment }}
+
+[SERVICE]
+    Flush 5
+    Daemon Off
+    Log_Level info
+    Parsers_File /etc/fluent-bit/parsers.conf
+    Parsers_File /etc/fluent-bit/custom_parsers.conf
+
+[INPUT]
+    Name tail
+    Path /var/log/auth.log
+    Tag node.auth
+    Mem_Buf_Limit 5MB
+    Skip_Long_Lines On
+    DB /var/lib/fluent-bit/auth.db
+
+{% if log_shipper_tail_fail2ban %}
+[INPUT]
+    Name tail
+    Path /var/log/fail2ban.log
+    Tag node.fail2ban
+    Mem_Buf_Limit 5MB
+    Skip_Long_Lines On
+    DB /var/lib/fluent-bit/fail2ban.db
+{% endif %}
+
+[FILTER]
+    Name modify
+    Match node.*
+    Set host {{ inventory_hostname }}
+
+[FILTER]
+    Name lua
+    Match node.*
+    script /etc/fluent-bit/extract_fields.lua
+    call extract
+
+[FILTER]
+    Name modify
+    Match node.auth
+    Set log_file auth.log
+
+{% if log_shipper_tail_fail2ban %}
+[FILTER]
+    Name modify
+    Match node.fail2ban
+    Set log_file fail2ban.log
+{% endif %}
+
+[OUTPUT]
+    Name loki
+    Match node.*
+    Host loki.home
+    Port 443
+    tls On
+    tls.verify On
+    tls.ca_file {{ log_shipper_ca_file }}
+    URI /loki/api/v1/push
+    Labels job=host
+    Label_Keys $host,$log_file
+    Line_Format json

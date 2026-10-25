@@ -1,0 +1,129 @@
+---
+- name: Note non-Debian host
+  ansible.builtin.debug:
+    msg: >-
+      {{ inventory_hostname }} is {{ ansible_facts['os_family'] }}: skipping
+      package install, CA/config/service still applied.
+  when: ansible_facts['os_family'] != 'Debian'
+  tags: ['log-shipper']
+
+- name: Ensure Fluent Bit config directory
+  ansible.builtin.file:
+    path: /etc/fluent-bit
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  tags: ['log-shipper']
+
+- name: Install mkcert root CA
+  ansible.builtin.copy:
+    src: "{{ log_shipper_ca_cert }}"
+    dest: "{{ log_shipper_ca_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Update CA certificates
+  tags: ['log-shipper']
+
+- name: Ensure loki.home resolves
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: "10.0.0.50 loki.home"
+    state: present
+  tags: ['log-shipper']
+
+- name: Determine Fluent Bit package coordinates
+  ansible.builtin.set_fact:
+    log_shipper_deb_arch: >-
+      {{ 'arm64' if ansible_facts['architecture'] == 'aarch64' else 'amd64' }}
+    log_shipper_deb_base: >-
+      {{ 'ubuntu/noble' if ansible_facts['os_family'] == 'Debian' and ansible_facts['distribution'] == 'Ubuntu' else 'debian/bookworm' }}
+  when: ansible_facts['os_family'] == 'Debian'
+  tags: ['log-shipper']
+
+- name: Determine Fluent Bit download URL
+  ansible.builtin.set_fact:
+    log_shipper_deb_url: >-
+      https://packages.fluentbit.io/{{ log_shipper_deb_base }}/
+      pool/main/f/fluent-bit/fluent-bit_{{ log_shipper_version }}_{{ log_shipper_deb_arch }}.deb
+  when: ansible_facts['os_family'] == 'Debian'
+  tags: ['log-shipper']
+
+- name: Download Fluent Bit package
+  ansible.builtin.get_url:
+    url: "{{ log_shipper_deb_url | replace(' ', '') | replace('\n', '') }}"
+    dest: "/tmp/fluent-bit_{{ log_shipper_version }}_{{ log_shipper_deb_arch }}.deb"
+    mode: "0644"
+  register: log_shipper_download
+  retries: 5
+  until: log_shipper_download is success
+  when: ansible_facts['os_family'] == 'Debian'
+  tags: ['log-shipper']
+
+- name: Install Fluent Bit package
+  ansible.builtin.apt:
+    deb: "/tmp/fluent-bit_{{ log_shipper_version }}_{{ log_shipper_deb_arch }}.deb"
+    state: present
+  register: log_shipper_install
+  retries: 5
+  until: log_shipper_install is success
+  when: ansible_facts['os_family'] == 'Debian'
+  tags: ['log-shipper']
+
+- name: Detect fail2ban.log presence
+  ansible.builtin.stat:
+    path: /var/log/fail2ban.log
+  register: log_shipper_f2b_stat
+  tags: ['log-shipper']
+
+- name: Set fail2ban tail flag
+  ansible.builtin.set_fact:
+    log_shipper_tail_fail2ban: "{{ log_shipper_f2b_stat.stat.exists | default(false) }}"
+  tags: ['log-shipper']
+
+- name: Create Fluent Bit state directory
+  ansible.builtin.file:
+    path: /var/lib/fluent-bit
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  tags: ['log-shipper']
+
+- name: Install custom Fluent Bit parsers
+  ansible.builtin.copy:
+    src: custom_parsers.conf
+    dest: /etc/fluent-bit/custom_parsers.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Fluent Bit
+  tags: ['log-shipper']
+
+- name: Install Fluent Bit lua script
+  ansible.builtin.copy:
+    src: extract_fields.lua
+    dest: /etc/fluent-bit/extract_fields.lua
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Fluent Bit
+  tags: ['log-shipper']
+
+- name: Render Fluent Bit configuration
+  ansible.builtin.template:
+    src: fluent-bit.conf.j2
+    dest: "{{ log_shipper_config_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart Fluent Bit
+  tags: ['log-shipper']
+
+- name: Enable and start Fluent Bit
+  ansible.builtin.service:
+    name: fluent-bit
+    enabled: true
+    state: started
+  tags: ['log-shipper']
