@@ -1,0 +1,25 @@
+---
+# Fluent Bit host agent. Ships /var/log/auth.log (and fail2ban.log where
+# present) to Loki via https://loki.home. Mirrors the cluster's Fluent Bit
+# config (classic mode) but with a minimal pipeline.
+
+log_shipper_loki_url: "https://loki.home/loki/api/v1/push"
+log_shipper_ca_cert: "mkcert-rootCA.pem"
+
+# Pinned so a re-run is a no-op and an upstream release never lands unannounced.
+# The debian package version tracks the cluster's Fluent Bit image.
+log_shipper_version: "5.1.3"
+
+# Debian-family only: the package is downloaded directly from
+# packages.fluentbit.io (no apt repository). The distro base is chosen
+# in tasks based on ansible_distribution (Ubuntu -> noble, Debian -> bookworm).
+
+# Paths on the target host
+log_shipper_config_dir: /etc/fluent-bit
+log_shipper_config_file: /etc/fluent-bit/fluent-bit.conf
+log_shipper_ca_dir: /usr/local/share/ca-certificates
+log_shipper_ca_file: /usr/local/share/ca-certificates/mkcert-rootCA.crt
+
+# Only tail fail2ban.log where it actually exists (blueberry, and any host
+# where fail2ban has been enabled).
+log_shipper_tail_fail2ban: false

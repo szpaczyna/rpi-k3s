@@ -228,3 +228,27 @@ the chart has nowhere to put it and it will be silently dropped.
 `traefik-external-*` and `traefik-internal-*` alike, so both instances are
 collected. `*.home` requests are only present in the `traefik-internal` pod's
 logs, since the external gateway serves only `*.shpaq.org`.
+
+## Host logs (auth.log, fail2ban.log)
+
+k3s nodes collect their own host logs through the Fluent Bit DaemonSet
+(hostPath `/var/log`, inputs `node.auth` / `node.fail2ban`, output `job=host`).
+Off-cluster hosts (pihole, standalone, gentoo) run a host Fluent Bit agent
+installed by the `log_shipper` Ansible role in `provision/ansible/`. Both
+paths push to `https://loki.home/loki/api/v1/push` (push-only HTTPRoute,
+`PathPrefix /loki/api/v1/push`).
+
+Labels are deliberately limited to `job`, `host`, `log_file` to keep stream
+cardinality low. `src_ip` (and `user`, `action` for fail2ban) are extracted
+at ingest time by a Fluent Bit lua filter and stored as fields in the JSON
+body, so they survive `count_over_time` aggregations via `| json`:
+
+```logql
+{job="host"} | json | src_ip != ""
+```
+
+Top offending IPs:
+
+```logql
+topk(10, sum by (src_ip) (count_over_time({job="host",log_file="auth.log"} | json | src_ip != "" [1h])))
+```

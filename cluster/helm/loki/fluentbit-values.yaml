@@ -76,6 +76,8 @@ hostAliases: []
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:
+    add:
+      - DAC_READ_SEARCH
     drop:
       - ALL
 #   readOnlyRootFilesystem: true
@@ -277,7 +279,11 @@ podDisruptionBudget:
   annotations: {}
   maxUnavailable: "30%"
 
-nodeSelector: {}
+# Master node cannot reach CoreDNS (pod network issue), so its DaemonSet pod
+# crash-loops on the kubernetes filter. Exclude master; host logs there are
+# collected by the log_shipper Ansible role instead.
+nodeSelector:
+  kubernetes.io/role: worker
 
 tolerations: []
 
@@ -301,7 +307,11 @@ terminationGracePeriodSeconds:
 
 priorityClassName: ""
 
-env: []
+env:
+  - name: NODE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
 #  - name: FOO
 #    value: "bar"
 
@@ -352,10 +362,17 @@ extraVolumes:
   - name: geoip
     persistentVolumeClaim:
       claimName: geolite2-data
+  - name: hostlog
+    hostPath:
+      path: /var/log
+      type: Directory
 
 extraVolumeMounts:
   - name: geoip
     mountPath: /geoip
+    readOnly: true
+  - name: hostlog
+    mountPath: /host/var/log
     readOnly: true
 
 updateStrategy: {}
@@ -372,7 +389,28 @@ networkPolicy:
 #     from: []
 
 # See Lua script configuration example in README.md
-luaScripts: {}
+luaScripts:
+  extract_fields.lua: |
+    function extract(tag, timestamp, record)
+        local log = record["log"]
+        if log == nil then return 0, timestamp, record end
+
+        local ip = string.match(log, "from ([^ ]+)")
+        if ip then record["src_ip"] = ip end
+
+        if string.match(log, "Ban ") then
+            record["action"] = "Ban"
+            local f2b_ip = string.match(log, "Ban ([^ ]+)")
+            if f2b_ip then record["src_ip"] = f2b_ip end
+        end
+        if string.match(log, "Unban ") then
+            record["action"] = "Unban"
+            local f2b_ip = string.match(log, "Unban ([^ ]+)")
+            if f2b_ip then record["src_ip"] = f2b_ip end
+        end
+
+        return 1, timestamp, record
+    end
 
 ## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/configuration-file
 config:
@@ -403,6 +441,22 @@ config:
         Tag host.*
         Systemd_Filter _SYSTEMD_UNIT=kubelet.service
         Read_From_Tail On
+
+    [INPUT]
+        Name tail
+        Path /host/var/log/auth.log
+        Tag node.auth
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+        DB /tmp/fluent-bit-node-auth.db
+
+    [INPUT]
+        Name tail
+        Path /host/var/log/fail2ban.log
+        Tag node.fail2ban
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+        DB /tmp/fluent-bit-node-fail2ban.db
 
   ## https://docs.fluentbit.io/manual/pipeline/filters
   filters: |
@@ -448,16 +502,62 @@ config:
         script /fluent-bit/etc/conf/geoblock.lua
         call geoblock_extract
 
+    [FILTER]
+        # Host auth/fail2ban logs: tag node.*. Set the source node name from
+        # the downward-API env var NODE_NAME and the originating log file, so
+        # the Loki output can label streams by host + log_file without
+        # cardinality from src_ip (which stays in the body).
+        Name modify
+        Match node.auth
+        Set log_file auth.log
+
+    [FILTER]
+        Name modify
+        Match node.fail2ban
+        Set log_file fail2ban.log
+
+    [FILTER]
+        Name modify
+        Match node.*
+        Set host ${NODE_NAME}
+
+    [FILTER]
+        Name lua
+        Match node.*
+        script /fluent-bit/scripts/extract_fields.lua
+        call extract
+
+
   ## https://docs.fluentbit.io/manual/pipeline/outputs
   outputs: |
     [OUTPUT]
         name loki
-        match *
+        match kube.*
         host loki-headless
         port 3100
         uri  /loki/api/v1/push
         labels job=fluentbit
         label_map_path /fluent-bit/etc/conf/labelmap.json
+        line_format json
+
+    [OUTPUT]
+        name loki
+        match host.*
+        host loki-headless
+        port 3100
+        uri  /loki/api/v1/push
+        labels job=fluentbit
+        label_map_path /fluent-bit/etc/conf/labelmap.json
+        line_format json
+
+    [OUTPUT]
+        name loki
+        match node.*
+        host loki-headless
+        port 3100
+        uri  /loki/api/v1/push
+        labels job=host
+        label_keys $host,$log_file
         line_format json
 
   ## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/upstream-servers
