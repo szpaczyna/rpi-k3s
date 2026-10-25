@@ -279,9 +279,8 @@ podDisruptionBudget:
   annotations: {}
   maxUnavailable: "30%"
 
-# Master node cannot reach CoreDNS (pod network issue), so its DaemonSet pod
-# crash-loops on the kubernetes filter. Exclude master; host logs there are
-# collected by the log_shipper Ansible role instead.
+# Master node cannot reach CoreDNS, so its DaemonSet pod crash-loops on the
+# kubernetes filter. Exclude master; host logs there use log_shipper instead.
 nodeSelector:
   kubernetes.io/role: worker
 
@@ -503,10 +502,6 @@ config:
         call geoblock_extract
 
     [FILTER]
-        # Host auth/fail2ban logs: tag node.*. Set the source node name from
-        # the downward-API env var NODE_NAME and the originating log file, so
-        # the Loki output can label streams by host + log_file without
-        # cardinality from src_ip (which stays in the body).
         Name modify
         Match node.auth
         Set log_file auth.log

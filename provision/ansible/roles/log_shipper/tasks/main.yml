@@ -1,12 +1,4 @@
 ---
-# Fluent Bit host agent. Debian-family only: Gentoo has no package in
-# portage, so it is installed manually (see handoff). The role no-ops on
-# Gentoo so a mixed play does not fail.
-
-# Gentoo has no apt package; Fluent Bit is installed manually there (see
-# provision/ansible/README.md). The role still distributes the CA, the
-# /etc/hosts entry and the config, and manages the service, so the manual
-# install only needs the binary.
 - name: Note non-Debian host
   ansible.builtin.debug:
     msg: >-
@@ -34,8 +26,6 @@
   notify: Update CA certificates
   tags: ['log-shipper']
 
-# blueberry (Pi-hole) is its own DNS resolver and its upstream chain does not
-# resolve loki.home, so pin it in /etc/hosts for robustness on every host.
 - name: Ensure loki.home resolves
   ansible.builtin.lineinfile:
     path: /etc/hosts
