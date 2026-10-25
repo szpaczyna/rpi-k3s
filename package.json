@@ -1,0 +1,16 @@
+{
+  "name": "rpi-k3s",
+  "version": "0.6.8",
+  "description": "Szpacze Gniazdo k3s",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/szpaczyna/rpi-k3s.git"
+  },
+  "author": "Michal 'shpaq' Laszuk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/szpaczyna/rpi-k3s/issues"
+  },
+  "homepage": "https://szpaczyna.github.io/rpi-k3s/"
+}
