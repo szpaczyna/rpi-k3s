@@ -1021,7 +1021,8 @@ podSecurityContext:
 namespaceOverride: ""
 
 ## -- This field override the default app.kubernetes.io/instance label for all Objects.
-instanceLabelOverride: ""
+## Chart default would be `traefik-external-traefik` (release name + namespace).
+instanceLabelOverride: "traefik-external"
 
 # Traefik Hub configuration. See https://doc.traefik.io/traefik-hub/
 hub:
