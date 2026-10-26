@@ -777,6 +777,9 @@ kube-state-metrics:
       cpu: 350m
       memory: 200Mi
 
+  nodeSelector:
+    kubernetes.io/role: worker
+
 prometheus-node-exporter:
   enabled: true
   nameOverride: node-exporter
