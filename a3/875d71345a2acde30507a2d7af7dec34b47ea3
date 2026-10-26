@@ -1,0 +1,19 @@
+cluster/helm/prometheus/values.yaml
+  s_e5cfd1212e709b::t_693237e6d31395 725-758
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a3875d71345a2acde30507a2d7af7dec34b47ea3",
+  "prompts": {},
+  "sessions": {
+    "s_e5cfd1212e709b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e87c2591dffegwUHXZkE6Yiz2F",
+        "model": "unknown"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
