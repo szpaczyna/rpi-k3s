@@ -722,6 +722,40 @@ kube-state-metrics:
     - validatingwebhookconfigurations
     - volumeattachments
 
+  rbac:
+    extraRules:
+      - apiGroups: ["gateway.networking.k8s.io"]
+        resources: ["httproutes"]
+        verbs: ["list", "watch"]
+
+  customResourceState:
+    enabled: true
+    config:
+      kind: CustomResourceStateMetrics
+      spec:
+        resources:
+          - groupVersionKind:
+              group: gateway.networking.k8s.io
+              version: v1
+              kind: HTTPRoute
+            metricNamePrefix: kube_httproute
+            labelsFromPath:
+              namespace: [metadata, namespace]
+              httproute: [metadata, name]
+              host: [spec, hostnames, "0"]
+            metrics:
+              - name: path
+                help: HTTPRoute path match per rule (first match and first backend of each rule)
+                each:
+                  type: Info
+                  info:
+                    path: [spec, rules]
+                    labelsFromPath:
+                      path: [matches, "0", path, value]
+                      path_type: [matches, "0", path, type]
+                      service_name: [backendRefs, "0", name]
+                      service_port: [backendRefs, "0", port]
+
   resources:
     requests:
       cpu: 0.1
