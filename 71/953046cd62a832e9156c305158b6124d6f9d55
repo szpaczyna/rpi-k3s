@@ -1,0 +1,14 @@
+cluster/helm/prometheus/values.yaml
+  h_906bde6ad77cff 780-782
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "71953046cd62a832e9156c305158b6124d6f9d55",
+  "prompts": {},
+  "humans": {
+    "h_906bde6ad77cff": {
+      "author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
