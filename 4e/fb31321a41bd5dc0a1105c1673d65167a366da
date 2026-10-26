@@ -1,0 +1,19 @@
+cluster/helm/traefik-external/values.yaml
+  s_cdc9add683d749::t_029f1177ebdd46 1024-1025
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4efb31321a41bd5dc0a1105c1673d65167a366da",
+  "prompts": {},
+  "sessions": {
+    "s_cdc9add683d749": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e8793dbf3ffepsUBbcBPxH1gQc",
+        "model": "unknown"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
