@@ -1,0 +1,138 @@
+---
+- name: Assert the country allowlist is only enabled on Debian family
+  ansible.builtin.assert:
+    that: ansible_facts['os_family'] == 'Debian'
+    fail_msg: >-
+      sshd_geofilter_enabled is set on a {{ ansible_facts['os_family'] }} host.
+      The packages and units assume Debian and systemd.
+    quiet: true
+  tags: ['sshd']
+
+- name: Assert the country allowlist inputs are set
+  ansible.builtin.assert:
+    that:
+      - sshd_geofilter_countries | length > 0
+      - sshd_geofilter_maxmind_account_id is defined
+      - sshd_geofilter_maxmind_license_key is defined
+    fail_msg: >-
+      Set sshd_geofilter_countries and the sshd_geofilter_maxmind_* credentials
+      (the latter in group_vars/all/sshd.enc.sops.yml) before enabling the
+      country allowlist.
+    quiet: true
+  tags: ['sshd']
+
+- name: Install the country allowlist packages
+  ansible.builtin.apt:
+    name:
+      - geoipupdate
+      - python3-maxminddb
+    install_recommends: false
+    state: present
+  register: sshd_geofilter_install
+  retries: 5
+  until: sshd_geofilter_install is success
+  tags: ['sshd']
+
+- name: Create the country allowlist directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop:
+    - /etc/ssh-geofilter
+    - "{{ sshd_geofilter_state_dir }}"
+    - /etc/systemd/system/geoipupdate.service.d
+  tags: ['sshd']
+
+- name: Configure geoipupdate
+  ansible.builtin.template:
+    src: GeoIP.conf.j2
+    dest: /etc/GeoIP.conf
+    owner: root
+    group: root
+    mode: "0600"
+  no_log: true
+  tags: ['sshd']
+
+# Fetched here once so the table is not installed ahead of its data. After this
+# the package's weekly timer keeps it current.
+- name: Download the GeoLite2 Country database
+  ansible.builtin.command: /usr/bin/geoipupdate
+  args:
+    creates: "{{ sshd_geofilter_database }}"
+  register: sshd_geofilter_download
+  retries: 3
+  until: sshd_geofilter_download is success
+  tags: ['sshd']
+
+- name: Install the allowlist builder
+  ansible.builtin.copy:
+    src: ssh-geofilter-build
+    dest: /usr/local/sbin/ssh-geofilter-build
+    owner: root
+    group: root
+    mode: "0755"
+  tags: ['sshd']
+
+- name: Build the country allowlist
+  ansible.builtin.command: >-
+    /usr/local/sbin/ssh-geofilter-build
+    --database {{ sshd_geofilter_database }}
+    --output-dir {{ sshd_geofilter_state_dir }}
+    --countries {{ sshd_geofilter_countries | join(',') }}
+  register: sshd_geofilter_build
+  changed_when: "'updated' in sshd_geofilter_build.stdout"
+  notify: Reload ssh-geofilter
+  tags: ['sshd']
+
+# The included allowlist files do not exist yet when this runs under --check on
+# a first install, so the syntax check is skipped there.
+- name: Deploy the ssh-geo nftables table
+  ansible.builtin.template:
+    src: ssh-geo.nft.j2
+    dest: /etc/ssh-geofilter/ssh-geo.nft
+    owner: root
+    group: root
+    mode: "0644"
+    validate: "{{ 'nft -c -f %s' if not ansible_check_mode else omit }}"
+  notify: Reload ssh-geofilter
+  tags: ['sshd']
+
+- name: Install the country allowlist units
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - src: ssh-geofilter.service.j2
+      dest: /etc/systemd/system/ssh-geofilter.service
+    - src: ssh-geofilter-refresh.service.j2
+      dest: /etc/systemd/system/ssh-geofilter-refresh.service
+    - src: geoipupdate-onsuccess.conf.j2
+      dest: /etc/systemd/system/geoipupdate.service.d/10-ssh-geofilter.conf
+  loop_control:
+    label: "{{ item.dest }}"
+  tags: ['sshd']
+
+# Under --check on a first install the unit files and the package do not exist
+# yet, so the lookup fails there and only there.
+- name: Enable the country allowlist
+  ansible.builtin.systemd:
+    name: ssh-geofilter.service
+    enabled: true
+    state: started
+    daemon_reload: true
+  ignore_errors: "{{ ansible_check_mode }}"
+  tags: ['sshd']
+
+- name: Enable the GeoLite2 refresh timer
+  ansible.builtin.systemd:
+    name: geoipupdate.timer
+    enabled: true
+    state: started
+  ignore_errors: "{{ ansible_check_mode }}"
+  tags: ['sshd']

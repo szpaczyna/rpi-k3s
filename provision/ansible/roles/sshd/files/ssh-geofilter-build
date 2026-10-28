@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+"""Turn a MaxMind country database into nftables element files for ssh-geo."""
+import argparse
+import ipaddress
+import os
+import subprocess
+import sys
+import tempfile
+
+import maxminddb
+
+
+def collect(db_path, countries):
+    v4, v6 = [], []
+    with maxminddb.open_database(db_path) as reader:
+        for network, record in reader:
+            code = ((record or {}).get("country") or {}).get("iso_code")
+            if code not in countries:
+                continue
+            (v4 if isinstance(network, ipaddress.IPv4Network) else v6).append(network)
+    return (
+        list(ipaddress.collapse_addresses(v4)),
+        list(ipaddress.collapse_addresses(v6)),
+    )
+
+
+def write_if_changed(path, text):
+    try:
+        with open(path) as handle:
+            if handle.read() == text:
+                return False
+    except FileNotFoundError:
+        pass
+    fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path), prefix=".tmp-")
+    with os.fdopen(fd, "w") as handle:
+        handle.write(text)
+    os.chmod(tmp, 0o644)
+    os.replace(tmp, path)
+    return True
+
+
+def element_command(set_name, networks):
+    if not networks:
+        return ""
+    body = ", ".join(str(n) for n in networks)
+    return f"add element inet ssh-geo {set_name} {{ {body} }}\n"
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--database", required=True)
+    parser.add_argument("--output-dir", required=True)
+    parser.add_argument("--countries", required=True, help="comma separated ISO codes")
+    parser.add_argument("--min-v4", type=int, default=500)
+    parser.add_argument("--reload", action="store_true")
+    args = parser.parse_args()
+
+    countries = {c.strip().upper() for c in args.countries.split(",") if c.strip()}
+    v4, v6 = collect(args.database, countries)
+
+    # A truncated or wrong database must not replace a working allowlist: an
+    # empty set locks out all remote clients.
+    if len(v4) < args.min_v4:
+        sys.exit(f"only {len(v4)} IPv4 prefixes for {sorted(countries)}, expected at least "
+                 f"{args.min_v4}; keeping the previous allowlist")
+
+    changed = [
+        write_if_changed(os.path.join(args.output_dir, "allow4.nft"), element_command("allow4", v4)),
+        write_if_changed(os.path.join(args.output_dir, "allow6.nft"), element_command("allow6", v6)),
+    ]
+    print(f"ssh-geofilter: {len(v4)} IPv4 and {len(v6)} IPv6 prefixes for {sorted(countries)}, "
+          f"{'updated' if any(changed) else 'unchanged'}")
+
+    if args.reload and any(changed):
+        subprocess.run(["systemctl", "reload-or-restart", "ssh-geofilter.service"], check=True)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,19 @@
+{{ ansible_managed | comment }}
+[Unit]
+Description=SSH country allowlist (nftables table ssh-geo)
+Documentation=file:///etc/ssh-geofilter/ssh-geo.nft
+DefaultDependencies=no
+After=local-fs.target
+Before=network-pre.target
+Wants=network-pre.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/nft -f /etc/ssh-geofilter/ssh-geo.nft
+ExecReload=/usr/sbin/nft -f /etc/ssh-geofilter/ssh-geo.nft
+ExecStop=-/usr/sbin/nft delete table inet ssh-geo
+
+[Install]
+WantedBy=multi-user.target

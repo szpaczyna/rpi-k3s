@@ -24,6 +24,20 @@
     Skip_Long_Lines On
     DB /var/lib/fluent-bit/fail2ban.db
 {% endif %}
+{% if log_shipper_tail_ssh_geo %}
+[INPUT]
+    Name tail
+    Path /var/log/kern.log
+    Tag node.ssh_geo
+    Mem_Buf_Limit 5MB
+    Skip_Long_Lines On
+    DB /var/lib/fluent-bit/kern.db
+
+[FILTER]
+    Name grep
+    Match node.ssh_geo
+    Regex log ssh-geo-
+{% endif %}
 
 [FILTER]
     Name modify
@@ -46,6 +60,22 @@
     Name modify
     Match node.fail2ban
     Set log_file fail2ban.log
+{% endif %}
+{% if log_shipper_tail_ssh_geo %}
+[FILTER]
+    Name modify
+    Match node.ssh_geo
+    Set log_file ssh-geo.log
+{% endif %}
+{% if log_shipper_geoip_database %}
+[FILTER]
+    Name geoip2
+    Match node.*
+    Database {{ log_shipper_geoip_database }}
+    Lookup_Key src_ip
+    Record country_code src_ip %{country.iso_code}
+    Record country_name src_ip %{country.names.en}
+    Log_Level error
 {% endif %}
 
 [OUTPUT]

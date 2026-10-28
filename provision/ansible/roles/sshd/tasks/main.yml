@@ -10,3 +10,8 @@
   ansible.builtin.include_tasks: fail2ban.yml
   tags: ['sshd']
   when: sshd_fail2ban_enabled | bool
+
+- name: Country allowlist
+  ansible.builtin.include_tasks: geofilter.yml
+  tags: ['sshd']
+  when: sshd_geofilter_enabled | bool

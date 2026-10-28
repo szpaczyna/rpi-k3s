@@ -11,3 +11,11 @@
   ansible.builtin.service:
     name: fail2ban
     state: restarted
+
+# One nft transaction replaces the whole table, so existing sessions and the
+# allowlist never see a gap.
+- name: Reload ssh-geofilter
+  ansible.builtin.systemd:
+    name: ssh-geofilter.service
+    state: reloaded
+  ignore_errors: "{{ ansible_check_mode }}"
