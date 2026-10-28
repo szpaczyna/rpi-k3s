@@ -72,7 +72,7 @@ def main():
           f"{'updated' if any(changed) else 'unchanged'}")
 
     if args.reload and any(changed):
-        subprocess.run(["systemctl", "reload-or-restart", "ssh-geofilter.service"], check=True)
+        subprocess.run(["systemctl", "try-reload-or-restart", "ssh-geofilter.service"], check=True)
 
 
 if __name__ == "__main__":
