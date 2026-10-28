@@ -1,0 +1,26 @@
+cluster/helm/loki/README.md
+  s_fed3aea8062090::t_58813a7b842621 234-239
+provision/ansible/playbooks/base_setup.yml
+  s_fed3aea8062090::t_f7dc025f723c1a 24
+cluster/helm/loki/fluentbit-values.yaml
+  s_fed3aea8062090::t_a2ff5b2a8907d1 304
+  s_fed3aea8062090::t_6e26f0c1603ec7 281,375,455
+provision/ansible/README.md
+  s_fed3aea8062090::t_a146bbbbaf26ab 354-357,408-409
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7b7f3e1f7319929e2f06da18e7238920ae73f1d9",
+  "prompts": {},
+  "sessions": {
+    "s_fed3aea8062090": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e7e4926dfffe9schGyCLOf5t2Z",
+        "model": "unknown"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
