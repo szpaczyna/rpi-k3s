@@ -1,0 +1,19 @@
+provision/ansible/roles/log_shipper/files/extract_fields.lua
+  s_fed3aea8062090::t_7f5ff5663831c0 1-4,9-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "03c98832984bb46dd5a6ed2c9b19f61011ff6c98",
+  "prompts": {},
+  "sessions": {
+    "s_fed3aea8062090": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e7e4926dfffe9schGyCLOf5t2Z",
+        "model": "unknown"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
