@@ -29,7 +29,7 @@ banaction_allports = nftables[type=allports]
 [sshd]
 enabled = true
 port = ssh
-mode = normal
+mode = {{ sshd_fail2ban_mode }}
 
 # `auto`, stated explicitly to override the `systemd` that
 # jail.d/defaults-debian.conf sets for sshd. It resolves to pyinotify or
@@ -38,6 +38,19 @@ mode = normal
 # the journal after every reboot and take the recidive history with it.
 backend = auto
 logpath = /var/log/auth.log
+{% if sshd_fail2ban_slow_enabled %}
+
+[sshd-slow]
+enabled = true
+port = ssh
+# The jail name differs from the filter name, so the filter is spelled out.
+filter = sshd[mode={{ sshd_fail2ban_mode }}]
+findtime = {{ sshd_fail2ban_slow_findtime }}
+maxretry = {{ sshd_fail2ban_slow_maxretry }}
+bantime = {{ sshd_fail2ban_slow_bantime }}
+backend = auto
+logpath = /var/log/auth.log
+{% endif %}
 {% if sshd_fail2ban_recidive_enabled %}
 
 [recidive]

@@ -3,9 +3,12 @@ sshd_password_allowed_cidrs:
 sshd_fail2ban_ignoreip_host:
     - ENC[AES256_GCM,data:F1fRtNydsN2mD6k=,iv:tdfHpdyjPnzJS4OKfshOTA0BIoofol3zE4dx+rqLmP8=,tag:GFe7KkrfzPfaeKpApS+RNg==,type:str]
     - ENC[AES256_GCM,data:FsI/XpxEU47Ne7JD,iv:VgjiS+vQ/6zhBQO6WgpjcU41HB2/0cXFo2kdrFcJuHY=,tag:fSHUCacxvDX7yzvbtXLubw==,type:str]
+    - ENC[AES256_GCM,data:V3J35BWJ9hhrNMAsiKk=,iv:5NY4Cz2b1DvGG//IMhsW7vZ/hLXyy8ppfg21rQ0Qkf0=,tag:Eq473LKcPSpQBubgwlOZrg==,type:str]
+sshd_geofilter_maxmind_account_id: ENC[AES256_GCM,data:RMZkzkuumw==,iv:G1VaG5pj37RwLNI5ZZ77LDho93rxAC8yz6yCnXeUUPk=,tag:67kX+UGcwfYCxpJKEwBqgw==,type:str]
+sshd_geofilter_maxmind_license_key: ENC[AES256_GCM,data:fKjfKh+MhSAnn24NIJbcbVBR+SJMBD2pITnkSkhek386s95tZ3Cu/w==,iv:n3y0Pk+IDTF+wDrF6Zug63vsIdTrt7at0a6VuIeXOxs=,tag:Rcnz7fUs5DVOCKs4gWIl8g==,type:str]
 sops:
-    lastmodified: "2026-10-10T09:54:44Z"
-    mac: ENC[AES256_GCM,data:M3XUmbOcmO2VxgoFbtKSfvHFB7472/14bzFVXl6zL48qU2tzQkBrTQboVK9bN00yv8AqhcgoNv1BWPzeWGW+mxWLnoXfqaShKB888xTYzTlWIl6pF5tPm6nE6LcfEdq8WgPIpo5TGbTGhXRiEB9vhKt2wYP1jU2wFjqYJP4hu5w=,iv:TISnsciWQJvkddsQWs/U5V4ctWBVtCSlyK1txFi52Z0=,tag:Czke14zRVt8cYwSawKPh/A==,type:str]
+    lastmodified: "2026-10-28T11:36:39Z"
+    mac: ENC[AES256_GCM,data:9qz5zeaZ1tEQwL82JCxyQNrbZKmvEcNYC8Qjyd8LDDY3n3sjh7n+nubLevIzBvt5dYWBl+bRWesLMV43d/azc1EicsgsmNUVcb28AtVQhHHL3MD5rlKfCS0fezoQ87yIyDbR1ggzp/F6wFcarKCEjHXAX0weqQk3UJKhzwHBqxg=,iv:KktDwfQD444t0a+Vmlw6yM0MghuJh8YgPFrpuqaugRQ=,tag:lUll1CVGo5PjrF/97HbkjA==,type:str]
     pgp:
         - created_at: "2026-10-10T09:54:44Z"
           enc: |-

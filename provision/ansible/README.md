@@ -104,6 +104,9 @@ values that name this fleet's networks (see [`sshd`](#sshd)):
 home subnet, and the second also a public IP, so they are the same kind of secret
 as the inventory: network topology. They share one file on purpose, because a
 subnet change should be one edit rather than two lists that can drift apart.
+The MaxMind credentials for the country allowlist
+(`sshd_geofilter_maxmind_account_id`, `sshd_geofilter_maxmind_license_key`) live
+in the same file.
 
 The non-secret fail2ban switch stays in plaintext in
 `group_vars/pihole/sshd.yml`, so toggling it does not require the PGP key. A
@@ -309,7 +312,7 @@ Off by default (`sshd_fail2ban_enabled`), enabled only for `pihole` via
 hardcode Debian-style log paths. The role ships no Portage install path for
 fail2ban, because nothing enables it off `pihole`.
 
-Jails: `sshd` and `recidive` (3 bans in a day -> a week), with
+Jails: `sshd`, `sshd-slow` and `recidive` (3 bans in a day -> a week), with
 `bantime.increment` so repeat offenders get 2h, 4h, 8h instead of a flat 60m.
 `banaction = nftables` is stated in `jail.local` rather than inherited, because
 `jail.d/defaults-debian.conf` moves between fail2ban releases while the host
@@ -329,6 +332,59 @@ which is the check that catches it.
 `ignoreip` combines loopback from `defaults/main.yml` with the house LAN and the
 operator's public IP from the SOPS-encrypted `group_vars/all/sshd.enc.sops.yml`
 (see [SOPS secrets](#sops-secrets-in-group_vars)).
+
+The `sshd` jail runs in `aggressive` mode (`sshd_fail2ban_mode`). `normal` mode
+ignores `Connection closed by authenticating user ...` and
+`Disconnected from ... [preauth]`, which is most of what a scanner leaves
+behind: `fail2ban-regex` over blueberry's auth.log matched 1671 of 10198 lines in
+`normal` and 6615 of 10200 in `aggressive`. Aggressive mode also counts failed
+key offers, so each remote client you use needs an `ignoreip` entry.
+
+`sshd-slow` applies the same filter over a one-day window (10 failures, one-week
+ban). It targets scanners that try once an hour and never reach 5 failures in
+10 minutes. Both are switched by `sshd_fail2ban_slow_*` in `defaults/main.yml`.
+
+#### Country allowlist
+
+Gated by `sshd_geofilter_enabled`, set for `pihole` in
+`group_vars/pihole/sshd.yml`. The role installs an nftables table `inet ssh-geo`
+that hooks input at priority `filter - 2`, ahead of fail2ban's `f2b-table`
+(`filter - 1`). Only `tcp dport 22 ct state new` is matched, so established
+sessions keep working. A new connection passes when its source is in
+`ignoreip`, `sshd_password_allowed_cidrs`, `sshd_geofilter_allow_extra`, IPv6
+link-local, or a prefix of a country in `sshd_geofilter_countries` (default
+`PL`). Everything else is logged with the prefix `ssh-geo-drop` (rate limited by
+`sshd_geofilter_log_rate`) and dropped.
+
+A dropped connection never reaches sshd, so it is absent from auth.log. The
+kernel log line (`kern.log`) is the only record, and `log_shipper` forwards it
+to Loki as `log_file="ssh-geo.log"`. It carries the source address, the port and
+a country code, but no user name, because the login is read only after the
+handshake.
+
+Data comes from the GeoLite2 Country database. `geoipupdate` downloads it with
+the credentials from the SOPS file, and the package's timer keeps it current. A
+systemd drop-in on `geoipupdate.service` (`OnSuccess=`) starts
+`ssh-geofilter-refresh.service` after each update. That unit runs
+`/usr/local/sbin/ssh-geofilter-build`, which reads the database with
+`python3-maxminddb`, writes `allow4.nft` and `allow6.nft` to
+`/var/lib/ssh-geofilter`, and reloads the table only when their content changed.
+The builder exits without writing when fewer than 500 IPv4 prefixes match, so a
+wrong or truncated database keeps the previous allowlist. The table file
+`include`s both element files, so it fails to load rather than installing an
+empty allowlist.
+
+Switching it off:
+
+- `sshd_geofilter_enforce: false` and a re-run. The table stays, logs
+  `ssh-geo-would-drop` and counts, but drops nothing.
+- `systemctl disable --now ssh-geofilter` on the host removes the table at
+  once. Setting `sshd_geofilter_enabled: false` only stops the role from
+  managing it, so the running table stays.
+
+Do not enable `nftables.service` on this host. Ubuntu's `/etc/nftables.conf`
+starts with `flush ruleset`, which removes both `ssh-geo` and fail2ban's active
+bans.
 
 ### `fail2ban_exporter`
 
@@ -364,6 +420,13 @@ installs cleanly on resolute. Configuration is classic-mode Fluent Bit,
 templated from `templates/fluent-bit.conf.j2`, with `host` pinned through
 `/etc/hosts` (blueberry is its own resolver and does not resolve
 `loki.home` through its upstream chain).
+
+With the country allowlist enabled (`log_shipper_tail_ssh_geo`), the agent also
+tails `/var/log/kern.log`, keeps only lines containing `ssh-geo-`, and ships
+them as `log_file="ssh-geo.log"`. When `log_shipper_geoip_database` is set, a
+`geoip2` filter adds `country_code` and `country_name` to every record that has a
+`src_ip`. `extract_fields.lua` reads the address from the `SRC=` field of the
+nftables line.
 
 ### `dotfiles`
 

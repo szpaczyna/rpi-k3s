@@ -1,0 +1,9 @@
+{{ ansible_managed | comment }}
+[Unit]
+Description=Rebuild the SSH country allowlist from the GeoLite2 database
+Documentation=file:///etc/ssh-geofilter/ssh-geo.nft
+
+[Service]
+Type=oneshot
+Nice=10
+ExecStart=/usr/local/sbin/ssh-geofilter-build --database {{ sshd_geofilter_database }} --output-dir {{ sshd_geofilter_state_dir }} --countries {{ sshd_geofilter_countries | join(',') }} --reload

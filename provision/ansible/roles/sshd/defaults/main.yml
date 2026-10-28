@@ -37,9 +37,34 @@ sshd_fail2ban_bantime: 60m
 sshd_fail2ban_findtime: 10m
 sshd_fail2ban_maxretry: 5
 
+# `normal` ignores "Connection closed/Disconnected ... [preauth]", which is
+# most of what a scanner leaves behind, so those IPs were never banned.
+sshd_fail2ban_mode: aggressive
+
+# Second sshd jail with a day-long window, for scanners that stay under
+# maxretry per findtime.
+sshd_fail2ban_slow_enabled: true
+sshd_fail2ban_slow_bantime: 1w
+sshd_fail2ban_slow_findtime: 1d
+sshd_fail2ban_slow_maxretry: 10
+
 # Re-bans anyone the other jails already banned, so a scanner that returns
 # nightly still ends up locked out.
 sshd_fail2ban_recidive_enabled: true
 sshd_fail2ban_recidive_bantime: 1w
 sshd_fail2ban_recidive_findtime: 1d
 sshd_fail2ban_recidive_maxretry: 3
+
+# --- country allowlist for port 22 --------------------------------------------
+# nftables table `ssh-geo`, ahead of fail2ban's chain. Off by default; enabled
+# for `pihole` in group_vars/pihole/sshd.yml. The MaxMind credentials come from
+# the SOPS-encrypted group_vars/all/sshd.enc.sops.yml.
+sshd_geofilter_enabled: false
+# false installs the table in log-and-count mode: nothing is dropped.
+sshd_geofilter_enforce: true
+sshd_geofilter_countries: [PL]
+# Allowed from anywhere, on top of ignoreip and the password CIDRs.
+sshd_geofilter_allow_extra: []
+sshd_geofilter_log_rate: 20/second
+sshd_geofilter_state_dir: /var/lib/ssh-geofilter
+sshd_geofilter_database: /var/lib/GeoIP/GeoLite2-Country.mmdb

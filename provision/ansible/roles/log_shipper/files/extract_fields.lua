@@ -7,7 +7,9 @@ function extract(tag, timestamp, record)
     if log == nil then return 0, timestamp, record end
 
     -- auth.log: the client address, which is not always right after "from"
-    local ip = addr(string.match(log, "%s([%x%.:]+) port %d+"))
+    -- SRC= only on kern.log lines: in auth.log it can come from the user name.
+    local ip = (tag == "node.ssh_geo" and addr(string.match(log, "SRC=([%x%.:]+)")))
+        or addr(string.match(log, "%s([%x%.:]+) port %d+"))
         or addr(string.match(log, "connection from ([%x%.:]+)"))
         or addr(string.match(log, "from %[([%x%.:]+)%]"))
     if ip then record["src_ip"] = ip end

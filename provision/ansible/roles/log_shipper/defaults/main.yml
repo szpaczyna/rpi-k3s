@@ -23,3 +23,11 @@ log_shipper_ca_file: /usr/local/share/ca-certificates/mkcert-rootCA.crt
 # Only tail fail2ban.log where it actually exists (blueberry, and any host
 # where fail2ban has been enabled).
 log_shipper_tail_fail2ban: false
+
+# Connections dropped by the sshd country allowlist are logged by the kernel
+# with an `ssh-geo-` prefix; only those lines are picked out of kern.log.
+log_shipper_tail_ssh_geo: false
+
+# Path of a GeoLite2 Country database. Empty skips the lookup, because the
+# geoip2 filter refuses to start without its file.
+log_shipper_geoip_database: ""

@@ -1,0 +1,57 @@
+{{ ansible_managed | comment }}
+{% set trusted = (sshd_fail2ban_ignoreip_base + sshd_fail2ban_ignoreip_host + sshd_password_allowed_cidrs + sshd_geofilter_allow_extra) | unique | list %}
+{% set trusted4 = trusted | reject('search', ':') | list %}
+{% set trusted6 = (trusted | select('search', ':') | list) + ['fe80::/10'] %}
+table inet ssh-geo
+delete table inet ssh-geo
+
+table inet ssh-geo {
+    set trusted4 {
+        type ipv4_addr
+        flags interval
+        auto-merge
+{% if trusted4 %}
+        elements = { {{ trusted4 | join(', ') }} }
+{% endif %}
+    }
+
+    set trusted6 {
+        type ipv6_addr
+        flags interval
+        auto-merge
+        elements = { {{ trusted6 | join(', ') }} }
+    }
+
+    set allow4 {
+        type ipv4_addr
+        flags interval
+        auto-merge
+    }
+
+    set allow6 {
+        type ipv6_addr
+        flags interval
+        auto-merge
+    }
+
+    # Runs before fail2ban's chain (priority filter - 1), so a dropped
+    # connection does not reach sshd and leaves nothing in auth.log.
+    chain input {
+        type filter hook input priority filter - 2; policy accept;
+        tcp dport 22 ct state new ip saddr @trusted4 accept
+        tcp dport 22 ct state new ip6 saddr @trusted6 accept
+        tcp dport 22 ct state new ip saddr @allow4 accept
+        tcp dport 22 ct state new ip6 saddr @allow6 accept
+        tcp dport 22 ct state new limit rate {{ sshd_geofilter_log_rate }} log prefix "{{ 'ssh-geo-drop ' if sshd_geofilter_enforce else 'ssh-geo-would-drop ' }}"
+{% if sshd_geofilter_enforce %}
+        tcp dport 22 ct state new counter drop
+{% else %}
+        tcp dport 22 ct state new counter
+{% endif %}
+    }
+}
+
+# A missing file fails the whole load, so the table cannot be installed with
+# an empty allowlist.
+include "{{ sshd_geofilter_state_dir }}/allow4.nft"
+include "{{ sshd_geofilter_state_dir }}/allow6.nft"

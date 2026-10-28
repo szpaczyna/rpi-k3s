@@ -1,0 +1,5 @@
+---
+# Set here rather than in the role defaults: sshd_geofilter_enabled is only
+# known at play scope, and the database exists once the sshd role has run.
+log_shipper_tail_ssh_geo: true
+log_shipper_geoip_database: /var/lib/GeoIP/GeoLite2-Country.mmdb
