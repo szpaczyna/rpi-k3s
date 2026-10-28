@@ -1,0 +1,19 @@
+provision/ansible/roles/sshd/files/ssh-geofilter-build
+  s_1c775f8d52e28c::t_7f43eeb8b1c57f 75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dae39b106a2b2ed08a4e3aff3974a53aececd226",
+  "prompts": {},
+  "sessions": {
+    "s_1c775f8d52e28c": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_6811c27f-c6cb-4e02-93d8-1346f4fc3b46",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
