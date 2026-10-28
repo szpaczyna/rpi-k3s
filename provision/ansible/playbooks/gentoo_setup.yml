@@ -18,6 +18,3 @@
       ansible.builtin.include_role:
         name: dotfiles
       tags: ['dotfiles']
-    # Fluent Bit is not available in the main Portage tree and is not
-    # installed by this play. Install manually from the zGentoo overlay
-    # (see provision/ansible/README.md) if host log shipping is needed.

@@ -351,12 +351,10 @@ the router. Scraped by the `fail2ban` job in `cluster/helm/prometheus`.
 
 ### `log_shipper`
 
-Host agent that ships `/var/log/auth.log` (and `/var/log/fail2ban.log` where
-present) to Loki via `https://loki.home`. Runs on Debian-family hosts only;
-Gentoo is installed by hand (see below). On `k3s_cluster` hosts the
-collection is already done by the Fluent Bit DaemonSet in `cluster/helm/loki`
-(hostPath `/var/log`), so this role is wired into `pihole_setup.yml` and
-`standalone_setup.yml` only.
+Host agent that ships `/var/log/auth.log` and `/var/log/fail2ban.log` to
+Loki via `https://loki.home`. Runs on blueberry only (the `pihole` group), so
+it is wired into `pihole_setup.yml` and nowhere else. No other host ships
+logs to Loki.
 
 The role mirrors `fail2ban_exporter`: pinned version, sha256 per arch,
 `get_url` + `apt install ./file.deb`, idempotent re-run. The package comes
@@ -366,42 +364,6 @@ installs cleanly on resolute. Configuration is classic-mode Fluent Bit,
 templated from `templates/fluent-bit.conf.j2`, with `host` pinned through
 `/etc/hosts` (blueberry is its own resolver and does not resolve
 `loki.home` through its upstream chain).
-
-#### Gentoo (whitepi, redpi)
-
-Fluent Bit is not in the main Portage tree. The role does **not** install the
-package on Gentoo (it skips the apt/download tasks), but it still distributes
-the mkcert root CA, the `/etc/hosts` entry, the rendered config and manages
-the service. Install the binary yourself from the `zGentoo` overlay:
-
-```
-emerge app-eselect/eselect-repository
-eselect repository enable zGentoo
-emaint sync -r zGentoo
-```
-
-Required use flags (add to `/etc/portage/package.use/fluent-bit`):
-
-```
-app-admin/fluent-bit fluentbit_input_plugins_tail fluentbit_output_plugins_loki
-```
-
-Recommended: `fluentbit_filters_geoip2 luajit jemalloc`. Then:
-
-```
-emerge app-admin/fluent-bit
-```
-
-The package lands the binary at `/opt/fluent-bit/bin/fluent-bit` and a
-systemd unit at `fluent-bit.service`. Copy the rendered config from
-`templates/fluent-bit.conf.j2` (rendered for the host, with
-`log_shipper_tail_fail2ban` set to `false` unless fail2ban is enabled) to
-`/etc/fluent-bit/fluent-bit.conf`, create `/var/lib/fluent-bit` for the
-offset database, and install the mkcert root CA from
-`roles/log_shipper/files/mkcert-rootCA.pem` into
-`/usr/local/share/ca-certificates/mkcert-rootCA.crt` followed by
-`update-ca-certificates`. Add `10.0.0.50 loki.home` to `/etc/hosts` on
-blueberry-equivalent resolvers if needed.
 
 ### `dotfiles`
 
@@ -443,8 +405,8 @@ exists.
 |----------|-------|---------------|
 | `playbooks/base_setup.yml` | `k3s_cluster` | `system`, `sshd`, `dotfiles` |
 | `playbooks/pihole_setup.yml` | `pihole` | `system`, `sshd`, `fail2ban_exporter`, `log_shipper`, `dotfiles`, `pihole` |
-| `playbooks/gentoo_setup.yml` | `gentoo` | `gentoo_portage`, `sshd`, `log_shipper`, `dotfiles` |
-| `playbooks/standalone_setup.yml` | `standalone` | `sshd`, `log_shipper`, `dotfiles` |
+| `playbooks/gentoo_setup.yml` | `gentoo` | `gentoo_portage`, `sshd`, `dotfiles` |
+| `playbooks/standalone_setup.yml` | `standalone` | `sshd`, `dotfiles` |
 | `playbooks/apt.yaml` | `k3s_cluster` | `apt_upgrade` (opt-in, see above) |
 | `playbooks/kubernetes/k3s-install.yml` | `k3s_cluster` | `k3s` |
 | `playbooks/kubernetes/k3s-nuke.yml` | `k3s_cluster` | — (runs `k3s-killall.sh`/`k3s-uninstall.sh` directly) |
