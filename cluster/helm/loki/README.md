@@ -231,12 +231,12 @@ logs, since the external gateway serves only `*.shpaq.org`.
 
 ## Host logs (auth.log, fail2ban.log)
 
-k3s nodes collect their own host logs through the Fluent Bit DaemonSet
-(hostPath `/var/log`, inputs `node.auth` / `node.fail2ban`, output `job=host`).
-Off-cluster hosts (pihole, standalone, gentoo) run a host Fluent Bit agent
-installed by the `log_shipper` Ansible role in `provision/ansible/`. Both
-paths push to `https://loki.home/loki/api/v1/push` (push-only HTTPRoute,
-`PathPrefix /loki/api/v1/push`).
+Only blueberry (the `pihole` group) ships host logs. A host Fluent Bit agent,
+installed by the `log_shipper` Ansible role in `provision/ansible/`, pushes
+`/var/log/auth.log` and `/var/log/fail2ban.log` to
+`https://loki.home/loki/api/v1/push` (push-only HTTPRoute,
+`PathPrefix /loki/api/v1/push`). The cluster Fluent Bit DaemonSet collects
+container logs only.
 
 Labels are deliberately limited to `job`, `host`, `log_file` to keep stream
 cardinality low. `src_ip` (and `user`, `action` for fail2ban) are extracted
