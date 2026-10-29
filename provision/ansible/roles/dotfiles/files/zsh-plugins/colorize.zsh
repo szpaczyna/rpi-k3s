@@ -3,7 +3,7 @@ alias ccat="colorize_cat"
 alias cless="colorize_less"
 
 # '$0:A' gets the absolute path of this file
-ZSH_COLORIZE_TOOL=chroma
+ZSH_COLORIZE_TOOL=pygmentize
 ZSH_COLORIZE_PLUGIN_PATH=$0:A
 
 colorize_check_requirements() {
