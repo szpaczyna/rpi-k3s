@@ -2,7 +2,6 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "bump-patch-for-minor-pre-major": true,
       "include-v-in-tag": true,
       "changelog-sections": [
         { "type": "feat", "section": "Features" },
