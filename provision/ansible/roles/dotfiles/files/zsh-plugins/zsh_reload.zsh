@@ -1,5 +1,5 @@
 function src() {
-	local cache="~/.zsh/cache"
+	local cache="$HOME/.zsh/cache"
 	autoload -U compinit zrecompile
 	compinit -i -d "$cache/zcomp-$HOST"
 
