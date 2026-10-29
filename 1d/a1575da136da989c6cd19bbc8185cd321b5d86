@@ -1,0 +1,21 @@
+release-please-config.json
+  s_fed3aea8062090::t_38cc5b55a96ff8 5
+note.md
+  s_fed3aea8062090::t_cb4548a6fc1217 16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1da1575da136da989c6cd19bbc8185cd321b5d86",
+  "prompts": {},
+  "sessions": {
+    "s_fed3aea8062090": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e7e4926dfffe9schGyCLOf5t2Z",
+        "model": "unknown"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
