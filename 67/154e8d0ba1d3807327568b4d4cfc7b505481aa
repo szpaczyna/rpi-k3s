@@ -1,0 +1,14 @@
+provision/ansible/roles/dotfiles/files/zsh-plugins/zsh_reload.zsh
+  h_906bde6ad77cff 2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "67154e8d0ba1d3807327568b4d4cfc7b505481aa",
+  "prompts": {},
+  "humans": {
+    "h_906bde6ad77cff": {
+      "author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
