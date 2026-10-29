@@ -1,0 +1,14 @@
+provision/ansible/roles/dotfiles/files/zsh-plugins/colorize.zsh
+  h_906bde6ad77cff 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bc8fcd8f97f4e6d341ade6ae1039a1c8cdf09eab",
+  "prompts": {},
+  "humans": {
+    "h_906bde6ad77cff": {
+      "author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
