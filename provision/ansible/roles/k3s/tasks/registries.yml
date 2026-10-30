@@ -12,4 +12,5 @@
     mode: "0600"
     owner: root
     group: root
+  diff: false
   notify: Restart k3s

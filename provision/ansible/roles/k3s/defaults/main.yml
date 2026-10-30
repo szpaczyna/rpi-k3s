@@ -14,9 +14,13 @@ k3s_flannel_direct_routing: true
 # Rendered into /etc/rancher/k3s/config.yaml. Keep the quoted values quoted:
 # YAML would otherwise parse 600 as an integer and pass the wrong mode to k3s.
 #
-# flannel-iface and node-ip are resolved per host in tasks/main.yml. The charts
-# under cluster/helm select on kubernetes.io/role, which k3s does not create on
-# its own, so it is set here through kubelet-arg.
+# flannel-iface and node-ip are resolved per host in tasks/main.yml.
+#
+# The charts under cluster/helm select on kubernetes.io/role. The kubelet
+# refuses that label in --node-labels (kubernetes.io is a restricted prefix),
+# so server.yml and agent.yml set it through the API instead.
+k3s_node_role_label: kubernetes.io/role
+
 k3s_server_config:
   data-dir: "{{ k3s_data_dir }}"
   log: "{{ k3s_server_log_file }}"
@@ -25,8 +29,6 @@ k3s_server_config:
   flannel-iface: "{{ k3s_flannel_iface }}"
   flannel-conf: "{{ k3s_flannel_conf }}"
   write-kubeconfig-mode: "{{ k3s_write_kubeconfig_mode }}"
-  kubelet-arg:
-    - "node-labels=kubernetes.io/role=master"
   disable:
     - traefik
     - servicelb
@@ -36,5 +38,3 @@ k3s_agent_config:
   data-dir: "{{ k3s_data_dir }}"
   log: "{{ k3s_agent_log_file }}"
   flannel-conf: "{{ k3s_flannel_conf }}"
-  kubelet-arg:
-    - "node-labels=kubernetes.io/role=worker"

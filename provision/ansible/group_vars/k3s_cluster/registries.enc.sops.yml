@@ -1,8 +1,8 @@
 k3s_registries_docker_io_username: ENC[AES256_GCM,data:uETfDJ5Ghhc=,iv:gqr0HPedodjYf/fPslTzVzfQ5Vo7WYfzkjQ+eRXQfWk=,tag:MroFHTvMRPW0mOWv+lnXDw==,type:str]
-k3s_registries_docker_io_password: ENC[AES256_GCM,data:qXXw719uZleuo2Z7eboxLZts3XDIPOeOfWZoZz9FPQzb+jGL,iv:ihEQJvjMKPvoPr1IzSaB1cvvzMJOccEXBMFT+HqRJHA=,tag:hPZgSclXK00MY8cJVg7iMw==,type:str]
+k3s_registries_docker_io_password: ENC[AES256_GCM,data:baOSMeu5Kz/bF8vfVMlVc9Cbr16uLWyx3nb2gMOvflNBUfiG,iv:Fa3VJRLsaDXXnPbRETzvUcSJ3bsp0WUrMESKMcUuGIY=,tag:xWJpB+9Zb3ZTbea7CxmeMg==,type:str]
 sops:
-    lastmodified: "2026-10-07T09:26:30Z"
-    mac: ENC[AES256_GCM,data:KGMvN6ONSpUy48j+om6lo1jwIausXZdp5TGgPBvm033iYtoAD2zRj4HBdY4SaZLtJU168CDxB/OFUt61PPNIvXkuOzAhnoz2sjr9FIXsHGnuNtoCBEX1vkPfrd/j8PCepQettbwAtu2TUzJhcJ/Tl7zsqffDZCFZEZ+J6cYk8v8=,iv:yNHUiL2pZey8nJCba24Yk1S38zXkXMV4+8Jdhlyf5K8=,tag:Wa0AOQSPH/6DuxEz+YYEig==,type:str]
+    lastmodified: "2026-10-30T12:14:27Z"
+    mac: ENC[AES256_GCM,data:Y1sRDjoKxx6f9K/9KzcHdhwvYO6urZRsxIqi56Yu6iI86KSdNPYNddDwq7pV1WaxhHzlc083qZeISjaDh/qApGT4GPpSB32zC9Y260RObUWpR8f0qY9P5Mnc1gou7hNzbdSpYiO/1YiJjQNN86f0CFROGYWbL5K5FQLgs3aUu6w=,iv:amkOSscJdU6Uw+TsyWif93qFpzvhfHPaEcCsyd3+kkE=,tag:YC4Xkis1ohKASNpyR2/PvA==,type:str]
     pgp:
         - created_at: "2026-10-07T09:13:02Z"
           enc: |-

@@ -1,6 +1,3 @@
 ---
 
 ansible_user: root
-
-### kubernetes
-k3s_registration_address: 10.0.0.9

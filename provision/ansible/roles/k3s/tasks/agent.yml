@@ -1,16 +1,40 @@
 ---
+# Read straight from the master, so `--limit <worker>` works without the master
+# play having run first.
+- name: Read k3s join token from the master
+  ansible.builtin.slurp:
+    src: "{{ k3s_data_dir }}/server/token"
+  delegate_to: "{{ groups['k3s_master'][0] }}"
+  run_once: true
+  register: k3s_agent_token_slurp
+  no_log: true
+
+# A new agent joins at the master's running version, not k3s_version: the
+# system-upgrade-controller plan moves the cluster on without touching the role.
+- name: Read k3s version on the master
+  ansible.builtin.command: /usr/local/bin/k3s --version
+  delegate_to: "{{ groups['k3s_master'][0] }}"
+  run_once: true
+  register: k3s_agent_master_version
+  changed_when: false
+  check_mode: false
+
+# Skip the start: config.yaml and net-conf.json have to exist before the agent
+# first runs, otherwise it joins with the installer's flannel defaults.
 - name: Install k3s agent # noqa: command-instead-of-module
   ansible.builtin.shell: >
     set -o pipefail &&
     curl -sfL https://get.k3s.io |
-    INSTALL_K3S_VERSION={{ k3s_version }}
+    INSTALL_K3S_VERSION={{ k3s_agent_master_version.stdout.split()[2] }}
+    INSTALL_K3S_SKIP_START=true
     K3S_URL="https://{{ hostvars[groups['k3s_master'][0]].inventory_hostname }}:6443"
-    K3S_TOKEN="{{ hostvars[groups['k3s_master'][0]].k3s_token }}"
+    K3S_TOKEN="{{ k3s_agent_token_slurp.content | b64decode | trim }}"
     INSTALL_K3S_EXEC="agent"
     sh -s -
   args:
     executable: /bin/bash
     creates: /usr/local/bin/k3s
+  no_log: true
 
 # Must land before any restart: k3s rewrites its own net-conf.json on startup,
 # so a config.yaml pointing here is useless unless this file is already in place.
@@ -49,6 +73,14 @@
 - name: Strip agent flags from ExecStart
   ansible.builtin.replace:
     path: /etc/systemd/system/k3s-agent.service
-    regexp: '(?s)^ExecStart=.*$'
+    regexp: '^ExecStart=(?:.*\\\n)*.*$'
     replace: 'ExecStart=/usr/local/bin/k3s agent'
+  register: k3s_agent_unit
   notify: Restart k3s
+
+- name: Start k3s agent
+  ansible.builtin.systemd:
+    name: k3s-agent
+    state: started
+    enabled: true
+    daemon_reload: "{{ k3s_agent_unit.changed }}"

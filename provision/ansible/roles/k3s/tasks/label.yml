@@ -1,0 +1,23 @@
+---
+# Runs after the k3s service is up: the Node object has to exist first.
+- name: Read node role label
+  ansible.builtin.command: >-
+    k3s kubectl get node {{ inventory_hostname }}
+    -o 'jsonpath={.metadata.labels.kubernetes\.io/role}'
+  delegate_to: "{{ groups['k3s_master'][0] }}"
+  register: k3s_label_current
+  changed_when: false
+  check_mode: false
+  retries: 12
+  delay: 10
+  until: k3s_label_current.rc == 0
+
+- name: Set node role label
+  ansible.builtin.command: >-
+    k3s kubectl label node {{ inventory_hostname }}
+    {{ k3s_node_role_label }}={{ k3s_label_role }} --overwrite
+  delegate_to: "{{ groups['k3s_master'][0] }}"
+  vars:
+    k3s_label_role: "{{ 'master' if 'k3s_master' in group_names else 'worker' }}"
+  when: k3s_label_current.stdout != k3s_label_role
+  changed_when: true

@@ -21,6 +21,11 @@
     - name: Restart k3s before agents join
       ansible.builtin.meta: flush_handlers
 
+    - name: Label the node
+      ansible.builtin.include_role:
+        name: k3s
+        tasks_from: label.yml
+
     - name: Copy kubeconfig locally to /tmp
       ansible.builtin.fetch:
         src: "/etc/rancher/k3s/k3s.yaml"
@@ -62,9 +67,11 @@
         remote_src: true
       when: k3s_local_kubeconfig.stat.exists
 
+    # fetch is skipped in check mode, so there is nothing to copy.
     - name: Copy processed kubeconfig to local ~/.kube/config-k3s
       delegate_to: localhost
       become: false
+      when: not ansible_check_mode
       ansible.builtin.copy:
         src: "/tmp/kubeconfig"
         dest: "{{ lookup('env', 'HOME') }}/.kube/config-k3s"
@@ -91,3 +98,8 @@
 
     - name: Restart k3s agents
       ansible.builtin.meta: flush_handlers
+
+    - name: Label the node
+      ansible.builtin.include_role:
+        name: k3s
+        tasks_from: label.yml
