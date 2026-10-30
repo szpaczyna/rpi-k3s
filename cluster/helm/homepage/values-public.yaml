@@ -83,21 +83,21 @@ config:
       opacity: 50
     cardBlur: md
     layout:
-      Servers:
-        style: row
-        columns: 3
-      Media:
-        style: row
-        columns: 3
       Network:
+        style: row
+        columns: 4
+      Monitoring:
         style: row
         columns: 4
       Dev:
         style: row
         columns: 2
-      Monitoring:
+      Media:
         style: row
-        columns: 4
+        columns: 3
+      Servers:
+        style: row
+        columns: 3
 
   widgets.yaml: |
     - search:
@@ -116,6 +116,232 @@ config:
   bookmarks.yaml: ""
 
   services.yaml: |
+    - Network:
+        - Pi-hole:
+            icon: pi-hole.png
+            href: https://pihole.home/admin/
+            widget:
+              type: pihole
+              url: http://pihole.apps.svc.cluster.local
+              version: 6
+              key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
+        - UniFi:
+            icon: unifi.png
+            href: https://unifi.home
+            widget:
+              type: unifi
+              url: https://10.0.0.1
+              username: "{{HOMEPAGE_VAR_UNIFI_USERNAME}}"
+              password: "{{HOMEPAGE_VAR_UNIFI_PASSWORD}}"
+        - Traefik internal:
+            icon: traefik.png
+            href: http://traefik-internal.home:8080/dashboard/
+            namespace: traefik
+            app: traefik
+            podSelector: app.kubernetes.io/instance=traefik-internal
+            widget:
+              type: traefik
+              url: http://traefik-internal.traefik.svc.cluster.local:8080
+        - Traefik external:
+            icon: traefik.png
+            href: http://traefik.home:8080/dashboard/
+            namespace: traefik
+            app: traefik
+            podSelector: app.kubernetes.io/instance=traefik-external
+            widget:
+              type: traefik
+              url: http://traefik-external.traefik.svc.cluster.local:8080
+
+    - Monitoring:
+        - Grafana:
+            icon: grafana.png
+            href: https://grafana.home
+            namespace: monitoring
+            app: grafana
+        - Prometheus:
+            icon: prometheus.png
+            href: https://prometheus.home
+            namespace: monitoring
+            app: prometheus
+            podSelector: app.kubernetes.io/instance=prometheus,app.kubernetes.io/component=server
+        - Logs (Loki):
+            icon: loki.png
+            href: "https://grafana.home/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22Loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%7D%2C%22expr%22%3A%22%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-1h%22%2C%22to%22%3A%22now%22%7D%7D%7D"
+            namespace: logging
+            app: loki
+        - Longhorn:
+            icon: longhorn.png
+            href: https://longhorn.home
+            namespace: longhorn-system
+            app: longhorn
+            podSelector: app=longhorn-ui
+
+    - Dev:
+        - GitHub:
+            icon: github.png
+            href: https://github.com/szpaczyna
+            widgets:
+              - type: customapi
+                url: https://api.github.com/user
+                refreshInterval: 120000
+                headers:
+                  Authorization: "Bearer {{HOMEPAGE_VAR_GITHUB_TOKEN}}"
+                  User-Agent: homepage
+                mappings:
+                  - field: public_repos
+                    label: Public
+                  - field: total_private_repos
+                    label: Private
+                  - field: followers
+                    label: Followers
+              - type: customapi
+                url: "https://api.github.com/search/issues?q=is%3Apr+is%3Aopen+user%3Aszpaczyna&sort=updated&per_page=50"
+                display: dynamic-list
+                refreshInterval: 120000
+                headers:
+                  Authorization: "Bearer {{HOMEPAGE_VAR_GITHUB_TOKEN}}"
+                  User-Agent: homepage
+                mappings:
+                  items: items
+                  name: title
+                  label: number
+                  prefix: "#"
+                  target: "{html_url}"
+        - Docker Hub:
+            icon: docker.png
+            href: https://hub.docker.com/u/szpaczyn
+            widgets:
+              - type: customapi
+                url: https://hub.docker.com/v2/repositories/szpaczyn/?page_size=1
+                refreshInterval: 600000
+                mappings:
+                  - field: count
+                    label: Images
+              - type: customapi
+                url: "https://hub.docker.com/v2/repositories/szpaczyn/?page_size=40&ordering=pull_count"
+                display: dynamic-list
+                refreshInterval: 600000
+                mappings:
+                  items: results
+                  name: name
+                  label: pull_count
+                  format: number
+                  target: "https://hub.docker.com/r/szpaczyn/{name}"
+        - Gitea:
+            icon: gitea.png
+            href: https://gitea.shpaq.org
+            namespace: apps
+            app: gitea
+            widget:
+              type: gitea
+              url: http://gitea-http.apps.svc.cluster.local:3000
+              key: "{{HOMEPAGE_VAR_GITEA_TOKEN}}"
+
+    - Media:
+        - Sonarr:
+            icon: sonarr.png
+            href: https://media.home/sonarr/
+            namespace: media
+            app: sonarr
+            widget:
+              type: sonarr
+              url: http://sonarr.media.svc.cluster.local:8989/sonarr
+              key: "{{HOMEPAGE_VAR_SONARR_KEY}}"
+        - Radarr:
+            icon: radarr.png
+            href: https://media.home/radarr/
+            namespace: media
+            app: radarr
+            widget:
+              type: radarr
+              url: http://radarr.media.svc.cluster.local:7878/radarr
+              key: "{{HOMEPAGE_VAR_RADARR_KEY}}"
+        - Lidarr:
+            icon: lidarr.png
+            href: https://media.home/lidarr/
+            namespace: media
+            app: lidarr
+            widget:
+              type: lidarr
+              url: http://lidarr.media.svc.cluster.local:8686/lidarr
+              key: "{{HOMEPAGE_VAR_LIDARR_KEY}}"
+        - Readarr:
+            icon: readarr.png
+            href: https://media.home/readarr/
+            namespace: media
+            app: readarr
+            widget:
+              type: readarr
+              url: http://readarr.media.svc.cluster.local:8787/readarr
+              key: "{{HOMEPAGE_VAR_READARR_KEY}}"
+        - Prowlarr:
+            icon: prowlarr.png
+            href: https://media.home/prowlarr/
+            namespace: media
+            app: prowlarr
+            widget:
+              type: prowlarr
+              url: http://prowlarr.media.svc.cluster.local:9696/prowlarr
+              key: "{{HOMEPAGE_VAR_PROWLARR_KEY}}"
+        - Bazarr:
+            icon: bazarr.png
+            href: https://media.home/bazarr/
+            namespace: media
+            app: bazarr
+            widget:
+              type: bazarr
+              url: http://bazarr.media.svc.cluster.local:6767/bazarr
+              key: "{{HOMEPAGE_VAR_BAZARR_KEY}}"
+        - Transmission:
+            icon: transmission.png
+            href: https://media.home/transmission
+            namespace: media
+            app: transmission
+            widget:
+              type: transmission
+              url: http://transmission-http.media.svc.cluster.local:9091
+              rpcUrl: /transmission/
+        - Booklore:
+            icon: booklore.png
+            href: https://booklore.shpaq.org
+            namespace: media
+            app: booklore
+        - Kodi:
+            icon: kodi.png
+            href: http://greypi.home:8080
+            widget:
+              type: customapi
+              url: http://10.0.0.20:8080/jsonrpc
+              method: POST
+              username: "{{HOMEPAGE_VAR_KODI_USERNAME}}"
+              password: "{{HOMEPAGE_VAR_KODI_PASSWORD}}"
+              headers:
+                Content-Type: application/json
+              requestBody:
+                jsonrpc: "2.0"
+                id: 1
+                method: XBMC.GetInfoLabels
+                params:
+                  labels: [Player.Title, VideoPlayer.TVShowTitle, Player.Time, Player.Duration]
+              mappings:
+                - field: {result: Player.Title}
+                  label: Playing
+                  remap:
+                    - value: ""
+                      to: "-"
+                - field: {result: VideoPlayer.TVShowTitle}
+                  label: Show
+                  remap:
+                    - value: ""
+                      to: "-"
+                - field: {result: Player.Time}
+                  label: Time
+                - field: {result: Player.Duration}
+                  label: Duration
+                  remap:
+                    - value: ""
+                      to: "-"
+
     - Servers:
         - rpi-k3s:
             icon: kubernetes.png
@@ -395,232 +621,6 @@ config:
                   remap:
                     - value: "-1"
                       to: "-"
-
-    - Media:
-        - Sonarr:
-            icon: sonarr.png
-            href: https://media.home/sonarr/
-            namespace: media
-            app: sonarr
-            widget:
-              type: sonarr
-              url: http://sonarr.media.svc.cluster.local:8989/sonarr
-              key: "{{HOMEPAGE_VAR_SONARR_KEY}}"
-        - Radarr:
-            icon: radarr.png
-            href: https://media.home/radarr/
-            namespace: media
-            app: radarr
-            widget:
-              type: radarr
-              url: http://radarr.media.svc.cluster.local:7878/radarr
-              key: "{{HOMEPAGE_VAR_RADARR_KEY}}"
-        - Lidarr:
-            icon: lidarr.png
-            href: https://media.home/lidarr/
-            namespace: media
-            app: lidarr
-            widget:
-              type: lidarr
-              url: http://lidarr.media.svc.cluster.local:8686/lidarr
-              key: "{{HOMEPAGE_VAR_LIDARR_KEY}}"
-        - Readarr:
-            icon: readarr.png
-            href: https://media.home/readarr/
-            namespace: media
-            app: readarr
-            widget:
-              type: readarr
-              url: http://readarr.media.svc.cluster.local:8787/readarr
-              key: "{{HOMEPAGE_VAR_READARR_KEY}}"
-        - Prowlarr:
-            icon: prowlarr.png
-            href: https://media.home/prowlarr/
-            namespace: media
-            app: prowlarr
-            widget:
-              type: prowlarr
-              url: http://prowlarr.media.svc.cluster.local:9696/prowlarr
-              key: "{{HOMEPAGE_VAR_PROWLARR_KEY}}"
-        - Bazarr:
-            icon: bazarr.png
-            href: https://media.home/bazarr/
-            namespace: media
-            app: bazarr
-            widget:
-              type: bazarr
-              url: http://bazarr.media.svc.cluster.local:6767/bazarr
-              key: "{{HOMEPAGE_VAR_BAZARR_KEY}}"
-        - Transmission:
-            icon: transmission.png
-            href: https://media.home/transmission
-            namespace: media
-            app: transmission
-            widget:
-              type: transmission
-              url: http://transmission-http.media.svc.cluster.local:9091
-              rpcUrl: /transmission/
-        - Booklore:
-            icon: booklore.png
-            href: https://booklore.shpaq.org
-            namespace: media
-            app: booklore
-        - Kodi:
-            icon: kodi.png
-            href: http://greypi.home:8080
-            widget:
-              type: customapi
-              url: http://10.0.0.20:8080/jsonrpc
-              method: POST
-              username: "{{HOMEPAGE_VAR_KODI_USERNAME}}"
-              password: "{{HOMEPAGE_VAR_KODI_PASSWORD}}"
-              headers:
-                Content-Type: application/json
-              requestBody:
-                jsonrpc: "2.0"
-                id: 1
-                method: XBMC.GetInfoLabels
-                params:
-                  labels: [Player.Title, VideoPlayer.TVShowTitle, Player.Time, Player.Duration]
-              mappings:
-                - field: {result: Player.Title}
-                  label: Playing
-                  remap:
-                    - value: ""
-                      to: "-"
-                - field: {result: VideoPlayer.TVShowTitle}
-                  label: Show
-                  remap:
-                    - value: ""
-                      to: "-"
-                - field: {result: Player.Time}
-                  label: Time
-                - field: {result: Player.Duration}
-                  label: Duration
-                  remap:
-                    - value: ""
-                      to: "-"
-
-    - Network:
-        - Pi-hole:
-            icon: pi-hole.png
-            href: https://pihole.home/admin/
-            widget:
-              type: pihole
-              url: http://pihole.apps.svc.cluster.local
-              version: 6
-              key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
-        - UniFi:
-            icon: unifi.png
-            href: https://unifi.home
-            widget:
-              type: unifi
-              url: https://10.0.0.1
-              username: "{{HOMEPAGE_VAR_UNIFI_USERNAME}}"
-              password: "{{HOMEPAGE_VAR_UNIFI_PASSWORD}}"
-        - Traefik internal:
-            icon: traefik.png
-            href: http://traefik-internal.home:8080/dashboard/
-            namespace: traefik
-            app: traefik
-            podSelector: app.kubernetes.io/instance=traefik-internal
-            widget:
-              type: traefik
-              url: http://traefik-internal.traefik.svc.cluster.local:8080
-        - Traefik external:
-            icon: traefik.png
-            href: http://traefik.home:8080/dashboard/
-            namespace: traefik
-            app: traefik
-            podSelector: app.kubernetes.io/instance=traefik-external
-            widget:
-              type: traefik
-              url: http://traefik-external.traefik.svc.cluster.local:8080
-
-    - Dev:
-        - GitHub:
-            icon: github.png
-            href: https://github.com/szpaczyna
-            widgets:
-              - type: customapi
-                url: https://api.github.com/user
-                refreshInterval: 120000
-                headers:
-                  Authorization: "Bearer {{HOMEPAGE_VAR_GITHUB_TOKEN}}"
-                  User-Agent: homepage
-                mappings:
-                  - field: public_repos
-                    label: Public
-                  - field: total_private_repos
-                    label: Private
-                  - field: followers
-                    label: Followers
-              - type: customapi
-                url: "https://api.github.com/search/issues?q=is%3Apr+is%3Aopen+user%3Aszpaczyna&sort=updated&per_page=50"
-                display: dynamic-list
-                refreshInterval: 120000
-                headers:
-                  Authorization: "Bearer {{HOMEPAGE_VAR_GITHUB_TOKEN}}"
-                  User-Agent: homepage
-                mappings:
-                  items: items
-                  name: title
-                  label: number
-                  prefix: "#"
-                  target: "{html_url}"
-        - Docker Hub:
-            icon: docker.png
-            href: https://hub.docker.com/u/szpaczyn
-            widgets:
-              - type: customapi
-                url: https://hub.docker.com/v2/repositories/szpaczyn/?page_size=1
-                refreshInterval: 600000
-                mappings:
-                  - field: count
-                    label: Images
-              - type: customapi
-                url: "https://hub.docker.com/v2/repositories/szpaczyn/?page_size=40&ordering=pull_count"
-                display: dynamic-list
-                refreshInterval: 600000
-                mappings:
-                  items: results
-                  name: name
-                  label: pull_count
-                  format: number
-                  target: "https://hub.docker.com/r/szpaczyn/{name}"
-        - Gitea:
-            icon: gitea.png
-            href: https://gitea.shpaq.org
-            namespace: apps
-            app: gitea
-            widget:
-              type: gitea
-              url: http://gitea-http.apps.svc.cluster.local:3000
-              key: "{{HOMEPAGE_VAR_GITEA_TOKEN}}"
-
-    - Monitoring:
-        - Grafana:
-            icon: grafana.png
-            href: https://grafana.home
-            namespace: monitoring
-            app: grafana
-        - Prometheus:
-            icon: prometheus.png
-            href: https://prometheus.home
-            namespace: monitoring
-            app: prometheus
-            podSelector: app.kubernetes.io/instance=prometheus,app.kubernetes.io/component=server
-        - Logs (Loki):
-            icon: loki.png
-            href: "https://grafana.home/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22Loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%7D%2C%22expr%22%3A%22%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-1h%22%2C%22to%22%3A%22now%22%7D%7D%7D"
-            namespace: logging
-            app: loki
-        - Longhorn:
-            icon: longhorn.png
-            href: https://longhorn.home
-            namespace: longhorn-system
-            app: longhorn
-            podSelector: app=longhorn-ui
 
   # Mounted empty so homepage does not fall back to copying skeleton files.
   docker.yaml: ""
