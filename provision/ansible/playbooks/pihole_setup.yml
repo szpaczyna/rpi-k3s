@@ -35,4 +35,7 @@
     - name: Pi-hole
       ansible.builtin.include_role:
         name: pihole
+        # Tags on a dynamic include select only the include itself; apply passes them to the role's tasks.
+        apply:
+          tags: ['pihole']
       tags: ['pihole']
