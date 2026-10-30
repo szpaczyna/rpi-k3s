@@ -47,7 +47,7 @@
 - name: Strip server flags from ExecStart
   ansible.builtin.replace:
     path: /etc/systemd/system/k3s.service
-    regexp: '(?s)^ExecStart=.*$'
+    regexp: '^ExecStart=(?:.*\\\n)*.*$'
     replace: 'ExecStart=/usr/local/bin/k3s server'
   notify: Restart k3s
 

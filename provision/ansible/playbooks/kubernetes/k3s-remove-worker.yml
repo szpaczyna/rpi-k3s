@@ -1,0 +1,122 @@
+---
+# Removes one k3s worker from the cluster:
+#
+#   ansible-playbook playbooks/kubernetes/k3s-remove-worker.yml --limit <worker>
+#
+# kubectl runs on the master through `k3s kubectl`, so no local kubeconfig is
+# needed. The inventory and {{ k3s_data_dir }} on the worker stay as they are.
+- name: Remove a k3s worker
+  hosts: k3s_worker
+  become: true
+  gather_facts: false
+  any_errors_fatal: true
+  vars:
+    k3s_master: "{{ groups['k3s_master'][0] }}"
+    # worker-00 exports the NFS shares every other node mounts.
+    k3s_remove_protected_hosts: ['rpi-k3s-worker-00']
+    k3s_remove_ignore_longhorn: false
+  tasks:
+    - name: Load k3s role defaults
+      ansible.builtin.include_vars: "{{ playbook_dir }}/../../roles/k3s/defaults/main.yml"
+
+    - name: Check the target
+      ansible.builtin.assert:
+        that:
+          - ansible_play_hosts_all | length == 1
+          - inventory_hostname not in groups['k3s_master']
+          - inventory_hostname not in k3s_remove_protected_hosts
+        fail_msg: >-
+          Target exactly one worker with --limit. Protected hosts
+          ({{ k3s_remove_protected_hosts | join(', ') }}) need
+          -e '{"k3s_remove_protected_hosts": []}'.
+
+    - name: Look up the node
+      ansible.builtin.command: k3s kubectl get node {{ inventory_hostname }} -o name
+      delegate_to: "{{ k3s_master }}"
+      register: k3s_remove_node
+      changed_when: false
+      failed_when: false
+      check_mode: false
+
+    - name: List Longhorn replicas on the node
+      ansible.builtin.command: >-
+        k3s kubectl -n longhorn-system get replicas.longhorn.io
+        -l longhornnode={{ inventory_hostname }} -o name
+      delegate_to: "{{ k3s_master }}"
+      register: k3s_remove_replicas
+      changed_when: false
+      check_mode: false
+
+    # Eviction cannot finish while the remaining storage nodes are fewer than
+    # the replica count, so it is left to the operator instead of waited on.
+    - name: Stop while Longhorn still has replicas on the node
+      ansible.builtin.assert:
+        that: k3s_remove_replicas.stdout_lines | length == 0
+        fail_msg: >-
+          {{ k3s_remove_replicas.stdout_lines | length }} Longhorn replicas are
+          still on {{ inventory_hostname }}. Set the node's eviction to
+          requested in the Longhorn UI and wait until they move, or lower the
+          volumes' replica count. Override with -e k3s_remove_ignore_longhorn=true.
+      when: not k3s_remove_ignore_longhorn | bool
+
+    - name: Confirm removal
+      ansible.builtin.pause:
+        prompt: "Type {{ inventory_hostname }} to drain and uninstall it"
+      register: k3s_remove_confirm_input
+      when: k3s_remove_confirm is not defined
+
+    - name: Check the confirmation
+      ansible.builtin.assert:
+        that: >-
+          (k3s_remove_confirm | default(k3s_remove_confirm_input.user_input | default(''))) == inventory_hostname
+        fail_msg: Confirmation did not match {{ inventory_hostname }}, nothing was changed.
+
+    - name: Drain the node
+      ansible.builtin.command: >-
+        k3s kubectl drain {{ inventory_hostname }}
+        --ignore-daemonsets --delete-emptydir-data --timeout=300s
+      delegate_to: "{{ k3s_master }}"
+      changed_when: true
+      when: k3s_remove_node.rc == 0
+
+    # The uninstall script only finds containerd shims under K3S_DATA_DIR, but
+    # handing it the custom data dir would also wipe the Longhorn data there.
+    - name: Stop k3s and its containers
+      ansible.builtin.command: /usr/local/bin/k3s-killall.sh
+      environment:
+        K3S_DATA_DIR: "{{ k3s_data_dir }}"
+      args:
+        removes: /usr/local/bin/k3s-killall.sh
+
+    - name: Uninstall k3s agent
+      ansible.builtin.command:
+        cmd: /usr/local/bin/k3s-agent-uninstall.sh
+        removes: /usr/local/bin/k3s-agent-uninstall.sh
+
+    # Deleted after the uninstall, otherwise the kubelet registers the node again.
+    - name: Delete the node from the cluster
+      ansible.builtin.command: k3s kubectl delete node {{ inventory_hostname }} --ignore-not-found
+      delegate_to: "{{ k3s_master }}"
+      changed_when: true
+
+    - name: Delete the Longhorn node
+      ansible.builtin.command: >-
+        k3s kubectl -n longhorn-system delete nodes.longhorn.io
+        {{ inventory_hostname }} --ignore-not-found
+      delegate_to: "{{ k3s_master }}"
+      changed_when: true
+
+    # A leftover password secret blocks the same hostname from joining again.
+    - name: Delete the node password secret
+      ansible.builtin.command: >-
+        k3s kubectl -n kube-system delete secret
+        {{ inventory_hostname }}.node-password.k3s --ignore-not-found
+      delegate_to: "{{ k3s_master }}"
+      changed_when: true
+
+    - name: Next steps
+      ansible.builtin.debug:
+        msg: >-
+          {{ inventory_hostname }} is out of the cluster. Remove it from
+          inventory.enc.yaml, then re-run base_setup.yml and pihole_setup.yml
+          with --tags hosts. {{ k3s_data_dir }} on the host was left in place.

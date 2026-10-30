@@ -120,7 +120,7 @@ sops group_vars/all/sshd.enc.sops.yml
 
 | Role | Applies to | What it does |
 |------|------------|---------------|
-| `system` | `k3s_cluster`, `pihole` | Base OS config: kernel modules (`br_netfilter`/`overlay`/`rbd` for k3s), smartd, inotify limits, locale/timezone, network sysctl for the container runtime, apt packages (`system_apt_install_packages` in `defaults/main.yml`), unattended-upgrades, chrony, a static `/etc/hosts` (template `templates/hosts.j2`), sysctl `99-local`, auditd rules, kernel module hardening, journald config, and zram swap. |
+| `system` | `k3s_cluster`, `pihole` | Base OS config: kernel modules (`br_netfilter`/`overlay`/`rbd` for k3s), smartd, inotify limits, locale/timezone, network sysctl for the container runtime, apt packages (`system_apt_install_packages` in `defaults/main.yml`), unattended-upgrades, chrony, `/etc/hosts` generated from the `k3s_cluster` and `pihole` inventory groups (template `templates/hosts.j2`), sysctl `99-local`, auditd rules, kernel module hardening, journald config, and zram swap. |
 | `apt_upgrade` | opt-in only | Full `apt upgrade: full` + autoremove/autoclean. Not included by any playbook by default — see [apt_upgrade](#apt_upgrade-opt-in) below. |
 | `k3s` | `k3s_cluster` | Installs k3s via the upstream `get.k3s.io` script (server on `k3s_master`, agent on `k3s_worker`), and renders `/etc/rancher/k3s/registries.yaml` from the SOPS secret above. |
 | `pihole` | `pihole` | Manages only the Pi-hole v6 config *deviations* from default (via `pihole-FTL --config`), plus adlists in `gravity.db`. |
@@ -222,9 +222,20 @@ longer in `requirements.yml`) with a thin role that calls the upstream
   exposes it as a cacheable fact (`k3s_token`).
 - **Agent** (`tasks/agent.yml`, hosts in `k3s_worker`): joins the master by
   DNS name (`https://rpi-k3s-master-00:6443`, from
-  `hostvars[groups['k3s_master'][0]].inventory_hostname`) using the token
-  read via `hostvars` from the master's play facts. This DNS join relies on
-  the static `/etc/hosts` deployed by the `system` role.
+  `hostvars[groups['k3s_master'][0]].inventory_hostname`). The agent reads
+  the join token and the running `k3s --version` from the master itself
+  (`delegate_to`), so the master play does not have to run first and a new
+  agent never comes up at a different version than the cluster, even after
+  the system-upgrade-controller plan has moved past `k3s_version`. The
+  installer runs with `INSTALL_K3S_SKIP_START=true`, so `config.yaml` and
+  `net-conf.json` are in place before the agent first starts. The DNS join
+  relies on `/etc/hosts` from the `system` role, which lists every
+  `k3s_cluster` and `pihole` host from the inventory.
+- **Role label** (`tasks/label.yml`, called from `k3s-install.yml` after the
+  restart): sets `kubernetes.io/role=master|worker` through `k3s kubectl
+  label` on the master. The charts select on it, and the kubelet refuses
+  `kubernetes.io/*` labels in `--node-labels`, so it cannot go into
+  `config.yaml`.
 - **Registries** (`tasks/registries.yml`): always runs, before the
   server/agent install because k3s reads the file only at startup. Renders
   `/etc/rancher/k3s/registries.yaml` from `templates/registries.yaml.j2`
@@ -472,6 +483,7 @@ exists.
 | `playbooks/standalone_setup.yml` | `standalone` | `sshd`, `dotfiles` |
 | `playbooks/apt.yaml` | `k3s_cluster` | `apt_upgrade` (opt-in, see above) |
 | `playbooks/kubernetes/k3s-install.yml` | `k3s_cluster` | `k3s` |
+| `playbooks/kubernetes/k3s-remove-worker.yml` | one `k3s_worker` (`--limit`) | — (drains and uninstalls one agent) |
 | `playbooks/kubernetes/k3s-nuke.yml` | `k3s_cluster` | — (runs `k3s-killall.sh`/`k3s-uninstall.sh` directly) |
 
 `k3s-install.yml` also fetches `/etc/rancher/k3s/k3s.yaml` from the master,
@@ -483,14 +495,58 @@ IP rather than the DNS name agents use to join the cluster. The result is
 written to `~/.kube/config-k3s`, backing up any existing file to
 `~/.kube/config-k3s.bak` first.
 
-`k3s_registration_address` is defined in `vars.yml` (`10.0.0.9`), but
-`k3s-install.yml` doesn't load that file via `vars_files` the way
-`base_setup.yml` does — pass it explicitly if it isn't set some other way,
-e.g. `ansible-playbook playbooks/kubernetes/k3s-install.yml -e @../vars.yml`.
+`k3s_registration_address` (`10.0.0.9`) is set in
+`group_vars/k3s_cluster/k3s.yml`. Under `--check` the kubeconfig steps are
+skipped, because `fetch` does not run in check mode.
 
 `k3s-nuke.yml` tears the cluster down (`k3s-killall.sh`, then the
 `*-uninstall.sh` scripts, then removes leftover CNI files under
 `/etc/cni/net.d`).
+
+### Adding a worker
+
+1. Add the host to `k3s_worker` in `inventory.enc.yaml` (`sops inventory.enc.yaml`).
+2. Prepare the node outside Ansible: the NFS mounts from `rpi-k3s-worker-00`
+   in `/etc/fstab` (`/data/nfs`, `/data/media`, `/data/cloud`) and enough disk
+   under `/k3s/storage`, the Longhorn data path.
+3. Base OS on the new host, then `/etc/hosts` everywhere else so the other
+   nodes and the Pi-hole box resolve it:
+
+   ```bash
+   ansible-playbook playbooks/base_setup.yml --limit rpi-k3s-worker-03
+   ansible-playbook playbooks/base_setup.yml --tags hosts
+   ansible-playbook playbooks/pihole_setup.yml --tags hosts
+   ```
+
+4. Join it. The master play matches nothing and is skipped:
+
+   ```bash
+   ansible-playbook playbooks/kubernetes/k3s-install.yml --limit rpi-k3s-worker-03
+   kubectl get node rpi-k3s-worker-03 -L kubernetes.io/role
+   ```
+
+5. Add its address where it is hardcoded: the node-exporter targets in the
+   Prometheus chart and the `Servers` cards in the Homepage chart.
+
+### Removing a worker
+
+```bash
+ansible-playbook playbooks/kubernetes/k3s-remove-worker.yml --limit rpi-k3s-worker-02
+```
+
+The playbook asserts that exactly one worker is targeted and refuses
+`rpi-k3s-worker-00`, which exports the NFS shares (override with
+`-e '{"k3s_remove_protected_hosts": []}'`). It stops while Longhorn still
+keeps replicas on the node. With three storage nodes and
+`defaultClassReplicaCount: 3`, eviction cannot place the replicas anywhere
+else, so lower the replica count or add a node first. Override with
+`-e k3s_remove_ignore_longhorn=true` only when degraded volumes are acceptable.
+
+After you type the hostname at the prompt (or pass `-e k3s_remove_confirm=<host>`),
+it drains the node, stops k3s, runs `k3s-agent-uninstall.sh`, and deletes the
+Node, the Longhorn node and the `<host>.node-password.k3s` secret, so the same
+hostname can join again later. `/k3s` on the host and the inventory entry stay
+in place; remove the entry and re-run the `hosts` tag afterwards.
 
 ## Linting
 
