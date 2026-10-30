@@ -44,6 +44,7 @@
 | [bitwarden](cluster/helm/bitwarden) | Password management (Vaultwarden) |
 | [booklore](cluster/helm/booklore) | Book library management |
 | [gitea](cluster/helm/gitea) | Self-hosted Git service |
+| [homepage](cluster/helm/homepage) | Service dashboard at `homepage.home` |
 | [media-stack](cluster/helm/media-stack) | Radarr, Sonarr, Lidarr, Prowlarr, Readarr, Bazarr, Transmission |
 | [pihole](cluster/helm/pihole) | DNS ad-blocker |
 | [shpaq-org](cluster/helm/shpaq-org) | Personal website |

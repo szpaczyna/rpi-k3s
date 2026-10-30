@@ -10,7 +10,7 @@ INFRA        := metallb longhorn
 INGRESS      := cert-manager traefik-external traefik-internal
 PLATFORM     := local-path-provisioner system-upgrade-controller renovate postgresql middlewares defaultbackend
 MONITORING   := prometheus grafana loki speedtest x509-certificate-exporter unifipoller version-checker
-APPS         := authelia bitwarden booklore gitea gentoo media-stack pihole shpaq-org whoops
+APPS         := authelia bitwarden booklore gitea gentoo homepage media-stack pihole shpaq-org whoops
 
 COMPONENTS := $(INFRA) $(INGRESS) $(PLATFORM) $(MONITORING) $(APPS)
 

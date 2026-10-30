@@ -42,6 +42,7 @@ pihole_cname_records:
   - 'longhorn.home,traefik-internal.home'
   - 'loki.home,traefik-internal.home'
   - 'pihole.home,traefik-internal.home'
+  - 'homepage.home,traefik-internal.home'
   - 'auth.shpaq.org,traefik.home'
 
 pihole_rev_servers:
