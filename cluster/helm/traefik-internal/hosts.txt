@@ -12,3 +12,4 @@ prometheus.home
 longhorn.home
 loki.home
 pihole.home
+homepage.home
