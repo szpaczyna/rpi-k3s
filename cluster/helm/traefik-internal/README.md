@@ -59,7 +59,7 @@ starts a comment. Current list:
 ```
 home  *.home  traefik-internal.home
 media.home  grafana.home  prometheus.home  longhorn.home  loki.home
-pihole.home
+pihole.home  homepage.home
 ```
 
 ### Regenerating the certificate

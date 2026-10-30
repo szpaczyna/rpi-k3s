@@ -1,0 +1,9 @@
+---
+apiVersion: v2
+name: homepage
+description: Homepage dashboard for the cluster services, served at homepage.home
+type: application
+version: 0.1.0
+appVersion: "2.7.0"
+sources:
+  - https://github.com/gethomepage/homepage

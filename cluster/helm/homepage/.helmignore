@@ -1,0 +1,17 @@
+# Patterns to ignore when building packages.
+.DS_Store
+# Common VCS dirs
+.git/
+.gitignore
+# Common backup files
+*.swp
+*.bak
+*.tmp
+*.orig
+*~
+# Various IDEs
+.idea/
+.vscode/
+# Deploy scripts and secrets
+deploy
+README.md

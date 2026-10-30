@@ -1,0 +1,635 @@
+---
+# Non-secret values. Credentials come from values.enc.yaml (Gitea, Pi-hole,
+# Booklore), from deploy (UniFi, read out of unifipoller's sops file) and from
+# the media-exporter Secret (*arr API keys, see extraEnv).
+
+image:
+  repository: ghcr.io/gethomepage/homepage
+  tag: v2.7.0
+  pullPolicy: IfNotPresent
+
+service:
+  port: 3000
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 160Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+nodeSelector:
+  kubernetes.io/role: worker
+
+httpRoute:
+  enabled: true
+  hostname: homepage.home
+  parentRefs:
+    - name: traefik-internal-gateway
+      namespace: traefik
+      kind: Gateway
+      sectionName: websecure
+
+# Rendered into the <release>-env Secret; values.enc.yaml and deploy fill it in.
+env: {}
+
+extraEnv:
+  - name: LOG_TARGETS
+    value: stdout
+  # optional: a missing key breaks one widget instead of blocking the pod.
+  - name: HOMEPAGE_VAR_SONARR_KEY
+    valueFrom:
+      secretKeyRef: {name: media-exporter, key: SONARR_APIKEY, optional: true}
+  - name: HOMEPAGE_VAR_RADARR_KEY
+    valueFrom:
+      secretKeyRef: {name: media-exporter, key: RADARR_APIKEY, optional: true}
+  - name: HOMEPAGE_VAR_LIDARR_KEY
+    valueFrom:
+      secretKeyRef: {name: media-exporter, key: LIDARR_APIKEY, optional: true}
+  - name: HOMEPAGE_VAR_READARR_KEY
+    valueFrom:
+      secretKeyRef: {name: media-exporter, key: READARR_APIKEY, optional: true}
+  - name: HOMEPAGE_VAR_PROWLARR_KEY
+    valueFrom:
+      secretKeyRef: {name: media-exporter, key: PROWLARR_APIKEY, optional: true}
+  - name: HOMEPAGE_VAR_BAZARR_KEY
+    valueFrom:
+      secretKeyRef: {name: media-exporter, key: BAZARR_APIKEY, optional: true}
+
+# One entry per file in /app/config. Widget URLs use in-cluster Service names;
+# href values are what the browser opens, so they stay on *.home (Gitea and
+# Booklore have no *.home route and link to shpaq.org).
+config:
+  kubernetes.yaml: |
+    mode: cluster
+    ingress: false
+    traefik: false
+    gateway: false
+
+  settings.yaml: |
+    title: Szpacze Gniazdo
+    theme: dark
+    color: slate
+    headerStyle: clean
+    statusStyle: dot
+    useEqualHeights: true
+    hideVersion: true
+    background:
+      image: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
+      blur: sm
+      saturate: 50
+      brightness: 50
+      opacity: 50
+    cardBlur: md
+    layout:
+      Network:
+        style: row
+        columns: 4
+      Monitoring:
+        style: row
+        columns: 4
+      Dev:
+        style: row
+        columns: 2
+      Media:
+        style: row
+        columns: 3
+      Servers:
+        style: row
+        columns: 3
+
+  widgets.yaml: |
+    - search:
+        provider: [google, duckduckgo]
+        focus: true
+        target: _blank
+    - openmeteo:
+        label: Warsaw
+        latitude: 52.2297
+        longitude: 21.0122
+        timezone: Europe/Warsaw
+        units: metric
+        cache: 5
+
+  # Empty string stops Homepage from copying its skeleton bookmarks.
+  bookmarks.yaml: ""
+
+  services.yaml: |
+    - Network:
+        - Pi-hole:
+            icon: pi-hole.png
+            href: https://pihole.home/admin/
+            widget:
+              type: pihole
+              url: http://pihole.apps.svc.cluster.local
+              version: 6
+              key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
+        - UniFi:
+            icon: unifi.png
+            href: https://unifi.home
+            widget:
+              type: unifi
+              url: https://10.0.0.1
+              username: "{{HOMEPAGE_VAR_UNIFI_USERNAME}}"
+              password: "{{HOMEPAGE_VAR_UNIFI_PASSWORD}}"
+        - Traefik internal:
+            icon: traefik.png
+            href: http://traefik-internal.home:8080/dashboard/
+            namespace: traefik
+            app: traefik
+            podSelector: app.kubernetes.io/instance=traefik-internal
+            widget:
+              type: traefik
+              url: http://traefik-internal.traefik.svc.cluster.local:8080
+        - Traefik external:
+            icon: traefik.png
+            href: http://traefik.home:8080/dashboard/
+            namespace: traefik
+            app: traefik
+            podSelector: app.kubernetes.io/instance=traefik-external
+            widget:
+              type: traefik
+              url: http://traefik-external.traefik.svc.cluster.local:8080
+
+    - Monitoring:
+        - Grafana:
+            icon: grafana.png
+            href: https://grafana.home
+            namespace: monitoring
+            app: grafana
+        - Prometheus:
+            icon: prometheus.png
+            href: https://prometheus.home
+            namespace: monitoring
+            app: prometheus
+            podSelector: app.kubernetes.io/instance=prometheus,app.kubernetes.io/component=server
+        - Logs (Loki):
+            icon: loki.png
+            href: "https://grafana.home/explore?schemaVersion=1&orgId=1&panes=%7B%22a%22%3A%7B%22datasource%22%3A%22Loki%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%7D%2C%22expr%22%3A%22%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-1h%22%2C%22to%22%3A%22now%22%7D%7D%7D"
+            namespace: logging
+            app: loki
+        - Longhorn:
+            icon: longhorn.png
+            href: https://longhorn.home
+            namespace: longhorn-system
+            app: longhorn
+            podSelector: app=longhorn-ui
+
+    - Dev:
+        - GitHub:
+            icon: github.png
+            href: https://github.com/szpaczyna
+            widgets:
+              - type: customapi
+                url: https://api.github.com/user
+                refreshInterval: 120000
+                headers:
+                  Authorization: "Bearer {{HOMEPAGE_VAR_GITHUB_TOKEN}}"
+                  User-Agent: homepage
+                mappings:
+                  - field: public_repos
+                    label: Public
+                  - field: total_private_repos
+                    label: Private
+                  - field: followers
+                    label: Followers
+              - type: customapi
+                url: "https://api.github.com/search/issues?q=is%3Apr+is%3Aopen+user%3Aszpaczyna&sort=updated&per_page=50"
+                display: dynamic-list
+                refreshInterval: 120000
+                headers:
+                  Authorization: "Bearer {{HOMEPAGE_VAR_GITHUB_TOKEN}}"
+                  User-Agent: homepage
+                mappings:
+                  items: items
+                  name: title
+                  label: number
+                  prefix: "#"
+                  target: "{html_url}"
+        - Docker Hub:
+            icon: docker.png
+            href: https://hub.docker.com/u/szpaczyn
+            widgets:
+              - type: customapi
+                url: https://hub.docker.com/v2/repositories/szpaczyn/?page_size=1
+                refreshInterval: 600000
+                mappings:
+                  - field: count
+                    label: Images
+              - type: customapi
+                url: "https://hub.docker.com/v2/repositories/szpaczyn/?page_size=40&ordering=pull_count"
+                display: dynamic-list
+                refreshInterval: 600000
+                mappings:
+                  items: results
+                  name: name
+                  label: pull_count
+                  format: number
+                  target: "https://hub.docker.com/r/szpaczyn/{name}"
+        - Gitea:
+            icon: gitea.png
+            href: https://gitea.shpaq.org
+            namespace: apps
+            app: gitea
+            widget:
+              type: gitea
+              url: http://gitea-http.apps.svc.cluster.local:3000
+              key: "{{HOMEPAGE_VAR_GITEA_TOKEN}}"
+
+    - Media:
+        - Sonarr:
+            icon: sonarr.png
+            href: https://media.home/sonarr/
+            namespace: media
+            app: sonarr
+            widget:
+              type: sonarr
+              url: http://sonarr.media.svc.cluster.local:8989/sonarr
+              key: "{{HOMEPAGE_VAR_SONARR_KEY}}"
+        - Radarr:
+            icon: radarr.png
+            href: https://media.home/radarr/
+            namespace: media
+            app: radarr
+            widget:
+              type: radarr
+              url: http://radarr.media.svc.cluster.local:7878/radarr
+              key: "{{HOMEPAGE_VAR_RADARR_KEY}}"
+        - Lidarr:
+            icon: lidarr.png
+            href: https://media.home/lidarr/
+            namespace: media
+            app: lidarr
+            widget:
+              type: lidarr
+              url: http://lidarr.media.svc.cluster.local:8686/lidarr
+              key: "{{HOMEPAGE_VAR_LIDARR_KEY}}"
+        - Readarr:
+            icon: readarr.png
+            href: https://media.home/readarr/
+            namespace: media
+            app: readarr
+            widget:
+              type: readarr
+              url: http://readarr.media.svc.cluster.local:8787/readarr
+              key: "{{HOMEPAGE_VAR_READARR_KEY}}"
+        - Prowlarr:
+            icon: prowlarr.png
+            href: https://media.home/prowlarr/
+            namespace: media
+            app: prowlarr
+            widget:
+              type: prowlarr
+              url: http://prowlarr.media.svc.cluster.local:9696/prowlarr
+              key: "{{HOMEPAGE_VAR_PROWLARR_KEY}}"
+        - Bazarr:
+            icon: bazarr.png
+            href: https://media.home/bazarr/
+            namespace: media
+            app: bazarr
+            widget:
+              type: bazarr
+              url: http://bazarr.media.svc.cluster.local:6767/bazarr
+              key: "{{HOMEPAGE_VAR_BAZARR_KEY}}"
+        - Transmission:
+            icon: transmission.png
+            href: https://media.home/transmission
+            namespace: media
+            app: transmission
+            widget:
+              type: transmission
+              url: http://transmission-http.media.svc.cluster.local:9091
+              rpcUrl: /transmission/
+        - Booklore:
+            icon: booklore.png
+            href: https://booklore.shpaq.org
+            namespace: media
+            app: booklore
+        - Kodi:
+            icon: kodi.png
+            href: http://greypi.home:8080
+            widget:
+              type: customapi
+              url: http://10.0.0.20:8080/jsonrpc
+              method: POST
+              username: "{{HOMEPAGE_VAR_KODI_USERNAME}}"
+              password: "{{HOMEPAGE_VAR_KODI_PASSWORD}}"
+              headers:
+                Content-Type: application/json
+              requestBody:
+                jsonrpc: "2.0"
+                id: 1
+                method: XBMC.GetInfoLabels
+                params:
+                  labels: [Player.Title, VideoPlayer.TVShowTitle, Player.Time, Player.Duration]
+              mappings:
+                - field: {result: Player.Title}
+                  label: Playing
+                  remap:
+                    - value: ""
+                      to: "-"
+                - field: {result: VideoPlayer.TVShowTitle}
+                  label: Show
+                  remap:
+                    - value: ""
+                      to: "-"
+                - field: {result: Player.Time}
+                  label: Time
+                - field: {result: Player.Duration}
+                  label: Duration
+                  remap:
+                    - value: ""
+                      to: "-"
+
+    - Servers:
+        - rpi-k3s:
+            icon: kubernetes.png
+            widget:
+              type: customapi
+              url: "http://prometheus-server.monitoring.svc.cluster.local:9090/api/v1/query?query=label_replace%28round%28100%20%2A%20%281%20-%20avg%28rate%28node_cpu_seconds_total%7Bservice%3D%22prometheus-node-exporter%22%2Cmode%3D%22idle%22%7D%5B5m%5D%29%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22cpu%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28100%20%2A%20%281%20-%20sum%28node_memory_MemAvailable_bytes%7Bservice%3D%22prometheus-node-exporter%22%7D%29%20%2F%20sum%28node_memory_MemTotal_bytes%7Bservice%3D%22prometheus-node-exporter%22%7D%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22mem%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28sum%28node_memory_MemAvailable_bytes%7Bservice%3D%22prometheus-node-exporter%22%7D%29%20%2F%201048576%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22free%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28count%28up%7Bservice%3D%22prometheus-node-exporter%22%7D%20%3D%3D%201%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22nodes%22%2C%20%22%22%2C%20%22%22%29"
+              refreshInterval: 30000
+              mappings:
+                - field: data.result.0.value.1
+                  label: CPU
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.1.value.1
+                  label: RAM
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.2.value.1
+                  label: Free
+                  suffix: "MiB"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.3.value.1
+                  label: Nodes
+                  remap:
+                    - value: "-1"
+                      to: "-"
+        - rpi-k3s-master-00:
+            icon: ubuntu-linux.png
+            widget:
+              type: customapi
+              url: "http://prometheus-server.monitoring.svc.cluster.local:9090/api/v1/query?query=label_replace%28round%28100%20%2A%20%281%20-%20avg%28rate%28node_cpu_seconds_total%7Binstance%3D%2210.0.0.9%3A9100%22%2Cmode%3D%22idle%22%7D%5B5m%5D%29%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22cpu%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28100%20%2A%20%281%20-%20node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.9%3A9100%22%7D%20%2F%20node_memory_MemTotal_bytes%7Binstance%3D%2210.0.0.9%3A9100%22%7D%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22mem%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.9%3A9100%22%7D%29%20%2F%201048576%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22free%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_thermal_zone_temp%7Binstance%3D%2210.0.0.9%3A9100%22%7D%29%2C%200.1%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22temp%22%2C%20%22%22%2C%20%22%22%29"
+              refreshInterval: 30000
+              mappings:
+                - field: data.result.0.value.1
+                  label: CPU
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.1.value.1
+                  label: RAM
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.2.value.1
+                  label: Free
+                  suffix: "MiB"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.3.value.1
+                  label: Temp
+                  suffix: "°C"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+        - rpi-k3s-worker-00:
+            icon: ubuntu-linux.png
+            widget:
+              type: customapi
+              url: "http://prometheus-server.monitoring.svc.cluster.local:9090/api/v1/query?query=label_replace%28round%28100%20%2A%20%281%20-%20avg%28rate%28node_cpu_seconds_total%7Binstance%3D%2210.0.0.11%3A9100%22%2Cmode%3D%22idle%22%7D%5B5m%5D%29%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22cpu%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28100%20%2A%20%281%20-%20node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.11%3A9100%22%7D%20%2F%20node_memory_MemTotal_bytes%7Binstance%3D%2210.0.0.11%3A9100%22%7D%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22mem%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.11%3A9100%22%7D%29%20%2F%201048576%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22free%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_thermal_zone_temp%7Binstance%3D%2210.0.0.11%3A9100%22%7D%29%2C%200.1%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22temp%22%2C%20%22%22%2C%20%22%22%29"
+              refreshInterval: 30000
+              mappings:
+                - field: data.result.0.value.1
+                  label: CPU
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.1.value.1
+                  label: RAM
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.2.value.1
+                  label: Free
+                  suffix: "MiB"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.3.value.1
+                  label: Temp
+                  suffix: "°C"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+        - rpi-k3s-worker-01:
+            icon: ubuntu-linux.png
+            widget:
+              type: customapi
+              url: "http://prometheus-server.monitoring.svc.cluster.local:9090/api/v1/query?query=label_replace%28round%28100%20%2A%20%281%20-%20avg%28rate%28node_cpu_seconds_total%7Binstance%3D%2210.0.0.12%3A9100%22%2Cmode%3D%22idle%22%7D%5B5m%5D%29%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22cpu%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28100%20%2A%20%281%20-%20node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.12%3A9100%22%7D%20%2F%20node_memory_MemTotal_bytes%7Binstance%3D%2210.0.0.12%3A9100%22%7D%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22mem%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.12%3A9100%22%7D%29%20%2F%201048576%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22free%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_thermal_zone_temp%7Binstance%3D%2210.0.0.12%3A9100%22%7D%29%2C%200.1%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22temp%22%2C%20%22%22%2C%20%22%22%29"
+              refreshInterval: 30000
+              mappings:
+                - field: data.result.0.value.1
+                  label: CPU
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.1.value.1
+                  label: RAM
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.2.value.1
+                  label: Free
+                  suffix: "MiB"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.3.value.1
+                  label: Temp
+                  suffix: "°C"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+        - rpi-k3s-worker-02:
+            icon: ubuntu-linux.png
+            widget:
+              type: customapi
+              url: "http://prometheus-server.monitoring.svc.cluster.local:9090/api/v1/query?query=label_replace%28round%28100%20%2A%20%281%20-%20avg%28rate%28node_cpu_seconds_total%7Binstance%3D%2210.0.0.13%3A9100%22%2Cmode%3D%22idle%22%7D%5B5m%5D%29%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22cpu%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28100%20%2A%20%281%20-%20node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.13%3A9100%22%7D%20%2F%20node_memory_MemTotal_bytes%7Binstance%3D%2210.0.0.13%3A9100%22%7D%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22mem%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.13%3A9100%22%7D%29%20%2F%201048576%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22free%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_thermal_zone_temp%7Binstance%3D%2210.0.0.13%3A9100%22%7D%29%2C%200.1%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22temp%22%2C%20%22%22%2C%20%22%22%29"
+              refreshInterval: 30000
+              mappings:
+                - field: data.result.0.value.1
+                  label: CPU
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.1.value.1
+                  label: RAM
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.2.value.1
+                  label: Free
+                  suffix: "MiB"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.3.value.1
+                  label: Temp
+                  suffix: "°C"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+        - blueberry:
+            icon: ubuntu-linux.png
+            widget:
+              type: customapi
+              url: "http://prometheus-server.monitoring.svc.cluster.local:9090/api/v1/query?query=label_replace%28round%28100%20%2A%20%281%20-%20avg%28rate%28node_cpu_seconds_total%7Binstance%3D%2210.0.0.2%3A9100%22%2Cmode%3D%22idle%22%7D%5B5m%5D%29%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22cpu%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28100%20%2A%20%281%20-%20node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.2%3A9100%22%7D%20%2F%20node_memory_MemTotal_bytes%7Binstance%3D%2210.0.0.2%3A9100%22%7D%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22mem%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.2%3A9100%22%7D%29%20%2F%201048576%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22free%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_thermal_zone_temp%7Binstance%3D%2210.0.0.2%3A9100%22%7D%29%2C%200.1%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22temp%22%2C%20%22%22%2C%20%22%22%29"
+              refreshInterval: 30000
+              mappings:
+                - field: data.result.0.value.1
+                  label: CPU
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.1.value.1
+                  label: RAM
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.2.value.1
+                  label: Free
+                  suffix: "MiB"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.3.value.1
+                  label: Temp
+                  suffix: "°C"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+        - whitepi:
+            icon: gentoo-linux.png
+            widget:
+              type: customapi
+              url: "http://prometheus-server.monitoring.svc.cluster.local:9090/api/v1/query?query=label_replace%28round%28100%20%2A%20%281%20-%20avg%28rate%28node_cpu_seconds_total%7Binstance%3D%2210.0.0.21%3A9100%22%2Cmode%3D%22idle%22%7D%5B5m%5D%29%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22cpu%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28100%20%2A%20%281%20-%20node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.21%3A9100%22%7D%20%2F%20node_memory_MemTotal_bytes%7Binstance%3D%2210.0.0.21%3A9100%22%7D%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22mem%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.21%3A9100%22%7D%29%20%2F%201048576%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22free%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_thermal_zone_temp%7Binstance%3D%2210.0.0.21%3A9100%22%7D%29%2C%200.1%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22temp%22%2C%20%22%22%2C%20%22%22%29"
+              refreshInterval: 30000
+              mappings:
+                - field: data.result.0.value.1
+                  label: CPU
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.1.value.1
+                  label: RAM
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.2.value.1
+                  label: Free
+                  suffix: "MiB"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.3.value.1
+                  label: Temp
+                  suffix: "°C"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+        - redpi:
+            icon: gentoo-linux.png
+            widget:
+              type: customapi
+              url: "http://prometheus-server.monitoring.svc.cluster.local:9090/api/v1/query?query=label_replace%28round%28100%20%2A%20%281%20-%20avg%28rate%28node_cpu_seconds_total%7Binstance%3D%2210.0.0.22%3A9100%22%2Cmode%3D%22idle%22%7D%5B5m%5D%29%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22cpu%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28100%20%2A%20%281%20-%20node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.22%3A9100%22%7D%20%2F%20node_memory_MemTotal_bytes%7Binstance%3D%2210.0.0.22%3A9100%22%7D%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22mem%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.22%3A9100%22%7D%29%20%2F%201048576%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22free%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_thermal_zone_temp%7Binstance%3D%2210.0.0.22%3A9100%22%7D%29%2C%200.1%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22temp%22%2C%20%22%22%2C%20%22%22%29"
+              refreshInterval: 30000
+              mappings:
+                - field: data.result.0.value.1
+                  label: CPU
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.1.value.1
+                  label: RAM
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.2.value.1
+                  label: Free
+                  suffix: "MiB"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.3.value.1
+                  label: Temp
+                  suffix: "°C"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+        - blackpi:
+            icon: ubuntu-linux.png
+            widget:
+              type: customapi
+              url: "http://prometheus-server.monitoring.svc.cluster.local:9090/api/v1/query?query=label_replace%28round%28100%20%2A%20%281%20-%20avg%28rate%28node_cpu_seconds_total%7Binstance%3D%2210.0.0.23%3A9100%22%2Cmode%3D%22idle%22%7D%5B5m%5D%29%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22cpu%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28100%20%2A%20%281%20-%20node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.23%3A9100%22%7D%20%2F%20node_memory_MemTotal_bytes%7Binstance%3D%2210.0.0.23%3A9100%22%7D%29%29%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22mem%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_memory_MemAvailable_bytes%7Binstance%3D%2210.0.0.23%3A9100%22%7D%29%20%2F%201048576%2C%201%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22free%22%2C%20%22%22%2C%20%22%22%29%20or%20label_replace%28round%28max%28node_thermal_zone_temp%7Binstance%3D%2210.0.0.23%3A9100%22%7D%29%2C%200.1%29%20or%20vector%28-1%29%2C%20%22m%22%2C%20%22temp%22%2C%20%22%22%2C%20%22%22%29"
+              refreshInterval: 30000
+              mappings:
+                - field: data.result.0.value.1
+                  label: CPU
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.1.value.1
+                  label: RAM
+                  suffix: "%"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.2.value.1
+                  label: Free
+                  suffix: "MiB"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+                - field: data.result.3.value.1
+                  label: Temp
+                  suffix: "°C"
+                  remap:
+                    - value: "-1"
+                      to: "-"
+
+  # Mounted empty so homepage does not fall back to copying skeleton files.
+  docker.yaml: ""
+  proxmox.yaml: ""
+  custom.css: |
+    li.service[data-name="GitHub"] a .font-bold { white-space: nowrap; }
+    @media (min-width: 768px) {
+      li.service[data-name="Docker Hub"] { grid-row: span 2; position: relative; }
+      li.service[data-name="Docker Hub"] > .service-card { position: absolute; inset: 0 0 0.5rem 0; height: auto; overflow-y: auto; }
+      li.service[data-name="GitHub"] > .service-card { max-height: 16rem; overflow-y: auto; }
+    }
+  custom.js: ""
