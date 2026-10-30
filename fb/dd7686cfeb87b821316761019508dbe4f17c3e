@@ -1,0 +1,50 @@
+provision/ansible/roles/k3s/defaults/main.yml
+  s_5dcd20fce1436f::t_86a80075daf36c 17-23
+provision/ansible/roles/k3s/tasks/registries.yml
+  s_5dcd20fce1436f::t_594ee116852675 15
+provision/ansible/roles/k3s/tasks/server.yml
+  s_5dcd20fce1436f::t_3850ae62d58c04 50
+provision/ansible/roles/k3s/tasks/label.yml
+  s_5dcd20fce1436f::t_7bf9b885f9c5ff 1-5,7-23
+  s_5dcd20fce1436f::t_4c484f92d76838 6
+provision/ansible/playbooks/pihole_setup.yml
+  s_5dcd20fce1436f::t_6a5df81c9d4f25 9
+provision/ansible/roles/k3s/tasks/main.yml
+  s_5dcd20fce1436f::t_fcc159ee4f7e80 25
+provision/ansible/group_vars/k3s_cluster/k3s.yml
+  s_5dcd20fce1436f::t_4e8c417d308bca 6-8
+provision/ansible/playbooks/kubernetes/k3s-install.yml
+  s_5dcd20fce1436f::t_c4ca1f6633981c 70,74
+  s_5dcd20fce1436f::t_37d0c40cf81b34 24-27,101-105
+  s_5dcd20fce1436f::t_325db5ff46557a 28
+provision/ansible/playbooks/kubernetes/k3s-remove-worker.yml
+  s_5dcd20fce1436f::t_b657916460424a 1-18,22-122
+  s_5dcd20fce1436f::t_96fa7394f21fc5 19-21
+provision/ansible/roles/k3s/tasks/agent.yml
+  s_5dcd20fce1436f::t_2d11597612a9c7 76
+  s_5dcd20fce1436f::t_587bc67c6996ad 2-21,28-29,31,37,78,80-86
+  s_5dcd20fce1436f::t_64cf7ca8a44c01 22-23
+provision/ansible/roles/system/templates/hosts.j2
+  s_5dcd20fce1436f::t_f39a3b979f0ae7 5-7
+provision/ansible/README.md
+  s_5dcd20fce1436f::t_077fe1d6e7c6c7 123
+  s_5dcd20fce1436f::t_115ebc88f2963a 225-229,498-500,506-549
+  s_5dcd20fce1436f::t_7e8bb1dc2f36e6 230-238
+  s_5dcd20fce1436f::t_5118973a532c0d 550
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fbdd7686cfeb87b821316761019508dbe4f17c3e",
+  "prompts": {},
+  "sessions": {
+    "s_5dcd20fce1436f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e74627be0ffeY4YWNWcbs1myUO",
+        "model": "unknown"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
