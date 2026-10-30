@@ -1,0 +1,82 @@
+README.md
+  s_5dcd20fce1436f::t_030b96a2ff0a36 47
+cluster/helm/homepage/templates/deployment.yaml
+  s_5dcd20fce1436f::t_3874b86980f9bd 1-87
+cluster/helm/homepage/Chart.yaml
+  s_5dcd20fce1436f::t_3917bcad8d9c81 1-9
+cluster/helm/traefik-internal/README.md
+  s_5dcd20fce1436f::t_804b406f7b2e49 62
+cluster/helm/homepage/templates/configmap.yaml
+  s_5dcd20fce1436f::t_4f839831b6bffa 9,12-14
+  s_5dcd20fce1436f::t_2bace736149a39 1-8,10-11,15
+cluster/helm/homepage/templates/rbac.yaml
+  s_5dcd20fce1436f::t_ecfb75d2de3b45 2-10,12-13,15-30
+  s_5dcd20fce1436f::t_06dec2001f860f 1,11,14
+cluster/helm/homepage/.helmignore
+  s_5dcd20fce1436f::t_aaccaa55accddd 1-17
+cluster/helm/homepage/values-public.yaml
+  s_5dcd20fce1436f::t_1ac856f481e1e9 1-70,72-77,85,89-90,92-96,98-107,109-114,117-118,399-467,503-540,596,600-612,614,616-627
+  s_5dcd20fce1436f::t_1dde7b1dd4441b 86-88,119-398,635
+  s_5dcd20fce1436f::t_c9f12e69196f00 486,491,496,498
+  s_c04ab0ef350d27::t_4537200c8c6014 629
+  s_5dcd20fce1436f::t_afe40ef1620a26 630-632,634
+  s_c04ab0ef350d27::t_20f1326e5fec42 97,108,115-116,487,492,497,499,553-555,557,580,613
+  s_9f22a879fa5d9d::t_feb5b16456afdc 71,78-84,541-545,551-552,556,558,560,565-579,581,583-590,615,628
+  s_5dcd20fce1436f::t_0a4bfc73929f44 550,564
+  s_5dcd20fce1436f::t_b807601ce597e3 468-485,488-490,493-495,500-502
+  s_5dcd20fce1436f::t_a1f20a15932564 91,546-549,559,561-563,582,591-595,597-599,633
+Makefile
+  s_5dcd20fce1436f::t_2a7242326fa8f8 13
+cluster/helm/homepage/deploy
+  s_5dcd20fce1436f::t_baeb298a439da6 1-22
+provision/ansible/roles/pihole/defaults/main.yml
+  s_5dcd20fce1436f::t_00b3f24bef5676 45
+cluster/helm/homepage/templates/serviceaccount.yaml
+  s_5dcd20fce1436f::t_98646f4e6fe684 1-6
+cluster/helm/homepage/README.md
+  s_5dcd20fce1436f::t_e7b809262764e0 19-28
+  s_5dcd20fce1436f::t_798a504f9bd637 43
+  s_c04ab0ef350d27::t_e68218c380015f 29
+  s_5dcd20fce1436f::t_444ca5efac15c8 16-18
+  s_5dcd20fce1436f::t_cd775e45b6837e 44-46
+cluster/helm/homepage/templates/httproute.yaml
+  s_5dcd20fce1436f::t_4ea063a3e3d714 1-27
+cluster/helm/homepage/templates/secret.yaml
+  s_5dcd20fce1436f::t_b3ff1c43a59099 1-11
+cluster/helm/homepage/templates/service.yaml
+  s_5dcd20fce1436f::t_221c391750a35e 1-15
+cluster/helm/homepage/templates/_helpers.tpl
+  s_5dcd20fce1436f::t_2a921a769102c5 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b009f61aa5ad4b13195874e95727c58e9fd76033",
+  "prompts": {},
+  "sessions": {
+    "s_5dcd20fce1436f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e74627be0ffeY4YWNWcbs1myUO",
+        "model": "unknown"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    },
+    "s_9f22a879fa5d9d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e73d96658ffeTekWwcyIioPp6K",
+        "model": "unknown"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    },
+    "s_c04ab0ef350d27": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e73bdd49dffe4C91q7H06CPurp",
+        "model": "unknown"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
