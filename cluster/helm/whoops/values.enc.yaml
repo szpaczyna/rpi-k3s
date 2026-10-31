@@ -5,9 +5,10 @@ env:
     CLIENT_ID: ENC[AES256_GCM,data:3+JuaZgnOgObzZNdwkQoYgrXec9rre3tl91WW7rIkRozo/1t,iv:zy6h2a75qarTemyMhzyTI7BzkWZi7N+wsc54RQEBX3k=,tag:VZ3OC9RNkAPjrIGSJkXLRw==,type:str]
     CLIENT_SECRET: ENC[AES256_GCM,data:o0X+oo9sfazwpu0p8nPIS+fd98tvD4HPrS6gOV7kmb9VHFXPpycbwh2SvrsMbRlfwQW/RmpasmFrkM6l2XfC7w==,iv:foUQ2fDPZiCr8Fbb7EQ8gBNSlJ4ndk4bmco0sYWeuNI=,tag:6QierSxMmTHJTP2k+TCgaQ==,type:str]
     SQLALCHEMY_DATABASE_URI: ENC[AES256_GCM,data:0OY+nz4j7MgTg7zhHvZMCS1AEzUvMjgRDjWOV1CUx0LgPbye+8s2JtWpUBvKOLNdwTIB4Cw+8yBpV/BJz606gwIcsVOAX/kCjm3mWg95giRIvVpG0N42p/Yz35vcR38O0jdB354KYZaTMvx8UQ6n96vDG9s=,iv:6bbGlTwTR/R1jqhy0HyxnQrU2W3NHepXhBt5ENBRpb8=,tag:e8zUk73FiPihCmpkhkIaqA==,type:str]
+    SECRET_KEY: ENC[AES256_GCM,data:bXo9mZkkCYsxAoS7a1SNoOfw3xtK063z+otiuuD6n6AmzXUbC2E1PaYZnkzm+x+rFCy5fvVEEZQ986QnKHjehg==,iv:OA/gK8tyVknra05bRSGPrCYvOsi7p2biSoqhptJUabs=,tag:2H50soXSloDdvgcarJlsGg==,type:str]
 sops:
-    lastmodified: "2026-07-31T10:04:21Z"
-    mac: ENC[AES256_GCM,data:M59vzLypbZ4pqIrZd9Ot0ZYNctoquxQqHMtUc6kt3UOc3OaZny0v0Y10KXgALv0f+ZxKv4n/FLwpuCvN7cZ1eX+bpjtL17TS1/GUzWgiUiDgfqj/oYz97EDGGhQ10k6IeerXylvOtpA1/JMbXbsWJmh1kBXFQvC8KFqDu4qbIsw=,iv:IqaCzA23m7tboJlYo11aGg3APGpl3Nok1+h1Rh/Ehqw=,tag:+pyE31Yh3RAOZMP1RkJFGQ==,type:str]
+    lastmodified: "2026-10-31T07:09:48Z"
+    mac: ENC[AES256_GCM,data:uLxTZZlI6As7NlJHJbFRYenQHlIj7BR8KN/ICFvh1MICdiSTKmvsQATnBQEleBzLrJODN+gwirT7kdwYy2SPmmpemmT+gG5PjlwMsmJgHcoqAVNf2SItbCz1vIA8p9Vif28wcR6yeBKNAOCkeDKJUVVcV2e1898u3B+ncrKNw8E=,iv:o8MHVzwTjwQTHA0EuGmJ3UNipJO+69b0ag9fZVSjiwE=,tag:hCnlT8cM54rxHQpN4j/wDw==,type:str]
     pgp:
         - created_at: "2025-11-28T09:12:30Z"
           enc: |-
