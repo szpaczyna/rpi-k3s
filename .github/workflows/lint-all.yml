@@ -20,7 +20,7 @@ concurrency:
 jobs:
   yaml:
     name: YAML Lint
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
       - name: yamllint
@@ -31,7 +31,7 @@ jobs:
 
   markdown:
     name: Markdown Lint
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
       - name: markdownlint (informational)
@@ -45,7 +45,7 @@ jobs:
 
   shell:
     name: ShellCheck
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
       - name: ShellCheck
@@ -56,7 +56,7 @@ jobs:
 
   kubeconform:
     name: Kubeconform (Rendered Helm & Raw Manifests)
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
       - name: Set up Helm
@@ -95,7 +95,7 @@ jobs:
 
   kube_linter:
     name: Kube Linter
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
       - name: kube-linter
@@ -108,7 +108,7 @@ jobs:
 
   chart_testing:
     name: Chart Testing
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:
