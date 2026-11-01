@@ -4,7 +4,7 @@ set -euo pipefail
 NAMESPACE="renovate"
 RELEASE_NAME="renovate"
 CHART="oci://ghcr.io/renovatebot/charts/renovate"
-VERSION="46.395.1"
+VERSION="46.396.1"
 
 kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
 
