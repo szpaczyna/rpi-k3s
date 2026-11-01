@@ -14,19 +14,26 @@ APPS         := authelia bitwarden booklore gitea gentoo homepage media-stack pi
 
 COMPONENTS := $(INFRA) $(INGRESS) $(PLATFORM) $(MONITORING) $(APPS)
 
-.PHONY: all $(COMPONENTS) helm-update enc yamllint jsonlint
+.DEFAULT_GOAL := help
 
-all: $(COMPONENTS)
+.PHONY: all $(COMPONENTS) helm-update enc yamllint jsonlint help
+
+all: $(COMPONENTS) ## Deploy all components
 
 $(COMPONENTS):
 	cd $(CLUSTER_DIR)/$@ && ./deploy
 
-helm-update:
+helm-update: ## Update Helm repositories
 	helm repo update
 
-enc:
+enc: ## Encrypt all *secret.yaml files with sops
 	find . -name "*secret.yaml" | xargs -I {} sops -e -i {}
-yamllint:
-	yamllint -c .github/yamllint.config.yaml yaml
-jsonlint:
-	jsonlint json/*/*.json
+
+help: ## Show this help message
+	@echo "Usage: make <target>"
+	@echo ""
+	@echo "Top-level targets:"
+	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-18s %s\n", $$1, $$2}'
+	@echo ""
+	@echo "Components (deploy a single component):"
+	@for c in $(COMPONENTS); do printf "  %s\n" "$$c"; done
