@@ -147,8 +147,8 @@ images:
     repository: "lscr.io/linuxserver/prowlarr"
     tag: "2.6.5"
   readarr:
-    repository: "lscr.io/linuxserver/readarr"
-    tag: "0.4.18-develop"
+    repository: "ghcr.io/pennydreadful/bookshelf"
+    tag: "softcover"
   bazarr:
     repository: "lscr.io/linuxserver/bazarr"
     tag: "1.6.2"
