@@ -7,9 +7,15 @@ k3s_write_kubeconfig_mode: "600"
 
 # k3s rewrites its generated net-conf.json on every start, so DirectRouting only
 # survives a restart if flannel-conf points at a file this role manages.
+#
+# DirectRouting is disabled: it programs per-peer routes on the physical node
+# interface (end0), which systemd-networkd wipes on DHCP renew / restart (seen
+# 2026-11-06). Flannel then does not reprogram them, breaking cross-node pod
+# traffic and cluster DNS. With DirectRouting off, routes live on flannel.1 and
+# survive networkd restarts (at the cost of VXLAN encapsulation).
 k3s_flannel_conf: "{{ k3s_data_dir }}/agent/etc/flannel/net-conf.json"
 k3s_flannel_network: 10.42.0.0/16
-k3s_flannel_direct_routing: true
+k3s_flannel_direct_routing: false
 
 # Rendered into /etc/rancher/k3s/config.yaml. Keep the quoted values quoted:
 # YAML would otherwise parse 600 as an integer and pass the wrong mode to k3s.
