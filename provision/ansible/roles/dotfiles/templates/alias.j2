@@ -100,8 +100,10 @@ alias -g NUL="> /dev/null 2>&1"
 ## Search running processes
 alias p="ps aux | grep "
 
-## fdfind alias
+{% if 'gentoo' not in group_names %}
+## fdfind alias (Ubuntu ships the binary as fdfind)
 alias fd="fdfind"
+{% endif %}
 
 ## Search files in the current folder
 alias f="find . | grep "
