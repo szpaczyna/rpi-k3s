@@ -2,6 +2,8 @@
 {{ ansible_managed | comment }}
 {% raw %}
 
+
+
 ## alias to show the date
 alias da='date "+%Y-%m-%d %A %T %Z"'
 
@@ -97,6 +99,9 @@ alias -g NUL="> /dev/null 2>&1"
 
 ## Search running processes
 alias p="ps aux | grep "
+
+## fdfind alias
+alias fd="fdfind"
 
 ## Search files in the current folder
 alias f="find . | grep "
