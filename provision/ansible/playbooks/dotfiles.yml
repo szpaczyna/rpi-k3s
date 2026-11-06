@@ -1,0 +1,14 @@
+---
+
+- name: Dotfiles on all nodes
+  hosts: all
+  become: true
+  gather_facts: true
+
+  vars_files:
+    - ../vars.yml
+
+  tasks:
+    - name: Dotfiles
+      ansible.builtin.include_role:
+        name: dotfiles
