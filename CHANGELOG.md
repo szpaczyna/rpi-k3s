@@ -1,4 +1,78 @@
 # Changelog
+## [0.7.0](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.8...v0.7.0) (2026-11-06)
+
+
+### Features
+
+* add dotfiles playbook for all nodes ([#311](https://github.com/szpaczyna/rpi-k3s/issues/311)) ([9e9776d](https://github.com/szpaczyna/rpi-k3s/commit/9e9776de2a553f81c4b18f888263a0c314104e1e))
+* **ansible:** join and remove k3s workers one at a time ([#294](https://github.com/szpaczyna/rpi-k3s/issues/294)) ([e8b3b6a](https://github.com/szpaczyna/rpi-k3s/commit/e8b3b6af43fae9e6940208a4ebca065b14e46fae))
+* **homepage:** add Homepage dashboard at homepage.home ([#293](https://github.com/szpaczyna/rpi-k3s/issues/293)) ([48e73cd](https://github.com/szpaczyna/rpi-k3s/commit/48e73cda5f0fc3382c4de2627f5657cb65e6edc6))
+* **logging:** ship host auth and fail2ban logs to Loki ([#285](https://github.com/szpaczyna/rpi-k3s/issues/285)) ([b6f44f4](https://github.com/szpaczyna/rpi-k3s/commit/b6f44f4abab47cb7716e10ea12e9f8de7c98e05b))
+* **monitoring:** added custom httproute metric ([a3875d7](https://github.com/szpaczyna/rpi-k3s/commit/a3875d71345a2acde30507a2d7af7dec34b47ea3))
+* **monitoring:** added NodeSelector to kubeStateMetrics ([7195304](https://github.com/szpaczyna/rpi-k3s/commit/71953046cd62a832e9156c305158b6124d6f9d55))
+* refine dotfiles role (zoxide, tmux, nvim) ([#312](https://github.com/szpaczyna/rpi-k3s/issues/312)) ([05946f3](https://github.com/szpaczyna/rpi-k3s/commit/05946f34e7c27e23f60f317b1f2cc9eebeb84d6a))
+* **sshd:** restrict port 22 to Poland and ban scanners sooner ([#289](https://github.com/szpaczyna/rpi-k3s/issues/289)) ([9db1f6c](https://github.com/szpaczyna/rpi-k3s/commit/9db1f6c42203b8961d1527488c1096e4241ea276))
+* **x509:** switch to upstream chart 4.2.2 ([#284](https://github.com/szpaczyna/rpi-k3s/issues/284)) ([bc5340a](https://github.com/szpaczyna/rpi-k3s/commit/bc5340ab8cd95b885e5e0ba30df5327f1e2cedb5))
+
+
+### Bug Fixes
+
+* added fd-find to installed packages ([2e1f16d](https://github.com/szpaczyna/rpi-k3s/commit/2e1f16dda0298f17a9e49473cb205a0710b069f0))
+* bump booklore memory limit ([5529729](https://github.com/szpaczyna/rpi-k3s/commit/552972951a387075a5d06ea6c543a0cd0372335f))
+* changed chroma to pygmentize in zsh env ([bc8fcd8](https://github.com/szpaczyna/rpi-k3s/commit/bc8fcd8f97f4e6d341ade6ae1039a1c8cdf09eab))
+* **helm:** align appVersion with images, make files/index.html authoritative, drop dead helper ([#268](https://github.com/szpaczyna/rpi-k3s/issues/268)) ([0681a66](https://github.com/szpaczyna/rpi-k3s/commit/0681a66ffc7afbbb67891f592ad63ac4ba70e385))
+* **helm:** quote openweather values, remove duplicate gentoo manifests, fix stale doc references ([#269](https://github.com/szpaczyna/rpi-k3s/issues/269)) ([27cbf1f](https://github.com/szpaczyna/rpi-k3s/commit/27cbf1f79e1260a0717895566b2566ffc47d39b4))
+* **k3s:** disable flannel DirectRouting (routes flushed by networkd) ([#315](https://github.com/szpaczyna/rpi-k3s/issues/315)) ([e2343b4](https://github.com/szpaczyna/rpi-k3s/commit/e2343b4ed5dcd9233deafcfcf618fcfe8075b465))
+* **logging:** extract sshd client address by its port ([#288](https://github.com/szpaczyna/rpi-k3s/issues/288)) ([b324d33](https://github.com/szpaczyna/rpi-k3s/commit/b324d3360aedd57d5b3a6ec214e46a119e12f0cc))
+* **logging:** ship host logs from blueberry only ([#287](https://github.com/szpaczyna/rpi-k3s/issues/287)) ([fbf4f57](https://github.com/szpaczyna/rpi-k3s/commit/fbf4f57da20d67872295ebb72517ca42b358abea))
+* **make:** added help to makefile and changed default action ([25cf625](https://github.com/szpaczyna/rpi-k3s/commit/25cf62547c51a2fe3137352e3783e48ef5a412e3))
+* **media-stack:** switch readarr image to pennydreadful/bookshelf (softcover) ([#314](https://github.com/szpaczyna/rpi-k3s/issues/314)) ([51e8a47](https://github.com/szpaczyna/rpi-k3s/commit/51e8a4706014d2c02fd8aa0a22db4d4b7e1cdcec))
+* render fdfind alias condition outside raw block ([#313](https://github.com/szpaczyna/rpi-k3s/issues/313)) ([213429f](https://github.com/szpaczyna/rpi-k3s/commit/213429f44a92883427b278cf8bd59000b744685b))
+* restore package.json and package-lock.json for release-please ([#286](https://github.com/szpaczyna/rpi-k3s/issues/286)) ([9268eb7](https://github.com/szpaczyna/rpi-k3s/commit/9268eb794277c5d0fa0f0ed1555b69e2cc7cdc10))
+* **shpaq-org:** render landing page consistently on mobile ([#300](https://github.com/szpaczyna/rpi-k3s/issues/300)) ([35bab65](https://github.com/szpaczyna/rpi-k3s/commit/35bab659edbb25f230e7c52f54815ceba71595d6))
+* **x509-certificate-exporter:** correct rbacProxy values keys ([#266](https://github.com/szpaczyna/rpi-k3s/issues/266)) ([0a40e59](https://github.com/szpaczyna/rpi-k3s/commit/0a40e5964b26159f23bc64acec9a9f06f62974fc))
+* zsh_reload function ([67154e8](https://github.com/szpaczyna/rpi-k3s/commit/67154e8d0ba1d3807327568b4d4cfc7b505481aa))
+
+
+### Miscellaneous
+
+* clean up unused charts and dead scripts ([#281](https://github.com/szpaczyna/rpi-k3s/issues/281)) ([9f77432](https://github.com/szpaczyna/rpi-k3s/commit/9f77432866f92e63e5526a55b031c39241413b46))
+* **deps:** update dependency kubernetes-sigs/kind to v0.33.0 [minor] ([#298](https://github.com/szpaczyna/rpi-k3s/issues/298)) ([6104c71](https://github.com/szpaczyna/rpi-k3s/commit/6104c711aca24366ea7a1e045e2f4467527435ce))
+* **deps:** update ghcr.io/renovatebot/charts/renovate docker tag to v46.381.1 [minor] ([#276](https://github.com/szpaczyna/rpi-k3s/issues/276)) ([6a6794b](https://github.com/szpaczyna/rpi-k3s/commit/6a6794b07e66029b589077938354498cf28e69b4))
+* **deps:** update ghcr.io/renovatebot/charts/renovate docker tag to v46.395.1 [minor] ([#292](https://github.com/szpaczyna/rpi-k3s/issues/292)) ([a05a099](https://github.com/szpaczyna/rpi-k3s/commit/a05a09994a7c1f1bfd358a21560dac995aff9c0a))
+* **deps:** update ghcr.io/renovatebot/charts/renovate docker tag to v46.396.1 [minor] ([#299](https://github.com/szpaczyna/rpi-k3s/issues/299)) ([bf2e0b6](https://github.com/szpaczyna/rpi-k3s/commit/bf2e0b6d51099e97fb50e6f8eb11f78a464d1c4c))
+* **deps:** update helm release loki to v7.5.0 [minor] ([#277](https://github.com/szpaczyna/rpi-k3s/issues/277)) ([5bd27bb](https://github.com/szpaczyna/rpi-k3s/commit/5bd27bbb47e9b102d266a95be4f4291d0a347651))
+* **deps:** update helm release traefik to v42.1.3 [minor] ([#280](https://github.com/szpaczyna/rpi-k3s/issues/280)) ([3e0932e](https://github.com/szpaczyna/rpi-k3s/commit/3e0932e1fbe8f30bde925de7db9c6ac3e7b0215c))
+* **deps:** update lscr.io/linuxserver/mariadb docker tag to v11.8.9 [patch] ([#272](https://github.com/szpaczyna/rpi-k3s/issues/272)) ([5e34547](https://github.com/szpaczyna/rpi-k3s/commit/5e3454795ec1ff42c73ef395cd952b365090e962))
+* **deps:** update nginx docker tag to v1.31.8 [patch] ([#273](https://github.com/szpaczyna/rpi-k3s/issues/273)) ([eab1f5d](https://github.com/szpaczyna/rpi-k3s/commit/eab1f5defba3ce27767f1d35342b2d3cf3bf24c8))
+* **deps:** update nginxinc/nginx-unprivileged docker tag to v1.31 [minor] ([#278](https://github.com/szpaczyna/rpi-k3s/issues/278)) ([58aaf85](https://github.com/szpaczyna/rpi-k3s/commit/58aaf85ab807ebb31a004f179a1862fe6b4583fd))
+* **deps:** update quay.io/brancz/kube-rbac-proxy docker tag to v0.23.1 [patch] ([#291](https://github.com/szpaczyna/rpi-k3s/issues/291)) ([d1b2c70](https://github.com/szpaczyna/rpi-k3s/commit/d1b2c700668abe59a2ac6c115439e5e018be778f))
+* **deps:** update quay.io/prometheus-operator/prometheus-config-reloader docker tag to v0.94.2 [patch] ([#274](https://github.com/szpaczyna/rpi-k3s/issues/274)) ([4dd00c3](https://github.com/szpaczyna/rpi-k3s/commit/4dd00c3fcba4a0f4a07ed27438d097bf538ac44e))
+* **deps:** update quay.io/prometheus/prometheus docker tag to v3.15.1 [patch] ([#275](https://github.com/szpaczyna/rpi-k3s/issues/275)) ([8ef80d9](https://github.com/szpaczyna/rpi-k3s/commit/8ef80d9dec1e9413c393ef29f1fad8fdfe2b8f50))
+* **helm:** unify deploy scripts, chart helpers, labels and CI stubs ([#279](https://github.com/szpaczyna/rpi-k3s/issues/279)) ([b9444e2](https://github.com/szpaczyna/rpi-k3s/commit/b9444e2163ffbdb2b1c824c66c03a70287fc9624))
+* **release:** set bump-patch-for-minor-pre-major to false ([#290](https://github.com/szpaczyna/rpi-k3s/issues/290)) ([0beddd3](https://github.com/szpaczyna/rpi-k3s/commit/0beddd3317f48c83bdf773979a5fee9fb9f46274))
+* remove unused package.json and package-lock.json ([4223b2f](https://github.com/szpaczyna/rpi-k3s/commit/4223b2fc45411887d990557c6aff71860b8a78ef))
+* **scripts:** keep only deploy_template.sh and sops-check.sh ([#282](https://github.com/szpaczyna/rpi-k3s/issues/282)) ([8816a28](https://github.com/szpaczyna/rpi-k3s/commit/8816a2873d7b830d57aac24d9915416049848190))
+* **traefik:** align external instance label with internal ([4efb313](https://github.com/szpaczyna/rpi-k3s/commit/4efb31321a41bd5dc0a1105c1673d65167a366da))
+* updated python version to 3.14.10 ([d6400dc](https://github.com/szpaczyna/rpi-k3s/commit/d6400dce07906ba7e35c0eda620881e6f732820e))
+* **whoops:** bump to 1.1.2 and add SECRET_KEY ([#295](https://github.com/szpaczyna/rpi-k3s/issues/295)) ([03cad8c](https://github.com/szpaczyna/rpi-k3s/commit/03cad8c0f2c483917e052945853691311ee1eac5))
+* **whoops:** bump to 1.2.2 ([#296](https://github.com/szpaczyna/rpi-k3s/issues/296)) ([d1d7e61](https://github.com/szpaczyna/rpi-k3s/commit/d1d7e612257f4035c53d7cc23d4d712e7462abff))
+* **whoops:** bump to v1.2.2 ([2743a7c](https://github.com/szpaczyna/rpi-k3s/commit/2743a7c94dc8dd0a3e0b2f09b2117ebaa755267d))
+
+
+### CI/CD
+
+* label kind nodes so worker-pinned charts can schedule ([#270](https://github.com/szpaczyna/rpi-k3s/issues/270)) ([617bac3](https://github.com/szpaczyna/rpi-k3s/commit/617bac36e5591161db157ef34a208d41c1729458))
+* update GitHub Actions to latest versions ([#297](https://github.com/szpaczyna/rpi-k3s/issues/297)) ([4e66128](https://github.com/szpaczyna/rpi-k3s/commit/4e661285e4a9646d1d027fc32a96c0775116cd1d))
+
+
+### Documentation
+
+* fix stale references to removed unused/ directory ([72aa808](https://github.com/szpaczyna/rpi-k3s/commit/72aa80806de50ac4f03b8789d74ef43710501c52))
+* **helm:** add missing chart READMEs, ignore graphify-out ([#267](https://github.com/szpaczyna/rpi-k3s/issues/267)) ([0db283b](https://github.com/szpaczyna/rpi-k3s/commit/0db283b185811abfe29e8e97594a0a2e4e98d9a2))
+* refresh README chart list and repository structure ([#283](https://github.com/szpaczyna/rpi-k3s/issues/283)) ([74bfddf](https://github.com/szpaczyna/rpi-k3s/commit/74bfddf1190c0bb5cc03a492eecf78df55624534))
+* updated copilot instructions ([7d9fd69](https://github.com/szpaczyna/rpi-k3s/commit/7d9fd69511bf2a09f99ac603ad0e8a6e9ad4a982))
+
 ## [0.6.8](https://github.com/szpaczyna/rpi-k3s/compare/v0.6.7...v0.6.8) (2026-10-18)
 
 
