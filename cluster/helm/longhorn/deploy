@@ -6,7 +6,7 @@ RELEASE_NAME="longhorn"
 CHART="longhorn/longhorn"
 
 # Pass an argument to upgrade to a version other than the pinned one.
-VERSION="1.12.1"
+VERSION="1.13.0"
 [[ $# -gt 0 ]] && VERSION="$1"
 
 REPO_NAME="longhorn"
