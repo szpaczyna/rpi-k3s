@@ -5,7 +5,7 @@ NAMESPACE="monitoring"
 RELEASE_NAME="x509-certificate-exporter"
 CHART="enix/x509-certificate-exporter"
 
-VERSION="4.2.2"
+VERSION="4.2.4"
 REPO_NAME="enix"
 REPO_URL="https://charts.enix.io"
 
