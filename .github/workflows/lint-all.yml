@@ -60,7 +60,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Set up Helm
-        uses: azure/setup-helm@v5.0.1
+        uses: azure/setup-helm@v5.1.0
         with:
           version: v4.3.1
       - name: Render Helm charts (skip charts with no values at all)
@@ -115,7 +115,7 @@ jobs:
           # ensure full fetch so ct can compare against origin/main (avoid targetBranch does not exist errors)
           fetch-depth: 0
       - name: Set up Helm
-        uses: azure/setup-helm@v5.0.1
+        uses: azure/setup-helm@v5.1.0
         with:
           version: v4.3.1
       - name: Set up chart-testing
