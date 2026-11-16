@@ -3,9 +3,9 @@ image:
   tag: "v0.21.0"
   pullPolicy: IfNotPresent
 
-# k3s version the plans converge the nodes to. ./deploy takes it as its first
-# argument and overrides this, so the default only applies to a bare
-# `helm install`, which is what CI does.
+# k3s version the plans converge the nodes to. ./deploy takes it as an optional
+# first argument and otherwise uses this value, which is also what a bare
+# `helm install` (CI) uses.
 k3sVersion: "v1.37.1+k3s1"
 
 plan:
