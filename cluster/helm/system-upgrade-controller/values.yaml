@@ -1,6 +1,6 @@
 image:
   repository: rancher/system-upgrade-controller
-  tag: "v0.20.2"
+  tag: "v0.21.0"
   pullPolicy: IfNotPresent
 
 # k3s version the plans converge the nodes to. ./deploy takes it as its first
