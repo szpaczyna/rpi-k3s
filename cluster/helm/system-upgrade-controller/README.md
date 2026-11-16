@@ -25,13 +25,13 @@ cd cluster/helm/system-upgrade-controller
 ./deploy v1.37.1+k3s1
 ```
 
-The argument is required. `deploy` passes it as `k3sVersion`, which becomes the
-`version` on both Plans. The kubectl image the upgrade Jobs use is derived from the
-same version with the `+k3sN` and `-` suffixes removed. `v1.37.1+k3s1` gives
-`rancher/kubectl:v1.37.1`.
+The argument is optional. `deploy` passes it as `k3sVersion`, which becomes the
+`version` on both Plans; without it, the value comes from `values.yaml`. The
+kubectl image the upgrade Jobs use is derived from the same version with the
+`+k3sN` and `-` suffixes removed. `v1.37.1+k3s1` gives `rancher/kubectl:v1.37.1`.
 
-The `k3sVersion` default in `values.yaml` applies only to a bare `helm install` with
-no version argument. CI installs the chart into a kind cluster that way.
+A bare `helm install` with no version argument also uses the `k3sVersion` default
+in `values.yaml`. CI installs the chart into a kind cluster that way.
 
 `plan.channel` is set to the stable K3s channel, but it is not used. Upstream SUC
 skips channel resolution when a Plan sets `version`, and this chart sets it in both Plans.

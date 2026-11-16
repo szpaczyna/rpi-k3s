@@ -7,11 +7,14 @@ CHART="."
 
 kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
 
-# k3s version the nodes should converge to, e.g. v1.37.1+k3s1
+# k3s version the nodes should converge to, e.g. v1.37.1+k3s1. Optional first
+# argument; without it the value comes from values.yaml.
+VERSION="${1:-$(yq -r '.k3sVersion' values.yaml)}"
+
 HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
   --namespace "${NAMESPACE}"
   --create-namespace
   --values values.yaml
-  --set k3sVersion="${1:?Usage: ./deploy <k3s-version>  e.g. ./deploy v1.37.1+k3s1}")
+  --set k3sVersion="${VERSION}")
 
 helm "${HELM_ARGS[@]}"

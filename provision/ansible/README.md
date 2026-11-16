@@ -481,6 +481,7 @@ exists.
 | `playbooks/pihole_setup.yml` | `pihole` | `system`, `sshd`, `fail2ban_exporter`, `log_shipper`, `dotfiles`, `pihole` |
 | `playbooks/gentoo_setup.yml` | `gentoo` | `gentoo_portage`, `sshd`, `dotfiles` |
 | `playbooks/standalone_setup.yml` | `standalone` | `sshd`, `dotfiles` |
+| `playbooks/dotfiles.yml` | `all` | `dotfiles` |
 | `playbooks/apt.yaml` | `k3s_cluster` | `apt_upgrade` (opt-in, see above) |
 | `playbooks/kubernetes/k3s-install.yml` | `k3s_cluster` | `k3s` |
 | `playbooks/kubernetes/k3s-remove-worker.yml` | one `k3s_worker` (`--limit`) | — (drains and uninstalls one agent) |

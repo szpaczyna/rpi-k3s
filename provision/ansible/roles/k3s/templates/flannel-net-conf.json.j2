@@ -4,8 +4,10 @@
    start, which is why config.yaml sets flannel-conf to point here instead.
 
    DirectRouting routes same-subnet traffic directly over the node interface
-   instead of encapsulating it in VXLAN. All nodes must sit in one L2 segment,
-   see k3s_node_subnet_cidr in group_vars/k3s_cluster/k3s.yml.
+   instead of encapsulating it in VXLAN. Disabled: systemd-networkd wipes those
+   routes on DHCP renew/restart and flannel does not reprogram them, which
+   breaks cross-node pod traffic and cluster DNS. All nodes must sit in one L2
+   segment for DirectRouting; see k3s_node_subnet_cidr in group_vars.
 #}
 {
 	"Network": "{{ k3s_flannel_network }}",

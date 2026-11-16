@@ -9,7 +9,7 @@ dotfiles_zsh_plugins:
   - forgit.zsh
   - l.plugin.zsh
   - zsh_reload.zsh
-  - zsh-z.plugin.zsh
+  - zoxide.plugin.zsh
 
 # Host-group specific plugins appended after the base list (kubectl & co. on k3s_cluster).
 dotfiles_zsh_plugins_extra: []
@@ -25,6 +25,7 @@ dotfiles_apt_packages:
   - neovim
   - pyenv
   - ripgrep
+  - zoxide
   - zsh-syntax-highlighting
 
 # Gentoo equivalents of the apt list above. fzf and neovim back the vimrc that
@@ -36,6 +37,8 @@ dotfiles_portage_packages:
     probe: "test -e {{ dotfiles_zsh_syntax_highlighting_path }}"
   - package: app-shells/fzf
     probe: command -v fzf
+  - package: app-shells/zoxide
+    probe: command -v zoxide
   - package: app-editors/neovim
     probe: command -v nvim
 

@@ -26,6 +26,7 @@ system_apt_install_packages:
   - pv
   - zsh
   - util-linux
+  - fd-find
 
 system_apt_remove_packages: []
 
