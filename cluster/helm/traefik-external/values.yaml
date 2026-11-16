@@ -848,7 +848,6 @@ service:
   # -- Adopt the existing ingress-nginx-controller Service identity during
   # cutover: same object name/selector semantics, so the LoadBalancer IP can
   # be transferred without a DNS change. See migration runbook.
-  type: LoadBalancer
   # -- Additional annotations applied to both TCP and UDP services (e.g. for cloud provider specific config)
   annotations: {}
   # -- Additional annotations for TCP service only
@@ -858,25 +857,26 @@ service:
   # -- Additional service labels (e.g. for filtering Service by custom labels)
   labels: {}
   # -- Additional entries here will be added to the service spec.
-  # -- Cannot contain type, selector or ports entries.
+  # -- Cannot contain selector or ports entries.
   # Pinned to the IP formerly used by ingress-nginx-controller so no DNS
   # changes were needed during cutover.
   spec:
+    type: LoadBalancer
     loadBalancerIP: "10.0.0.40"
     # Preserve the real client IP. With the default `Cluster` policy kube-proxy
     # SNATs every connection, so Traefik access logs only saw the node's pod
     # network gateway (10.42.x.1) instead of the client address. `Local` works
     # here because Traefik runs as a DaemonSet (a local backend on every node).
     externalTrafficPolicy: Local
-  # externalTrafficPolicy: Cluster
-  # clusterIP: "2.3.4.5"
-  loadBalancerSourceRanges: []
-  # - 192.168.0.1/32
-  # - 172.16.0.0/16
-  ## -- Class of the load balancer implementation
-  # loadBalancerClass: service.k8s.aws/nlb
-  externalIPs: []
-  # - 1.2.3.4
+    # externalTrafficPolicy: Cluster
+    # clusterIP: "2.3.4.5"
+    loadBalancerSourceRanges: []
+    # - 192.168.0.1/32
+    # - 172.16.0.0/16
+    ## -- Class of the load balancer implementation
+    # loadBalancerClass: service.k8s.aws/nlb
+    externalIPs: []
+    # - 1.2.3.4
   ## One of SingleStack, PreferDualStack, or RequireDualStack.
   # ipFamilyPolicy: SingleStack
   ## List of IP families (e.g. IPv4 and/or IPv6).
