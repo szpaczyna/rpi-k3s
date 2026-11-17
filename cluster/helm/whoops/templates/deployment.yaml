@@ -6,6 +6,9 @@ metadata:
     {{- include "whoops.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  # WHOOP rotates refresh tokens, so two pods running at once can invalidate each other's token.
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "whoops.selectorLabels" . | nindent 6 }}
