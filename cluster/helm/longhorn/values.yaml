@@ -120,7 +120,7 @@ defaultSettings:
   # may schedule 2x real capacity (see the setting above) and fill a node.
   storageMinimalAvailablePercentage: "25"
   upgradeChecker: false
-  defaultReplicaCount: "2"
+  defaultReplicaCount: "3"
   defaultLonghornStaticStorageClass: longhorn-static
   backupstorePollInterval: 0
   taintToleration: null

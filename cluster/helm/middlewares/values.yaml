@@ -12,6 +12,7 @@ namespaces:
 # namespace belongs here only while it still has a `*.shpaq.org` route.
 externalChainNamespaces:
   - apps
+  - auth
   - media
 # Namespaces still behind Authelia forwardAuth. `media` left this list when
 # its routes moved to media.home. Removing the middleware while routes still

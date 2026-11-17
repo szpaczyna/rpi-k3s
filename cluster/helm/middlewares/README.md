@@ -13,7 +13,7 @@ The chains reference four shared middlewares in namespace `traefik`: `redirect-h
 
 | Middleware | Created in | Contents |
 |---|---|---|
-| `security-chain` | `externalChainNamespaces`: `apps`, `media` | `redirect-https`, `geoblock`, `hsts`, `compress` |
+| `security-chain` | `externalChainNamespaces`: `apps`, `auth`, `media` | `redirect-https`, `geoblock`, `hsts`, `compress` |
 | `security-chain-nogeo` | `externalChainNamespaces` | `redirect-https`, `hsts`, `compress` |
 | `security-chain-internal` | `namespaces`: `apps`, `logging`, `media`, `monitoring` | `redirect-https` |
 | `authelia` | `autheliaNamespaces`: `apps` | `forwardAuth` to `http://authelia.auth.svc.cluster.local/api/authz/forward-auth`, passing `Remote-User`, `Remote-Groups`, `Remote-Email` |

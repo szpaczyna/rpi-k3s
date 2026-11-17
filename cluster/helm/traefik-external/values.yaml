@@ -1155,22 +1155,6 @@ extraObjects:
   - apiVersion: traefik.io/v1alpha1
     kind: Middleware
     metadata:
-      name: security-chain
-      namespace: traefik
-    spec:
-      chain:
-        middlewares:
-          - name: redirect-https
-            namespace: traefik
-          - name: geoblock
-            namespace: traefik
-          - name: hsts
-            namespace: traefik
-          - name: compress
-            namespace: traefik
-  - apiVersion: traefik.io/v1alpha1
-    kind: Middleware
-    metadata:
       name: redirect-https
       namespace: traefik
     spec:

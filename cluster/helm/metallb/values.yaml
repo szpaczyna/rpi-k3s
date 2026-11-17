@@ -7,35 +7,9 @@ nameOverride: ""
 fullnameOverride: ""
 loadBalancerClass: ""
 
-# To configure MetalLB, you must specify ONE of the following two
-# options.
-
 crds:
   enabled: true
   validationFailurePolicy: Fail
-
-ipAddressPools:
-- name: morphine
-  protocol: layer2
-  addresses:
-  - 10.0.0.31-10.0.0.34
-- name: bgp
-  protocol: bgp
-  addresses:
-  - 10.1.0.2-10.1.0.254
-
-bgpPeers:
-- myASN: 64512
-  peerASN: 64512
-  peerAddress: 10.0.0.1
-
-l2Advertisements:
-- ipAddressPools:
-  - morphine
-
-bgpAdvertisements:
-- ipAddressPools:
-  - bgp
 
 rbac:
   # create specifies whether to install and use RBAC rules.
