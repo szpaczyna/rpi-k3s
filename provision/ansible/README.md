@@ -121,8 +121,8 @@ sops group_vars/all/sshd.enc.sops.yml
 | Role | Applies to | What it does |
 |------|------------|---------------|
 | `system` | `k3s_cluster`, `pihole` | Base OS config: kernel modules (`br_netfilter`/`overlay`/`rbd` for k3s), smartd, inotify limits, locale/timezone, network sysctl for the container runtime, apt packages (`system_apt_install_packages` in `defaults/main.yml`), unattended-upgrades, chrony, `/etc/hosts` generated from the `k3s_cluster` and `pihole` inventory groups (template `templates/hosts.j2`), sysctl `99-local`, auditd rules, kernel module hardening, journald config, and zram swap. |
-| `apt_upgrade` | opt-in only | Full `apt upgrade: full` + autoremove/autoclean. Not included by any playbook by default — see [apt_upgrade](#apt_upgrade-opt-in) below. |
-| `k3s` | `k3s_cluster` | Installs k3s via the upstream `get.k3s.io` script (server on `k3s_master`, agent on `k3s_worker`), and renders `/etc/rancher/k3s/registries.yaml` from the SOPS secret above. |
+| `apt_upgrade` | opt-in only | Full `apt upgrade: full` + autoremove/autoclean. Only `playbooks/apt.yaml` includes it, see [apt_upgrade](#apt_upgrade-opt-in) below. |
+| `k3s` | `k3s_cluster` | Installs k3s via the upstream `install.sh` script pinned to the k3s release tag (server on `k3s_master`, agent on `k3s_worker`), and renders `/etc/rancher/k3s/registries.yaml` from the SOPS secret above. |
 | `pihole` | `pihole` | Manages only the Pi-hole v6 config *deviations* from default (via `pihole-FTL --config`), plus adlists in `gravity.db`. |
 | `gentoo_portage` | `gentoo` | Portage config for Gentoo hosts: `make.conf`, `package.use`, `package.accept_keywords/old`, `package.mask`. |
 | `dotfiles` | `k3s_cluster`, `pihole`, `gentoo` | Shared shell/editor setup: zsh (zshrc + plugins), tmux, fastfetch, neovim. |
@@ -139,10 +139,9 @@ tag:
 | `kernel` | `kernel.yml` | Kernel modules needed by k3s/containerd |
 | `initramfs` | `initramfs.yml` | Boot payload size for the 256 MiB boot partition (see below) |
 | `disks` | `disks.yml` | smartd disk monitoring |
-| `filesystem` | `filesystem.yml` | Filesystem/inotify limits |
 | `locale` | `locale.yml` | Locale and timezone |
 | `network` | `network.yml` | Network sysctl for the CRI |
-| `packages` | `packages.yml` | Apt packages (install/remove lists) |
+| `packages` | `packages.yml` | Apt packages (install list) |
 | `unattended-upgrades` | `unattended-upgrades.yml` | Unattended security upgrades |
 | `chrony` | `chrony.yml` | NTP via chrony |
 | `hosts` | `hosts.yml` | Static `/etc/hosts` (see below) |
@@ -212,14 +211,17 @@ ansible-playbook playbooks/apt.yaml
 
 Replaces the previous dependency on the `xanmanning.k3s` Galaxy role (no
 longer in `requirements.yml`) with a thin role that calls the upstream
-`curl https://get.k3s.io | sh` installer directly:
+`install.sh` installer directly, fetched from the k3s release tag on
+`raw.githubusercontent.com`:
 
 - **Server** (`tasks/server.yml`, hosts in `k3s_master`): installs with
   `INSTALL_K3S_EXEC` matching flannel vxlan backend, `traefik`/`servicelb`/
   `local-path` disabled, `--write-kubeconfig-mode 644`, data dir `/k3s`
   (`k3s_server_exec_args` / `k3s_data_dir` in `defaults/main.yml`). After
-  install it reads the join token from `{{ k3s_data_dir }}/server/token` and
-  exposes it as a cacheable fact (`k3s_token`).
+  install it starts the server and waits for the join token in
+  `{{ k3s_data_dir }}/server/token`. The installer runs with
+  `INSTALL_K3S_SKIP_START=true`, so the first start already reads
+  `config.yaml`.
 - **Agent** (`tasks/agent.yml`, hosts in `k3s_worker`): joins the master by
   DNS name (`https://rpi-k3s-master-00:6443`, from
   `hostvars[groups['k3s_master'][0]].inventory_hostname`). The agent reads
@@ -429,7 +431,8 @@ directly from `packages.fluentbit.io` (no apt repository) because the fleet
 runs Ubuntu 26.04, which has no published repository yet; the noble `.deb`
 installs cleanly on resolute. Configuration is classic-mode Fluent Bit,
 templated from `templates/fluent-bit.conf.j2`, with `host` pinned through
-`/etc/hosts` (blueberry is its own resolver and does not resolve
+`/etc/hosts`, which the `system` role renders with the `loki.home` line on
+`pihole` hosts (blueberry is its own resolver and does not resolve
 `loki.home` through its upstream chain).
 
 With the country allowlist enabled (`log_shipper_tail_ssh_geo`), the agent also
@@ -502,7 +505,8 @@ skipped, because `fetch` does not run in check mode.
 
 `k3s-nuke.yml` tears the cluster down (`k3s-killall.sh`, then the
 `*-uninstall.sh` scripts, then removes leftover CNI files under
-`/etc/cni/net.d`).
+`/etc/cni/net.d` and `{{ k3s_data_dir }}/{server,agent,data}`). It keeps
+`{{ k3s_data_dir }}/storage`, which holds the Longhorn volumes.
 
 ### Adding a worker
 

@@ -28,8 +28,6 @@ system_apt_install_packages:
   - util-linux
   - fd-find
 
-system_apt_remove_packages: []
-
 ### initramfs
 # The boot partition is 256 MiB and piboot-try stages a second full copy of the
 # boot payload into new/ on every flash-kernel run, so the payload has to fit

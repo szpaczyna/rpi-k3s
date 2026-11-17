@@ -1,9 +1,11 @@
 ---
+# Skip the start: the server must not come up before config.yaml sets its data dir.
 - name: Install k3s server # noqa: command-instead-of-module
   ansible.builtin.shell: >
     set -o pipefail &&
-    curl -sfL https://get.k3s.io |
+    curl -sfL https://raw.githubusercontent.com/k3s-io/k3s/{{ k3s_version }}/install.sh |
     INSTALL_K3S_VERSION={{ k3s_version }}
+    INSTALL_K3S_SKIP_START=true
     INSTALL_K3S_EXEC="server"
     sh -s -
   args:
@@ -55,18 +57,18 @@
   ansible.builtin.file:
     path: /etc/systemd/system/k3s.service.d
     state: absent
-  notify: Reload systemd
+  notify: Restart k3s
+
+- name: Apply k3s config before waiting for the token
+  ansible.builtin.meta: flush_handlers
+
+- name: Start k3s server
+  ansible.builtin.systemd:
+    name: k3s
+    state: started
+    enabled: true
 
 - name: Wait for k3s server token file
   ansible.builtin.wait_for:
     path: "{{ k3s_data_dir }}/server/token"
     timeout: 60
-
-- name: Read k3s server token
-  ansible.builtin.slurp:
-    src: "{{ k3s_data_dir }}/server/token"
-  register: k3s_token_slurp
-
-- name: Expose k3s token to other hosts in play
-  ansible.builtin.set_fact:
-    k3s_token: "{{ k3s_token_slurp.content | b64decode | trim }}"

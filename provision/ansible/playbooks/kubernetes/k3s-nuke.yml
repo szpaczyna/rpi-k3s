@@ -9,9 +9,14 @@
       ansible.builtin.pause:
         seconds: 5
   tasks:
+    - name: Load k3s role defaults
+      ansible.builtin.include_vars: "{{ playbook_dir }}/../../roles/k3s/defaults/main.yml"
     - name: Kill k3s
-      ansible.builtin.command: /usr/local/bin/k3s-killall.sh
-      changed_when: true
+      ansible.builtin.command:
+        cmd: /usr/local/bin/k3s-killall.sh
+        removes: /usr/local/bin/k3s-killall.sh
+      environment:
+        K3S_DATA_DIR: "{{ k3s_data_dir }}"
     - name: Uninstall k3s
       ansible.builtin.command:
         cmd: /usr/local/bin/k3s-uninstall.sh
@@ -30,3 +35,12 @@
         path: "{{ item.path }}"
         state: absent
       loop: "{{ files_to_delete.files }}"
+    # Longhorn keeps its volumes in {{ k3s_data_dir }}/storage, so only the k3s state goes.
+    - name: Delete k3s state from the data dir
+      ansible.builtin.file:
+        path: "{{ k3s_data_dir }}/{{ item }}"
+        state: absent
+      loop:
+        - server
+        - agent
+        - data
