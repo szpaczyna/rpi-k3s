@@ -60,10 +60,3 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
-
-{{/*
-Resolve the database port from values.
-*/}}
-{{- define "booklore.dbPort" -}}
-{{- .Values.mariadb.port -}}
-{{- end }}

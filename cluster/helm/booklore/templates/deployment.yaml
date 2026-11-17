@@ -85,7 +85,7 @@ spec:
             {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- end }}
-        {{- if and .Values.mariadb.enabled .Values.mariadb.inline }}
+        {{- if .Values.mariadb.enabled }}
         - name: mariadb
           image: "{{ .Values.mariadb.image.repository }}:{{ .Values.mariadb.image.tag }}"
           imagePullPolicy: {{ .Values.mariadb.image.pullPolicy }}
@@ -120,7 +120,7 @@ spec:
           resources:
             {{- toYaml .Values.mariadb.resources | nindent 12 }}
         {{- end }}
-      {{- if (or .Values.persistence.dataVolume.enabled .Values.persistence.booksVolume.enabled .Values.extraVolumes (and .Values.mariadb.enabled .Values.mariadb.inline .Values.mariadb.persistence.config.enabled)) }}
+      {{- if (or .Values.persistence.dataVolume.enabled .Values.persistence.booksVolume.enabled .Values.extraVolumes (and .Values.mariadb.enabled .Values.mariadb.persistence.config.enabled)) }}
       volumes:
         {{- if .Values.persistence.dataVolume.enabled }}
         - name: data
@@ -140,7 +140,7 @@ spec:
               {{- include "booklore.fullname" . }}-books
             {{- end }}
         {{- end }}
-        {{- if and .Values.mariadb.enabled .Values.mariadb.inline .Values.mariadb.persistence.config.enabled }}
+        {{- if and .Values.mariadb.enabled .Values.mariadb.persistence.config.enabled }}
         - name: mariadb-config
           persistentVolumeClaim:
             claimName: {{ if .Values.mariadb.persistence.config.existingClaim }}

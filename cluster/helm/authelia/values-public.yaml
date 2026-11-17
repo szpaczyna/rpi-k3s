@@ -1,7 +1,10 @@
 ---
 ## Default values for Authelia.
+# registry and repository repeat the chart defaults so Renovate can track the tag.
 image:
-  tag: "4.39.24"
+  registry: ghcr.io
+  repository: authelia/authelia
+  tag: "4.39.28"
 
 pod:
   kind: Deployment
@@ -46,16 +49,10 @@ persistence:
   size: 1Gi
   storageClass: longhorn
 
+# The upstream HTTPRoute template has no filters hook, so the route lives in
+# extraObjects to carry the WAN security chain.
 ingress:
-  enabled: true
-  gatewayAPI:
-    enabled: true
-    parentRefs:
-      - name: traefik-gateway
-        namespace: traefik
-        sectionName: websecure
-    hostnamesOverride:
-      - auth.shpaq.org
+  enabled: false
 
 # TLS certificate for the gatewayAPI hostname, rendered by the upstream
 # chart via extraObjects. It lives in the `traefik` namespace because the
@@ -80,6 +77,32 @@ extraObjects:
       usages:
         - digital signature
         - key encipherment
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: authelia
+      namespace: auth
+    spec:
+      parentRefs:
+        - name: traefik-gateway
+          namespace: traefik
+          sectionName: websecure
+      hostnames:
+        - auth.shpaq.org
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          filters:
+            - type: ExtensionRef
+              extensionRef:
+                group: traefik.io
+                kind: Middleware
+                name: security-chain
+          backendRefs:
+            - name: authelia
+              port: 80
 
 configMap:
   theme: dark

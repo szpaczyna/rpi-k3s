@@ -2,8 +2,6 @@
 ---
 mariadb:
   enabled: true
-  # Run MariaDB inside the app pod (inline) instead of a separate StatefulSet
-  inline: true
   port: 3306
   resources:
     limits:
@@ -85,7 +83,6 @@ securityContext:
 service:
   type: ClusterIP
   port: 6060
-  targetPort: http
 
 httpRoute:
   enabled: true

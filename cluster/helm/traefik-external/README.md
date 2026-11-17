@@ -79,7 +79,9 @@ Applied via `ports.websecure.http.middlewares`:
 ### Per-route (security-chain, HTTPRoutes only)
 
 Applied via `extensionRef` on each HTTPRoute rule. The `security-chain`
-Chain middleware (defined in `extraObjects`) combines:
+Chain middleware (one copy per namespace, rendered by
+[`cluster/helm/middlewares`](../middlewares); the members live in `extraObjects`)
+combines:
 
 1. **`redirect-https`** — permanent redirect from HTTP to HTTPS.
 2. **`geoblock`** — Poland-only allowlist (`allowedCountries: [PL]`,
@@ -89,16 +91,6 @@ Chain middleware (defined in `extraObjects`) combines:
    `stsIncludeSubdomains: true`, `stsPreload: true`).
 4. **`compress`** — Brotli/gzip response compression.
    `text/event-stream` is excluded (SSE needs raw stream).
-
-### Per-route (security-chain, HTTPRoutes only)
-
-Applied via `extensionRef` on each HTTPRoute rule. The `security-chain`
-Chain middleware (defined in `extraObjects`) combines:
-
-1. **`redirect-https`** — permanent redirect from HTTP to HTTPS.
-2. **`geoblock`** — Poland-only allowlist (`allowedCountries: [PL]`,
-   `defaultAllow: false`). Private/LAN traffic is always allowed via
-   `allowPrivate: true`; everything else gets `418`.
 
 `geoblock` is per-route (not entrypoint) because cert-manager's ACME
 HTTP-01 solver creates its own HTTPRoute without the security chain —

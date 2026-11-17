@@ -63,7 +63,3 @@ persistence:
 
 podDisruptionBudget: {}
 #    minAvailable: 1
-hpa:
-  enabled: false
-vpa:
-  enabled: false

@@ -1,7 +1,7 @@
 # Authelia
 
 Single Sign-On / MFA portal for `*.shpaq.org` subdomains, deployed using
-the upstream chart `authelia/authelia` (0.11.22, appVersion 4.39.24) from
+the upstream chart `authelia/authelia` (0.11.22, image pinned to 4.39.28) from
 `https://charts.authelia.com`.
 
 ## Files
@@ -28,7 +28,8 @@ keeping an SSO portal for one hostname.
 ## Architecture
 
 - **Gateway API**: HTTPRoute for `auth.shpaq.org` → Gateway `traefik-gateway`
-  (external). There is no counterpart on `traefik-internal`.
+  (external), defined in `extraObjects` with the `security-chain` Middleware
+  (geoblock, HSTS). There is no counterpart on `traefik-internal`.
 - **Authentication backend**: file-based (`users_database.yml`), seeded from
   Secret `authelia-users` to PVC via initContainer — file is writable, password
   changes from the portal work.
@@ -58,10 +59,10 @@ The script:
 3. Runs `helm upgrade --install` with both `values-public.yaml` and
    `./values.enc.yaml` (via `sops -d`)
 
-**Important**: the `authelia` Middleware objects are **not** owned by this
-chart. They come from [`cluster/helm/middlewares`](../middlewares), whose
-`autheliaNamespaces` list exists because a `forwardAuth` reference must live in
-the same namespace as the HTTPRoute using it. Deploy that chart first when
+**Important**: the `authelia` and `security-chain` Middleware objects are
+**not** owned by this chart. They come from [`cluster/helm/middlewares`](../middlewares),
+because an HTTPRoute `extensionRef` must name a Middleware in its own
+namespace. Deploy that chart first when
 adding a namespace.
 
 ## Secrets
