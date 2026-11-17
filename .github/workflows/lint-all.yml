@@ -108,7 +108,8 @@ jobs:
 
   chart_testing:
     name: Chart Testing
-    runs-on: ubuntu-26.04
+    # The cluster is arm64 and some images (booklore) ship no amd64 build.
+    runs-on: ubuntu-26.04-arm
     steps:
       - uses: actions/checkout@v7
         with:
@@ -127,6 +128,11 @@ jobs:
       - name: Install Gateway API CRDs
         run: |
           kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
+      - name: Install Traefik CRDs
+        run: |
+          # The middlewares chart renders only Traefik Middleware objects.
+          # Pinned to the Traefik version the traefik-external chart runs.
+          kubectl apply --server-side -f https://raw.githubusercontent.com/traefik/traefik/v3.7.18/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
       - name: Alias the longhorn StorageClass to kind's local-path provisioner
         run: |
           # Several charts hardcode storageClassName: longhorn, which doesn't
@@ -208,6 +214,12 @@ jobs:
             install_args=()
             if yq -e '.httpRoute.enabled' "$c/values.yaml" >/dev/null 2>&1; then
               install_args+=(--set httpRoute.enabled=false)
+            fi
+            # Charts that point at live-only PVCs, Secrets or host paths ship
+            # CI overrides next to the values-public stubs.
+            stub=".github/ci-stub-values/$(basename "$c").yaml"
+            if [ -f "$stub" ]; then
+              install_args+=(--values "$stub")
             fi
             # Some charts render resources (e.g. a cross-namespace Certificate
             # for the Gateway websecure listener) into a namespace other than
