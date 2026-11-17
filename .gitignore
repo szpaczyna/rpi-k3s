@@ -7,6 +7,10 @@ scripts/gitea/config.yaml
 handoff*
 ### sops
 .sops.yaml
+# Plaintext written by the per-chart decrypt scripts.
+cluster/helm/bitwarden/values.yaml
+cluster/helm/gitea/values.yaml
+cluster/helm/longhorn/longhorn-auth.yaml
 ### ansible
 # inventory.enc.yaml is SOPS-encrypted and safe to commit; inventory.sh and
 # inventory_transform.py are the decrypt/transform scripts, also safe.
