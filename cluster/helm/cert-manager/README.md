@@ -11,8 +11,6 @@ upstream chart `jetstack/cert-manager` (`v1.21.1`) from `https://charts.jetstack
 | `deploy` | Deploy script (repo, namespace, helm install, issuers) |
 | `letsencrypt-staging.yaml` | ClusterIssuer `letsencrypt-stage` (Let's Encrypt staging). Applied by `deploy` |
 | `letsencrypt-production.yaml` | ClusterIssuer `letsencrypt-prod` (Let's Encrypt production). Applied by `deploy` |
-| `prometheus-rule.yaml` | PrometheusRule `cert-manager.rules`. Applied manually |
-| `letsencrypt-podMonitor.yaml` | PodMonitor `cert-manager`. Applied manually |
 
 ## Architecture
 
@@ -44,13 +42,6 @@ fails, rerun `./deploy` once the webhook pod is `Running`.
 
 To change the chart version, edit `VERSION` in `deploy`, run `make helm-update`
 from the repository root, then run `./deploy`.
-
-## Manual steps
-
-The deploy script does not apply these two files:
-
-    kubectl apply -f prometheus-rule.yaml
-    kubectl apply -f letsencrypt-podMonitor.yaml
 
 ## Secrets
 

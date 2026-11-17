@@ -1,7 +1,7 @@
 # MetalLB
 
 Load balancer for bare-metal services. It hands out LAN addresses to
-`LoadBalancer` Services, using the upstream chart `metallb/metallb` (`0.16.1`)
+`LoadBalancer` Services, using the upstream chart `metallb/metallb` (`0.16.2`)
 from `https://metallb.github.io/metallb`.
 
 ## Files
@@ -16,8 +16,8 @@ from `https://metallb.github.io/metallb`.
 
 - **Pool**: `k3s-services` (`10.0.0.40-10.0.0.50`) in `resources.yaml`, advertised
   through `l2advertisement1`. The upstream chart has no values for pools.
-- **Version pin**: `VERSION="0.16.1"` in `deploy`. The MetalLB image tag
-  `v0.16.1` is set in `values.yaml` in two places. Keep it in step with the pin.
+- **Version pin**: `VERSION="0.16.2"` in `deploy`. The image tags in
+  `values.yaml` stay empty, so the chart uses its appVersion.
 
 ## Deployment
 
@@ -27,7 +27,7 @@ from `https://metallb.github.io/metallb`.
 The script:
 1. Adds the `metallb` Helm repo only if it is not configured. It does not run
    `helm repo update`.
-2. Runs `helm upgrade --install` with `values.yaml` and `--version 0.16.1`
+2. Runs `helm upgrade --install` with `values.yaml` and `--version 0.16.2`
 3. Applies `resources.yaml`
 
 To change the chart version, edit `VERSION` in `deploy`, run `make helm-update`

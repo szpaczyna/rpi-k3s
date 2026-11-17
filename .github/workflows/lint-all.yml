@@ -89,7 +89,7 @@ jobs:
               echo "Helm template failed for $name; skipping"; continue; }
           done
       - name: Run kubeconform
-        uses: docker://ghcr.io/yannh/kubeconform:latest
+        uses: docker://ghcr.io/yannh/kubeconform:v0.8.0
         with:
           args: -strict -ignore-missing-schemas -schema-location default -summary rendered
 
