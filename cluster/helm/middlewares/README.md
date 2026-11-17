@@ -55,8 +55,9 @@ cd cluster/helm/middlewares
 ```
 
 Add a namespace to the relevant list before deploying a chart whose routes need
-the middleware in that namespace. The [Authelia README](../authelia/README.md)
-explains the same ordering for `authelia`.
+the middleware in that namespace. `deploy` creates every listed namespace that
+does not exist yet, so the chart also installs on a fresh cluster. The
+[Authelia README](../authelia/README.md) explains the same ordering for `authelia`.
 
 ## Related
 

@@ -13,6 +13,9 @@ metadata:
     {{- include "bitwarden.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  # The data PVC is ReadWriteOnce: a surge pod on another node could never attach it.
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "bitwarden.selectorLabels" . | nindent 6 }}
@@ -20,10 +23,11 @@ spec:
     metadata:
       labels:
         {{- include "bitwarden.selectorLabels" . | nindent 8 }}
-      {{- with .Values.podAnnotations }}
       annotations:
+        checksum/env: {{ .Values.env | toYaml | sha256sum }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -31,11 +35,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          env:
-            {{- range $key, $val := .Values.env }}
-            - name: {{ $key }}
-              value: {{ $val | quote }}
-            {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "bitwarden.fullname" . }}-env
           ports:
             - name: http
               containerPort: 80
