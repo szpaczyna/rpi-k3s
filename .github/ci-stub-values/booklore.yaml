@@ -1,0 +1,19 @@
+# CI-only overrides for the kind install (never deployed): the live PVCs,
+# Secret and host path do not exist there, so the chart creates its own.
+mariadb:
+  auth:
+    existingSecret: ""
+    password: ci-placeholder # pragma: allowlist secret
+  rootPassword: ci-placeholder # pragma: allowlist secret
+  persistence:
+    config:
+      existingClaim: ""
+
+persistence:
+  dataVolume:
+    existingClaim: ""
+  booksVolume:
+    existingClaim: ""
+
+extraVolumes: []
+extraVolumeMounts: []
