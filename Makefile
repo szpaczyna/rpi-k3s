@@ -16,7 +16,7 @@ COMPONENTS := $(INFRA) $(INGRESS) $(PLATFORM) $(MONITORING) $(APPS)
 
 .DEFAULT_GOAL := help
 
-.PHONY: all $(COMPONENTS) helm-update enc yamllint jsonlint help
+.PHONY: all $(COMPONENTS) helm-update yamllint jsonlint help
 
 all: $(COMPONENTS) ## Deploy all components
 
@@ -25,9 +25,6 @@ $(COMPONENTS):
 
 helm-update: ## Update Helm repositories
 	helm repo update
-
-enc: ## Encrypt all *secret.yaml files with sops
-	find . -name "*secret.yaml" | xargs -I {} sops -e -i {}
 
 help: ## Show this help message
 	@echo "Usage: make <target>"

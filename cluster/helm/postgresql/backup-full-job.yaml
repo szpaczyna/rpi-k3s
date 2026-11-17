@@ -21,14 +21,17 @@ spec:
               - "-c"
               - |
                 echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass
-                echo "Cleaning up full backups older than 14 days"
-                find /var/backups/full -name "*.sql.gz" -type f -mtime +14 -delete
+                mkdir -p /var/backups/full
                 echo "Starting full backup..."
-                pg_dumpall -U postgres -h morphine-postgresql | gzip > /var/backups/full/morphine-postgresql-$(date +"%Y%m%d-%H%M").sql.gz
-                if [ $? -eq 0 ]; then
+                OUT=/var/backups/full/morphine-postgresql-$(date +"%Y%m%d-%H%M%S").sql
+                # No pipe: sh has no pipefail, so a pipe would hide pg_dumpall failures.
+                if pg_dumpall -U postgres -h morphine-postgresql > "${OUT}" && gzip "${OUT}"; then
                   echo "Full backup completed successfully"
+                  echo "Cleaning up full backups older than 14 days"
+                  find /var/backups/full -name "*.sql.gz" -type f -mtime +14 -delete
                 else
                   echo "Full backup FAILED" >&2
+                  rm -f "${OUT}" "${OUT}.gz"
                   exit 1
                 fi
             env:

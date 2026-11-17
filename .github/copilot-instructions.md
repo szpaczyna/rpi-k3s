@@ -72,7 +72,7 @@ This repository is infrastructure-as-code for a Raspberry Pi k3s homelab. Treat 
 ## Commands to prefer
 
 - Prefer existing repo commands before inventing new ones:
-  - `make <component>` (deploy a single component), `make all`, `make helm-update`, `make enc`, `make help`
+  - `make <component>` (deploy a single component), `make all`, `make helm-update`, `make help`
   - `pre-commit run --all-files` (or a named hook) for local validation
   - `helm lint <chart-dir>` and `helm template <release-name> <chart-dir>` for Helm changes
   - `scripts/sops-check.sh <files>` to verify `.enc.*` files are encrypted
