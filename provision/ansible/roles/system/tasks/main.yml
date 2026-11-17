@@ -19,10 +19,6 @@
   tags: ['disks']
   when: "'k3s_cluster' in group_names"
 
-- name: Filesystem limits
-  ansible.builtin.include_tasks: filesystem.yml
-  tags: ['filesystem']
-
 - name: Locale and timezone
   ansible.builtin.include_tasks: locale.yml
   tags: ['locale']

@@ -1,0 +1,23 @@
+---
+- name: Reload sysctl
+  ansible.builtin.systemd:
+    name: systemd-sysctl.service
+    state: restarted
+
+- name: Restart smartd
+  ansible.builtin.systemd:
+    name: smartd.service
+    state: restarted
+
+- name: Restart unattended-upgrades
+  ansible.builtin.systemd:
+    name: unattended-upgrades.service
+    state: restarted
+
+# Defined after Reload sysctl and listening to it: zram-swap-config sets
+# vm.swappiness and has to win after every sysctl reload.
+- name: Restart zram swap
+  listen: Reload sysctl
+  ansible.builtin.systemd:
+    name: zram-swap-config.service
+    state: restarted

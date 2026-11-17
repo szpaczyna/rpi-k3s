@@ -26,13 +26,6 @@
   notify: Update CA certificates
   tags: ['log-shipper']
 
-- name: Ensure loki.home resolves
-  ansible.builtin.lineinfile:
-    path: /etc/hosts
-    line: "10.0.0.50 loki.home"
-    state: present
-  tags: ['log-shipper']
-
 - name: Determine Fluent Bit package coordinates
   ansible.builtin.set_fact:
     log_shipper_deb_arch: >-
@@ -54,6 +47,7 @@
   ansible.builtin.get_url:
     url: "{{ log_shipper_deb_url | replace(' ', '') | replace('\n', '') }}"
     dest: "/tmp/fluent-bit_{{ log_shipper_version }}_{{ log_shipper_deb_arch }}.deb"
+    checksum: "sha256:{{ log_shipper_deb_sha256[log_shipper_deb_base][log_shipper_deb_arch] }}"
     mode: "0644"
   register: log_shipper_download
   retries: 5

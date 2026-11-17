@@ -1,8 +1,6 @@
 ---
-# Opt-in, full-system apt upgrade. Not included by any playbook by default:
-# run it explicitly (e.g. `ansible-playbook ... --tags apt-upgrade` once the
-# role is wired into a play) when you want a one-off full upgrade outside of
-# the routine provisioning done by roles/system/tasks/packages.yml.
+# Opt-in, full-system apt upgrade. Only playbooks/apt.yaml includes it, so it
+# stays out of the routine provisioning done by roles/system/tasks/packages.yml.
 - name: Upgrade all system packages
   ansible.builtin.apt:
     upgrade: full

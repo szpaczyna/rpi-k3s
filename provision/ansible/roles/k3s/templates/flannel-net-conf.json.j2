@@ -7,7 +7,7 @@
    instead of encapsulating it in VXLAN. Disabled: systemd-networkd wipes those
    routes on DHCP renew/restart and flannel does not reprogram them, which
    breaks cross-node pod traffic and cluster DNS. All nodes must sit in one L2
-   segment for DirectRouting; see k3s_node_subnet_cidr in group_vars.
+   segment for DirectRouting, and they sit on a /25 (10.0.0.0/25), not a /24.
 #}
 {
 	"Network": "{{ k3s_flannel_network }}",

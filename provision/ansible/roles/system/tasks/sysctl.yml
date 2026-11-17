@@ -10,6 +10,7 @@
     src: sysctl/99-local.conf.j2
     dest: /etc/sysctl.d/99-local.conf
     mode: "0644"
+  notify: Reload sysctl
 
 # This file used to fight 99-local.conf over fs.file-max, vm.swappiness,
 # somaxconn and netdev_max_backlog. Its settings now live in 99-local.conf.
@@ -17,8 +18,14 @@
   ansible.builtin.file:
     path: /etc/sysctl.d/99-network-performance.conf
     state: absent
+  notify: Reload sysctl
 
-- name: Reload sysctl so the new values take effect
-  ansible.builtin.systemd:
-    name: systemd-sysctl.service
-    state: restarted
+# Older runs wrote the inotify limits here; 99-local.conf now sets the same values.
+- name: Retire superseded inotify sysctl files
+  ansible.builtin.file:
+    path: "/etc/sysctl.d/{{ item }}"
+    state: absent
+  loop:
+    - 99-max_user_watches.conf
+    - 99-max_user_instances.conf
+  notify: Reload sysctl

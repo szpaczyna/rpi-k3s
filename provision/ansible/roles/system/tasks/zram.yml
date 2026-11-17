@@ -8,8 +8,9 @@
   ansible.builtin.git:
     repo: https://github.com/StuartIanNaylor/zram-swap-config.git
     dest: /opt/zram-swap-config
-    version: master
+    version: f62bb382d964be9661df3bd51aacaec05299dea9 # pragma: allowlist secret
   when: not system_zram_cloned.stat.exists
+  notify: Restart zram swap
 
 - name: Changing perms of "/opt/zram-swap-config/install.sh"
   ansible.builtin.file:
@@ -22,20 +23,26 @@
     chdir: "/opt/zram-swap-config"
   register: system_zram_install
   changed_when: '"Reboot to activate zram-swap-config" in system_zram_install.stdout'
+  notify: Restart zram swap
 
 - name: Copy zram-swap-config.conf
   ansible.builtin.template:
     src: zram-swap-config.conf.j2
     dest: /etc/zram-swap-config.conf
     mode: "0644"
+  notify: Restart zram swap
 
 # SWAPPINESS differs per role, and zram-swap-config.service runs at
 # sysinit.target, after systemd-sysctl, so it decides the final value.
 - name: Start zram swap with the role's swappiness
   ansible.builtin.systemd:
     name: zram-swap-config.service
-    state: restarted
+    state: started
     enabled: true
+
+# The checks below have to see the swappiness the restart handler sets.
+- name: Apply pending zram and sysctl restarts
+  ansible.builtin.meta: flush_handlers
 
 # These three tasks verify the *real* effect of the systemd restart above.
 # In --check mode that restart never actually happens, so the swappiness
