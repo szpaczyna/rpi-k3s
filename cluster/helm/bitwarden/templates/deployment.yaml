@@ -14,8 +14,10 @@ metadata:
 spec:
   replicas: {{ .Values.replicaCount }}
   # The data PVC is ReadWriteOnce: a surge pod on another node could never attach it.
+  # rollingUpdate: null clears the defaulted field, which server-side apply keeps otherwise.
   strategy:
     type: Recreate
+    rollingUpdate: null
   selector:
     matchLabels:
       {{- include "bitwarden.selectorLabels" . | nindent 6 }}
