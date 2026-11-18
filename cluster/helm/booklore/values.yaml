@@ -34,7 +34,12 @@ image:
   # repository: ghcr.io/booklore-app/booklore
   repository: szpaczyn/booklore
   pullPolicy: IfNotPresent
-  tag: "v1.18.5"
+  tag: "v2.4.0-corretto"
+
+# entrypoint.sh drops to this uid/gid; must match ownership of the media library.
+appUser:
+  uid: 568
+  gid: 568
 
 imagePullSecrets: []
 
@@ -105,6 +110,12 @@ resources:
     cpu: 500m
     memory: 768Mi
 
+# Flyway migrations run before Tomcat listens; a liveness kill mid-migration corrupts the schema.
+startupProbe:
+  tcpSocket:
+    port: http
+  periodSeconds: 10
+  failureThreshold: 60
 livenessProbe:
   tcpSocket:
     port: http

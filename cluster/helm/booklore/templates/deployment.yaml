@@ -47,6 +47,10 @@ spec:
             - configMapRef:
                 name: {{ include "booklore.fullname" . }}-app-config
           env:
+            - name: USER_ID
+              value: {{ .Values.appUser.uid | quote }}
+            - name: GROUP_ID
+              value: {{ .Values.appUser.gid | quote }}
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -56,6 +60,10 @@ spec:
                   name: {{ .Release.Name }}-mariadb
                   {{- end }}
                   key: mariadb-password
+          {{- with .Values.startupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
