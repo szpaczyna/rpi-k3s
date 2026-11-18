@@ -6,7 +6,7 @@ replicaCount: 1
 image:
   repository: szpaczyn/whoops
   pullPolicy: Always
-  tag: v1.3.3
+  tag: v1.3.4
 
 service:
   type: ClusterIP
