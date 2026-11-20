@@ -3,7 +3,7 @@ AllCops:
   Exclude:
     - _site/**/*
 
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
 
 Gemspec/RequiredRubyVersion:
