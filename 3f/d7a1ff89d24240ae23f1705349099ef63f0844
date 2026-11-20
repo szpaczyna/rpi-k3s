@@ -1,0 +1,19 @@
+.pre-commit-config.yaml
+  s_ecb20e9f123a02::t_4b2b7fe2340557 31,38-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3fd7a1ff89d24240ae23f1705349099ef63f0844",
+  "prompts": {},
+  "sessions": {
+    "s_ecb20e9f123a02": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_a0e65705-c795-4359-8f86-82b4928aafe5",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
