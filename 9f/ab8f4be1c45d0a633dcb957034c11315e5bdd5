@@ -1,0 +1,20 @@
+cluster/helm/longhorn/deploy
+  s_ecb20e9f123a02::t_9f1a8e0dd0f46a 34-35
+  s_ecb20e9f123a02::t_b1c33c082415cf 36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9fab8f4be1c45d0a633dcb957034c11315e5bdd5",
+  "prompts": {},
+  "sessions": {
+    "s_ecb20e9f123a02": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_a0e65705-c795-4359-8f86-82b4928aafe5",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
