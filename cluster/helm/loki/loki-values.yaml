@@ -42,6 +42,10 @@ deploymentMode: SingleBinary
 
 singleBinary:
   replicas: 1
+  # The chart default deletes the PVC when the StatefulSet is scaled to 0, which wipes all logs.
+  persistence:
+    whenScaled: Retain
+    whenDeleted: Retain
   nodeSelector:
     kubernetes.io/role: worker
   resources:
