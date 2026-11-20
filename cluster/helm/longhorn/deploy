@@ -6,7 +6,7 @@ RELEASE_NAME="longhorn"
 CHART="longhorn/longhorn"
 
 # Pass an argument to upgrade to a version other than the pinned one.
-VERSION="1.12.1"
+VERSION="1.12.2"
 [[ $# -gt 0 ]] && VERSION="$1"
 
 REPO_NAME="longhorn"
@@ -30,6 +30,9 @@ HELM_ARGS+=(--values values.yaml)
 [[ -n "${VERSION}" ]] && HELM_ARGS+=(--version "${VERSION}")
 
 helm "${HELM_ARGS[@]}"
+
+# The node patch below goes through the admission webhook served by longhorn-manager.
+kubectl -n "${NAMESPACE}" rollout status daemonset/longhorn-manager --timeout=10m
 
 # The control plane runs on 3.8 GB and hosts no application workloads, so it
 # must not store volume replicas. The chart cannot express per-node
