@@ -75,7 +75,10 @@ spec:
         - name: TRANSMISSION_INCOMPLETE_DIR_ENABLED
           value: "true"
         - name: TRANSMISSION_RPC_PASSWORD
-          value: "CHANGEME"
+          valueFrom:
+            secretKeyRef:
+              name: media-exporter
+              key: TRANSMISSION_PASSWORD
         - name: TRANSMISSION_WATCH_DIR_ENABLED
           value: "false"
         - name: TRANSMISSION_WEB_HOME
@@ -135,12 +138,24 @@ spec:
         env:
         - name: TZ
           value: "{{ .Values.global.timezone }}"
-        - name: TRANSMISSION_ADDR
+        - name: TRANSMISSION_HOST
           value: "http://localhost:9091"
-        - name: WEB_PATH
-          value: "/metrics"
-        - name: WEB_ADDR
-          value: ":9190"
+        - name: TRANSMISSION_USER
+          valueFrom:
+            secretKeyRef:
+              name: media-exporter
+              key: TRANSMISSION_USERNAME
+        - name: TRANSMISSION_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: media-exporter
+              key: TRANSMISSION_PASSWORD
+        - name: PORT
+          value: "9190"
+        - name: EXPORT_TORRENT_LEVEL_METRICS
+          value: "true"
+        - name: LOG_LEVEL
+          value: "info"
         readinessProbe:
           httpGet:
             path: /metrics
