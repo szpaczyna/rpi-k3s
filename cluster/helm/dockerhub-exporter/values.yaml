@@ -1,0 +1,58 @@
+---
+replicaCount: 1
+
+image:
+  repository: ghcr.io/promhippie/dockerhub-exporter
+  tag: "2.19.4"
+  pullPolicy: IfNotPresent
+
+port: 9505
+
+env:
+  DOCKERHUB_EXPORTER_USER: szpaczyn
+
+podAnnotations:
+  prometheus.io/path: /metrics
+  prometheus.io/port: "9505"
+  prometheus.io/scrape: "true"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1337
+  runAsGroup: 1337
+  fsGroup: 1337
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+
+readinessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+
+nodeSelector:
+  kubernetes.io/role: worker
+
+tolerations: []
+
+affinity: {}
