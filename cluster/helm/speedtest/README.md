@@ -37,7 +37,7 @@ the Prometheus values.
 
 | Setting | Value |
 |---|---|
-| Image | `szpaczyn/prometheus-speedtest-exporter:v1.1.0` |
+| Image | `szpaczyn/speedtest-exporter:v1.2.0` |
 | Port | `9469` |
 | Security context | `runAsNonRoot: true`, `runAsUser: 65535` |
 | Requests / limits | CPU `10m` / `100m`, memory `24Mi` / `128Mi` |
