@@ -160,7 +160,7 @@ images:
     tag: "v2.3.0"
   transmissionExporter:
     repository: "szpaczyn/transmission-exporter"
-    tag: "v1.0.0"
+    tag: "v1.0.1"
   busybox:
     repository: "busybox"
     tag: "1.38.0"
