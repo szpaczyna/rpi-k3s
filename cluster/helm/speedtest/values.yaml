@@ -6,8 +6,8 @@
 # Service needed, same as before the conversion.
 
 image:
-  repository: szpaczyn/prometheus-speedtest-exporter
-  tag: "v1.1.0"
+  repository: szpaczyn/speedtest-exporter
+  tag: "v1.2.0"
   pullPolicy: IfNotPresent
 
 port: 9469
