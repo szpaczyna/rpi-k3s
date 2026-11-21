@@ -631,9 +631,6 @@ extraScrapeConfigs: |
   - job_name: 'speedtest'
     scrape_interval: 29m
     scrape_timeout: 90s
-    metrics_path: /probe
-    params:
-      script: [speedtest]
     static_configs:
       - targets:
         - 10.0.0.12:9469
