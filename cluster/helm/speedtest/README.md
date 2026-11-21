@@ -27,7 +27,7 @@ Prometheus reaches this exporter through a static target, not through pod
 annotations. The pod still carries `prometheus.io/scrape` and `prometheus.io/port`
 annotations, but the `kubernetes-pods` discovery job in
 [`cluster/helm/prometheus/values.yaml`](../prometheus/values.yaml) is commented out.
-The `speedtest` job there scrapes `10.0.0.12:9469` on path `/probe` at a 29 minute
+The `speedtest` job there scrapes `10.0.0.12:9469` on path `/metrics` at a 29 minute
 interval, with a 90 second timeout.
 
 If the node changes, update both the `nodeSelector` here and the static target in
@@ -37,7 +37,7 @@ the Prometheus values.
 
 | Setting | Value |
 |---|---|
-| Image | `szpaczyn/speedtest-exporter:v1.2.0` |
+| Image | `szpaczyn/speedtest-exporter:v2.0.0` |
 | Port | `9469` |
 | Security context | `runAsNonRoot: true`, `runAsUser: 65535` |
 | Requests / limits | CPU `10m` / `100m`, memory `24Mi` / `128Mi` |
