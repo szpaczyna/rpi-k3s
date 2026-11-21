@@ -7,6 +7,9 @@ metadata:
     {{- include "speedtest.labels" . | nindent 4 }}
 spec:
   replicas: 1
+  # hostNetwork holds port 9469 on the pinned node, so a surge pod can never schedule.
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "speedtest.selectorLabels" . | nindent 6 }}
