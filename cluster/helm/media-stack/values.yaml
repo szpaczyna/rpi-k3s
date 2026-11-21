@@ -159,8 +159,8 @@ images:
     repository: "ghcr.io/onedr0p/exportarr"
     tag: "v2.3.0"
   transmissionExporter:
-    repository: "szpaczyn/transmission_exporter-arm64"
-    tag: "v0.3.0"
+    repository: "szpaczyn/transmission-exporter"
+    tag: "v1.0.0"
   busybox:
     repository: "busybox"
     tag: "1.38.0"
