@@ -1,2 +1,3 @@
 # CI-only override: kind has no rpi-k3s-worker-01 node (never deployed).
-nodeSelector: {}
+nodeSelector:
+  kubernetes.io/hostname: null
