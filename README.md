@@ -68,6 +68,7 @@ Retired charts moved to the separate repository
 | [x509-certificate-exporter](cluster/helm/x509-certificate-exporter) | TLS certificate expiry monitoring |
 | [unifipoller](cluster/helm/unifipoller) | UniFi network metrics exporter |
 | [version-checker](cluster/helm/version-checker) | Deployed image version monitoring |
+| [dockerhub-exporter](cluster/helm/dockerhub-exporter) | Docker Hub repository metrics exporter |
 
 ### System / Infrastructure
 
