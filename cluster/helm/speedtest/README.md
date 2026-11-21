@@ -24,9 +24,10 @@ another node.
 ## Scraping
 
 Prometheus reaches this exporter through a static target, not through pod
-annotations. The pod still carries `prometheus.io/scrape` and `prometheus.io/port`
-annotations, but the `kubernetes-pods` discovery job in
-[`cluster/helm/prometheus/values.yaml`](../prometheus/values.yaml) is commented out.
+annotations. The pod has no `prometheus.io/*` annotations on purpose: every scrape
+runs a full Ookla test, and an annotation-based job in
+[`cluster/helm/prometheus/values.yaml`](../prometheus/values.yaml) at a 1 minute
+interval would hit the Ookla rate limit.
 The `speedtest` job there scrapes `10.0.0.12:9469` on path `/metrics` at a 29 minute
 interval, with a 90 second timeout.
 

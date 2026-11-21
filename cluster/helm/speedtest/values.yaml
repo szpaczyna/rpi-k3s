@@ -1,9 +1,9 @@
 ---
 # Converted from the former plain manifest cluster/apps/speedtest.yaml.
 #
-# The exporter runs with hostNetwork on a single pinned node and is
-# scraped by Prometheus through pod annotations (prometheus.io/*) — no
-# Service needed, same as before the conversion.
+# The exporter runs with hostNetwork on a single pinned node. Prometheus
+# scrapes it through the static `speedtest` job, so the pod carries no
+# prometheus.io/* annotations: each scrape runs a full speed test.
 
 image:
   repository: szpaczyn/speedtest-exporter
@@ -12,9 +12,7 @@ image:
 
 port: 9469
 
-podAnnotations:
-  prometheus.io/scrape: "true"
-  prometheus.io/port: "9469"
+podAnnotations: {}
 
 securityContext:
   runAsNonRoot: true
