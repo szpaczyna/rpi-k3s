@@ -7,10 +7,25 @@
 
 image:
   repository: szpaczyn/speedtest-exporter
-  tag: "v2.0.0"
+  tag: "v2.1.1"
   pullPolicy: IfNotPresent
 
 port: 9469
+
+# TCP only: an HTTP probe on /metrics would start a full speed test.
+livenessProbe:
+  tcpSocket:
+    port: http
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  tcpSocket:
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
 
 podAnnotations: {}
 
