@@ -38,8 +38,9 @@ the Prometheus values.
 
 | Setting | Value |
 |---|---|
-| Image | `szpaczyn/speedtest-exporter:v2.0.0` |
+| Image | `szpaczyn/speedtest-exporter:v2.1.1` |
 | Port | `9469` |
+| Probes | TCP connect on port `http`: liveness every 30s (restart after 3 failures), readiness every 10s |
 | Security context | `runAsNonRoot: true`, `runAsUser: 65535` |
 | Requests / limits | CPU `10m` / `100m`, memory `24Mi` / `128Mi` |
 | Affinity | Requires `kubernetes.io/os=linux` |
