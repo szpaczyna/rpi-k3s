@@ -1,0 +1,14 @@
+Makefile
+  h_906bde6ad77cff 19,32-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "de2b25667e6a952ec933c2b58ef51b8896b7e7d6",
+  "prompts": {},
+  "humans": {
+    "h_906bde6ad77cff": {
+      "author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
