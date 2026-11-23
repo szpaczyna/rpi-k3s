@@ -21,26 +21,46 @@ spec:
           restartPolicy: "Never"
           containers:
             - name: k3s-backup
-              image: busybox:1.38
+              image: keinos/sqlite3:3.54.1
               imagePullPolicy: IfNotPresent
-              command: ["sh", "-c"]
+              command: ["/bin/sh", "-c"]
               args:
                 - |
-                  set -e
+                  set -eu
                   echo "[backup] K3s backup start"
-                  TIMESTAMP=$(date +%Y%m%d%H%M)
-                  BACKUP_FILE="${TIMESTAMP}.tar.gz"
+                  [ -f /backup/.backup-target ] || {
+                    echo "[backup] /backup has no .backup-target marker, the NFS share is not mounted" >&2
+                    exit 1
+                  }
+                  BACKUP_FILE="$(date +%Y%m%d%H%M).tar.gz"
+                  echo "[backup] Snapshotting state.db"
+                  mkdir -p /work/db
+                  sqlite3 -cmd ".timeout 30000" /k3s/db/state.db "VACUUM INTO '/work/db/state.db'"
+                  [ "$(sqlite3 /work/db/state.db 'PRAGMA quick_check')" = ok ] || {
+                    echo "[backup] Snapshot failed quick_check" >&2
+                    exit 1
+                  }
+                  cp /k3s/token /work/token
                   echo "[backup] Creating archive: ${BACKUP_FILE}"
-                  tar -czf /backup/${BACKUP_FILE} -C /k3s/server db token
-                  echo "[backup] Archive created successfully"
-                  ls -lh /backup/${BACKUP_FILE}
+                  if ! tar -czf "/backup/${BACKUP_FILE}.tmp" -C /work db token; then
+                    rm -f "/backup/${BACKUP_FILE}.tmp"
+                    exit 1
+                  fi
+                  mv "/backup/${BACKUP_FILE}.tmp" "/backup/${BACKUP_FILE}"
+                  ls -lh "/backup/${BACKUP_FILE}"
                   echo "[backup] Cleaning up backups older than 14 days"
                   find /backup -name "*.tar.gz" -type f -mtime +14 -delete
                   echo "[backup] K3s backup done"
+              securityContext:
+                runAsUser: 0
               volumeMounts:
-                - name: k3s-data
-                  mountPath: /k3s/server
+                - name: k3s-db
+                  mountPath: /k3s/db
+                - name: k3s-token
+                  mountPath: /k3s/token
                   readOnly: true
+                - name: work
+                  mountPath: /work
                 - name: backup-storage
                   mountPath: /backup
               resources:
@@ -51,10 +71,17 @@ spec:
                   cpu: 500m
                   memory: 256Mi
           volumes:
-            - name: k3s-data
+            - name: k3s-db
               hostPath:
-                path: /k3s/server
+                path: /k3s/server/db
                 type: Directory
+            - name: k3s-token
+              hostPath:
+                path: /k3s/server/token
+                type: File
+            - name: work
+              emptyDir:
+                sizeLimit: 1Gi
             - name: backup-storage
               hostPath:
                 path: /data/nfs/k3s-backups

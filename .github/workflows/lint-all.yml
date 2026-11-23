@@ -175,7 +175,7 @@ jobs:
       - name: List changed charts
         id: list
         run: |
-          changed="$(ct list-changed --config .github/ct.yaml || true)"
+          changed="$(ct list-changed --config .github/ct.yaml)"
           printf '%s\n' "$changed"
           # ct prints one chart per line, and a bare `name=value` cannot carry
           # newlines: with more than one changed chart the step failed with
