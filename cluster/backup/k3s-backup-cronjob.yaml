@@ -42,11 +42,11 @@ spec:
                   }
                   cp /k3s/token /work/token
                   echo "[backup] Creating archive: ${BACKUP_FILE}"
-                  if ! tar -czf "/backup/${BACKUP_FILE}.tmp" -C /work db token; then
-                    rm -f "/backup/${BACKUP_FILE}.tmp"
+                  if ! tar -czf /backup/k3s-backup.tmp -C /work db token; then
+                    rm -f /backup/k3s-backup.tmp
                     exit 1
                   fi
-                  mv "/backup/${BACKUP_FILE}.tmp" "/backup/${BACKUP_FILE}"
+                  mv /backup/k3s-backup.tmp "/backup/${BACKUP_FILE}"
                   ls -lh "/backup/${BACKUP_FILE}"
                   echo "[backup] Cleaning up backups older than 14 days"
                   find /backup -name "*.tar.gz" -type f -mtime +14 -delete
