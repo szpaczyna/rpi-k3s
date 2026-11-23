@@ -58,6 +58,10 @@ To view without editing:
 
 ## Manual steps
 
+Both backup jobs fail when `/data/nfs/postgres-backups/.backup-target` is
+missing. `deploy` does not create it; see
+[`cluster/backup`](../../backup/README.md#nfs-marker).
+
 Before the first backup run, check that Secret `postgresql-pgpass` exists:
 
     kubectl -n apps get secret postgresql-pgpass
