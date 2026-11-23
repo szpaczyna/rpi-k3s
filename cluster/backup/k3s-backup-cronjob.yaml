@@ -28,14 +28,15 @@ spec:
                 - |
                   set -e
                   echo "[backup] K3s backup start"
-                  echo "[backup] Cleaning up backups older than 14 days"
-                  find /backup -name "*.tar.gz" -type f -mtime +14 -delete
                   TIMESTAMP=$(date +%Y%m%d%H%M)
                   BACKUP_FILE="${TIMESTAMP}.tar.gz"
                   echo "[backup] Creating archive: ${BACKUP_FILE}"
                   tar -czf /backup/${BACKUP_FILE} -C /k3s/server db token
                   echo "[backup] Archive created successfully"
                   ls -lh /backup/${BACKUP_FILE}
+                  # Pruning only after a good archive keeps the old ones if tar fails every night.
+                  echo "[backup] Cleaning up backups older than 14 days"
+                  find /backup -name "*.tar.gz" -type f -mtime +14 -delete
                   echo "[backup] K3s backup done"
               volumeMounts:
                 - name: k3s-data
@@ -58,7 +59,8 @@ spec:
             - name: backup-storage
               hostPath:
                 path: /data/nfs/k3s-backups
-                type: DirectoryOrCreate
+                # Fails the pod when the NFS mount is missing instead of writing to the local disk.
+                type: Directory
           nodeSelector:
             node-role.kubernetes.io/control-plane: "true"
           tolerations:

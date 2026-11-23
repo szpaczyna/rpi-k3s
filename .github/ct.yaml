@@ -1,7 +1,6 @@
 ---
 chart-dirs:
   - cluster/helm
-check-version-increment: true
 validate-maintainers: false
 target-branch: main
 excluded-charts: []

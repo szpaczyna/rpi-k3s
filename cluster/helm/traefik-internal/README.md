@@ -16,8 +16,9 @@ wildcard cert. Shares namespace `traefik` with the external instance in
 | cert | Let's Encrypt, per app | one mkcert leaf for `*.home` |
 | authentication | Authelia forwardAuth | none, LAN is trusted |
 
-Chart `traefik/traefik` 42.0.0, image pinned to `v3.7.15` (kept equal to the
-external instance so behaviour differences do not confound debugging), two
+Chart `traefik/traefik` at the `VERSION` pinned in `deploy`, image pinned to
+`v3.7.15` (kept equal to the external instance so behaviour differences do
+not confound debugging), two
 replicas, no HPA since LAN traffic does not burst. Dashboard and API on port
 `8080` of the same LoadBalancer, unauthenticated, reachable only from the LAN:
 

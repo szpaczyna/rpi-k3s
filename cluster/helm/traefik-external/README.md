@@ -27,8 +27,9 @@ constraints a shared namespace imposes.
 - **Service type `LoadBalancer`**, pinned to `10.0.0.40` via
   `service.spec.loadBalancerIP` — this is the same IP `ingress-nginx`
   used, transferred during cutover with zero DNS/router changes.
-- Chart: `traefik/traefik` 42.0.0, image pinned to `v3.7.15`. The pin is
-  deliberate and moves independently of the chart's `appVersion`.
+- Chart: `traefik/traefik` at the `VERSION` pinned in `deploy`, image
+  pinned to `v3.7.15`. The image pin is deliberate and moves independently
+  of the chart's `appVersion`.
 - Dashboard/API exposed on port `8080` on the same LoadBalancer Service —
   reachable from the local network (e.g. `http://10.0.0.40:8080/dashboard/`)
   but **not** routed to the internet and **not** protected by

@@ -16,12 +16,15 @@ COMPONENTS := $(INFRA) $(INGRESS) $(PLATFORM) $(MONITORING) $(APPS)
 
 .DEFAULT_GOAL := help
 
-.PHONY: all $(COMPONENTS) helm-update yamllint jsonlint help
+.PHONY: all $(COMPONENTS) backup helm-update help
 
-all: $(COMPONENTS) ## Deploy all components
+all: $(COMPONENTS) backup ## Deploy all components
 
 $(COMPONENTS):
 	cd $(CLUSTER_DIR)/$@ && ./deploy
+
+backup: ## Deploy the k3s datastore backup CronJob
+	cd cluster/backup && ./deploy
 
 helm-update: ## Update Helm repositories
 	helm repo update

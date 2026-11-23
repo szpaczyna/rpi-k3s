@@ -47,4 +47,5 @@ spec:
             - name: grafana-storage
               hostPath:
                 path: /data/nfs/grafana-backups
-                type: DirectoryOrCreate
+                # Fails the pod when the NFS mount is missing instead of writing to the local disk.
+                type: Directory
