@@ -1,0 +1,22 @@
+.github/workflows/lint-all.yml
+  h_906bde6ad77cff 178
+cluster/backup/k3s-backup-cronjob.yaml
+  h_906bde6ad77cff 24,26,29,31-43,45-50,54-55,57-60,62-63,74,76,78-84
+cluster/helm/grafana/backup-cronjob.yaml
+  h_906bde6ad77cff 26
+cluster/helm/postgresql/backup-full-job.yaml
+  h_906bde6ad77cff 23-26
+cluster/helm/postgresql/backup-job.yaml
+  h_906bde6ad77cff 23-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "50dd0471fbb401ef22dc5a2f9cfb781270fe9025",
+  "prompts": {},
+  "humans": {
+    "h_906bde6ad77cff": {
+      "author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
