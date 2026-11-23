@@ -41,8 +41,6 @@ net.ipv4.tcp_synack_retries = 2
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_rfc1337 = 1
 
-# Kernel default. A start below 32768 can hand NFS 2049, 6443, 9100 or 10250
-# to an outgoing connection before the service binds it after a reboot.
 net.ipv4.ip_local_port_range = 32768 60999
 
 net.ipv4.tcp_fin_timeout = 15

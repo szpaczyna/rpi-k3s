@@ -48,8 +48,6 @@ jobs:
     runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
-      # Most scripts here (deploy, decrypt) have no .sh suffix, so they are
-      # picked by shebang. zsh-plugins is vendored zsh that shellcheck cannot parse.
       - name: ShellCheck
         run: |
           git ls-files -z -- ':!:provision/ansible/roles/dotfiles/files/zsh-plugins/**' ':!:*.enc.*' \
@@ -73,7 +71,6 @@ jobs:
           mkdir -p rendered
           for d in cluster/helm/*/; do
             chart="${d%/}"; name=$(basename "$chart")
-            # Upstream charts are only a values file and a deploy script.
             [ -f "$chart/Chart.yaml" ] || continue
             values_args=()
             if [ -f "$chart/values.yaml" ]; then
@@ -186,8 +183,6 @@ jobs:
           # the next step word-splits anyway.
           flattened="$(printf '%s' "$changed" | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
           echo "changed=$flattened" >> "$GITHUB_OUTPUT"
-      # ct's own version check runs only inside `ct lint`, which this job does
-      # not use. Docs and operator scripts are not packaged, so they need no bump.
       - name: Require a chart version bump
         if: steps.list.outputs.changed != ''
         env:
