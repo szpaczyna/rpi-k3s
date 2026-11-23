@@ -38,7 +38,7 @@ the Prometheus values.
 
 | Setting | Value |
 |---|---|
-| Image | `szpaczyn/speedtest-exporter:v2.1.1` |
+| Image | `szpaczyn/speedtest-exporter:v2.2.0` |
 | Port | `9469` |
 | Probes | TCP connect on port `http`: liveness every 30s (restart after 3 failures), readiness every 10s |
 | Security context | `runAsNonRoot: true`, `runAsUser: 65535` |
