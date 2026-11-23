@@ -1,0 +1,19 @@
+cluster/helm/traefik-external/README.md
+  s_2d99313ec91c56::t_31ce8736aa7abd 77-83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4879ce1f128b821788d6928d5d4e024e3e0a8152",
+  "prompts": {},
+  "sessions": {
+    "s_2d99313ec91c56": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_963e9348-468c-4442-819b-6d3408bac8ab",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
