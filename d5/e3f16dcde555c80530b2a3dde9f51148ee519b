@@ -1,0 +1,16 @@
+.github/workflows/lint-all.yml
+  h_906bde6ad77cff 55
+cluster/backup/k3s-backup-cronjob.yaml
+  h_906bde6ad77cff 45-46,49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d5e3f16dcde555c80530b2a3dde9f51148ee519b",
+  "prompts": {},
+  "humans": {
+    "h_906bde6ad77cff": {
+      "author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
