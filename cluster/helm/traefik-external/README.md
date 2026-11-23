@@ -74,7 +74,13 @@ Applied via `ports.websecure.http.middlewares`:
    300`), returns `429` on bursts.
 2. **`fail2ban`** (`tomMoulard/fail2ban` plugin) — bans source IPs after
    repeated failures (`findtime: 10m`, `maxretry: 5`, `bantime: 1h`,
-   `statuscode: 400,401,403-499`). `10.0.0.0/8` is allowlisted, which
+   `statuscode: 400,401,403`). 404 does not count, so a page with missing
+   assets or an app retrying an expired token does not ban a real user.
+   Probes for root-level dotfiles (`/.env`, `/.git/`) and PHP paths
+   (`/wp-login.php`, `/index.php`) match `urlregexps` in `block` mode, which
+   bans the IP on the first request. The patterns are anchored at `/`, so
+   Gitea paths such as `/user/repo.git` or `/user/repo/raw/.../.env.example`
+   do not match. `10.0.0.0/8` is allowlisted, which
    exempts the LAN, the MetalLB pool and the k3s pod/service CIDRs.
 
 ### Per-route (security-chain, HTTPRoutes only)
