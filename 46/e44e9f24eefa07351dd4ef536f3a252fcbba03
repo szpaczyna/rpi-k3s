@@ -1,0 +1,25 @@
+cluster/helm/traefik-internal/README.md
+  s_2d99313ec91c56::t_9b8e9838932e99 19-21
+docs/index.md
+  s_2d99313ec91c56::t_064068be5965fc 5-7
+provision/ansible/roles/system/templates/sysctl/99-local.conf.j2
+  s_2d99313ec91c56::t_2e4df13a51411b 44-46
+cluster/backup/deploy
+  s_2d99313ec91c56::t_9eb96bf6e5ff5b 1-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "46e44e9f24eefa07351dd4ef536f3a252fcbba03",
+  "prompts": {},
+  "sessions": {
+    "s_2d99313ec91c56": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_963e9348-468c-4442-819b-6d3408bac8ab",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
