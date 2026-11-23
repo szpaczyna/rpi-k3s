@@ -1,0 +1,19 @@
+cluster/backup/README.md
+  s_2d99313ec91c56::t_6bbb06a6133f51 1-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dd2f269691a5e398ed58d3a766d760a4120b3d4e",
+  "prompts": {},
+  "sessions": {
+    "s_2d99313ec91c56": {
+      "agent_id": {
+        "tool": "kiro",
+        "id": "sess_963e9348-468c-4442-819b-6d3408bac8ab",
+        "model": "auto"
+      },
+      "human_author": "Michal Laszuk <shpaq@shpaq.org>"
+    }
+  }
+}
