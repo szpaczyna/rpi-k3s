@@ -27,8 +27,9 @@ constraints a shared namespace imposes.
 - **Service type `LoadBalancer`**, pinned to `10.0.0.40` via
   `service.spec.loadBalancerIP` — this is the same IP `ingress-nginx`
   used, transferred during cutover with zero DNS/router changes.
-- Chart: `traefik/traefik` 42.0.0, image pinned to `v3.7.15`. The pin is
-  deliberate and moves independently of the chart's `appVersion`.
+- Chart: `traefik/traefik` at the `VERSION` pinned in `deploy`, image
+  pinned to `v3.7.15`. The image pin is deliberate and moves independently
+  of the chart's `appVersion`.
 - Dashboard/API exposed on port `8080` on the same LoadBalancer Service —
   reachable from the local network (e.g. `http://10.0.0.40:8080/dashboard/`)
   but **not** routed to the internet and **not** protected by
@@ -73,7 +74,13 @@ Applied via `ports.websecure.http.middlewares`:
    300`), returns `429` on bursts.
 2. **`fail2ban`** (`tomMoulard/fail2ban` plugin) — bans source IPs after
    repeated failures (`findtime: 10m`, `maxretry: 5`, `bantime: 1h`,
-   `statuscode: 400,401,403-499`). `10.0.0.0/8` is allowlisted, which
+   `statuscode: 400,401,403`). 404 does not count, so a page with missing
+   assets or an app retrying an expired token does not ban a real user.
+   Probes for root-level dotfiles (`/.env`, `/.git/`) and PHP paths
+   (`/wp-login.php`, `/index.php`) match `urlregexps` in `block` mode, which
+   bans the IP on the first request. The patterns are anchored at `/`, so
+   Gitea paths such as `/user/repo.git` or `/user/repo/raw/.../.env.example`
+   do not match. `10.0.0.0/8` is allowlisted, which
    exempts the LAN, the MetalLB pool and the k3s pod/service CIDRs.
 
 ### Per-route (security-chain, HTTPRoutes only)

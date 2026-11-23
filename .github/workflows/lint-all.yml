@@ -49,10 +49,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: ShellCheck
-        continue-on-error: true
         run: |
-          find . -name '*.sh' -type f \
-            -print0 | xargs -0 shellcheck -x
+          git ls-files -z -- ':!:provision/ansible/roles/dotfiles/files/zsh-plugins/**' ':!:*.enc.*' \
+            | while IFS= read -r -d '' f; do
+                if head -n1 "$f" | grep -qE '^#!.*[/ ](ba|da)?sh( |$)'; then printf '%s\0' "$f"; fi
+              done \
+            | xargs -0 shellcheck -x
 
   kubeconform:
     name: Kubeconform (Rendered Helm & Raw Manifests)
@@ -63,11 +65,13 @@ jobs:
         uses: azure/setup-helm@v5.1.0
         with:
           version: v4.3.2
-      - name: Render Helm charts (skip charts with no values at all)
+      - name: Lint and render local Helm charts
         run: |
+          set -euo pipefail
           mkdir -p rendered
           for d in cluster/helm/*/; do
             chart="${d%/}"; name=$(basename "$chart")
+            [ -f "$chart/Chart.yaml" ] || continue
             values_args=()
             if [ -f "$chart/values.yaml" ]; then
               values_args+=(--values "$chart/values.yaml")
@@ -83,10 +87,10 @@ jobs:
               echo " skipping $name (no values.yaml or values-public.yaml present)";
               continue
             fi
-            echo "Rendering $name";
+            echo "Linting and rendering $name"
             helm dependency update "$chart" || true
-            helm template "$name" "$chart" "${values_args[@]}" > "rendered/${name}.yaml" || {
-              echo "Helm template failed for $name; skipping"; continue; }
+            helm lint --quiet "$chart" "${values_args[@]}"
+            helm template "$name" "$chart" "${values_args[@]}" > "rendered/${name}.yaml"
           done
       - name: Run kubeconform
         uses: docker://ghcr.io/yannh/kubeconform:v0.8.0
@@ -171,7 +175,7 @@ jobs:
       - name: List changed charts
         id: list
         run: |
-          changed="$(ct list-changed --config .github/ct.yaml || true)"
+          changed="$(ct list-changed --config .github/ct.yaml)"
           printf '%s\n' "$changed"
           # ct prints one chart per line, and a bare `name=value` cannot carry
           # newlines: with more than one changed chart the step failed with
@@ -179,6 +183,28 @@ jobs:
           # the next step word-splits anyway.
           flattened="$(printf '%s' "$changed" | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
           echo "changed=$flattened" >> "$GITHUB_OUTPUT"
+      - name: Require a chart version bump
+        if: steps.list.outputs.changed != ''
+        env:
+          CHANGED_CHARTS: ${{ steps.list.outputs.changed }}
+        run: |
+          set -euo pipefail
+          base="$(git merge-base origin/main HEAD)"
+          fail=0
+          for c in $CHANGED_CHARTS; do
+            git cat-file -e "$base:$c/Chart.yaml" 2>/dev/null || continue
+            changed="$(git diff --name-only "$base" HEAD -- "$c" \
+              ':(exclude)*.md' ":(exclude)$c/deploy" ":(exclude)$c/decrypt")"
+            [ -n "$changed" ] || continue
+            old="$(git show "$base:$c/Chart.yaml" | yq -r '.version')"
+            new="$(yq -r '.version' "$c/Chart.yaml")"
+            top="$(printf '%s\n%s\n' "$old" "$new" | sort -V | tail -n1)"
+            if [ "$old" = "$new" ] || [ "$top" != "$new" ]; then
+              echo "::error file=$c/Chart.yaml::$c changed but version $new is not above $old"
+              fail=1
+            fi
+          done
+          exit "$fail"
       - name: Lint & install eligible charts (skip missing values.yaml)
         if: steps.list.outputs.changed != ''
         env:

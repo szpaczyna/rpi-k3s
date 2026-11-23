@@ -155,4 +155,4 @@ affinity: {}
 mounterInitContainer:
   enabled: true
   image: busybox
-  tag: 1.37
+  tag: "1.38"

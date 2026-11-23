@@ -41,7 +41,7 @@ net.ipv4.tcp_synack_retries = 2
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_rfc1337 = 1
 
-net.ipv4.ip_local_port_range = 2000 65535
+net.ipv4.ip_local_port_range = 32768 60999
 
 net.ipv4.tcp_fin_timeout = 15
 net.ipv4.tcp_keepalive_time = 300
@@ -105,11 +105,11 @@ net.netfilter.nf_conntrack_tcp_timeout_time_wait = 30
 # zram-swap-config.service, which starts after systemd-sysctl and therefore
 # has the final say on vm.swappiness.
 #
-# etcd must never be paged out. A zram swap event on the master stalls
-# etcd fsync and shows up as leader election churn.
+# The k3s datastore (SQLite through kine) must never be paged out. A zram
+# swap event on the master stalls its fsync and every apiserver write.
 vm.swappiness = 0
 
-# etcd and containerd both fsync heavily. A lower background threshold
+# SQLite and containerd both fsync heavily. A lower background threshold
 # starts writeback earlier and at smaller granularity, which shortens the
 # write path the apiserver competes for.
 vm.dirty_background_ratio = 5

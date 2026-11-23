@@ -20,6 +20,10 @@ spec:
             args:
               - "-c"
               - |
+                [ -f /var/backups/.backup-target ] || {
+                  echo "/var/backups has no .backup-target marker, the NFS share is not mounted" >&2
+                  exit 1
+                }
                 echo "$PGPASS" > /root/.pgpass && chmod 600 /root/.pgpass
                 FAILED=""
                 for DB in grafana bitwarden gitea whoops; do
@@ -61,4 +65,4 @@ spec:
           - name: postgres-storage
             hostPath:
               path: /data/nfs/postgres-backups
-              type: DirectoryOrCreate
+              type: Directory

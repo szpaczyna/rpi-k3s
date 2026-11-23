@@ -16,15 +16,24 @@ COMPONENTS := $(INFRA) $(INGRESS) $(PLATFORM) $(MONITORING) $(APPS)
 
 .DEFAULT_GOAL := help
 
-.PHONY: all $(COMPONENTS) helm-update yamllint jsonlint help
+.PHONY: all $(COMPONENTS) backup helm-update yamllint jsonlint help
 
-all: $(COMPONENTS) ## Deploy all components
+all: $(COMPONENTS) backup ## Deploy all components
 
 $(COMPONENTS):
 	cd $(CLUSTER_DIR)/$@ && ./deploy
 
+backup: ## Deploy the k3s datastore backup CronJob
+	cd cluster/backup && ./deploy
+
 helm-update: ## Update Helm repositories
 	helm repo update
+
+yamllint: ## Lint YAML with .github/.yamllint.config.yaml
+	yamllint -c .github/.yamllint.config.yaml .
+
+jsonlint: ## Lint every tracked JSON file
+	git ls-files -z '*.json' | xargs -0 -n1 jsonlint -qc
 
 help: ## Show this help message
 	@echo "Usage: make <target>"

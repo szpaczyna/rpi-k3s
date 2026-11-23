@@ -23,7 +23,9 @@ Dashboards for the cluster, deployed with the upstream chart `grafana/grafana`
 - **Admin credentials**: `admin.existingSecret` points to `grafana-admin-creds`.
 - **Backups**: CronJob `grafana-backup-tool` runs
   `szpaczyn/grafana-backup-tool:1.4.2` as UID 1337. The init container
-  `fix-permissions` runs before it.
+  `fix-permissions` runs before it and fails the job when
+  `/data/nfs/grafana-backups/.backup-target` is missing (see
+  [`cluster/backup`](../../backup/README.md#nfs-marker)).
 - **Probes**: liveness and readiness use `/api/health` on port 3000.
 
 ## Deployment

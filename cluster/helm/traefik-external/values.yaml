@@ -866,7 +866,7 @@ service:
     # Preserve the real client IP. With the default `Cluster` policy kube-proxy
     # SNATs every connection, so Traefik access logs only saw the node's pod
     # network gateway (10.42.x.1) instead of the client address. `Local` works
-    # here because Traefik runs as a DaemonSet (a local backend on every node).
+    # here because MetalLB L2 announces the IP only from a node with a ready pod.
     externalTrafficPolicy: Local
     # externalTrafficPolicy: Cluster
     # clusterIP: "2.3.4.5"
@@ -1150,7 +1150,12 @@ extraObjects:
             findtime: "10m"
             maxretry: 5
             bantime: "1h"
-            statuscode: "400,401,403-499"
+            statuscode: "400,401,403"
+            urlregexps:
+              - regexp: '^/\.(env|git|svn|hg|aws|ssh|htpasswd|htaccess|DS_Store)(/|\.|\?|$)'
+                mode: block
+              - regexp: '(?i)^/(wp-login\.php|xmlrpc\.php|wp-admin/|wp-includes/|phpmyadmin|cgi-bin/|[^/?]*\.php(\?|$))'
+                mode: block
           enableBlockLogs: true
   - apiVersion: traefik.io/v1alpha1
     kind: Middleware
