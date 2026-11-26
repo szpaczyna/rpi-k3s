@@ -3,7 +3,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/promhippie/dockerhub-exporter
-  tag: "2.19.4"
+  tag: "2.20.0"
   pullPolicy: IfNotPresent
 
 port: 9505
