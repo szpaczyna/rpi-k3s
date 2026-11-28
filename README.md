@@ -75,6 +75,7 @@ Retired charts moved to the separate repository
 | Component | Description |
 |-----------|-------------|
 | [cert-manager](cluster/helm/cert-manager) | Automated Let's Encrypt certificates (ACME HTTP-01 via Gateway API) |
+| [lan-cert](cluster/helm/lan-cert) | Let's Encrypt wildcard for `*.lan.shpaq.org` (lego, DNS-01 at dns.he.net) |
 | [defaultbackend](cluster/helm/defaultbackend) | Catch-all backend for Traefik (bare-IP / unknown host) |
 | [gentoo](cluster/helm/gentoo) | Gentoo distcc build node (cross-compiles on behalf of other hosts) |
 | [metallb](cluster/helm/metallb) | Bare-metal load balancer (L2) |

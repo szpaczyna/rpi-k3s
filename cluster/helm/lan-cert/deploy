@@ -1,0 +1,30 @@
+#!/bin/bash
+set -euo pipefail
+
+NAMESPACE="traefik"
+RELEASE_NAME="lan-cert"
+CHART="."
+TLS_SECRET="wildcard-lan-tls"  # pragma: allowlist secret
+
+kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl apply -f <(sops -d ./hurricane-token.enc.yaml) -n "${NAMESPACE}"
+
+# The Job's Role cannot create Secrets, so seed this one with a throwaway
+# certificate. Traefik ignores it for *.lan.shpaq.org because no SAN matches.
+if ! kubectl get secret "${TLS_SECRET}" -n "${NAMESPACE}" >/dev/null 2>&1; then
+  tmp="$(mktemp -d "/tmp/lan-cert-placeholder.XXXXXX")"
+  trap 'rm -rf "${tmp}"' EXIT
+  openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj "/CN=placeholder" \
+    -keyout "${tmp}/tls.key" -out "${tmp}/tls.crt" 2>/dev/null
+  kubectl create secret tls "${TLS_SECRET}" -n "${NAMESPACE}" \
+    --cert "${tmp}/tls.crt" --key "${tmp}/tls.key"
+fi
+
+HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
+  --namespace "${NAMESPACE}"
+  --create-namespace)
+
+[[ -f values.yaml ]] && HELM_ARGS+=(--values values.yaml)
+
+helm "${HELM_ARGS[@]}"
