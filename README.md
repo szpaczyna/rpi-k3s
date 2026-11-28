@@ -85,7 +85,6 @@ Retired charts moved to the separate repository
 | [longhorn](cluster/helm/longhorn) | Distributed block storage |
 | [local-path-provisioner](cluster/helm/local-path-provisioner) | Local HostPath storage provisioner |
 | [system-upgrade-controller](cluster/helm/system-upgrade-controller) | Automated K3s upgrades |
-| [renovate](cluster/helm/renovate) | Automated dependency updates |
 
 * * *
 

@@ -8,7 +8,7 @@ CLUSTER_DIR := cluster/helm
 # app's Certificate depends on), then everything else.
 INFRA        := metallb longhorn
 INGRESS      := cert-manager traefik-external traefik-internal
-PLATFORM     := local-path-provisioner system-upgrade-controller renovate postgresql middlewares defaultbackend
+PLATFORM     := local-path-provisioner system-upgrade-controller postgresql middlewares defaultbackend
 MONITORING   := prometheus grafana loki speedtest x509-certificate-exporter unifipoller version-checker dockerhub-exporter
 APPS         := authelia bitwarden booklore gitea gentoo homepage media-stack pihole shpaq-org whoops
 

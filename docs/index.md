@@ -40,4 +40,3 @@ layout: default
   - [longhorn](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/longhorn) - Distributed block storage
   - [local-path-provisioner](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/local-path-provisioner) - Local HostPath storage provisioner
   - [system-upgrade-controller](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/system-upgrade-controller) - Automated K3s upgrades
-  - [renovate](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/renovate) - Automated dependency updates
