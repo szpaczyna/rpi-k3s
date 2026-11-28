@@ -20,6 +20,10 @@ kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply
 # The Secret must exist before the Gateway references it: a missing one drops
 # the whole websecure listener, not one route.
 kubectl apply -f <(sops -d ./wildcard-home-tls.enc.yaml)
+if ! kubectl get secret wildcard-lan-tls -n "${NAMESPACE}" >/dev/null 2>&1; then
+  echo "Secret wildcard-lan-tls is missing; run ../lan-cert/deploy first." >&2
+  exit 1
+fi
 
 HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
   --namespace "${NAMESPACE}"

@@ -74,11 +74,12 @@ spec:
           value: "/downloads/incomplete"
         - name: TRANSMISSION_INCOMPLETE_DIR_ENABLED
           value: "true"
-        - name: TRANSMISSION_RPC_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: media-exporter
-              key: TRANSMISSION_PASSWORD
+        # USER and PASS stay unset, so the linuxserver init turns RPC auth off.
+        # Authelia guards the route; these lists keep the RPC to pods and Traefik.
+        - name: WHITELIST
+          value: "127.0.0.1,::1,10.42.*.*"
+        - name: HOST_WHITELIST
+          value: "transmission-http,transmission-http.{{ .Release.Namespace }},transmission-http.{{ .Release.Namespace }}.svc,transmission-http.{{ .Release.Namespace }}.svc.cluster.local,{{ .Values.httpRoute.hostname }}"
         - name: TRANSMISSION_WATCH_DIR_ENABLED
           value: "false"
         - name: TRANSMISSION_WEB_HOME

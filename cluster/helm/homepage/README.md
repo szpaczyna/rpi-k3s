@@ -1,7 +1,7 @@
 # Homepage
 
 [Homepage](https://github.com/gethomepage/homepage) dashboard at
-`https://homepage.home`, attached to `traefik-internal-gateway` with
+`https://homepage.lan.shpaq.org`, attached to `traefik-internal-gateway` with
 `security-chain-internal`. LAN only, no login: anyone on the LAN sees the
 widget data, so the credentials below should be read-only accounts.
 
@@ -28,8 +28,9 @@ metrics (`job="raspberries"` for the standalone Pis, the
 as `-`.
 
 Widget `url`s use in-cluster Service names. `href`s are what the browser
-opens, so they stay on `*.home`; Gitea and Booklore have no `*.home` route and
-link to `*.shpaq.org`.
+opens, so they use `*.lan.shpaq.org`; Gitea and Booklore have no LAN route and
+link to `*.shpaq.org`. The two Traefik dashboard links still point at `.home`
+hosts on port 8080, outside the redirect.
 
 ## Credentials
 
@@ -62,9 +63,9 @@ a Secret are read once, at container start.
 ```
 
 - `kubectl -n media rollout status deploy/homepage`
-- `curl -sI https://homepage.home/` returns `200`
+- `curl -sI https://homepage.lan.shpaq.org/` returns `200`
 - `kubectl -n media logs deploy/homepage` has no `Host validation failed` or widget errors
 
-`homepage.home` must be in `../traefik-internal/hosts.txt` (certificate SAN)
-and in the Pi-hole CNAME list in
+`homepage.lan.shpaq.org` is covered by the Let's Encrypt `*.lan.shpaq.org`
+wildcard from [`../lan-cert`](../lan-cert) and needs an entry in the Pi-hole CNAME list in
 `provision/ansible/roles/pihole/defaults/main.yml`.

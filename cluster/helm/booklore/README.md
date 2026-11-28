@@ -58,6 +58,32 @@ After changing the secret, run `./deploy` and roll the pod if needed:
 
     kubectl -n media rollout restart deploy/booklore
 
+## Single sign-on (Authelia)
+
+Booklore 2.4.0 keeps its OIDC settings in the database and reads no OIDC
+environment variables (only `FORCE_DISABLE_OIDC`), so the provider is set up
+in the UI. Authelia registers Booklore as the public client `booklore` with
+PKCE (see [`cluster/helm/authelia`](../authelia/README.md#openid-connect-provider)).
+The backend exchanges the code, so the pod must reach `auth.shpaq.org`.
+
+1. Sign in as a Booklore admin and open Settings (cog icon), then
+   `Authentication`.
+2. Under OIDC Authentication set:
+   - OIDC Enabled: on
+   - Provider Name: `Authelia`
+   - Client ID: `booklore`
+   - Client Secret: empty
+   - Issuer URI: `https://auth.shpaq.org`
+   - Scope: `openid profile email offline_access`
+   - Username Claim: `preferred_username`
+   - Email Claim: `email`
+   - Display Name Claim: `name`
+3. Save. Booklore sends `https://booklore.shpaq.org/oauth2-callback` as the
+   redirect URI; the Authelia client allows only that one.
+
+If a bad OIDC setting locks you out, set `FORCE_DISABLE_OIDC=true` on the
+container to get the local login back.
+
 ## Verification
 
     kubectl -n media get deploy,pvc,httproute,svc

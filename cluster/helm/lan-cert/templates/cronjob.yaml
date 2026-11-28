@@ -1,0 +1,117 @@
+{{- /* lego names the files after --cert.name; one name per ACME server keeps a staging certificate from blocking the first production issue. */ -}}
+{{- $certName := (urlParse .Values.acme.server).host | replace ":" "-" -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "lan-cert.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      # Covers the HE propagation timeout (300 s) plus lego's renewal jitter (up to 8 min).
+      activeDeadlineSeconds: 1800
+      template:
+        metadata:
+          labels:
+            {{- include "lan-cert.selectorLabels" . | nindent 12 }}
+            {{- include "lan-cert.labels" . | nindent 12 }}
+        spec:
+          serviceAccountName: {{ .Release.Name }}
+          restartPolicy: Never
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          initContainers:
+            # `lego run` obtains the certificate when none is stored and renews it otherwise.
+            - name: lego
+              image: "{{ .Values.lego.image.repository }}:{{ .Values.lego.image.tag }}"
+              imagePullPolicy: {{ .Values.lego.image.pullPolicy }}
+              args:
+                - run
+                - --accept-tos
+                - --server={{ .Values.acme.server }}
+                - --email={{ .Values.acme.email }}
+                - --domains={{ .Values.acme.domain }}
+                - --cert.name={{ $certName }}
+                - --path=/data/lego
+                - --dns=hurricane
+                {{- range .Values.acme.resolvers }}
+                - --dns.resolvers={{ . }}
+                {{- end }}
+                - --renew-days={{ .Values.acme.renewDays }}
+              env:
+                - name: HOME
+                  value: /data
+                - name: LEGO_LOG_FORMAT
+                  value: text
+                - name: HURRICANE_TOKENS_FILE
+                  value: /run/secrets/hurricane/tokens
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+              volumeMounts:
+                - name: data
+                  mountPath: /data
+                - name: hurricane
+                  mountPath: /run/secrets/hurricane
+                  readOnly: true
+          containers:
+            - name: update-secret
+              image: "{{ .Values.kubectl.image.repository }}:{{ .Values.kubectl.image.tag }}"
+              imagePullPolicy: {{ .Values.kubectl.image.pullPolicy }}
+              command: ["/bin/sh", "-c"]
+              # Server-side apply needs only patch on an existing Secret and,
+              # unlike client-side apply, does not copy the private key into
+              # the last-applied-configuration annotation.
+              args:
+                - |
+                  set -euo pipefail
+                  dir=/data/lego/certificates
+                  kubectl create secret tls "$TLS_NAME" --namespace "$NAMESPACE" \
+                    --cert "$dir/$CERT_NAME.crt" --key "$dir/$CERT_NAME.key" \
+                    --dry-run=client -o yaml \
+                    | kubectl apply --server-side --force-conflicts --field-manager=lan-cert \
+                      --namespace "$NAMESPACE" -f -
+              env:
+                - name: HOME
+                  value: /tmp
+                - name: NAMESPACE
+                  value: {{ .Release.Namespace }}
+                - name: TLS_NAME
+                  value: {{ .Values.tlsSecret }}
+                - name: CERT_NAME
+                  value: {{ $certName }}
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+              volumeMounts:
+                - name: data
+                  mountPath: /data
+                  readOnly: true
+                - name: tmp
+                  mountPath: /tmp
+          volumes:
+            - name: data
+              {{- if .Values.persistence.enabled }}
+              persistentVolumeClaim:
+                claimName: {{ .Release.Name }}-data
+              {{- else }}
+              emptyDir: {}
+              {{- end }}
+            - name: tmp
+              emptyDir: {}
+            - name: hurricane
+              secret:
+                secretName: {{ .Values.hurricaneSecret }}
+                defaultMode: 0440

@@ -421,7 +421,7 @@ the router. Scraped by the `fail2ban` job in `cluster/helm/prometheus`.
 ### `log_shipper`
 
 Host agent that ships `/var/log/auth.log` and `/var/log/fail2ban.log` to
-Loki via `https://loki.home`. Runs on blueberry only (the `pihole` group), so
+Loki via `https://loki.lan.shpaq.org`. Runs on blueberry only (the `pihole` group), so
 it is wired into `pihole_setup.yml` and nowhere else. No other host ships
 logs to Loki.
 
@@ -431,9 +431,9 @@ directly from `packages.fluentbit.io` (no apt repository) because the fleet
 runs Ubuntu 26.04, which has no published repository yet; the noble `.deb`
 installs cleanly on resolute. Configuration is classic-mode Fluent Bit,
 templated from `templates/fluent-bit.conf.j2`, with `host` pinned through
-`/etc/hosts`, which the `system` role renders with the `loki.home` line on
-`pihole` hosts (blueberry is its own resolver and does not resolve
-`loki.home` through its upstream chain).
+`/etc/hosts`, which the `system` role renders with a
+`loki.lan.shpaq.org loki.home` line on `pihole` hosts (blueberry is its own
+resolver and does not resolve the Loki name through its upstream chain).
 
 With the country allowlist enabled (`log_shipper_tail_ssh_geo`), the agent also
 tails `/var/log/kern.log`, keeps only lines containing `ssh-geo-`, and ships

@@ -53,6 +53,8 @@ resourceProfiles:
       cpu: 300m
       memory: 384Mi
 
+# The *arr apps set <APP>__AUTH__METHOD=External because Authelia
+# forward-auth on the route replaces their own login.
 media:
   bazarr:
     enable: true
@@ -65,7 +67,7 @@ media:
     # page links rely on.
     env:
       - name: ROOT_URL
-        value: https://media.home/bazarr
+        value: https://media.lan.shpaq.org/bazarr
 
   lidarr:
     enable: true
@@ -73,6 +75,9 @@ media:
     service:
       port: 8686
     storageSize: 1Gi
+    env:
+      - name: LIDARR__AUTH__METHOD
+        value: External
 
   prowlarr:
     enable: true
@@ -80,6 +85,9 @@ media:
     service:
       port: 9696
     storageSize: 1Gi
+    env:
+      - name: PROWLARR__AUTH__METHOD
+        value: External
 
   radarr:
     enable: true
@@ -87,13 +95,26 @@ media:
     service:
       port: 7878
     storageSize: 1Gi
+    env:
+      - name: RADARR__AUTH__METHOD
+        value: External
 
   readarr:
     enable: true
     resourceProfile: light
     service:
       port: 8787
-    storageSize: 1Gi
+    storageSize: 2Gi
+    # bookshelf keeps Readarr's config section, so the prefix stays READARR.
+    env:
+      - name: READARR__AUTH__METHOD
+        value: External
+      # The config volume was recreated with a new key; pin the one the exporter, homepage and Prowlarr use.
+      - name: READARR__AUTH__APIKEY
+        valueFrom:
+          secretKeyRef:
+            name: media-exporter
+            key: READARR_APIKEY
 
   sonarr:
     enable: true
@@ -101,6 +122,9 @@ media:
     service:
       port: 8989
     storageSize: 1Gi
+    env:
+      - name: SONARR__AUTH__METHOD
+        value: External
 
 transmission:
   flood:
@@ -174,7 +198,7 @@ landingPage:
 
 httpRoute:
   enabled: true
-  hostname: media.home
+  hostname: media.lan.shpaq.org
   parentRefs:
     - name: traefik-internal-gateway
       namespace: traefik
