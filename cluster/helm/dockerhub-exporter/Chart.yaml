@@ -2,5 +2,5 @@ apiVersion: v2
 name: dockerhub-exporter
 description: Prometheus Docker Hub repository metrics exporter
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "2.19.4"
