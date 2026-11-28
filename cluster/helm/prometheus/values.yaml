@@ -803,10 +803,6 @@ prometheus-node-exporter:
   rbac:
     pspEnabled: false
 
-  extraArgs:
-   - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|squashfs|configfs|debugfs|devpts|#devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
-   - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|snap|var/lib/docker|var/lib/containers/.+)#($|/)
-
   resources:
     limits:
       cpu: 200m
