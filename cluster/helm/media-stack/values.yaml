@@ -109,6 +109,12 @@ media:
     env:
       - name: READARR__AUTH__METHOD
         value: External
+      # The config volume was recreated with a new key; pin the one the exporter, homepage and Prowlarr use.
+      - name: READARR__AUTH__APIKEY
+        valueFrom:
+          secretKeyRef:
+            name: media-exporter
+            key: READARR_APIKEY
 
   sonarr:
     enable: true
