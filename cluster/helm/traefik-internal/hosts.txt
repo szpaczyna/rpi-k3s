@@ -1,6 +1,7 @@
 # Hostnames for the wildcard-home-tls Secret, one per line, read by
-# ./generate-cert. Every one must be listed: `.home` is a public suffix, so
-# clients reject a wildcard matching a registrable domain.
+# ./generate-cert. Only the .home names, kept for the redirect; lan.shpaq.org
+# uses wildcard-lan-tls. Every one must be listed: `.home` is a public suffix,
+# so clients reject a wildcard matching a registrable domain.
 
 home
 *.home

@@ -12,6 +12,21 @@ or use a deploy script
 
     ./deploy
 
+# SSO with Authelia
+
+Vaultwarden signs users in through Authelia (client `vaultwarden`, see
+[`cluster/helm/authelia`](../authelia/README.md#openid-connect-provider)).
+All `SSO_*` variables, `SSO_CLIENT_SECRET` included, are in `values.enc.yaml`.
+They land in the `bitwarden-env` Secret that the pod reads through `envFrom`. The redirect URI is `DOMAIN` plus
+`/identity/connect/oidc-signin`.
+
+- `SSO_ONLY=false` keeps the email and master password login.
+- SSO replaces only the login step. The master password still decrypts the
+  vault, so users enter it after the Authelia login.
+- On the first SSO login Vaultwarden links the Authelia identity to the
+  existing account with the same email. The Authelia user's email must match
+  the Vaultwarden account email.
+
 # Migrating from sqlite to external postgres
 
 ## WARN

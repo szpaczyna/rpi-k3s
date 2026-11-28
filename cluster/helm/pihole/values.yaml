@@ -1,4 +1,4 @@
-hostname: pihole.home
+hostname: pihole.lan.shpaq.org
 
 # External Pi-hole IP (selector-less Service + manual Endpoints)
 upstreamIP: 10.0.0.2

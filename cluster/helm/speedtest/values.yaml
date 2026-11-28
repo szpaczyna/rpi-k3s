@@ -3,16 +3,17 @@
 #
 # The exporter runs with hostNetwork on a single pinned node. Prometheus
 # scrapes it through the static `speedtest` job, so the pod carries no
-# prometheus.io/* annotations: each scrape runs a full speed test.
+# prometheus.io/* annotations: a scrape runs a full speed test when the last
+# result is older than 10 minutes.
 
 image:
   repository: szpaczyn/speedtest-exporter
-  tag: "v2.2.0"
+  tag: "v2.2.1"
   pullPolicy: IfNotPresent
 
 port: 9469
 
-# TCP only: an HTTP probe on /metrics would start a full speed test.
+# TCP only: an HTTP probe on /metrics would start a speed test every 10 minutes.
 livenessProbe:
   tcpSocket:
     port: http

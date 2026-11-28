@@ -22,6 +22,11 @@ spec:
             group: traefik.io
             kind: Middleware
             name: security-chain-internal
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: authelia
       {{- if .Values.landingPage.enabled }}
       backendRefs:
         - name: landingpage
@@ -47,6 +52,11 @@ spec:
             group: traefik.io
             kind: Middleware
             name: security-chain-internal
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: authelia
       backendRefs:
         - name: transmission-http
           port: {{ .Values.transmission.service.port }}
@@ -63,6 +73,11 @@ spec:
             group: traefik.io
             kind: Middleware
             name: security-chain-internal
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: authelia
       backendRefs:
         - name: "{{ $name }}"
           port: {{ $svc.service.port }}
@@ -80,6 +95,11 @@ spec:
             group: traefik.io
             kind: Middleware
             name: security-chain-internal
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: authelia
         - type: RequestRedirect
           requestRedirect:
             scheme: https

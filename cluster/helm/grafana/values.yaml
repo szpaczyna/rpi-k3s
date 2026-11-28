@@ -52,7 +52,7 @@ ingress:
   # hosts is kept populated (ingress disabled) because grafana.ini below
   # still reads .Values.ingress.hosts to template server.domain / instance_name.
   hosts:
-    - grafana.home
+    - grafana.lan.shpaq.org
 
 route:
   main:
@@ -63,7 +63,7 @@ route:
         kind: Gateway
         sectionName: websecure
     hostnames:
-      - grafana.home
+      - grafana.lan.shpaq.org
     matches:
       - path:
           type: PathPrefix
@@ -123,6 +123,12 @@ initChownData:
 admin:
   existingSecret: "grafana-admin-creds"
 
+envValueFrom:
+  GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
+    secretKeyRef:
+      name: grafana-oidc
+      key: client-secret
+
 enableServiceLinks: true
 
 extraVolumes: []
@@ -181,16 +187,18 @@ datasources:
 
 grafana.ini:
   app_mode: production
-  instance_name: grafana.home
+  instance_name: grafana.lan.shpaq.org
 
   paths:
     logs: /var/lib/grafana/log
     provisioning: /var/lib/grafana/provisioning
 
   server:
-    domain: grafana.home
+    domain: grafana.lan.shpaq.org
     enable_gzip: true
     socket: /tmp/grafana.sock
+    # The OAuth redirect URI is built from root_url; the default adds :3000 and plain http.
+    root_url: https://%(domain)s/
 
   security:
     encryption_provider: secretKey
