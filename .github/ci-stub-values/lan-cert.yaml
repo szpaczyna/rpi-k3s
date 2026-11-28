@@ -1,0 +1,6 @@
+---
+# CI-only override (never deployed): kind's longhorn StorageClass binds on
+# first consumer, and the CronJob never runs during the install, so an unbound
+# PVC would hold `helm install --wait` until it times out.
+persistence:
+  enabled: false
