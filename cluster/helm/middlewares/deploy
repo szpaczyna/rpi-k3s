@@ -8,7 +8,7 @@ CHART="."
 kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
 
 # The chart renders into the app namespaces, so on a fresh cluster they must exist first.
-for ns in $(yq -r '(.namespaces + .externalChainNamespaces + .autheliaNamespaces) | unique | .[]' values.yaml); do
+for ns in $(yq -r '(.namespaces + .externalChainNamespaces + .autheliaNamespaces + .lanOnlyNamespaces) | unique | .[]' values.yaml); do
   kubectl create namespace "${ns}" --dry-run=client -o yaml | kubectl apply -f -
 done
 

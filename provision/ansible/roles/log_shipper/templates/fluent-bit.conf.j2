@@ -81,11 +81,11 @@
 [OUTPUT]
     Name loki
     Match node.*
-    Host loki.home
+    Host loki.lan.shpaq.org
     Port 443
     tls On
     tls.verify On
-    tls.ca_file {{ log_shipper_ca_file }}
+    tls.ca_file {{ log_shipper_ca_bundle }}
     URI /loki/api/v1/push
     Labels job=host
     Label_Keys $host,$log_file

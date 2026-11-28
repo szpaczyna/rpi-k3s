@@ -21,6 +21,11 @@ spec:
             group: traefik.io
             kind: Middleware
             name: security-chain-internal
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: authelia
       backendRefs:
         - name: {{ .Release.Name }}
           port: {{ .Values.service.port }}

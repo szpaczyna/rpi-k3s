@@ -1,9 +1,10 @@
 # Traefik (internal)
 
-Second ingress controller, LAN only. Serves `*.home` over TLS with an `mkcert`
-wildcard cert. Shares namespace `traefik` with the external instance in
-[`../traefik`](../traefik), and is separated from it by its own
-`GatewayClass`, not by its own namespace.
+Second ingress controller, LAN only. Serves `*.lan.shpaq.org` over TLS with
+the Let's Encrypt wildcard from [`../lan-cert`](../lan-cert), and redirects the
+old `*.home` names there, which keep an `mkcert` leaf until the cleanup. Shares
+namespace `traefik` with the external instance in [`../traefik`](../traefik),
+and is separated from it by its own `GatewayClass`, not by its own namespace.
 
 | | external | internal |
 |---|---|---|
@@ -13,44 +14,80 @@ wildcard cert. Shares namespace `traefik` with the external instance in
 | GatewayClass | `traefik` | `traefik-internal` |
 | Gateway | `traefik-gateway` | `traefik-internal-gateway` |
 | LoadBalancer IP | `10.0.0.40` | `10.0.0.50` |
-| cert | Let's Encrypt, per app | one mkcert leaf for `*.home` |
-| authentication | Authelia forwardAuth | none, LAN is trusted |
+| cert | Let's Encrypt, per app | Let's Encrypt `*.lan.shpaq.org`, mkcert leaf for `*.home` |
+| authentication | Authelia forwardAuth | Authelia forwardAuth on the web UIs |
 
 Chart `traefik/traefik` at the `VERSION` pinned in `deploy`, image pinned to
 `v3.7.15` (kept equal to the external instance so behaviour differences do
 not confound debugging), two
-replicas, no HPA since LAN traffic does not burst. Dashboard and API on port
-`8080` of the same LoadBalancer, unauthenticated, reachable only from the LAN:
+replicas, no HPA since LAN traffic does not burst. The dashboard is served by
+the chart's dashboard IngressRoute on `websecure`, behind the `authelia`
+Middleware, with the `wildcard-home-tls` certificate:
 
 ```
-http://10.0.0.50:8080/dashboard/
+https://traefik-internal.lan.shpaq.org/dashboard/
 ```
+
+Port `8080` is no longer on the LoadBalancer. The ClusterIP Service
+`traefik-internal-dashboard` carries it for the homepage widget. The
+IngressRoute sets the `kubernetes.io/ingress.class: traefik-internal`
+annotation because the chart only writes `ingressClassName` when
+`ingressClass.enabled` is true, and the CRD provider skips unclassed objects.
 
 ## Gateway listeners
 
 | Listener | Port | Protocol | Notes |
 |---|---|---|---|
-| `web` | 80 | HTTP | Nothing routes to it. `redirect-https` is attached to `websecure` routes rather than to this listener, so no request needs it (see [middlewares](#middlewares)). |
-| `websecure` | 443 | HTTPS | `mode: Terminate`, `certificateRefs: [wildcard-home-tls]`, `namespacePolicy: All`. |
+| `web` | 80 | HTTP | Only the `*.home` redirect routes to it. `redirect-https` is attached to `websecure` routes rather than to this listener, so no other request needs it (see [middlewares](#middlewares)). |
+| `websecure` | 443 | HTTPS | `mode: Terminate`, `certificateRefs: [wildcard-home-tls, wildcard-lan-tls]`, `namespacePolicy: All`. |
 
-There is no catch-all HTTPRoute, unlike the external instance. An unrecognised
-`*.home` hostname gets a 404 from Traefik.
+There is no catch-all HTTPRoute for `lan.shpaq.org`, unlike the external
+instance. An unrecognised `*.lan.shpaq.org` hostname gets a 404 from Traefik.
 
-## Certificate
+## Redirect from `*.home`
 
-The whole `*.home` zone is covered by one Secret, `wildcard-home-tls` in
-namespace `traefik`. It is a plain `kubernetes.io/tls` Secret applied from
-SOPS-encrypted YAML, because cert-manager cannot issue from a private CA and
-there is nothing public to validate against.
+`extraObjects` renders an HTTPRoute and a Middleware, both named
+`redirect-home-to-lan`, that answer every `<label>.home` request on either
+listener with a 301 to `https://<label>.lan.shpaq.org`, keeping the port, path
+and query. The Gateway API `RequestRedirect` filter only sets a fixed hostname,
+so the route uses a Traefik `redirectRegex` Middleware instead. Pi-hole keeps a
+CNAME from the `.home` name of each LAN web app to its new name, so old
+bookmarks still resolve; device names under `.home` are gone.
 
-### The wildcard alone does not work
+```sh
+curl -sI https://media.home/radarr/ | grep -i '^location'
+# location: https://media.lan.shpaq.org/radarr/
+```
+
+The redirect, the `.home` SANs and the remaining `.home` CNAMEs stay for old
+bookmarks; remove them together.
+
+## Certificates
+
+The `websecure` listener references two `kubernetes.io/tls` Secrets in
+namespace `traefik`. Their SANs do not overlap, so Traefik picks one by SNI.
+
+| Secret | SANs | issuer | managed by |
+|---|---|---|---|
+| `wildcard-lan-tls` | `*.lan.shpaq.org` | Let's Encrypt | [`../lan-cert`](../lan-cert), weekly renewal CronJob |
+| `wildcard-home-tls` | `home`, `*.home`, each `.home` name | mkcert CA | [`hosts.txt`](hosts.txt) and `./generate-cert`, SOPS-encrypted here |
+
+`wildcard-lan-tls` comes from a public CA, so devices need no mkcert CA for
+`*.lan.shpaq.org`, and a new `lan.shpaq.org` application needs no new
+certificate. `deploy` stops if the Secret is missing; run
+[`../lan-cert/deploy`](../lan-cert) first on a fresh cluster.
+
+`wildcard-home-tls` exists only for the `.home` redirect and goes away with
+it. `deploy` applies it from SOPS-encrypted YAML because cert-manager cannot
+issue from a private CA.
+
+### The `.home` wildcard alone does not work
 
 `.home` is a public suffix, so `media.home` is a registrable domain rather than
 a subdomain. A certificate whose only SAN is `*.home` fails hostname
 verification in curl and in browsers, with `no alternative certificate subject
-name matches target host name`. The wildcard stays in the SAN list as a
-convenience, but every hostname is also listed explicitly. Adding a hostname
-means regenerating the leaf.
+name matches target host name`. The `.home` wildcard stays in the SAN list as a
+convenience, but every `.home` hostname is also listed explicitly.
 
 ### Hostnames
 
@@ -66,7 +103,7 @@ pihole.home  homepage.home
 ### Regenerating the certificate
 
 The CA in `$(mkcert -CAROOT)` is the durable part and never changes. The leaf
-has to be reissued whenever a hostname is added, and it expires on its own
+has to be reissued whenever `hosts.txt` changes, and it expires on its own
 (about two years from each generation).
 
 ```sh
@@ -82,8 +119,9 @@ has to be reissued whenever a hostname is added, and it expires on its own
 list and the validity window; check that the new hostname is there before
 running `./deploy`.
 
-Two hostnames are not covered by a wildcard under any circumstance: apex
-`home`, and anything two levels deep such as `a.b.home`.
+A wildcard never covers the apex (`lan.shpaq.org`, `home`) or anything two
+levels deep such as `a.b.lan.shpaq.org`. Neither certificate covers
+`lan.shpaq.org` itself.
 
 Check the SANs after applying:
 
@@ -96,10 +134,10 @@ The full TLS check is under [Verifying TLS](#verifying-tls).
 
 ### Trusting the CA on clients
 
-Clients need `rootCA.pem` from `$(mkcert -CAROOT)` installed in their trust
-store. `mkcert -install` on a workstation handles it, but every other device
-that opens a `*.home` URL needs it too. Android ignores user-installed CAs in
-most applications, though browsers on it do accept them.
+Only clients that still open `*.home` URLs need `rootCA.pem` from
+`$(mkcert -CAROOT)` in their trust store; `*.lan.shpaq.org` needs no extra CA.
+`mkcert -install` on a workstation handles it. Android ignores user-installed
+CAs in most applications, though browsers on it do accept them.
 
 The CA is not secret. It is also not committed: export it explicitly when
 distributing it.
@@ -108,11 +146,12 @@ distributing it.
 
 Both releases render into namespace `traefik`, which constrains three things.
 
-**`extraObjects` is empty.** A second Helm release cannot take ownership of an
-object name another release already owns, so this chart creates no
-Middleware of its own. Routes reference the middlewares that already exist in
-`traefik`, for example `redirect-https@kubernetescrd`. Uninstalling the
-external release would break every `*.home` route.
+**`extraObjects` holds only the `.home` redirect.** A second Helm release
+cannot take ownership of an object name another release already owns, so this
+chart re-creates none of the shared middlewares, and its own objects use names
+the external release does not. Routes reference the middlewares that already
+exist in `traefik`, for example `redirect-https@kubernetescrd`. Uninstalling
+the external release would break every `*.lan.shpaq.org` route.
 
 **GatewayClass scoping is done with a label.** The chart creates the
 `GatewayClass` but never tells the Traefik binary which one to serve, and
@@ -148,8 +187,8 @@ against the other's spread.
 
 ## Middlewares
 
-The `*.home` routes for media, loki, pihole, grafana and prometheus attach
-`security-chain-internal`. `longhorn.home` has none: the upstream Longhorn
+The `*.lan.shpaq.org` routes for media, loki, pihole, grafana and prometheus
+attach `security-chain-internal`. `longhorn.lan.shpaq.org` has none: the upstream Longhorn
 chart's `httproute.yaml` has no `filters` hook, so the route cannot take one.
 
 Per-route middleware has to live in the route's own namespace, because
@@ -180,31 +219,35 @@ next to `security-chain` for the external instance.
 ./deploy
 ```
 
-Applies the Secret, then reconciles the release. The Secret has to exist
-before the Gateway declares a `certificateRefs` entry: a missing Secret drops
-the whole `websecure` listener, not one route.
+Applies `wildcard-home-tls`, checks that `wildcard-lan-tls` exists, then
+reconciles the release. Both Secrets have to exist before the Gateway declares
+them in `certificateRefs`: a missing Secret drops the whole `websecure`
+listener, not one route.
 
-## Adding a new `*.home` application
+## Adding a new `*.lan.shpaq.org` application
 
-1. Add the hostname to `hosts.txt`.
-2. `./generate-cert && ./deploy`, so the certificate covers it.
-3. Point the app's `HTTPRoute` at `traefik-internal-gateway` in namespace
+1. Point the app's `HTTPRoute` at `traefik-internal-gateway` in namespace
    `traefik`, section `websecure`.
-4. Add a DNS record pointing the hostname at `10.0.0.50`, in
+2. Add a CNAME from the hostname to `traefik-internal.lan.shpaq.org`, in
    `provision/ansible/roles/pihole/defaults/main.yml`.
-5. Give the route a `Chain` middleware in the app's own namespace if it needs
+3. Give the route a `Chain` middleware in the app's own namespace if it needs
    one, per [middlewares](#middlewares).
 
 ## Verifying TLS
 
 The status code is whatever the route answers; only `ssl_verify_result`
-matters here, and it must be `0`:
+matters here, and it must be `0`. `*.lan.shpaq.org` verifies against the
+system trust store, `*.home` against the mkcert CA:
 
 ```sh
 curl -s -o /dev/null -w '%{http_code} %{ssl_verify_result}\n' \
+  --resolve media.lan.shpaq.org:443:10.0.0.50 https://media.lan.shpaq.org/
+# 200 0
+
+curl -s -o /dev/null -w '%{http_code} %{ssl_verify_result}\n' \
   --cacert "$(mkcert -CAROOT)/rootCA.pem" \
   --resolve media.home:443:10.0.0.50 https://media.home/
-# 200 0
+# 301 0
 ```
 
 Any other `ssl_verify_result` means either that the

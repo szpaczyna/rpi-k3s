@@ -28,8 +28,8 @@ data:
     </style>
     </head>
     <body>
-    <h1>media.home</h1>
-    <p class="meta">Serving from the LAN. TLS by a private CA.</p>
+    <h1>media.lan.shpaq.org</h1>
+    <p class="meta">Serving from the LAN. TLS by Let's Encrypt.</p>
     <ul>
     {{- range $name, $svc := .Values.media }}
     {{- if $svc.enable }}

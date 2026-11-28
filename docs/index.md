@@ -9,7 +9,7 @@ layout: default
   - [bitwarden](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/bitwarden) - Password management (Vaultwarden)
   - [booklore](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/booklore) - Book library management
   - [gitea](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/gitea) - Self-hosted Git service
-  - [homepage](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/homepage) - Service dashboard at `homepage.home`
+  - [homepage](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/homepage) - Service dashboard at `homepage.lan.shpaq.org`
   - [media-stack](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/media-stack) - Radarr, Sonarr, Lidarr, Prowlarr, Readarr, Bazarr, Transmission
   - [pihole](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/pihole) - DNS ad-blocker
   - [shpaq-org](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/shpaq-org) - Personal website
@@ -36,7 +36,7 @@ layout: default
   - [metallb](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/metallb) - Bare-metal load balancer (L2)
   - [middlewares](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/middlewares) - Traefik middlewares (security chain, authelia)
   - [traefik](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/traefik-external) - Ingress controller (Gateway API / HTTPRoute)
-  - [traefik-internal](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/traefik-internal) - Internal Traefik instance for the *.home LAN domain
+  - [traefik-internal](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/traefik-internal) - Internal Traefik instance for the *.lan.shpaq.org LAN domain
   - [longhorn](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/longhorn) - Distributed block storage
   - [local-path-provisioner](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/local-path-provisioner) - Local HostPath storage provisioner
   - [system-upgrade-controller](https://github.com/szpaczyna/rpi-k3s/tree/main/cluster/helm/system-upgrade-controller) - Automated K3s upgrades
