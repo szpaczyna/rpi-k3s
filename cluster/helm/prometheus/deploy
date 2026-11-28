@@ -5,7 +5,7 @@ NAMESPACE="monitoring"
 RELEASE_NAME="prometheus"
 CHART="prometheus-community/prometheus"
 
-VERSION="29.47.2"
+VERSION="29.49.0"
 REPO_NAME="prometheus-community"
 REPO_URL="https://prometheus-community.github.io/helm-charts"
 
