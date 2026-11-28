@@ -1,0 +1,26 @@
+---
+# CI-only placeholder for exporter-secret.enc.yaml (never deployed). The
+# exporters and transmission read it, so without it every pod stays in
+# CreateContainerConfigError. Contains no real secrets.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: media-exporter
+type: Opaque
+stringData:
+  BASIC_AUTH_USERNAME: ci
+  BASIC_AUTH_PASSWORD: ci # pragma: allowlist secret
+  TRANSMISSION_USERNAME: ci
+  TRANSMISSION_PASSWORD: ci # pragma: allowlist secret
+  BAZARR_URL: http://localhost:6767
+  BAZARR_APIKEY: "00000000000000000000000000000000" # pragma: allowlist secret
+  LIDARR_URL: http://localhost:8686
+  LIDARR_APIKEY: "00000000000000000000000000000000" # pragma: allowlist secret
+  PROWLARR_URL: http://localhost:9696
+  PROWLARR_APIKEY: "00000000000000000000000000000000" # pragma: allowlist secret
+  RADARR_URL: http://localhost:7878
+  RADARR_APIKEY: "00000000000000000000000000000000" # pragma: allowlist secret
+  READARR_URL: http://localhost:8787
+  READARR_APIKEY: "00000000000000000000000000000000" # pragma: allowlist secret
+  SONARR_URL: http://localhost:8989
+  SONARR_APIKEY: "00000000000000000000000000000000" # pragma: allowlist secret
