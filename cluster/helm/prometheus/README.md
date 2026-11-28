@@ -13,8 +13,8 @@ Metrics collection for the cluster, deployed with the upstream chart
 
 ## Architecture
 
-- **Version pin**: `VERSION="29.37.0"` in `deploy`. Renovate tracks this pin
-  through a custom manager in `cluster/helm/renovate/values.yaml`.
+- **Version pin**: `VERSION="31.0.0"` in `deploy`. Renovate tracks this pin
+  through a custom manager in `.github/renovate.json5`.
 
 ## Deployment
 
