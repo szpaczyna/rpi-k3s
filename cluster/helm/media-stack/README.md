@@ -83,20 +83,20 @@ For more information on each application, refer to their respective documentatio
 
 ## Ingress / Routing
 
-The chart exposes `media.home` through an `HTTPRoute` in `templates/httproute.yaml`,
-attached to `traefik-internal-gateway`. The chart has no `Certificate`; TLS comes
-from the shared `wildcard-home-tls` Secret (see
+The chart exposes `media.lan.shpaq.org` through an `HTTPRoute` in
+`templates/httproute.yaml`, attached to `traefik-internal-gateway`. The chart
+has no `Certificate`; TLS comes from the shared `wildcard-lan-tls` Secret (see
 [`cluster/helm/traefik-internal`](../traefik-internal)).
 
 | Path | Target |
 |---|---|
 | `/` (exact) | `landingpage` pod (`templates/landingpage.yaml`) when `landingPage.enabled`, otherwise a 302 to `https://shpaq.org/` |
 | `/transmission`, `/<app>` for each enabled `media.<app>` | the app's Service, `PathPrefix` match |
-| anything else | 302 back to `https://media.home/` |
+| anything else | 302 back to `https://media.lan.shpaq.org/` |
 
 Every route carries `security-chain-internal`, a `redirect-https` chain with no
-Authelia. An Authelia cookie is scoped to `.shpaq.org`, so it never reaches
-`media.home`.
+Authelia. `https://media.home/` answers with a 301 to the same path on
+`media.lan.shpaq.org` (see [`cluster/helm/traefik-internal`](../traefik-internal)).
 
 The landing page links are generated from `.Values.media`. Disabling an app
 removes its link without a template change.

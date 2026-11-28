@@ -65,7 +65,7 @@ media:
     # page links rely on.
     env:
       - name: ROOT_URL
-        value: https://media.home/bazarr
+        value: https://media.lan.shpaq.org/bazarr
 
   lidarr:
     enable: true
@@ -174,7 +174,7 @@ landingPage:
 
 httpRoute:
   enabled: true
-  hostname: media.home
+  hostname: media.lan.shpaq.org
   parentRefs:
     - name: traefik-internal-gateway
       namespace: traefik

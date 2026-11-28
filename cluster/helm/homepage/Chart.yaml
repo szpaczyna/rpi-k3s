@@ -1,9 +1,9 @@
 ---
 apiVersion: v2
 name: homepage
-description: Homepage dashboard for the cluster services, served at homepage.home
+description: Homepage dashboard for the cluster services, served at homepage.lan.shpaq.org
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "2.7.0"
 sources:
   - https://github.com/gethomepage/homepage

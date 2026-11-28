@@ -226,8 +226,8 @@ gateway:
         - name: whoops-shpaq-org-tls     # whoops.shpaq.org
         - name: booklore-shpaq-org-tls   # booklore.shpaq.org
         - name: auth-shpaq-org-tls       # auth.shpaq.org
-        # Moved to the internal gateway as *.home, served there by the
-        # wildcard-home-tls Secret: media, grafana, pihole.
+        # Moved to the internal gateway as *.lan.shpaq.org, served there by
+        # the wildcard-lan-tls Secret: media, grafana, pihole.
         # Retired apps — their charts live in ~/git/k3s-old-stuff and render
         # nothing until revived:
         # - name: calibre-shpaq-org-tls   # k3s-old-stuff/calibre
