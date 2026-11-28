@@ -23,7 +23,7 @@ schedule: "17 4 * * 1"
 lego:
   image:
     repository: goacme/lego
-    tag: v5.8.0
+    tag: v5.8.1
     pullPolicy: IfNotPresent
 
 kubectl:
