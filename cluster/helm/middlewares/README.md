@@ -16,7 +16,8 @@ The chains reference four shared middlewares in namespace `traefik`: `redirect-h
 | `security-chain` | `externalChainNamespaces`: `apps`, `auth`, `media` | `redirect-https`, `geoblock`, `hsts`, `compress` |
 | `security-chain-nogeo` | `externalChainNamespaces` | `redirect-https`, `hsts`, `compress` |
 | `security-chain-internal` | `namespaces`: `apps`, `logging`, `media`, `monitoring` | `redirect-https` |
-| `authelia` | `autheliaNamespaces`: `apps` | `forwardAuth` to `http://authelia.auth.svc.cluster.local/api/authz/forward-auth`, passing `Remote-User`, `Remote-Groups`, `Remote-Email` |
+| `authelia` | `autheliaNamespaces`: `apps`, `longhorn-system`, `media`, `monitoring`, `traefik` | `forwardAuth` to `http://authelia.auth.svc.cluster.local/api/authz/forward-auth`, passing `Remote-User`, `Remote-Groups`, `Remote-Email` |
+| `lan-only` | `lanOnlyNamespaces`: `logging`, `traefik` | `ipAllowList` for `10.0.0.0/24` |
 
 The `security-chain` variants on WAN routes use `geoblock`, a plugin that only
 `traefik-external` loads. The internal gateway has no `geoblock` and does not use
@@ -40,12 +41,17 @@ when its namespace leaves the list.
   middleware.
 - **`externalChainNamespaces`** should hold only namespaces that still have a
   `*.shpaq.org` route. Remove a namespace when its last WAN route is gone.
-- **`namespaces`** must include each namespace with a `*.home` route. Routes on the
-  internal gateway reference `security-chain-internal`.
+- **`namespaces`** must include each namespace with a route on the internal
+  gateway. Those routes reference `security-chain-internal`.
+- **`lanOnlyNamespaces`** holds namespaces with a route that must stay reachable
+  from `10.0.0.0/24` only. The allowlist works because both Traefik Services use
+  `externalTrafficPolicy: Local`, which keeps the client IP. Pods reaching the
+  route through the LoadBalancer IP arrive from `10.42.0.0/16` and get a 403.
 
 Examples of current consumers: `shpaq-org` uses `security-chain-nogeo`, `whoops`,
-`gitea` and `bitwarden` use `security-chain`, and `pihole` and `grafana` use
-`security-chain-internal`.
+`gitea` and `bitwarden` use `security-chain`, `pihole` and `grafana` use
+`security-chain-internal`, the LAN web UIs add `authelia`, and Loki and the
+traefik-external dashboard use `lan-only`.
 
 ## Deploying
 
@@ -62,5 +68,5 @@ does not exist yet, so the chart also installs on a fresh cluster. The
 ## Related
 
 - [traefik-external](../traefik-external): defines the shared `redirect-https`, `geoblock`, `hsts` and `compress` middlewares.
-- [traefik-internal](../traefik-internal): the `*.home` gateway and the reasoning behind `security-chain-internal`.
+- [traefik-internal](../traefik-internal): the LAN gateway and the reasoning behind `security-chain-internal`.
 - [Repository README](../../../README.md)

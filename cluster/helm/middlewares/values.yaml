@@ -1,6 +1,5 @@
 # Namespaces needing `security-chain-internal` (redirect-https only). Every
-# namespace holding a `*.home` route belongs here; the internal gateway has no
-# Authelia, and a `.shpaq.org` cookie is never sent to a `.home` host.
+# namespace holding a route on the internal gateway belongs here.
 namespaces:
   - apps
   - logging
@@ -14,10 +13,19 @@ externalChainNamespaces:
   - apps
   - auth
   - media
-# Namespaces still behind Authelia forwardAuth. `media` left this list when
-# its routes moved to media.home. Removing the middleware while routes still
-# reference it breaks them: Traefik falls through to the catch-all redirect
-# instead of serving the app, so this list may only shrink after the routes
-# that need it are gone.
+# Namespaces whose routes use Authelia forwardAuth. LAN hosts sit under
+# lan.shpaq.org, so the `.shpaq.org` session cookie reaches them. Removing
+# the middleware while routes still reference it breaks them: Traefik falls
+# through to the catch-all redirect instead of serving the app, so this list
+# may only shrink after the routes that need it are gone.
 autheliaNamespaces:
   - apps
+  - longhorn-system
+  - media
+  - monitoring
+  - traefik
+# Namespaces needing `lan-only`, an ipAllowList for 10.0.0.0/24. It relies on
+# `externalTrafficPolicy: Local` on both Traefik Services to see client IPs.
+lanOnlyNamespaces:
+  - logging
+  - traefik

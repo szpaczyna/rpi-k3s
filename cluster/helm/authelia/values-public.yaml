@@ -8,6 +8,9 @@ image:
 
 pod:
   kind: Deployment
+  # The PVC is RWO, so a rolling update waits forever for the old pod to release it.
+  strategy:
+    type: Recreate
   selectors:
     nodeSelector:
       kubernetes.io/role: worker
@@ -43,6 +46,9 @@ pod:
 
 secret:
   existingSecret: authelia
+  # The chart mounts only known keys from existingSecret, so the JWKS key needs its own Secret.
+  additionalSecrets:
+    authelia-oidc-jwks: {}
 
 persistence:
   enabled: true

@@ -103,7 +103,7 @@ extraObjects:
           kind: Gateway
           sectionName: websecure
       hostnames:
-        - loki.home
+        - loki.lan.shpaq.org
       rules:
         - matches:
             - path:
@@ -115,6 +115,11 @@ extraObjects:
                 group: traefik.io
                 kind: Middleware
                 name: security-chain-internal
+            - type: ExtensionRef
+              extensionRef:
+                group: traefik.io
+                kind: Middleware
+                name: lan-only
           backendRefs:
             - name: loki
               port: 3100

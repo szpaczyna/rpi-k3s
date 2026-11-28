@@ -126,7 +126,7 @@ server:
   ingress:
     enabled: false
     hosts:
-      - prometheus.home
+      - prometheus.lan.shpaq.org
 
   route:
     main:
@@ -141,7 +141,7 @@ server:
           kind: Gateway
           sectionName: websecure
       hostnames:
-        - prometheus.home
+        - prometheus.lan.shpaq.org
       additionalRules: []
       filters:
         - type: ExtensionRef
@@ -149,6 +149,11 @@ server:
             group: traefik.io
             kind: Middleware
             name: security-chain-internal
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: authelia
       matches:
         - path:
             type: PathPrefix

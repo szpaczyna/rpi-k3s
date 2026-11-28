@@ -11,19 +11,18 @@ the upstream chart `authelia/authelia` (0.11.22, image pinned to 4.39.28) from
 | `values-public.yaml` | Non-sensitive chart config (image, pod, ingress, storage, initContainer) |
 | `deploy` | Deploy script (repo + secrets + `helm upgrade --install`) |
 | `./values.enc.yaml` | Sensitive config (session, access_control, TOTP, WebAuthn, password policy) — SOPS encrypted |
-| `./secrets.enc.yaml` | Kubernetes Secrets (JWT/session/storage keys + `users_database.yml`) — SOPS encrypted |
+| `./secrets.enc.yaml` | Kubernetes Secrets (JWT/session/storage keys, OIDC HMAC secret, OIDC JWKS key in `authelia-oidc-jwks`, `users_database.yml`) — SOPS encrypted |
 
 ## Who this protects
 
-One route: **`whoops.shpaq.org`**.
+- WAN: `whoops.shpaq.org`.
+- LAN: the web UIs under `*.lan.shpaq.org` (media stack, homepage, Pi-hole,
+  Prometheus, Longhorn and both Traefik dashboards).
 
-`*.home` is out of scope by design. The session cookie is issued for
-`shpaq.org`, and a browser does not send a `.shpaq.org` cookie to `media.home`.
-Covering `*.home` would mean a second Authelia with its own cookie domain and
-an `auth.home` portal. The LAN is trusted instead.
-
-If the WAN route count drops to zero, `basicAuth` per app is cheaper than
-keeping an SSO portal for one hostname.
+The session cookie is issued for `shpaq.org`, so one login at `auth.shpaq.org`
+covers both groups. Grafana has no forwardAuth and is due to log in through
+Authelia OIDC. Loki has no forwardAuth because the host log shippers cannot
+log in; the `lan-only` Middleware limits its route to `10.0.0.0/24`.
 
 ## Architecture
 
@@ -44,9 +43,70 @@ keeping an SSO portal for one hostname.
   kubectl -n auth exec deploy/authelia -- cat /config/notification.txt
   ```
 - **2FA**: TOTP (issuer `shpaq.org`) + WebAuthn (passkeys enabled).
-- **Access control** (`default_policy: deny`): `auth.shpaq.org` bypasses;
-  app names require two_factor, or bypass from `10.0.0.0/8`.
+- **Access control** (`default_policy: deny`): `auth.shpaq.org` bypasses.
+  `*.lan.shpaq.org` and `whoops.shpaq.org` need one_factor from the `lan`
+  network (`10.0.0.0/24`, under `definitions.network`) and two_factor from
+  anywhere else. The earlier bypass from `10.0.0.0/8` also matched the pod
+  CIDR `10.42.0.0/16`, so any pod could reach a protected app without a login.
 
+
+## OpenID Connect provider
+
+Authelia is the OIDC provider (issuer `https://auth.shpaq.org`) for these clients:
+
+| Client ID | Redirect URI | Type |
+|---|---|---|
+| `grafana` | `https://grafana.lan.shpaq.org/login/generic_oauth` | confidential, PKCE |
+| `gitea` | `https://gitea.shpaq.org/user/oauth2/authelia/callback` | confidential |
+| `vaultwarden` | `https://bitwarden.shpaq.org/identity/connect/oidc-signin` | confidential, PKCE |
+| `booklore` | `https://booklore.shpaq.org/oauth2-callback` | public, PKCE |
+
+Every client uses the custom policy `lan_one_factor`: one factor from
+`10.0.0.0/24`, two factors from anywhere else. Consent is `implicit`: the
+clients are this cluster's own apps, so Authelia shows no consent screen.
+
+Configuration lives in encrypted files only:
+
+- `values.enc.yaml`: the whole `identity_providers.oidc` block: `enabled`, the
+  JWKS key path, `authorization_policies`, `claims_policies`, CORS and the
+  `clients` list with the digests of the client secrets.
+- `secrets.enc.yaml`: key `identity_providers.oidc.hmac.key` in Secret
+  `authelia`, and key `private.pem` in Secret `authelia-oidc-jwks`, mounted at
+  `/secrets/authelia-oidc-jwks/`.
+
+The applications hold the plaintext client secrets: Grafana in
+`cluster/helm/grafana/oidc-secret.enc.yaml`, Gitea and Vaultwarden in their
+`values.enc.yaml`. BookLore is a public client and has no secret.
+
+Generate a client secret and its digest. The digest uses sha512crypt with
+1000 rounds: pbkdf2 at the CLI minimum of 100000 iterations costs about 1.8 s
+per token request on the Pi, and the secrets are 72 random characters.
+
+```sh
+docker run --rm authelia/authelia:4.39.28 authelia crypto hash generate sha2crypt \
+  --variant sha512 --iterations 1000 --random --random.length 72 --random.charset rfc3986
+```
+
+`Random Password` goes to the application, `Digest` goes to the client entry
+in `values.enc.yaml`.
+
+### Rotating keys
+
+- **Client secret**: generate a new pair, put the digest in `values.enc.yaml`
+  and the password in the application's secret, then deploy both. Logins for
+  that client fail between the two deploys.
+- **JWKS signing key**: generate a key with
+  `docker run --rm -v "$PWD/jwks:/out" authelia/authelia:4.39.28 authelia crypto pair rsa generate --directory /out`.
+  Add it to `authelia-oidc-jwks` under a new key name, add a second `jwks`
+  entry pointing to it in `values-public.yaml` above the old one, and deploy.
+  Remove the old entry and key after the longest token lifespan has passed
+  (90 minutes for refresh tokens with the defaults).
+- **HMAC secret**: replace `identity_providers.oidc.hmac.key` with the output
+  of `authelia crypto rand --length 64 --charset alphanumeric`. Authelia can no
+  longer read the authorization codes and refresh tokens it issued, so users
+  sign in to each client again.
+
+After changing a Secret, restart the deployment (see below).
 
 ## Deployment
 
