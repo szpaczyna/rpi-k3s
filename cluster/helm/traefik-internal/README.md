@@ -51,15 +51,16 @@ instance. An unrecognised `*.lan.shpaq.org` hostname gets a 404 from Traefik.
 listener with a 301 to `https://<label>.lan.shpaq.org`, keeping the port, path
 and query. The Gateway API `RequestRedirect` filter only sets a fixed hostname,
 so the route uses a Traefik `redirectRegex` Middleware instead. Pi-hole keeps a
-CNAME from each `.home` name to its new name for the same transition period.
+CNAME from the `.home` name of each LAN web app to its new name, so old
+bookmarks still resolve; device names under `.home` are gone.
 
 ```sh
 curl -sI https://media.home/radarr/ | grep -i '^location'
 # location: https://media.lan.shpaq.org/radarr/
 ```
 
-The redirect, the `.home` SANs and the `.home` CNAMEs go away together once
-nothing uses the old names.
+The redirect, the `.home` SANs and the remaining `.home` CNAMEs stay for old
+bookmarks; remove them together.
 
 ## Certificates
 

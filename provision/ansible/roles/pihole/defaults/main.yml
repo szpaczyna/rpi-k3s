@@ -45,29 +45,7 @@ pihole_cname_records:
   - 'loki.lan.shpaq.org,traefik-internal.lan.shpaq.org'
   - 'pihole.lan.shpaq.org,traefik-internal.lan.shpaq.org'
   - 'homepage.lan.shpaq.org,traefik-internal.lan.shpaq.org'
-  # .home names stay as CNAMEs during the move; an A record for them would shadow these.
-  - 'unifi.home,unifi.lan.shpaq.org'
-  - 'blueberry.home,blueberry.lan.shpaq.org'
-  - 'blueberry_wlan.home,blueberry.w.lan.shpaq.org'
-  - 'pihole-wlan.home,blueberry.w.lan.shpaq.org'
-  - 'ap.home,ap.lan.shpaq.org'
-  - 'greyhound.home,greyhound.lan.shpaq.org'
-  - 'tv.home,tv.lan.shpaq.org'
-  - 'printer.home,printer.lan.shpaq.org'
-  - 'sonos.home,sonos.lan.shpaq.org'
-  - 'rpi-k3s-master-00.home,rpi-k3s-master-00.lan.shpaq.org'
-  - 'rpi-k3s-worker-00.home,rpi-k3s-worker-00.lan.shpaq.org'
-  - 'rpi-k3s-worker-01.home,rpi-k3s-worker-01.lan.shpaq.org'
-  - 'rpi-k3s-worker-02.home,rpi-k3s-worker-02.lan.shpaq.org'
-  - 'greypi.home,greypi.lan.shpaq.org'
-  - 'whitepi.home,whitepi.lan.shpaq.org'
-  - 'redpi.home,redpi.lan.shpaq.org'
-  - 'blackpi.home,blackpi.lan.shpaq.org'
-  - 'u7.home,u7.lan.shpaq.org'
-  - 'psql.home,psql.lan.shpaq.org'
-  - 'transmission.home,transmission.lan.shpaq.org'
-  - 'gitea-ssh.home,gitea-ssh.lan.shpaq.org'
-  - 'traefik.home,traefik.lan.shpaq.org'
+  # Old .home names of LAN web apps, kept for the Traefik *.home redirect; an A record would shadow these.
   - 'traefik-internal.home,traefik-internal.lan.shpaq.org'
   - 'media.home,media.lan.shpaq.org'
   - 'grafana.home,grafana.lan.shpaq.org'
@@ -79,7 +57,6 @@ pihole_cname_records:
 
 pihole_rev_servers:
   - 'true,10.0.0.0/24,10.0.0.1,lan.shpaq.org'
-  - 'true,10.0.0.0/24,10.0.0.1,home'
 
 pihole_dns_cname_deep_inspect: true
 pihole_dns_block_esni: true
