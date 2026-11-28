@@ -18,6 +18,7 @@ fi
 kubectl create namespace "${NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
 
 kubectl apply -f <(sops -d ./admin-creds.enc.yaml) -n "${NAMESPACE}"
+kubectl apply -f <(sops -d ./oidc-secret.enc.yaml) -n "${NAMESPACE}"
 kubectl apply -f <(sops -d ./backup-secret.enc.yaml) -n "${NAMESPACE}"
 kubectl apply -f backup-cronjob.yaml -n "${NAMESPACE}"
 
@@ -28,4 +29,5 @@ HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
 HELM_ARGS+=(--values values.yaml)
 [[ -n "${VERSION}" ]] && HELM_ARGS+=(--version "${VERSION}")
 
-helm "${HELM_ARGS[@]}"
+# Keep the sops values inline; bash 3.2 closes a stored process substitution fd.
+helm "${HELM_ARGS[@]}" --values <(sops -d ./values.enc.yaml)
