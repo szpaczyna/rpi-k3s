@@ -256,6 +256,16 @@ jobs:
             for ns in $(yq -N e '... | select(has("namespace")) | .namespace' /tmp/rendered.yaml | sort -u); do
               [ "$ns" != "chart-test" ] && kubectl create namespace "$ns" || true
             done
+            # An untyped hostPath fails the subPath mount when the directory
+            # is missing; the fleet nodes have it, the kind nodes do not.
+            for p in $(yq -N e '... | select(has("hostPath")) | .hostPath | select((.type // "") == "") | .path' /tmp/rendered.yaml | sort -u); do
+              for n in $(kind get nodes --name chart-testing); do docker exec "$n" mkdir -p "$p"; done
+            done
+            # Secrets the deploy script applies from SOPS, outside the chart.
+            fixture=".github/ci-fixtures/$(basename "$c").yaml"
+            if [ -f "$fixture" ]; then
+              kubectl apply --namespace chart-test -f "$fixture"
+            fi
             echo "Installing $rel from $c";
             helm install "$rel" "$c" --namespace chart-test --wait --timeout 10m "${install_args[@]}" || { echo "Install failed for $c"; exit 1; }
             echo "Uninstalling $rel";
