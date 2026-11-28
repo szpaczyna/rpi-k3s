@@ -30,11 +30,12 @@ constraints a shared namespace imposes.
 - Chart: `traefik/traefik` at the `VERSION` pinned in `deploy`, image
   pinned to `v3.7.15`. The image pin is deliberate and moves independently
   of the chart's `appVersion`.
-- Dashboard/API exposed on port `8080` on the same LoadBalancer Service —
-  reachable from the local network (e.g. `http://10.0.0.40:8080/dashboard/`)
-  but **not** routed to the internet and **not** protected by
-  authentication. Keep this LAN-only; do not expose it via an `HTTPRoute`
-  without adding a `BasicAuth`/`ForwardAuth` Middleware first.
+- Dashboard served by the chart's dashboard IngressRoute on `websecure` at
+  `https://traefik.lan.shpaq.org/dashboard/`, with the `wildcard-lan-tls`
+  certificate. `websecure` on this instance is reachable from the internet, so
+  the route carries `lan-only` (ipAllowList `10.0.0.0/24`) before `authelia`.
+  Port `8080` is off the LoadBalancer; the ClusterIP Service
+  `traefik-external-dashboard` carries it for the homepage widget.
 
 ## Gateway listeners
 
@@ -118,7 +119,7 @@ Keep the download URL in `deployment.initContainers` in sync with
 `experimental.plugins.geoblock.version` when bumping the plugin.
 
 Not affected by the chain: ACME/Let's Encrypt HTTP-01 challenges (port 80,
-`web` entrypoint), the dashboard/API (`traefik` entrypoint, port 8080) and
+`web` entrypoint), the in-cluster API (`traefik` entrypoint, port 8080) and
 kubelet healthchecks.
 
 ## Adding a new application with TLS

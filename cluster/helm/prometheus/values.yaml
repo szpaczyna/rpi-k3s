@@ -149,6 +149,11 @@ server:
             group: traefik.io
             kind: Middleware
             name: security-chain-internal
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: authelia
       matches:
         - path:
             type: PathPrefix

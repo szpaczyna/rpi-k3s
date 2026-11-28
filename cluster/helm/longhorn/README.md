@@ -20,8 +20,11 @@ Distributed block storage for the cluster, deployed with the upstream chart
 - **Control-plane node**: `rpi-k3s-master-00` is listed under
   `storageNodes.exclude`. The chart cannot set `allowScheduling` per node, so
   `deploy` patches the `nodes.longhorn.io` CR after the install.
-- **Auth**: the UI sits behind basic auth, provided by the `auth.enc.yaml`
-  Secret.
+- **Auth**: the UI sits behind the `authelia` forwardAuth Middleware. The
+  chart's `httproute` template has no filters hook, so `httproute.enabled` is
+  false and the route lives in `extraObjects`, reading its hostname and parent
+  from the `httproute` block. No object references the `longhorn-auth` basic-auth
+  Secret from `auth.enc.yaml`.
 
 ## Deployment
 

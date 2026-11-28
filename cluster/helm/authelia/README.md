@@ -15,15 +15,14 @@ the upstream chart `authelia/authelia` (0.11.22, image pinned to 4.39.28) from
 
 ## Who this protects
 
-One route: **`whoops.shpaq.org`**.
+- WAN: `whoops.shpaq.org`.
+- LAN: the web UIs under `*.lan.shpaq.org` (media stack, homepage, Pi-hole,
+  Prometheus, Longhorn and both Traefik dashboards).
 
-`*.home` is out of scope by design. The session cookie is issued for
-`shpaq.org`, and a browser does not send a `.shpaq.org` cookie to `media.home`.
-Covering `*.home` would mean a second Authelia with its own cookie domain and
-an `auth.home` portal. The LAN is trusted instead.
-
-If the WAN route count drops to zero, `basicAuth` per app is cheaper than
-keeping an SSO portal for one hostname.
+The session cookie is issued for `shpaq.org`, so one login at `auth.shpaq.org`
+covers both groups. Grafana has no forwardAuth and is due to log in through
+Authelia OIDC. Loki has no forwardAuth because the host log shippers cannot
+log in; the `lan-only` Middleware limits its route to `10.0.0.0/24`.
 
 ## Architecture
 
@@ -44,8 +43,11 @@ keeping an SSO portal for one hostname.
   kubectl -n auth exec deploy/authelia -- cat /config/notification.txt
   ```
 - **2FA**: TOTP (issuer `shpaq.org`) + WebAuthn (passkeys enabled).
-- **Access control** (`default_policy: deny`): `auth.shpaq.org` bypasses;
-  app names require two_factor, or bypass from `10.0.0.0/8`.
+- **Access control** (`default_policy: deny`): `auth.shpaq.org` bypasses.
+  `*.lan.shpaq.org` and `whoops.shpaq.org` need one_factor from the `lan`
+  network (`10.0.0.0/24`, under `definitions.network`) and two_factor from
+  anywhere else. The earlier bypass from `10.0.0.0/8` also matched the pod
+  CIDR `10.42.0.0/16`, so any pod could reach a protected app without a login.
 
 
 ## Deployment

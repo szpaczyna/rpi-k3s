@@ -94,9 +94,35 @@ has no `Certificate`; TLS comes from the shared `wildcard-lan-tls` Secret (see
 | `/transmission`, `/<app>` for each enabled `media.<app>` | the app's Service, `PathPrefix` match |
 | anything else | 302 back to `https://media.lan.shpaq.org/` |
 
-Every route carries `security-chain-internal`, a `redirect-https` chain with no
-Authelia. `https://media.home/` answers with a 301 to the same path on
-`media.lan.shpaq.org` (see [`cluster/helm/traefik-internal`](../traefik-internal)).
+Every rule carries `security-chain-internal` (a `redirect-https` chain) and
+`authelia` (forwardAuth). Authelia asks for one factor from `10.0.0.0/24` and two
+factors from anywhere else. Its session cookie is scoped to `.shpaq.org`, so it
+covers `media.lan.shpaq.org`. `https://media.home/` answers with a 301 to the same
+path on `media.lan.shpaq.org` (see [`cluster/helm/traefik-internal`](../traefik-internal)).
+
+## Authentication
+
+Authelia is the only login for the web UIs. Each app keeps its API key, and
+exportarr, homepage widgets and Prowlarr call the apps by Service URL
+(`http://<app>.media:<port>`), which bypasses Traefik and Authelia.
+
+| App | App-side auth | Set by |
+|---|---|---|
+| radarr, sonarr, lidarr, prowlarr | `External` | `<APP>__AUTH__METHOD` in `media.<app>.env` |
+| readarr (bookshelf) | `External` | `READARR__AUTH__METHOD`; the fork keeps Readarr's `Readarr:Auth` config section |
+| bazarr | `None` | by hand, see below |
+| transmission | off | `USER`/`PASS` unset; `WHITELIST` and `HOST_WHITELIST` in `templates/transmission-deployment.yaml` |
+
+Bazarr has no external auth mode and no environment override for it. After the
+first deploy with Authelia in front, open Bazarr, go to Settings, General,
+Security, set Authentication to `None` and save. The setting lives in
+`/config/config/config.yaml` on the `bazarr` PVC, so it survives restarts.
+
+Transmission runs with RPC authentication disabled. `WHITELIST` admits
+`127.0.0.1`, `::1` (the exporter sidecar) and the pod CIDR `10.42.*.*` (Traefik
+and the *arr download clients). `HOST_WHITELIST` admits the `transmission-http`
+Service names and `httpRoute.hostname`; Transmission returns 421 for any other
+`Host` header.
 
 The landing page links are generated from `.Values.media`. Disabling an app
 removes its link without a template change.

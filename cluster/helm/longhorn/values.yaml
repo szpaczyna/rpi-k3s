@@ -206,10 +206,11 @@ ingress:
   host: longhorn.lan.shpaq.org
   secrets: null
 
-# No middleware on this route: the upstream httproute.yaml template has no
-# filters hook, not even the HTTPS redirect. Longhorn has its own login page.
+# The upstream httproute.yaml template has no filters hook, so the chart route
+# stays off and extraObjects renders it with Authelia. The fields below feed
+# that route through tpl. Longhorn has no login of its own.
 httproute:
-  enabled: true
+  enabled: false
   hostnames:
     - longhorn.lan.shpaq.org
   parentRefs:
@@ -217,6 +218,34 @@ httproute:
       namespace: traefik
       kind: Gateway
       sectionName: websecure
+
+extraObjects:
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: longhorn-httproute
+      namespace: longhorn-system
+    spec:
+      parentRefs:
+        - name: '{{ (index .Values.httproute.parentRefs 0).name }}'
+          namespace: '{{ (index .Values.httproute.parentRefs 0).namespace }}'
+          sectionName: '{{ (index .Values.httproute.parentRefs 0).sectionName }}'
+      hostnames:
+        - '{{ index .Values.httproute.hostnames 0 }}'
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          filters:
+            - type: ExtensionRef
+              extensionRef:
+                group: traefik.io
+                kind: Middleware
+                name: authelia
+          backendRefs:
+            - name: longhorn-frontend
+              port: 80
 
 enablePSP: false
 namespaceOverride: ""

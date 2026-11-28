@@ -135,22 +135,22 @@ config:
               password: "{{HOMEPAGE_VAR_UNIFI_PASSWORD}}"
         - Traefik internal:
             icon: traefik.png
-            href: http://traefik-internal.home:8080/dashboard/
+            href: https://traefik-internal.lan.shpaq.org/dashboard/
             namespace: traefik
             app: traefik
             podSelector: app.kubernetes.io/instance=traefik-internal
             widget:
               type: traefik
-              url: http://traefik-internal.traefik.svc.cluster.local:8080
+              url: http://traefik-internal-dashboard.traefik.svc.cluster.local:8080
         - Traefik external:
             icon: traefik.png
-            href: http://traefik.home:8080/dashboard/
+            href: https://traefik.lan.shpaq.org/dashboard/
             namespace: traefik
             app: traefik
             podSelector: app.kubernetes.io/instance=traefik-external
             widget:
               type: traefik
-              url: http://traefik-external.traefik.svc.cluster.local:8080
+              url: http://traefik-external-dashboard.traefik.svc.cluster.local:8080
 
     - Monitoring:
         - Grafana:

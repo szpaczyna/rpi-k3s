@@ -62,3 +62,15 @@ spec:
       - Remote-Groups
       - Remote-Email
 {{- end }}
+{{- range .Values.lanOnlyNamespaces }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: lan-only
+  namespace: {{ . }}
+spec:
+  ipAllowList:
+    sourceRange:
+      - 10.0.0.0/24
+{{- end }}
