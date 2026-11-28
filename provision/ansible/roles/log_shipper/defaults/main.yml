@@ -1,6 +1,6 @@
 ---
 # Fluent Bit host agent. Ships /var/log/auth.log (and fail2ban.log where
-# present) to Loki via https://loki.home. Mirrors the cluster's Fluent Bit
+# present) to Loki via https://loki.lan.shpaq.org. Mirrors the cluster's Fluent Bit
 # config (classic mode) but with a minimal pipeline.
 
 log_shipper_ca_cert: "mkcert-rootCA.pem"
@@ -26,6 +26,8 @@ log_shipper_deb_sha256:
 # Paths on the target host
 log_shipper_config_file: /etc/fluent-bit/fluent-bit.conf
 log_shipper_ca_file: /usr/local/share/ca-certificates/mkcert-rootCA.crt
+# update-ca-certificates merges the public CAs and the mkcert root into it.
+log_shipper_ca_bundle: /etc/ssl/certs/ca-certificates.crt
 
 # Only tail fail2ban.log where it actually exists (blueberry, and any host
 # where fail2ban has been enabled).

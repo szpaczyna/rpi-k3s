@@ -1,0 +1,63 @@
+---
+# Default values for lan-cert.
+
+acme:
+  # Staging: https://acme-staging-v02.api.letsencrypt.org/directory
+  server: https://acme-v02.api.letsencrypt.org/directory
+  email: shpaq@shpaq.org
+  domain: "*.lan.shpaq.org"
+  renewDays: 30
+  # Pods resolve through Pi-hole, which answers lan.shpaq.org locally and
+  # never returns the public challenge TXT record.
+  resolvers:
+    - 1.1.1.1:53
+    - 8.8.8.8:53
+
+# Created by ./deploy from hurricane-token.enc.yaml, key `tokens`.
+hurricaneSecret: lan-cert-hurricane  # pragma: allowlist secret
+# Created once by ./deploy; the Job may only update it.
+tlsSecret: wildcard-lan-tls  # pragma: allowlist secret
+
+schedule: "17 4 * * 1"
+
+lego:
+  image:
+    repository: goacme/lego
+    tag: v5.8.0
+    pullPolicy: IfNotPresent
+
+kubectl:
+  image:
+    repository: alpine/kubectl
+    tag: 1.37.1
+    pullPolicy: IfNotPresent
+
+persistence:
+  enabled: true
+  storageClassName: longhorn
+  size: 1Gi
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: [ALL]
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+nodeSelector:
+  kubernetes.io/role: worker

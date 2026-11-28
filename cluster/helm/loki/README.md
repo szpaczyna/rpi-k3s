@@ -200,18 +200,18 @@ line. The "World Traffic" panel uses the aggregated lookup approach instead.
 
 ## Ingress
 
-Loki's query API is reachable at `loki.home`, on the LAN only, via
+Loki's query API is reachable at `loki.lan.shpaq.org`, on the LAN only, via
 `traefik-internal-gateway`. See
 [`cluster/helm/traefik-internal`](../traefik-internal).
 
 ### `GET /` returns 404, and that is correct
 
-Loki serves no route at the root. A 404 on `https://loki.home/` means the
+Loki serves no route at the root. A 404 on `https://loki.lan.shpaq.org/` means the
 route is working. Useful probes:
 
 ```bash
-curl -s -o /dev/null -w '%{http_code}\n' https://loki.home/ready        # 200
-curl -s https://loki.home/loki/api/v1/labels | head                    # 200, JSON
+curl -s -o /dev/null -w '%{http_code}\n' https://loki.lan.shpaq.org/ready  # 200
+curl -s https://loki.lan.shpaq.org/loki/api/v1/labels | head              # 200, JSON
 ```
 
 ### Why the HTTPRoute is hand-written
@@ -226,15 +226,16 @@ the chart has nowhere to put it and it will be silently dropped.
 
 `fluentbit-values.yaml` matches `traefik-.*` pods, which covers
 `traefik-external-*` and `traefik-internal-*` alike, so both instances are
-collected. `*.home` requests are only present in the `traefik-internal` pod's
-logs, since the external gateway serves only `*.shpaq.org`.
+collected. `*.lan.shpaq.org` and `*.home` requests are only present in the
+`traefik-internal` pod's logs, since the external gateway serves only
+`*.shpaq.org`.
 
 ## Host logs (auth.log, fail2ban.log)
 
 Only blueberry (the `pihole` group) ships host logs. A host Fluent Bit agent,
 installed by the `log_shipper` Ansible role in `provision/ansible/`, pushes
 `/var/log/auth.log` and `/var/log/fail2ban.log` to
-`https://loki.home/loki/api/v1/push` (push-only HTTPRoute,
+`https://loki.lan.shpaq.org/loki/api/v1/push` (push-only HTTPRoute,
 `PathPrefix /loki/api/v1/push`). The cluster Fluent Bit DaemonSet collects
 container logs only.
 

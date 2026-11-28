@@ -278,8 +278,9 @@ unrecognized subdomain to `https://shpaq.org` (302). Gateway API
 matches by hostname specificity — explicit routes (e.g. `booklore.shpaq.org`)
 always take priority over the wildcard.
 
-There is deliberately no such catch-all on `traefik-internal`: an unknown
-`*.home` name gets Traefik's default 404 rather than being redirected.
+There is deliberately no such catch-all for `*.lan.shpaq.org` on
+`traefik-internal`: an unknown name there gets Traefik's default 404. Its only
+wildcard route is the `*.home` redirect to `*.lan.shpaq.org`.
 
 ## Authelia forwardAuth
 
