@@ -15,4 +15,3 @@ HELM_ARGS=(upgrade --install "${RELEASE_NAME}" "${CHART}"
   --values values.yaml)
 
 helm "${HELM_ARGS[@]}"
-# ci: temporary change so ct tests media-stack
