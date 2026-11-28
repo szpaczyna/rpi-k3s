@@ -204,6 +204,12 @@ Loki's query API is reachable at `loki.lan.shpaq.org`, on the LAN only, via
 `traefik-internal-gateway`. See
 [`cluster/helm/traefik-internal`](../traefik-internal).
 
+The route has no Authelia, because the host Fluent Bit agents cannot log in.
+The `lan-only` Middleware (an `ipAllowList` for `10.0.0.0/24`, from
+[`cluster/helm/middlewares`](../middlewares)) restricts it instead. The cluster
+Fluent Bit DaemonSet does not use the route: it pushes to the `loki-headless`
+Service on port 3100.
+
 ### `GET /` returns 404, and that is correct
 
 Loki serves no route at the root. A 404 on `https://loki.lan.shpaq.org/` means the

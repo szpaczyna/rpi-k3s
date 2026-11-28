@@ -15,17 +15,24 @@ and is separated from it by its own `GatewayClass`, not by its own namespace.
 | Gateway | `traefik-gateway` | `traefik-internal-gateway` |
 | LoadBalancer IP | `10.0.0.40` | `10.0.0.50` |
 | cert | Let's Encrypt, per app | Let's Encrypt `*.lan.shpaq.org`, mkcert leaf for `*.home` |
-| authentication | Authelia forwardAuth | none, LAN is trusted |
+| authentication | Authelia forwardAuth | Authelia forwardAuth on the web UIs |
 
 Chart `traefik/traefik` at the `VERSION` pinned in `deploy`, image pinned to
 `v3.7.15` (kept equal to the external instance so behaviour differences do
 not confound debugging), two
-replicas, no HPA since LAN traffic does not burst. Dashboard and API on port
-`8080` of the same LoadBalancer, unauthenticated, reachable only from the LAN:
+replicas, no HPA since LAN traffic does not burst. The dashboard is served by
+the chart's dashboard IngressRoute on `websecure`, behind the `authelia`
+Middleware, with the `wildcard-home-tls` certificate:
 
 ```
-http://10.0.0.50:8080/dashboard/
+https://traefik-internal.lan.shpaq.org/dashboard/
 ```
+
+Port `8080` is no longer on the LoadBalancer. The ClusterIP Service
+`traefik-internal-dashboard` carries it for the homepage widget. The
+IngressRoute sets the `kubernetes.io/ingress.class: traefik-internal`
+annotation because the chart only writes `ingressClassName` when
+`ingressClass.enabled` is true, and the CRD provider skips unclassed objects.
 
 ## Gateway listeners
 

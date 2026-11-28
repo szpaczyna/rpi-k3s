@@ -4,7 +4,8 @@
 # release (cluster/helm/traefik-external). Own GatewayClass and Gateway, so
 # each provider serves only the routes parented to it. Terminates TLS for
 # *.lan.shpaq.org with the Let's Encrypt wildcard from lan-cert, and for
-# *.home during the move with the mkcert leaf. No geoblock, no auth.
+# *.home during the move with the mkcert leaf. No geoblock. Auth comes from
+# the Authelia forwardAuth Middleware on each route.
 
 image:  # @schema additionalProperties: false
   # -- Traefik image repository. Left null so the chart resolves the official
@@ -208,33 +209,36 @@ api:
   # -- Enable the dashboard
   dashboard: true
   # -- Enable the insecure API (HTTP) on the internal `traefik` entrypoint
-  # (port 8080, not exposed by the Service). Reach it locally via
-  # `kubectl port-forward -n traefik <pod> 8080:8080` then browse
-  # http://localhost:8080/dashboard/.
+  # (port 8080). Only the ClusterIP Service `<release>-dashboard` exposes it,
+  # for the homepage widget; browsers use the dashboard IngressRoute below.
   insecure: true
 
 ingressRoute:
   dashboard:
     # -- Create an IngressRoute for the dashboard
-    enabled: false
+    enabled: true
     # -- Additional ingressRoute annotations (e.g. for kubernetes.io/ingress.class)
-    annotations: {}
+    # The chart sets ingressClassName only when ingressClass.enabled, which is
+    # off here; without a class providers.kubernetesCRD.ingressClass skips it.
+    annotations:
+      kubernetes.io/ingress.class: traefik-internal
     # -- Additional ingressRoute labels (e.g. for filtering IngressRoute by custom labels)
     labels: {}
     # -- The router match rule used for the dashboard ingressRoute
-    matchRule: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
+    matchRule: Host(`traefik-internal.lan.shpaq.org`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
     # -- The internal service used for the dashboard ingressRoute
     services:
       - name: api@internal
         kind: TraefikService
     # -- Specify the allowed entrypoints to use for the dashboard ingress route, (e.g. traefik, web, websecure).
-    # By default, it's using traefik entrypoint, which is not exposed.
     # /!\ Do not expose your dashboard without any protection over the internet /!\
-    entryPoints: ["traefik"]
+    entryPoints: ["websecure"]
     # -- Additional ingressRoute middlewares (e.g. for authentication)
-    middlewares: []
+    middlewares:
+      - name: authelia
     # -- TLS options (e.g. secret containing certificate)
-    tls: {}
+    tls:
+      secretName: wildcard-lan-tls  # pragma: allowlist secret
   healthcheck:
     # -- Create an IngressRoute for the healthcheck probe
     enabled: false
@@ -658,12 +662,11 @@ ports:
     # Defines whether the port is exposed if service.type is LoadBalancer or
     # NodePort.
     #
-    # Exposed on the same LoadBalancer Service/IP as web/websecure, on a
-    # dedicated port. Reachable from the local network at
-    # http://10.0.0.50:8080/dashboard/, never routed to the internet.
-    # No authentication in front of it.
+    # Kept off the LoadBalancer: the dashboard is served on websecure behind
+    # Authelia, and only the ClusterIP `dashboard` Service carries this port.
     expose:
-      default: true
+      default: false
+      dashboard: true
     # -- The exposed port for this service
     exposedPort: 8080
     # -- The port protocol (TCP/UDP)
@@ -832,7 +835,11 @@ service:
   #   - IPv4
   #   - IPv6
   ##
-  additionalServices: {}
+  additionalServices:
+    # In-cluster access to the API on port 8080 (homepage traefik widget).
+    dashboard:
+      spec:
+        type: ClusterIP
   ## -- An additional and optional internal Service.
   ## Same parameters as external Service
   # internal:
