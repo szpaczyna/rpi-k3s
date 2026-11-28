@@ -3,5 +3,5 @@ apiVersion: v2
 name: lan-cert
 description: Let's Encrypt wildcard certificate for *.lan.shpaq.org, issued by lego over DNS-01
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "v5.8.0"
