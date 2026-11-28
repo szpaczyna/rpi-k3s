@@ -104,7 +104,7 @@ media:
     resourceProfile: light
     service:
       port: 8787
-    storageSize: 1Gi
+    storageSize: 2Gi
     # bookshelf keeps Readarr's config section, so the prefix stays READARR.
     env:
       - name: READARR__AUTH__METHOD
