@@ -123,6 +123,12 @@ initChownData:
 admin:
   existingSecret: "grafana-admin-creds"
 
+envValueFrom:
+  GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
+    secretKeyRef:
+      name: grafana-oidc
+      key: client-secret
+
 enableServiceLinks: true
 
 extraVolumes: []
@@ -191,6 +197,8 @@ grafana.ini:
     domain: grafana.lan.shpaq.org
     enable_gzip: true
     socket: /tmp/grafana.sock
+    # The OAuth redirect URI is built from root_url; the default adds :3000 and plain http.
+    root_url: https://%(domain)s/
 
   security:
     encryption_provider: secretKey

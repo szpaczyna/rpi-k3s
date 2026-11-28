@@ -322,6 +322,24 @@ kebab-case:
       #custom-email-url:
 ```
 
+#### Authelia in this cluster
+
+`values.enc.yaml` enables an `openidConnect` source named `authelia` with
+auto-discovery at `https://auth.shpaq.org/.well-known/openid-configuration`,
+`skipLocal2fa: true` (Authelia already enforced its factors) and the
+`[oauth2_client]` settings. The whole `gitea.oauth` block, secret included,
+lives there. The chart has no Secret reference for it: the init container passes every
+`gitea.oauth` value as a flag to `gitea admin auth add-oauth` (or
+`update-oauth` when the source exists), and the rendered script is stored in
+the `gitea-init` Secret.
+
+`[oauth2_client]` sets `ENABLE_AUTO_REGISTRATION = false`, so Authelia cannot
+create Gitea accounts. On the first Authelia login Gitea shows the account
+linking page: sign in once with the existing Gitea username and password, and
+later Authelia logins go to that account. `ACCOUNT_LINKING = auto` and
+`USERNAME = preferred_username` only take effect if auto-registration is
+turned on later. Password login stays enabled for the local admin.
+
 ### Metrics and profiling
 
 A Prometheus `/metrics` endpoint on the `HTTP_PORT` and `pprof` profiling endpoints on port 6060 can be enabled under `gitea`. Beware that the metrics endpoint is exposed via the ingress, manage access using ingress annotations for example.
