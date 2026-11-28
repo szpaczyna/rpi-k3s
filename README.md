@@ -44,7 +44,7 @@
 | [bitwarden](cluster/helm/bitwarden) | Password management (Vaultwarden) |
 | [booklore](cluster/helm/booklore) | Book library management |
 | [gitea](cluster/helm/gitea) | Self-hosted Git service |
-| [homepage](cluster/helm/homepage) | Service dashboard at `homepage.home` |
+| [homepage](cluster/helm/homepage) | Service dashboard at `homepage.lan.shpaq.org` |
 | [media-stack](cluster/helm/media-stack) | Radarr, Sonarr, Lidarr, Prowlarr, Readarr, Bazarr, Transmission |
 | [pihole](cluster/helm/pihole) | DNS ad-blocker |
 | [shpaq-org](cluster/helm/shpaq-org) | Personal website |
@@ -80,7 +80,7 @@ Retired charts moved to the separate repository
 | [metallb](cluster/helm/metallb) | Bare-metal load balancer (L2) |
 | [middlewares](cluster/helm/middlewares) | Traefik middlewares (security chain, authelia) |
 | [traefik](cluster/helm/traefik-external) | Ingress controller (Gateway API / HTTPRoute) |
-| [traefik-internal](cluster/helm/traefik-internal) | Internal Traefik instance for the *.home LAN domain |
+| [traefik-internal](cluster/helm/traefik-internal) | Internal Traefik instance for the *.lan.shpaq.org LAN domain |
 | [longhorn](cluster/helm/longhorn) | Distributed block storage |
 | [local-path-provisioner](cluster/helm/local-path-provisioner) | Local HostPath storage provisioner |
 | [system-upgrade-controller](cluster/helm/system-upgrade-controller) | Automated K3s upgrades |

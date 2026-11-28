@@ -203,7 +203,7 @@ longhornRecoveryBackend:
 
 ingress:
   enabled: false
-  host: longhorn.home
+  host: longhorn.lan.shpaq.org
   secrets: null
 
 # No middleware on this route: the upstream httproute.yaml template has no
@@ -211,7 +211,7 @@ ingress:
 httproute:
   enabled: true
   hostnames:
-    - longhorn.home
+    - longhorn.lan.shpaq.org
   parentRefs:
     - name: traefik-internal-gateway
       namespace: traefik

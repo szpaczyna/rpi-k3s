@@ -14,6 +14,7 @@ pihole_dns_scalars:
   - { key: 'dns.bogusPriv', value: "{{ pihole_dns_bogus_priv | string | lower }}" }
   - { key: 'dns.dnssec', value: "{{ pihole_dns_dnssec | string | lower }}" }
   - { key: 'dns.localise', value: "{{ pihole_dns_localise | string | lower }}" }
+  - { key: 'dns.domain.name', value: "{{ pihole_dns_domain_name }}" }
   - { key: 'dns.rateLimit.count', value: "{{ pihole_dns_rate_limit_count }}" }
   - { key: 'dns.rateLimit.interval', value: "{{ pihole_dns_rate_limit_interval }}" }
 

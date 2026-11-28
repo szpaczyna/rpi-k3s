@@ -103,7 +103,7 @@ extraObjects:
           kind: Gateway
           sectionName: websecure
       hostnames:
-        - loki.home
+        - loki.lan.shpaq.org
       rules:
         - matches:
             - path:
